@@ -1,0 +1,14 @@
+{
+	"folders": [
+		{
+			"path": "."
+		},
+		{
+			"path": "../m5x-sdk"
+		},
+		{
+			"path": "../../discomco"
+		}
+	],
+	"settings": {}
+}
