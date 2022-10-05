@@ -1,8 +1,8 @@
 ﻿namespace DotCart;
 
-public static class ExceptionExtensions
+public static class ErrorUtils
 {
-    public static Error ToError(this Exception e)
+    public static Error AsApiError(this Exception e)
     {
         var res = new Error
         {
@@ -14,7 +14,7 @@ public static class ExceptionExtensions
             Stack = e.StackTrace
         };
         if (e.InnerException != null)
-            res.InnerError = e.InnerException.ToError();
+            res.InnerError = e.InnerException.AsApiError();
         return res;
     }
 
@@ -26,4 +26,5 @@ public static class ExceptionExtensions
         foreach (var it in source) target.Add(it);
         return target;
     }
+
 }

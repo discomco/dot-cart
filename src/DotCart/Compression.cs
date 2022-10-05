@@ -2,7 +2,7 @@
 
 namespace DotCart;
 
-public class Compression
+public static class Compression
 {
     public static FileInfo Compress(FileInfo fi)
     {
@@ -19,7 +19,6 @@ public class Compression
         inFile.CopyTo(compress);
         return new FileInfo(compressedFilePath);
     }
-
     public static FileInfo Decompress(FileInfo fi)
     {
         // Get the stream of the source file.
@@ -35,7 +34,6 @@ public class Compression
 
         return new FileInfo(decompressedFilePath);
     }
-
     public static FileInfo Decompress(MemoryStream ms, string fileName)
     {
         // Get original file name
@@ -47,7 +45,6 @@ public class Compression
         decompress.CopyTo(outFile);
         return new FileInfo(decompressedFilePath);
     }
-
     public static FileInfo Decompress(MemoryStream ms, string fileName, string temporaryPath)
     {
         // Get original file name

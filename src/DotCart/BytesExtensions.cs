@@ -1,12 +1,11 @@
 ﻿namespace DotCart;
 
-public static class Bytes
+public static class BytesExtensions
 {
     public static byte[] EncodeBase64(this byte[] data)
     {
         // Convert to base64 (string)
         var base64String = Convert.ToBase64String(data);
-
         // Convert string to byte array (UTF8)
         Stream memoryStream = new MemoryStream();
         var streamWriter = new StreamWriter(memoryStream);
@@ -25,7 +24,6 @@ public static class Bytes
         // Return the byte array
         return encodedData;
     }
-
     public static byte[] DecodeBase64(this byte[] data)
     {
         // Reconstruct a string from input data
@@ -41,7 +39,6 @@ public static class Bytes
 
         return decodedData;
     }
-
     public static Stream ToStream(this byte[] input)
     {
         var sOut = new MemoryStream();
