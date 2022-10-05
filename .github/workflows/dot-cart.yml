@@ -3,7 +3,7 @@ name: dot-cart
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   
