@@ -1,0 +1,48 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{6555ED9A-03CD-47C8-BD60-B1F87E2BF21E}"
+	ProjectSection(SolutionItems) = preProject
+		Directory.Build.props = Directory.Build.props
+		README.MD = README.MD
+		RELEASES.MD = RELEASES.MD
+		nuget.config = nuget.config
+		.github\ISSUE_TEMPLATE\feature_request.md = .github\ISSUE_TEMPLATE\feature_request.md
+		.github\ISSUE_TEMPLATE\custom.md = .github\ISSUE_TEMPLATE\custom.md
+		.github\ISSUE_TEMPLATE\bug_report.md = .github\ISSUE_TEMPLATE\bug_report.md
+		.github\workflows\dot-cart.yml = .github\workflows\dot-cart.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0FF5546C-D563-4DF5-BF41-0D5C85C5AF6E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{ABC95C0D-B3B7-428B-AFEA-3507B2722848}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCart.Tests", "tests\DotCart.Tests\DotCart.Tests.csproj", "{2589E4F4-ECA1-43EF-87E7-C7803F7EF717}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCart", "src\DotCart\DotCart.csproj", "{7FCD13F7-5866-45FC-A501-8957E9BB5FE0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2589E4F4-ECA1-43EF-87E7-C7803F7EF717}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2589E4F4-ECA1-43EF-87E7-C7803F7EF717}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2589E4F4-ECA1-43EF-87E7-C7803F7EF717}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2589E4F4-ECA1-43EF-87E7-C7803F7EF717}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FCD13F7-5866-45FC-A501-8957E9BB5FE0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FCD13F7-5866-45FC-A501-8957E9BB5FE0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FCD13F7-5866-45FC-A501-8957E9BB5FE0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FCD13F7-5866-45FC-A501-8957E9BB5FE0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{2589E4F4-ECA1-43EF-87E7-C7803F7EF717} = {ABC95C0D-B3B7-428B-AFEA-3507B2722848}
+		{7FCD13F7-5866-45FC-A501-8957E9BB5FE0} = {0FF5546C-D563-4DF5-BF41-0D5C85C5AF6E}
+	EndGlobalSection
+EndGlobal

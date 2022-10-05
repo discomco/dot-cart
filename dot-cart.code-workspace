@@ -4,10 +4,7 @@
 			"path": "."
 		},
 		{
-			"path": "../m5x-sdk"
-		},
-		{
-			"path": "../../discomco"
+			"path": "../../rgfaber/m5x-sdk"
 		}
 	],
 	"settings": {}
