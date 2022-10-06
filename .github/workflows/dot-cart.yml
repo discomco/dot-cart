@@ -29,13 +29,13 @@ jobs:
         run: ./cid/build.sh DotCart.root.sln
       - name: Test Packages
         run: ./cid/run_unit_tests.sh DotCart.root.sln
-      - name: Publish Packages
-        run: ./cid/pub_pkg.sh
-        env:
-          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-          NUGET_URL: https://api.nuget.org/v3/index.json
-      - name: Test Published Packages
-        run: ./cid/testpub.sh
-        env:
-          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-          NUGET_URL: https://api.nuget.org/v3/index.json
+#      - name: Publish Packages
+#        run: ./cid/pub_pkg.sh
+#        env:
+#          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+#          NUGET_URL: https://api.nuget.org/v3/index.json
+#      - name: Test Published Packages
+#        run: ./cid/testpub.sh
+#        env:
+#          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+#          NUGET_URL: https://api.nuget.org/v3/index.json
