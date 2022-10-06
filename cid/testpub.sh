@@ -9,6 +9,7 @@ export version="$1"
 dotnet nuget locals --clear all
 
 dotnet add package -n -s "$source" -v "$version" "DotCart"
+dotnet add package -n -s "$source" -v "$version" "DotCart.Domain"
 dotnet add package -n -s "$source" -v "$version" "DotCart.Schema"
 dotnet add package -n -s "$source" -v "$version" "DotCart.TestKit"
 

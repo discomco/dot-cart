@@ -1,12 +1,12 @@
-# The DOT-CART SDK
+# The DOT-CART Ecosystem
 
 ## TABLE OF CONTENTS
-- [The DOT-CART SDK](#the-dot-cart-sdk)
+- [The DOT-CART Ecosystem](#the-dot-cart-ecosystem)
   - [TABLE OF CONTENTS](#table-of-contents)
   - [DESCRIPTION](#description)
   - [MOTIVATIONS](#motivations)
   - [DEFINITIONS](#definitions)
-    - [Cartwheel Architecture](#cartwheel-architecture)
+    - [Purposeful Architecture](#purposeful-architecture)
     - [The Cartwheel Monolith](#the-cartwheel-monolith)
     - [Event Storming](#event-storming)
       - [Events](#events)
@@ -42,7 +42,7 @@
   - [SERVERLESS DEPLOYMENT?](#serverless-deployment)
 
 ## DESCRIPTION
-This SDK provides a basis for developing modular applications for EventSourcing/CQRS in C#.NETCore
+The DOT-CART Ecosystem  provides a basis for developing modular applications for EventSourcing/CQRS in C#.NETCore
 
 ## MOTIVATIONS
 - as a **Software Engineering Manager**
@@ -61,8 +61,8 @@ This SDK provides a basis for developing modular applications for EventSourcing/
    - and can **avoid to implement recurring boilerplate code**
 
 ## DEFINITIONS
-### Cartwheel Architecture
->**Cartwheel Architecture** is a form of screaming architecture, which advocates the clear communication of purpose, where artifacts are immediately recognizable by all stakeholders. 
+### Purposeful Architecture
+>**Purposeful Architecture** is a form of screaming architecture, which advocates the clear communication of purpose, where artifacts are immediately recognizable by all stakeholders. 
 
 This leads to implementations where **modularity** becomes a key priority and encourages the creation of applications by composition, using **dependency injection**, producing "Cartwheel Monoliths", a form of Modular Monolith, where the bounded context is defined by dynamic behavior models (the process), rather than static domain models. 
 
@@ -109,15 +109,13 @@ Specifically for DOT-CART CMD Applications, given their modular nature, we rely 
 >**Aggregate Composition** is a technique that allows us to inject the IApplyEvt and ITryCmd injectors, in order to compose an Aggregate that has all the capabilities required to process the full Event Stream.
 
 ## DOT-CART Applications
-There are 3 types of DOT-CART applications: 
+There are 2 types of DOT-CART applications: 
 
 >- **Command (CMD)** applications  
 >   - accept and evaluate commands and 
 >   - write the resulting events to the EventStore
->- **Projection (PRJ)** applications
->   - extract events from the EventStore by subscribing to relevant streams, 
->   - transform the events to a read model and 
->   - load the result onto the read-dedicated data store(s) and cache(s)
+>   - subscribe to the event stream and *Project* these events onto the default Document- and List Models
+>   - Write these models to the cache and data stores
 >- **Query (QRY)** applications
 >   - execute query requests and 
 >   - return the results

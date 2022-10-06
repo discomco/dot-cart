@@ -5,21 +5,15 @@
 // <summary></summary>
 // ***********************************************************************
 
+using System.Collections.Concurrent;
+using System.Reflection;
 using System.Runtime.Serialization;
 using System.Xml;
 
 namespace DotCart;
 
-/// <summary>
-///     Class TypeExtensions.
-/// </summary>
 public static class TypeExtensions
 {
-    /// <summary>
-    ///     Knowns the types.
-    /// </summary>
-    /// <param name="type">The type.</param>
-    /// <returns>IEnumerable&lt;Type&gt;.</returns>
     public static IEnumerable<Type> KnownTypes(this Type type)
     {
         return Attribute
@@ -29,24 +23,11 @@ public static class TypeExtensions
     }
 
 
-    /// <summary>
-    ///     Gets the embedded file.
-    /// </summary>
-    /// <param name="type">The type.</param>
-    /// <param name="fileName">Name of the file.</param>
-    /// <returns>Stream.</returns>
     public static Stream GetEmbeddedFile(this Type type, string fileName)
     {
         return AssemblyUtils.GetEmbeddedFile(type.Assembly, fileName);
     }
 
-
-    /// <summary>
-    ///     Gets the embedded XML.
-    /// </summary>
-    /// <param name="type">The type.</param>
-    /// <param name="fileName">Name of the file.</param>
-    /// <returns>XmlDocument.</returns>
     public static XmlDocument GetEmbeddedXml(this Type type, string fileName)
     {
         var str = GetEmbeddedFile(type, fileName);
@@ -55,4 +36,43 @@ public static class TypeExtensions
         xml.Load(tr);
         return xml;
     }
+
+
+    private static readonly ConcurrentDictionary<Type, string> PrettyPrintCache =
+        new();
+
+    public static string PrettyPrint(this Type type)
+    {
+        return PrettyPrintCache.GetOrAdd(
+            type,
+            t =>
+            {
+                try
+                {
+                    return PrettyPrintRecursive(t, 0);
+                }
+                catch (Exception)
+                {
+                    return t.Name;
+                }
+            });
+    }
+
+    private static string PrettyPrintRecursive(Type type, int depth)
+    {
+        if (depth > 3) return type.Name;
+
+        var nameParts = type.Name.Split('`');
+        if (nameParts.Length == 1) return nameParts[0];
+
+        var genericArguments = type.GetTypeInfo().GetGenericArguments();
+        return !type.IsConstructedGenericType
+            ? $"{nameParts[0]}<{new string(',', genericArguments.Length - 1)}>"
+            : $"{nameParts[0]}<{string.Join(",", genericArguments.Select(t => PrettyPrintRecursive(t, depth + 1)))}>";
+    }
+
+
+
+
+
 }

@@ -22,8 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\DotCart.Schema\DotCart.Schema.csproj" />
-    <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
+    <ProjectReference Include="..\..\src\DotCart.Domain\DotCart.Domain.csproj" />
   </ItemGroup>
 
 </Project>
