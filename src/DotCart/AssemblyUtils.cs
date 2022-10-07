@@ -4,7 +4,7 @@ namespace DotCart;
 
 public static class AssemblyUtils
 {
-    public static Module[] GetLoadedModules()
+    public static IEnumerable<Module> GetLoadedModules()
     {
         var asm = Assembly.GetExecutingAssembly();
         return asm.GetLoadedModules();
@@ -19,6 +19,8 @@ public static class AssemblyUtils
     }
     public static Stream GetEmbeddedFile(this Assembly assembly, string fileName)
     {
+        fileName = fileName.Replace('/', '.');
+        fileName = fileName.Replace('\\', '.');
         var assemblyName = ShortName(assembly);
         try
         {
@@ -33,17 +35,12 @@ public static class AssemblyUtils
             throw new Exception(assemblyName + ": " + e.Message);
         }
     }
-    public static Stream GetEmbeddedFile(string assemblyName, string fileName)
+    public static Stream GetEmbeddedFileFromNamedAssembly(string assemblyName, string fileName)
     {
         try
         {
             var a = Assembly.Load(assemblyName);
-            var str = a.GetManifestResourceStream(assemblyName + "." + fileName);
-
-            if (str == null)
-                throw new Exception("Could not locate embedded resource '" + fileName + "' in assembly '" +
-                                    assemblyName + "'");
-            return str;
+            return GetEmbeddedFile(a, fileName);
         }
         catch (Exception e)
         {

@@ -25,4 +25,8 @@
     <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <EmbeddedResource Include="files\invictus.md" />
+  </ItemGroup>
+
 </Project>
