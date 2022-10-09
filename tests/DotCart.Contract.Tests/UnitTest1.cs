@@ -1,4 +1,4 @@
-namespace DotCart.Domain.Tests;
+namespace DotCart.Contract.Tests;
 
 public class UnitTest1
 {

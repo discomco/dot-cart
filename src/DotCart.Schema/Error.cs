@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace DotCart;
+namespace DotCart.Schema;
 
 public enum ErrorCode
 {

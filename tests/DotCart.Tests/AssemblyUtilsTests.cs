@@ -5,7 +5,7 @@ namespace DotCart.Tests;
 public class AssemblyUtilsTests
 {
     [Fact]
-    public void TestThatGetLoadedModulesDoesNotReturnAnEmptyArray()
+    public void GetLoadedModulesShouldNotReturnAnEmptyArray()
     {
         // GIVEN
         // WHEN
@@ -15,7 +15,7 @@ public class AssemblyUtilsTests
     }
 
     [Fact]
-    public void TestThatWeCanGetTheVersionOfTheAssembly()
+    public void ShouldGetTheVersionOfTheAssembly()
     {
         // GIVEN
         var assy = Assembly.GetAssembly(GetType());
@@ -26,7 +26,7 @@ public class AssemblyUtilsTests
     }
 
     [Fact]
-    public void TestThatWeCanGetTheShortNameofTheAssembly()
+    public void ShouldGetTheShortNameofTheAssembly()
     {
         // GIVEN
         var assy = Assembly.GetAssembly(GetType());
@@ -38,7 +38,7 @@ public class AssemblyUtilsTests
     }
 
     [Fact]
-    public void TestThatWeCanGetAnEmbeddedFileFromTheAssembly()
+    public void ShouldGetAnEmbeddedFileFromTheAssembly()
     {
         // GIVEN
         const string fileName = "files\\invictus.md";
@@ -51,7 +51,7 @@ public class AssemblyUtilsTests
     }
 
     [Fact]
-    public void TestThatWeCanGetAnEmbeddedFileFromANamedAssembly()
+    public void ShouldGetAnEmbeddedFileFromANamedAssembly()
     {
         // GIVEN
         const string fileName = "files\\invictus.md";

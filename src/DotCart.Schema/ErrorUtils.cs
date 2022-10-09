@@ -1,4 +1,4 @@
-﻿namespace DotCart;
+﻿namespace DotCart.Schema;
 
 public static class ErrorUtils
 {

@@ -21,10 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\DotCart.Domain\DotCart.Domain.csproj" />
-    <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
-    <ProjectReference Include="..\DotCart.Schema.Tests\DotCart.Schema.Tests.csproj" />
-  </ItemGroup>
-
 </Project>

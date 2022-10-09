@@ -1,6 +1,6 @@
 using System.Text.Json;
 
-namespace DotCart;
+namespace DotCart.Schema;
 
 [Serializable]
 public sealed class Errors : List<KeyValuePair<string, Error>>

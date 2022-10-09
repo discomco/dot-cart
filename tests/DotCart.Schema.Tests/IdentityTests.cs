@@ -1,8 +1,16 @@
 namespace DotCart.Schema.Tests;
 public class IdentityTests
 {
+
+    private record PrefixLessID : ID<PrefixLessID>
+    {
+        public PrefixLessID(string value) : base(value)
+        {
+        }
+    }
+
     [IDPrefix("my")]
-    private record MyID : Identity<MyID>
+    private record MyID : ID<MyID>
     {
         public MyID(string value) : base(value)
         {
@@ -21,4 +29,45 @@ public class IdentityTests
         Assert.Equal("my", ID.GetIdPrefix());
         Assert.Equal($"my-{guid}", ID.Value);
     }
+    
+    [Fact]
+    public void ShouldBeAbleToCreateAnIDFromNew()
+    {
+        // WHEN
+        var ID = MyID.New;
+        // THEN
+        Assert.NotNull(ID);
+        Assert.Equal("my", ID.GetIdPrefix());
+    }
+    
+    
+    
+    
+
+    [Fact]
+    public void ShouldThrowAnExeptionIfNoPrefixIDPresent()
+    {
+        try
+        {
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+        // GIVEN
+        var guid = GuidUtils.NewGuid;
+        // WHEN
+        var ID = PrefixLessID.NewComb(guid);
+        // THEN
+        Assert.NotNull(ID);
+        Assert.Equal("my", ID.GetIdPrefix());
+        Assert.Equal($"my-{guid}", ID.Value);
+
+        
+    }
+    
+    
+    
 }

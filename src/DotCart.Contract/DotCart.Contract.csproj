@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DotCart.Schema\DotCart.Schema.csproj" />
+    <ProjectReference Include="..\DotCart\DotCart.csproj" />
   </ItemGroup>
 
 </Project>

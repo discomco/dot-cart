@@ -14,7 +14,7 @@ public class IDPrefixAttribute : Attribute
 public static class Helper
 {
     public static string GetIdPrefix<TAggregateId>(this TAggregateId aggregateId)
-        where TAggregateId : IIdentity
+        where TAggregateId : IID
     {
         var prefixAttributes =
             (IDPrefixAttribute[])typeof(TAggregateId).GetCustomAttributes(typeof(IDPrefixAttribute), true);

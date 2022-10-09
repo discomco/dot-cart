@@ -23,6 +23,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\DotCart.Schema\DotCart.Schema.csproj" />
+    <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
     <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
   </ItemGroup>
 

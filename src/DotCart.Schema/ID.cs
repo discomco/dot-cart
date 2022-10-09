@@ -3,26 +3,33 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
-public interface IIdentity
+public interface IID
 {
     string Value { get; }
 }
 
-public abstract record Identity<T> :  IIdentity
-    where T : Identity<T>
+public abstract record ID<T> :  IID
+    where T : ID<T>
 {
     public string Value { get; }
+
     private readonly Lazy<Guid> _lazyGuid;
-    protected static readonly string Prefix = GetPrefix();
     
-    public static string GetPrefix()
+    protected static readonly string Prefix = GetPrefix();
+
+    private static string GetPrefix()
     {
         var prefixAttributes =
             (IDPrefixAttribute[])typeof(T).GetCustomAttributes(typeof(IDPrefixAttribute), true);
-        if (prefixAttributes.Length <= 0) return typeof(T).FullName.Replace(".", "").ToLower();
+        if (prefixAttributes.Length <= 0)
+            throw IDPrefixNotSetException.New;
+            // Let's throw an exception Instead.
+            //return typeof(T).FullName.Replace(".", "").ToLower();
         var att = prefixAttributes[0];
         return att.Prefix;
-    } // ReSharper disable StaticMemberInGenericType
+    }
+
+    // ReSharper disable StaticMemberInGenericType
 
     private static readonly Regex NameReplace = new("Id$");
     // private static readonly string Name = NameReplace.Replace(typeof(T).Name, string.Empty).ToLowerInvariant();
@@ -37,19 +44,19 @@ public abstract record Identity<T> :  IIdentity
 
     public static T NewDeterministic(Guid namespaceId, string name)
     {
-        var guid = GuidFactories.Deterministic.Create(namespaceId, name);
+        var guid = GuidUtils.Deterministic.Create(namespaceId, name);
         return With(guid);
     }
 
     public static T NewDeterministic(Guid namespaceId, byte[] nameBytes)
     {
-        var guid = GuidFactories.Deterministic.Create(namespaceId, nameBytes);
+        var guid = GuidUtils.Deterministic.Create(namespaceId, nameBytes);
         return With(guid);
     }
 
     public static T NewComb()
     {
-        var guid = GuidFactories.Comb.Create();
+        var guid = GuidUtils.Comb.Create();
         return With(guid);
     }
 
@@ -123,7 +130,7 @@ public abstract record Identity<T> :  IIdentity
                 $"Identity '{value}' of type '{typeof(T).PrettyPrint()}' does not follow the syntax '[NAME]-[GUID]' in lower case";
     }
 
-    protected Identity(string value)
+    protected ID(string value)
     {
         if (Config.IdCreationPolicy == IDCreationPolicy.Strict)
         {
