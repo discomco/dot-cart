@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>2.10.1.4</VersionPrefix>
+        <VersionPrefix>2.10.1.5</VersionPrefix>
         <VersionSuffix>$(VersionSuffix)</VersionSuffix>
         <Authors>macula.io</Authors>
         <Company>DisComCo Sp.z.o.o</Company>
