@@ -3,13 +3,18 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
+public interface IID<TID> : IID 
+    where TID : IID<TID>
+{
+}
+
 public interface IID
 {
     string Value { get; }
 }
 
-public abstract record ID<T> :  IID
-    where T : ID<T>
+public abstract record ID<T> :  IID<T>
+    where T : IID<T>
 {
     public string Value { get; }
 

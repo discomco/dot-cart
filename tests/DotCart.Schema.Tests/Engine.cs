@@ -7,13 +7,13 @@ public record Engine : IState
 {
     public static NewState<Engine> New = () => new Engine();
 
-    public EngineID ID { get; set; }
+    public string Id { get; set; }
     public EngineStatus Status { get; set; }
 
     [JsonConstructor]
-    public Engine(EngineID id, EngineStatus status)
+    public Engine(string id, EngineStatus status)
     {
-        ID = id;
+        Id = id;
         Status = status;
     }
     private Engine()

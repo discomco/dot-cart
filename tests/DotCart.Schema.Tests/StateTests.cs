@@ -42,7 +42,7 @@ public class StateTests : IoCTests
         // GIVEN
         var newState = Container.GetService<NewState<Engine>>();
         var eng = newState();
-        eng.ID = EngineID.New;
+        eng.Id = EngineID.New.Value;
         // WHEN
         var s = JsonSerializer.Serialize(eng);
         // THEN
@@ -53,12 +53,12 @@ public class StateTests : IoCTests
     public void ShouldStateBeDeserializable()
     {
         // GIVEN
-        var s = "{\"ID\":{\"Value\":\"engine-20298432-4a89-4aac-8430-9ce1161e55fd\"},\"Status\":1}";
+        var s = "{\"Id\":\"engine-20298432-4a89-4aac-8430-9ce1161e55fd\",\"Status\":1}";
         // WHEN
         var eng = JsonSerializer.Deserialize<Engine>(s);
         // THEN
         Assert.NotNull(eng);
-        Assert.Equal("engine-20298432-4a89-4aac-8430-9ce1161e55fd", eng.ID.Value);
+        Assert.Equal("engine-20298432-4a89-4aac-8430-9ce1161e55fd", eng.Id);
         Assert.Equal(EngineStatus.Initialized, eng.Status);
     }
     

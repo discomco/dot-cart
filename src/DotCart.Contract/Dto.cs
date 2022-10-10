@@ -1,29 +1,27 @@
-﻿using System.Text.Json;
-using DotCart.Schema;
+﻿namespace DotCart.Contract;
 
-namespace DotCart.Contract;
-
-public record Dto<TPayload>(string AggId, byte[] Data) : IDto<TPayload> where TPayload:IPayload
+public record Dto(string AggId, byte[] Data) : IDto
 {
-    public string AggId { get; }
-    public byte[] Data { get; private set; }
+    public string AggId { get; } = AggId;
+    public byte[] Data { get; private set; } = Data;
 
-
-    public TPayload Payload => JsonSerializer.Deserialize<TPayload>(Data);
-    
-    
-    public void SetPayload(TPayload payload)
+    public T GetPayload<T>()
     {
-        Data = JsonSerializer.SerializeToUtf8Bytes(payload);
+        return !Data.Any()
+            ? default
+            : Data.FromBytes<T>();
+    }
+
+    public void SetPayload<T>(T state)
+    {
+        Data = state.ToBytes();
     }
 }
 
-public interface IDto {}
-
-public interface IDto<TPayload> : IDto where TPayload: IPayload
+public interface IDto
 {
     string AggId { get; }
-    byte[] Data { get;  }
-    TPayload Payload { get; }
-    void SetPayload(TPayload payload);
+    byte[] Data { get; }
+    T GetPayload<T>();
+    void SetPayload<T>(T state);
 }

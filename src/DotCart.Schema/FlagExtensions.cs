@@ -2,6 +2,19 @@ namespace DotCart.Schema;
 
 public static class FlagExtensions  
 {
+
+    public static bool HasAllFlags(this int source, params int[] flags)
+    {
+        var res = true;
+        foreach (var flag in flags)
+        {
+            res = res && source.HasFlag(flag);
+            if (res == false)
+                return false;
+        }
+        return res;
+    }
+    
     public static bool HasFlag(this int flags, int flag)
     {
         return (flags & flag) == flag;

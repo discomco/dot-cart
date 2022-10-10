@@ -49,22 +49,20 @@ public class IdentityTests
     {
         try
         {
+            var guid = GuidUtils.NewGuid;
+            // WHEN
+            var ID = PrefixLessID.NewComb(guid);
+            // THEN
+            Assert.NotNull(ID);
+            Assert.Equal("my", ID.GetIdPrefix());
+            Assert.Equal($"my-{guid}", ID.Value);
 
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            Assert.True(true);
         }
         // GIVEN
-        var guid = GuidUtils.NewGuid;
-        // WHEN
-        var ID = PrefixLessID.NewComb(guid);
-        // THEN
-        Assert.NotNull(ID);
-        Assert.Equal("my", ID.GetIdPrefix());
-        Assert.Equal($"my-{guid}", ID.Value);
-
         
     }
     

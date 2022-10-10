@@ -30,32 +30,3 @@ public record AggregateMeta
         return JsonSerializer.Serialize(this);
     }
 }
-
-public abstract record Event : IEvent
-{
-    protected Event()
-    {
-        EventId = Guid.NewGuid();
-        Meta = AggregateMeta.Empty;
-    }
-
-    protected Event(Guid eventId, AggregateMeta meta)
-    {
-        EventId = eventId;
-        Meta = meta;
-    }
-
-    public Guid EventId { get; set; }
-    private AggregateMeta Meta { get; set; }
-
-    public override int GetHashCode()
-    {
-        return 240974282 + EqualityComparer<Guid>.Default.GetHashCode(EventId);
-    }
-    public abstract IEvent WithAggregate(AggregateMeta meta);
-}
-
-public interface IEvent
-{
-    Guid EventId { get; }
-}
