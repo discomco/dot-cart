@@ -1,5 +1,5 @@
 namespace DotCart.Schema;
 
-public interface IPayload
+public interface IPld
 {
 }

@@ -8,24 +8,23 @@ public interface ICmd
     IID GetID();
 }
 
-public interface ICmd<out TID, out TPayload> : ICmd
-    where TID : IID<TID>
-    where TPayload : IPayload
+public interface ICmd<out TPayload> : ICmd
+    where TPayload : IPld
 {
-    TID AggregateID { get; }
-    TPayload Payload { get; }
+    IID AggregateID { get; }
+    TPayload Pload { get; }
 }
 
-public abstract record Cmd<TID, TPayload>(
+public abstract record Cmd<TPayload>(
     string Topic,
-    TID AggregateID,
-    TPayload Payload
-) : ICmd<TID, TPayload>
-    where TID : IID<TID>
-    where TPayload : IPayload
+    IID AggregateID,
+    TPayload Pload
+) : ICmd<TPayload>
+    where TPayload : IPld
 {
     public IID GetID()
     {
         return AggregateID;
     }
+    public TPayload Pload { get; }
 }

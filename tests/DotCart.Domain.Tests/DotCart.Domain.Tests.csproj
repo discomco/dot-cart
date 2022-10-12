@@ -26,4 +26,10 @@
     <ProjectReference Include="..\DotCart.Schema.Tests\DotCart.Schema.Tests.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="Ardalis.GuardClauses">
+      <HintPath>..\..\..\..\..\..\.nuget\packages\ardalis.guardclauses\4.0.1\lib\net6.0\Ardalis.GuardClauses.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>

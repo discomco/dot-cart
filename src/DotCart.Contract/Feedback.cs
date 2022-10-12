@@ -5,7 +5,7 @@ namespace DotCart.Contract;
 
 public interface IFeedback: IDto
 {
-    IEnumerable<Error> Errors { get; }
+    ICollection<Error> Errors { get; }
     IEnumerable<string> Warnings { get; }
     IEnumerable<string> Infos { get; }
     bool IsSuccess { get; }
@@ -20,13 +20,13 @@ public interface IFeedback: IDto
 public record Feedback(string AggId, byte[] Data) 
     : Dto(AggId, Data), IFeedback
 {
-    public IEnumerable<Error> Errors { get; } = Array.Empty<Error>();
+    public ICollection<Error> Errors { get; } = new List<Error>();
     public IEnumerable<string> Warnings { get; } = Array.Empty<string>();
     public IEnumerable<string> Infos { get; } = Array.Empty<string>();
     public bool IsSuccess => !Errors.Any();
     public void SetError(Error error)
     {
-        Errors.Append(error);
+        Errors.Add(error);
     }
 
 
@@ -35,12 +35,13 @@ public record Feedback(string AggId, byte[] Data)
     {
         return new Feedback("", Array.Empty<byte>());
     }
-    private static IFeedback New(string aggId)
+
+    public static IFeedback New(IID ID)
     {
-        return new Feedback(aggId, Array.Empty<byte>());
+        return new Feedback(ID.Value, Array.Empty<byte>());
     }
-    public static IFeedback New<TPayload>(string AggId, TPayload payload) where TPayload: IPayload
+    public static IFeedback New<TPayload>(string aggId, TPayload payload) where TPayload: IPld
     {
-        return new Feedback(AggId, payload.ToBytes());
+        return new Feedback(aggId, payload.ToBytes());
     }
 }

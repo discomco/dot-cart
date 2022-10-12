@@ -2,13 +2,19 @@ using DotCart.Schema;
 
 namespace DotCart.Domain;
 
-public abstract record Evt<TID, TPayload>(
+public abstract record Evt<TPayload>(
     string Topic, 
-    TID AggregateID, 
-    TPayload Payload) : IEvt 
+    IID AggregateID, 
+    TPayload Payload) : IEvt
+    where TPayload: IPld
+
 {
     public Guid EventId { get; } = Guid.NewGuid();
-    public TID AggregateID { get; } = AggregateID;
+    public IPld GetPayload()
+    {
+        return Payload;
+    }
+    public IID AggregateID { get; } = AggregateID;
     public TPayload Payload { get; } = Payload;
     public string Topic { get; } = Topic;
 }
@@ -18,11 +24,12 @@ public interface IEvt
 {
     string Topic { get; }
     Guid EventId { get; }
+    IPld GetPayload();
+    IID AggregateID { get; }
 }
 
 
-public interface IEvt<out TID, out TPayload> : IEvt where TID: IID<TID> where TPayload:IPayload
+public interface IEvt<out TPayload> : IEvt where TPayload:IPld
 {
-    TID AggregateID { get; }
     TPayload Payload { get; }
 }

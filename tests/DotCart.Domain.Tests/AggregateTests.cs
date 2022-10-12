@@ -12,7 +12,10 @@ public class AggregateTests : IoCTests
 
     private EngineID _engineID = EngineID.New;
     private IEngineAggregate _agg;
-    
+    private IEnginePolicy _startPolicy;
+    private IEngineAggregateBuilder _builder;
+    private NewState<Schema.Tests.Engine> _newState; 
+
     [Fact]
     public void ShouldBeAbleToCreateEngineID()
     {
@@ -37,32 +40,35 @@ public class AggregateTests : IoCTests
 
 
     [Fact]
-    public void ShouldExecuteInitializeCmd()
+    public async Task ShouldExecuteInitializeCmd()
     {
         // GIVEN
         Assert.NotNull(_agg);
         Assert.NotNull(_engineID);
         _agg.SetID(_engineID);
         // WHEN
-        var pl = Schema.Tests.Engine.New();
-        var cmd = new Initialize.Cmd(_engineID, pl);
-        var feedback = _agg.Execute(_agg.GetState(), cmd);
+        var eng = _newState();
+        var cmd = Engine.Initialize.Cmd.New(_engineID, Engine.Initialize.Payload.New(eng));
+        var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Schema.Tests.Engine>();
         // THEN
         Assert.NotNull(feedback);
+        
         Assert.True(feedback.IsSuccess);
         Assert.True(state.Status.HasFlag(EngineStatus.Initialized));
+//        Thread.Sleep(1_000);
+        state = (Schema.Tests.Engine)_agg.GetState();
         Output.WriteLine($"{state}");
     }
 
     [Fact]
-    public void ShouldExecuteStartCmd()
+    public async Task ShouldExecuteStartCmd()
     {
         // GIVEN
-        ShouldExecuteInitializeCmd();
-        var startCmd = new Start.Cmd(_engineID, new Start.Payload());
+        await ShouldExecuteInitializeCmd();
+        var startCmd = Engine.Start.Cmd.New(_engineID, Engine.Start.Pld.New);
         // WHEN
-        var feedback = _agg.Execute(_agg.GetState(), startCmd);
+        var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Schema.Tests.Engine>();
         // THEN
         Assert.NotNull(feedback);
@@ -85,6 +91,9 @@ public class AggregateTests : IoCTests
     protected override void Initialize()
     {
         _agg = Container.GetService<IEngineAggregate>();
+        _builder = Container.GetService<IEngineAggregateBuilder>();
+        _agg = _builder.Aggregate;
+        _newState = Container.GetService<NewState<Schema.Tests.Engine>>();
     }
 
     protected override void SetTestEnvironment()
@@ -95,7 +104,7 @@ public class AggregateTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSingleton(Schema.Tests.Engine.New)
-            .AddTransient<IEngineAggregate, EngineAggregate>();
+            .AddAggregateBuilder();
+
     }
 }
