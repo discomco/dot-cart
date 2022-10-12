@@ -9,11 +9,10 @@ public interface IExec
 {
 }
 
-public interface IExec<TState, in TCmd> : IExec
-    where TState : IState
+public interface IExec<in TCmd> : IExec
     where TCmd : ICmd
 {
-    IFeedback Verify(TState state,  TCmd cmd);
-    IEnumerable<IEvt> Exec(TState state, TCmd cmd);
+    IFeedback Verify(TCmd cmd);
+    IEnumerable<IEvt> Exec(TCmd cmd);
 }
 

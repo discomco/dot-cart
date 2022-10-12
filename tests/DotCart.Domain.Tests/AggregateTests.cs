@@ -48,6 +48,7 @@ public class AggregateTests : IoCTests
         _agg.SetID(_engineID);
         // WHEN
         var eng = _newState();
+        eng.Id = _engineID.Value;
         var cmd = Engine.Initialize.Cmd.New(_engineID, Engine.Initialize.Payload.New(eng));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Schema.Tests.Engine>();
@@ -66,7 +67,7 @@ public class AggregateTests : IoCTests
     {
         // GIVEN
         await ShouldExecuteInitializeCmd();
-        var startCmd = Engine.Start.Cmd.New(_engineID, Engine.Start.Pld.New);
+        var startCmd = Engine.Start.Cmd.New(_engineID, Engine.Start.Payload.New);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Schema.Tests.Engine>();

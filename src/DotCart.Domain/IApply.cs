@@ -4,9 +4,8 @@ namespace DotCart.Domain;
 
 public interface IApply {}
 
-public interface IApply<TState, in TEvt>: IApply
-    where TState: IState 
+public interface IApply<in TEvt>: IApply
     where TEvt: IEvt
 {
-    TState Apply(TState state, TEvt evt);
+    void Apply(TEvt evt);
 }

@@ -8,7 +8,7 @@ public static partial class Inject
     {
         return services
             .AddTopicPubSub()
-            .AddSingleton(Schema.Tests.Engine.New)
+            .AddSingleton(Schema.Tests.Engine.Ctor)
             .AddTransient<IEngineAggregate, EngineAggregate>()
             .AddStartOnInitializedPolicy();
     }

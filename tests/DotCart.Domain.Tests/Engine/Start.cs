@@ -8,15 +8,15 @@ namespace DotCart.Domain.Tests.Engine;
 
 
 public partial class EngineAggregate :
-    IExec<Schema.Tests.Engine, Start.Cmd>,
-    IApply<Schema.Tests.Engine, Start.Evt>
+    IExec<Start.Cmd>,
+    IApply<Start.Evt>
 {
-    public IFeedback Verify(Schema.Tests.Engine state, Start.Cmd cmd)
+    public IFeedback Verify(Start.Cmd cmd)
     {
         var fbk = Feedback.Empty;
         try
         {
-            Guard.Against.StateIsNotInitialized(state);
+            Guard.Against.StateIsNotInitialized(_state);
         }
         catch (Exception e)
         {
@@ -25,7 +25,7 @@ public partial class EngineAggregate :
         return fbk;
     }
 
-    public IEnumerable<Domain.IEvt> Exec(Schema.Tests.Engine state, Start.Cmd cmd)
+    public IEnumerable<IEvt> Exec(Start.Cmd cmd)
     {
         return new[]
         {
@@ -33,10 +33,9 @@ public partial class EngineAggregate :
         };
     }
 
-    public Schema.Tests.Engine Apply(Schema.Tests.Engine state, Start.Evt evt)
+    public void Apply(Start.Evt evt)
     {
-        state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
-        return state;
+        _state.Status = (EngineStatus)((int)_state.Status).SetFlag((int)EngineStatus.Started);
     }
 }
 
@@ -54,15 +53,15 @@ public static class Start
 
         protected override async Task Enforce(Domain.IEvt evt)
         {
-            var cmd = Cmd.New(evt.AggregateID, Pld.New);
+            var cmd = Cmd.New(evt.AggregateID, Payload.New);
             var fbk = await Aggregate.ExecuteAsync(cmd);
             Console.WriteLine(fbk.GetPayload<Schema.Tests.Engine>());
         }
     }
     
-    public record Pld : IPld
+    public record Payload : IPld
     {
-        public static readonly Pld New = new();
+        public static readonly Payload New = new();
     }
     
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
@@ -78,26 +77,26 @@ public static class Start
     }
 
     
-    public interface ICmd : ICmd<Pld>
+    public interface ICmd : ICmd<Payload>
     {
     }
 
 
     public record Cmd
-        (IID AggregateID, Pld Pld) :
-            Cmd<Pld>(CmdTopic, AggregateID, Pld), ICmd
+        (IID AggregateID, Payload Payload) :
+            Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
     {
-        public static Cmd New(IID aggID, Pld pld)
+        public static Cmd New(IID aggID, Payload payload)
         {
-            return new Cmd(aggID, pld);
+            return new Cmd(aggID, payload);
         }
     }
     
-    public interface IEvt : IEvt<Pld>
+    public interface IEvt : IEvt<Payload>
     {
     }
     public record Evt
-        (IID AggregateID, Pld Pld) :
-            Evt<Pld>(EvtTopic, AggregateID, Pld), IEvt;
+        (IID AggregateID, Payload Payload) :
+            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt;
     
 }

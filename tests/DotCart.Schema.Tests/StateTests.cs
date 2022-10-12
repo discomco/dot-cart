@@ -15,6 +15,7 @@ public class StateTests : IoCTests
         var newState = Container.GetService<NewState<Engine>>();
         // WHEN
         var eng = newState();
+        eng.Id = EngineID.New.Value;
         // THEN
         Assert.NotNull(eng);
     }
@@ -80,6 +81,6 @@ public class StateTests : IoCTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        services.AddSingleton(Engine.New);
+        services.AddSingleton(Engine.Ctor);
     }
 }

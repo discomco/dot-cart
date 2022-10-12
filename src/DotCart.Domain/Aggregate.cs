@@ -28,14 +28,13 @@ public interface IAggregate<TState, TID> : IAggregate
 
     public string Name { get; }
     void InjectPolicies(IEnumerable<IAggregatePolicy> aggregatePolicies);
-    
+
     // bool IsNew();
     // bool HasSourceId(IID sourceId);
     // void ApplyEvent(IEvent evt, long version);
     // void ClearUncommittedEvents();
     // void Load(IEnumerable<IEvent> events);
     IEnumerable<IEvt> UncommittedEvents { get; }
-    
 }
 
 public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where TState : IState
@@ -63,11 +62,11 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
 
     private bool _withAppliedEvents;
 
-    private readonly TState _state;
+    protected TState _state;
 
     protected Aggregate(
         NewState<TState> newState,
-        ITopicPubSub pubSub) 
+        ITopicPubSub pubSub)
     {
         _state = newState();
         _pubSub = pubSub;
@@ -119,26 +118,30 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         var fbk = Feedback.New(cmd.GetID());
         try
         {
-            fbk = ((dynamic)this).Verify(_state, (dynamic)cmd);
+            fbk = ((dynamic)this).Verify((dynamic)cmd);
             if (!fbk.IsSuccess) return fbk;
-            IEnumerable<IEvt> events = ((dynamic)this).Exec(_state, (dynamic)cmd);
+            IEnumerable<IEvt> events = ((dynamic)this).Exec((dynamic)cmd);
+
+                
             foreach (var @event in events)
             {
                 await RaiseEvent(@event);
             }
+
             fbk.SetPayload(_state);
         }
         catch (Exception e)
         {
             fbk.SetError(e.AsApiError());
         }
+
         return fbk;
     }
 
     private void ApplyEvent(IEvt evt, long version)
     {
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId))) return;
-        ((dynamic)this).Apply(_state, (dynamic)evt);
+        ((dynamic)this).Apply((dynamic)evt);
         Version = version;
     }
 }
