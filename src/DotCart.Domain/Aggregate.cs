@@ -1,4 +1,3 @@
-using System.Dynamic;
 using DotCart.Contract;
 using DotCart.Schema;
 
@@ -46,9 +45,9 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
 
     public void InjectPolicies(IEnumerable<IAggregatePolicy> aggregatePolicies)
     {
-        foreach (var aggregatePolicy in aggregatePolicies)
+        foreach (var policy in aggregatePolicies)
         {
-            aggregatePolicy.SetAggregate(this);
+            policy.SetAggregate(this);
         }
     }
 
@@ -121,7 +120,6 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
             fbk = ((dynamic)this).Verify((dynamic)cmd);
             if (!fbk.IsSuccess) return fbk;
             IEnumerable<IEvt> events = ((dynamic)this).Exec((dynamic)cmd);
-
                 
             foreach (var @event in events)
             {
@@ -146,6 +144,3 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
     }
 }
 
-public abstract class AggregateBase
-{
-}

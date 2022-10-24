@@ -79,10 +79,6 @@ public class AggregateTests : IoCTests
             (int)EngineStatus.Started));
         Output.WriteLine($"{state}");
     }
-    
-    
-    
-    
 
     public AggregateTests(ITestOutputHelper output, IoCTestContainer container) 
         : base(output, container)
