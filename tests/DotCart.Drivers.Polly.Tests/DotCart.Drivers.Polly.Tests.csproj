@@ -21,8 +21,4 @@
     </PackageReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
-  </ItemGroup>
-
 </Project>

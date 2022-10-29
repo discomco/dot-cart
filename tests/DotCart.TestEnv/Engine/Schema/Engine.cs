@@ -11,6 +11,7 @@ public record struct Engine : IState
     public string Id { get; set; }
     public EngineStatus Status { get; set; }
 
+    public int Power { get; set; } = 0;
     public Details Details { get; }
 
     [JsonConstructor]
@@ -19,6 +20,7 @@ public record struct Engine : IState
         Id = id;
         Status = status;
         Details = details;
+        Power = 0;
     }
 
     private Engine(string id)

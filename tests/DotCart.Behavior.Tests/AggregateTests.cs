@@ -11,7 +11,7 @@ namespace DotCart.Behavior.Tests;
 public class AggregateTests : IoCTests
 {
     
-    private EngineID? _engineID = EngineID.New;
+    private readonly EngineID? _engineID = EngineID.New;
     private IEngineAggregate? _agg;
     private IEnginePolicy? _startPolicy;
     private IAggregateBuilder? _builder;
@@ -37,6 +37,28 @@ public class AggregateTests : IoCTests
         Assert.NotNull(agg);
         var state = agg.GetState();
         Assert.NotNull(state);
+    }
+
+    [Fact]
+    public void ShouldLoadEvents()
+    {
+        // GIVEN
+        Assert.NotNull(_agg);
+        // AND
+        var initPayload = TestEnv.Engine.Behavior.Initialize.Payload.New(_newState());
+        var initEvt = TestEnv.Engine.Behavior.Initialize.Evt.New(_engineID, initPayload);
+        // AND
+        var startPayload = Start.Payload.New;
+        var startEvt = Start.Evt.New(_engineID, startPayload);
+        // AND
+        var throttleUpPayload = ThrottleUp.Payload.New(5);
+        var throttleUpEvt = ThrottleUp.Evt.New(_engineID, throttleUpPayload);
+//        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
+        // WHEN
+        var events = new IEvt[] { initEvt, startEvt, throttleUpEvt };
+        _agg.Load(events);
+        // THEN
+        Assert.Equal(2,_agg.Version);
     }
 
 

@@ -29,11 +29,8 @@ public interface IAggregate<TState, TID> : IAggregate
 {
     public IAggregate SetID(TID id);
     public TID ID { get; }
-
     // bool IsNew();
     // bool HasSourceId(IID sourceId);
-    // void ApplyEvent(IEvent evt, long version);
-    
 }
 
 public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where TState : IState
@@ -60,11 +57,11 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
 
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
 
-    public IEnumerable<IEvt> AppliedEvents { get; }
+    public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>(); 
 
     public string Type { get; set; }
 
-    private bool _withAppliedEvents;
+    private bool _withAppliedEvents = false;
 
     protected TState _state;
 
@@ -89,7 +86,12 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
 
     public void Load(IEnumerable<IEvt>? events)
     {
-        _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, Version++));
+        // foreach (var evt in events)
+        // {
+        //     _state = ApplyEvent(_state, evt, ++Version);
+        // }
+       
+        _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
     }
 
     public TID ID { get; private set; }
@@ -119,7 +121,7 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
     {
         _state = ApplyEvent(_state, evt, Version++);
         _uncommittedEvents.Add(evt);
-        await _pubSub.PublishAsync(evt.Topic, evt);
+        await _pubSub.PublishAsync(evt.EventType, evt);
     }
 
     private IEnumerable<IDomainPolicy> _policies = Array.Empty<IDomainPolicy>();
@@ -136,13 +138,12 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
             
             if (!fbk.IsSuccess) return fbk;
             
-            IEnumerable<IEvt> events = ((dynamic)this).Exec((dynamic)cmd);
+            IEnumerable<IEvt> events = ((dynamic)this).Raise((dynamic)cmd);
             
             foreach (var @event in events)
             {
                 await RaiseEvent(@event);
             }
-            
             fbk.SetPayload(_state);
         }
         catch (Exception e)
@@ -157,6 +158,7 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
     {
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId))) return _state;
         Version = version;
+        evt.SetVersion(Version);
         return ((dynamic)this).Apply(state, (dynamic)evt);
     }
 }

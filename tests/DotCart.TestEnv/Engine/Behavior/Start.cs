@@ -1,7 +1,6 @@
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
-using DotCart.Drivers.Ardalis;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,7 +9,7 @@ namespace DotCart.TestEnv.Engine.Behavior;
 
 
 public partial class EngineAggregate :
-    IExec<Start.Cmd>,
+    ITry<Start.Cmd>,
     IApply<Schema.Engine, Start.Evt>
 {
     public IFeedback Verify(Start.Cmd cmd)
@@ -27,11 +26,11 @@ public partial class EngineAggregate :
         return fbk;
     }
 
-    public IEnumerable<IEvt> Exec(Start.Cmd cmd)
+    public IEnumerable<IEvt> Raise(Start.Cmd cmd)
     {
         return new[]
         {
-            new Start.Evt(cmd.AggregateID, cmd.Payload)
+            Start.Evt.New(cmd.AggregateID, cmd.Payload)
         };
     }
 
@@ -40,10 +39,16 @@ public partial class EngineAggregate :
         state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
         return state;
     }
+
 }
 
 public static class Start
 {
+    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<IEnginePolicy, StartOnInitializedPolicy>();
+    }
 
     public const string CmdTopic = "engine:start:v1";
     public const string EvtTopic = "engine:started:v1";
@@ -61,25 +66,15 @@ public static class Start
             Console.WriteLine(fbk.GetPayload<Schema.Engine>());
         }
     }
-    
     public record Payload : IPayload
     {
         public static readonly Payload New = new();
     }
-    
-    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
-    {
-        return services
-            .AddTransient<IEnginePolicy, StartOnInitializedPolicy>();
-    }
-    
     public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
     {
         if (((int)state.Status).NotHasFlag((int)EngineStatus.Initialized))
             throw new NotInitializedException($"engine {state.Id}  is not initialized");
     }
-
-    
     public interface ICmd : ICmd<Payload>
     {
     }
@@ -98,9 +93,11 @@ public static class Start
     public interface IEvt : IEvt<Payload>
     {
     }
-    
+   
     public record Evt
         (IID AggregateID, Payload Payload) :
-            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt;
-    
+            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
+    {
+        public static Evt New(IID engineID, Payload payload) => new(engineID, payload);
+    }
 }

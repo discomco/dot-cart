@@ -8,7 +8,7 @@ using DotCart.TestEnv.Engine.Schema;
 namespace DotCart.TestEnv.Engine.Behavior;
 
 public partial class EngineAggregate
-    : IExec<Initialize.Cmd>,
+    : ITry<Initialize.Cmd>,
         IApply<Schema.Engine, Initialize.Evt>
 
 {
@@ -17,7 +17,7 @@ public partial class EngineAggregate
         var fbk = Feedback.New(cmd.AggregateID);
         try
         {
-            Guard.Against.IsAlreadyInitialized(_state);
+            Guard.Against.EngineInitialized(_state);
         }
         catch (Exception e)
         {
@@ -28,11 +28,11 @@ public partial class EngineAggregate
         return fbk;
     }
 
-    public IEnumerable<IEvt> Exec(Initialize.Cmd cmd)
+    public IEnumerable<IEvt> Raise(Initialize.Cmd cmd)
     {
         return new[]
         {
-            new Initialize.Evt(cmd.AggregateID, Initialize.Payload.New(_state))
+            new Initialize.Evt(cmd.AggregateID, Initialize.Payload.New(cmd.Payload.Engine))
         };
     }
 
@@ -49,13 +49,6 @@ public static class Initialize
     public const string CmdTopic = "test:engine:initialize:v1";
     public const string EvtTopic = "test:engine:initialized:v1";
 
-    public static void IsAlreadyInitialized(this IGuardClause guard, Schema.Engine state)
-    {
-        if (((int)state.Status).HasFlag((int)EngineStatus.Initialized))
-        {
-            throw Excep.New($"Engine {state.Id} is already initialized.");
-        }
-    }
 
     public record Payload : IPayload
     {
@@ -72,27 +65,27 @@ public static class Initialize
         }
     }
 
-    public class Excep : Exception
+    public class Exception : System.Exception
     {
-        public Excep()
+        public Exception()
         {
         }
 
-        protected Excep(SerializationInfo info, StreamingContext context) : base(info, context)
+        protected Exception(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
 
-        public Excep(string? message) : base(message)
+        public Exception(string? message) : base(message)
         {
         }
 
-        public Excep(string? message, Exception? innerException) : base(message, innerException)
+        public Exception(string? message, System.Exception? innerException) : base(message, innerException)
         {
         }
 
-        public static Excep New(string msg)
+        public static Exception New(string msg)
         {
-            return new Excep(msg);
+            return new Exception(msg);
         }
     }
 
@@ -100,9 +93,14 @@ public static class Initialize
     {
     }
 
-    public record Evt
-        (IID AggregateID, Payload Payload)
-        : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt;
+    public record Evt(IID AggregateID, Payload Payload)
+        : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
+    {
+        public static Evt New(EngineID engineId, Payload initPayload)
+        {
+            return new Evt(engineId, initPayload);
+        }
+    }
 
     public interface ICmd : ICmd<Payload>
     {
