@@ -4,6 +4,7 @@ namespace DotCart.Schema;
 
 public enum ErrorCode
 {
+    Unknown = 0,
     // Informational 1xx
     Continue = 100,
     SwitchingProtocols = 101,
@@ -94,6 +95,7 @@ public enum ErrorCode
 
 public record Error
 {
+    public ErrorCode Code { get; set; }
     public string Subject { get; set; }
     public string Content { get; set; }
     public string Stack { get; set; }

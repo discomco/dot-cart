@@ -1,15 +1,17 @@
 namespace DotCart.Schema;
 
+
+
 public delegate TState NewState<out TState>() where TState:IState;
 
-public delegate TStateRepo NewStateRepo<out TStateRepo>() where TStateRepo : IStateRepo;
+public delegate TStateRepo NewStateRepo<out TStateRepo, TState>() 
+    where TStateRepo : IStateRepo<TState> 
+    where TState : IState;
 
-public interface IStateRepo
+public interface IStateRepo<TState> where TState:IState
 {
     
 }
 
-
-
-public interface IState: IPld
+public interface IState: IPayload
 { }

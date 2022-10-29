@@ -2,7 +2,7 @@
 
 public static class ErrorUtils
 {
-    public static Error AsApiError(this Exception e)
+    public static Error AsError(this Exception e)
     {
         var res = new Error
         {
@@ -14,7 +14,7 @@ public static class ErrorUtils
             Stack = e.StackTrace
         };
         if (e.InnerException != null)
-            res.InnerError = e.InnerException.AsApiError();
+            res.InnerError = e.InnerException.AsError();
         return res;
     }
 

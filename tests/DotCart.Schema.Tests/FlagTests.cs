@@ -1,3 +1,4 @@
+using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 

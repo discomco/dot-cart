@@ -6,10 +6,10 @@ public static class ResourceUtils
 {
     public static string GetEmbeddedResource(string resourceName, Assembly assembly)
     {
+        if (assembly == null) return string.Empty;
         var newResourceName = FormatResourceName(assembly, resourceName);
         using var resourceStream = assembly.GetManifestResourceStream(newResourceName);
-        if (resourceStream == null)
-            return null;
+        if (resourceStream == null) return string.Empty;
         using var reader = new StreamReader(resourceStream);
         return reader.ReadToEnd();
     }

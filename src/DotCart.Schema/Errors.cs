@@ -19,7 +19,7 @@ public sealed class Errors : List<KeyValuePair<string, Error>>
 
     public void Add(string key, Exception e)
     {
-        Add(key, e.AsApiError());
+        Add(key, e.AsError());
     }
 
     public new void AddRange(IEnumerable<KeyValuePair<string, Error>> range)

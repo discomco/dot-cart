@@ -13,7 +13,7 @@ public static class StreamUtils
             _file = file;
             _length = file.Length;
             _bytesRead = 0;
-            DoProgressChanged(_bytesRead, _length);
+//            DoProgressChanged(_bytesRead, _length);
         }
         public override bool CanRead => true;
         public override bool CanSeek => false;
@@ -24,7 +24,7 @@ public static class StreamUtils
             get => _bytesRead;
             set => throw new Exception("The method or operation is not implemented.");
         }
-        public event EventHandler<ProgressChangedEventArgs> OnProgressChanged;
+        public event EventHandler<ProgressChangedEventArgs>? OnProgressChanged;
         private void DoProgressChanged(long bytesRead, long length)
         {
             OnProgressChanged?.Invoke(this, new ProgressChangedEventArgs(bytesRead, length));
@@ -40,7 +40,7 @@ public static class StreamUtils
         {
             var result = _file.Read(buffer, offset, count);
             _bytesRead += result;
-            OnProgressChanged?.Invoke(this, new ProgressChangedEventArgs(_bytesRead, _length));
+            DoProgressChanged(_bytesRead, _length);
             return result;
         }
         public override long Seek(long offset, SeekOrigin origin)
