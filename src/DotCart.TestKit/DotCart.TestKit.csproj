@@ -14,8 +14,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
-        <ProjectReference Include="..\DotCart.Serilog\DotCart.Serilog.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
         <ProjectReference Include="..\DotCart\DotCart.csproj"/>
     </ItemGroup>
 
