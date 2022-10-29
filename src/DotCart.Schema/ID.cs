@@ -146,11 +146,6 @@ public abstract record ID<T> : IID<T>
         _lazyGuid = new Lazy<Guid>(() => Guid.Parse(ValueValidation.Match(Value).Groups["guid"].Value));
     }
 
-    // public Identity()
-    // {
-    //     
-    // }
-
     public Guid GetGuid()
     {
         return _lazyGuid.Value;

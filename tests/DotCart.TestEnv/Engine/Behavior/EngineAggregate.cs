@@ -8,7 +8,7 @@ public interface IEnginePolicy : IDomainPolicy<IEngineAggregate>
 {
 }
 
-public interface IEngineAggregate : IAggregate<Schema.Engine, EngineID>
+public interface IEngineAggregate : IAggregate
 {
 }
 

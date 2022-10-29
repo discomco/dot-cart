@@ -7,6 +7,13 @@ public record struct Engine : IState
 {
     public static NewState<Engine> Ctor = () => new Engine();
 
+    public Engine()
+    {
+        Details = Details.New("New Engine");
+        Id = EngineID.New.Value;
+        Status = EngineStatus.Unknown;
+    }
+    
     [JsonConstructor]
     public Engine(string id, EngineStatus status, Details details)
     {

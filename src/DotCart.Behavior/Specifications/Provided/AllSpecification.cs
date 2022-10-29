@@ -7,12 +7,9 @@ public class AllSpecifications<T> : Specification<T>
     public AllSpecifications(
         IEnumerable<ISpecification<T>> specifications)
     {
-        var specificationList = (specifications ?? Enumerable.Empty<ISpecification<T>>()).ToList();
-
-        if (!specificationList.Any())
+        if (!specifications.Any())
             throw new ArgumentException("Please provide some specifications", nameof(specifications));
-
-        _specifications = specificationList;
+        _specifications = specifications.ToList();
     }
 
     protected override IEnumerable<string> IsNotSatisfiedBecause(T aggregate)

@@ -35,7 +35,7 @@ public class StateTests : IoCTests
         // THEN
         Assert.NotNull(eng1.Details);
         Assert.NotNull(eng2.Details);
-        Assert.NotEqual(eng1, eng2);
+        Assert.NotSame(eng1, eng2);
     }
 
     [Fact]

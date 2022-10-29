@@ -1,5 +1,8 @@
+using System.Reflection.Metadata.Ecma335;
+using Ardalis.GuardClauses;
 using DotCart.Contract;
 using DotCart.Schema;
+using Serilog;
 
 namespace DotCart.Behavior;
 
@@ -9,32 +12,22 @@ public delegate IAggregate AggBuilder(AggCtor newAgg);
 
 public interface IAggregate
 {
+    IID ID { get; }
     bool IsNew { get; }
-    string Name { get; }
     long Version { get; }
     IEnumerable<IEvt> UncommittedEvents { get; }
     string Id();
-    IID GetID();
     Task<IFeedback> ExecuteAsync(ICmd cmd);
     IState GetState();
-    void SetID(IID getId);
+    IAggregate SetID(IID ID);
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
     void InjectPolicies(IEnumerable<IDomainPolicy> policies);
+    string GetName();
 }
 
-public interface IAggregate<TState, TID> : IAggregate
+public class Aggregate<TState, TID> : IAggregate 
     where TState : IState
-    where TID : IID
-{
-    public TID ID { get; }
-
-    public IAggregate SetID(TID id);
-    // bool IsNew();
-    // bool HasSourceId(IID sourceId);
-}
-
-public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where TState : IState
     where TID : ID<TID>
 {
     private const long _newVersion = -1;
@@ -44,9 +37,6 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
 
     public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>();
-    private object _mutex = new();
-
-    private IEnumerable<IDomainPolicy> _policies = Array.Empty<IDomainPolicy>();
 
     protected TState _state;
 
@@ -61,11 +51,15 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         Version = _newVersion;
     }
 
-    public string Type { get; set; }
 
     public void InjectPolicies(IEnumerable<IDomainPolicy> aggregatePolicies)
     {
         foreach (var policy in aggregatePolicies) policy.SetBehavior(this);
+    }
+
+    public string GetName()
+    {
+        return GetType().FullName;
     }
 
     public void ClearUncommittedEvents()
@@ -80,22 +74,31 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         return _state;
     }
 
-    public void SetID(IID getId)
+    public IAggregate SetID(IID ID)
     {
-        ID = getId as TID;
+        this.ID = ID;
+        return this;
     }
 
     public void Load(IEnumerable<IEvt>? events)
     {
-        // foreach (var evt in events)
-        // {
-        //     _state = ApplyEvent(_state, evt, ++Version);
-        // }
-
-        _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
+        try
+        {
+            Guard.Against.BehaviorIDNotSet(this);
+            // foreach (var evt in events)
+            // {
+            //     _state = ApplyEvent(_state, evt, ++Version);
+            // }
+            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.Message);
+            throw;
+        }
     }
 
-    public TID ID { get; private set; }
+    public IID ID { get; private set; }
 
     public bool IsNew => Version == -1;
     public long Version { get; set; }
@@ -105,44 +108,41 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         return ID;
     }
 
-    public string Name { get; }
 
     public string Id()
     {
         return ID.Value;
     }
 
-    public IAggregate SetID(TID id)
-    {
-        ID = id;
-        return this;
-    }
-
 
     public async Task<IFeedback> ExecuteAsync(ICmd cmd)
     {
-        var fbk = Feedback.New(cmd.GetID());
+        var feedback = Feedback.New(cmd.GetID());
         try
         {
-            fbk = ((dynamic)this).Verify((dynamic)cmd);
+            Guard.Against.BehaviorIDNotSet(this);
+            
+            feedback = ((dynamic)this).Verify((dynamic)cmd);
 
-            if (!fbk.IsSuccess) return fbk;
+            if (!feedback.IsSuccess) return feedback;
 
             IEnumerable<IEvt> events = ((dynamic)this).Raise((dynamic)cmd);
-
+            
             foreach (var @event in events) await RaiseEvent(@event);
-            fbk.SetPayload(_state);
+            
+            feedback.SetPayload(_state);
         }
         catch (Exception e)
         {
-            fbk.SetError(e.AsError());
+            feedback.SetError(e.AsError());
         }
 
-        return fbk;
+        return feedback;
     }
 
     private async Task RaiseEvent(IEvt evt)
     {
+        if (Version>= evt.Version) {return;}
         _state = ApplyEvent(_state, evt, Version++);
         _uncommittedEvents.Add(evt);
         await _pubSub.PublishAsync(evt.EventType, evt);
@@ -153,6 +153,8 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId))) return _state;
         Version = version;
         evt.SetVersion(Version);
+        evt.SetBehaviorType(GetName());
+        _appliedEvents.Add(evt);
         return ((dynamic)this).Apply(state, (dynamic)evt);
     }
 }

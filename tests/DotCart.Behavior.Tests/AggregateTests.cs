@@ -32,7 +32,7 @@ public class AggregateTests : IoCTests
     }
 
     [Fact]
-    public void ShouldBeAbleToCreateAnAggregate()
+    public void ShouldResolveBehavior()
     {
         // GIVEN
         // WHEN
@@ -60,9 +60,11 @@ public class AggregateTests : IoCTests
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
         var events = new[] { initEvt, startEvt, throttleUpEvt };
+        _agg.SetID(_engineID);
         _agg.Load(events);
         // THEN
         Assert.Equal(2, _agg.Version);
+        
     }
 
 
