@@ -1,7 +1,6 @@
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
-
 namespace DotCart.TestKit;
 
 public interface IHostExecutor

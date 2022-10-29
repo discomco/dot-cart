@@ -2,14 +2,13 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Behavior;
 
-
 public static partial class Inject
 {
     public static IServiceCollection AddTopicPubSub(this IServiceCollection services)
     {
         return services
             .AddSingleton<ITopicPubSub, TopicPubSub>();
-    } 
+    }
 }
 
 public class TopicPubSub : ITopicPubSub
@@ -32,7 +31,7 @@ public class TopicPubSub : ITopicPubSub
         GetHandlersOf(topic).Add(handler);
     }
 
-    public void Subscribe(string topic, Func<IEvt,Task> handler)
+    public void Subscribe(string topic, Func<IEvt, Task> handler)
     {
         GetHandlersOf(topic).Add(handler);
     }
@@ -58,10 +57,9 @@ public class TopicPubSub : ITopicPubSub
                 throw;
             }
     }
-    
+
     private ICollection<object> GetHandlersOf(string topic)
     {
         return Handlers.GetValueOrDefault(topic) ?? (Handlers[topic] = new List<object>());
     }
-    
 }

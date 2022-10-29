@@ -1,5 +1,7 @@
 namespace DotCart.Contract;
 
-public interface IFact : IDto {}
+public interface IFact : IDto
+{
+}
 
-public abstract record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact; 
+public abstract record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact;

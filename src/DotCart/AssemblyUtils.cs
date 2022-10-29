@@ -9,14 +9,17 @@ public static class AssemblyUtils
         var asm = Assembly.GetExecutingAssembly();
         return asm.GetLoadedModules();
     }
+
     public static string GetVersion(this Assembly assembly)
     {
         return assembly.GetName().Version?.ToString() ?? string.Empty;
     }
+
     public static string ShortName(this Assembly assembly)
     {
         return assembly.FullName?.Split(',')[0] ?? string.Empty;
     }
+
     public static Stream GetEmbeddedFile(this Assembly assembly, string fileName)
     {
         fileName = fileName.Replace('/', '.');
@@ -35,6 +38,7 @@ public static class AssemblyUtils
             throw new Exception(assemblyName + ": " + e.Message);
         }
     }
+
     public static Stream GetEmbeddedFileFromNamedAssembly(string assemblyName, string fileName)
     {
         try

@@ -47,7 +47,7 @@ public class AssemblyUtilsTests
         var file = AssemblyUtils.GetEmbeddedFile(assy, fileName);
         // THEN
         Assert.NotNull(file);
-        Assert.True(file.Length>0);
+        Assert.True(file.Length > 0);
     }
 
     [Fact]
@@ -60,10 +60,6 @@ public class AssemblyUtilsTests
         var file = AssemblyUtils.GetEmbeddedFileFromNamedAssembly(assyName, fileName);
         // THEN
         Assert.NotNull(file);
-        Assert.True(file.Length>0);
-        
+        Assert.True(file.Length > 0);
     }
-    
-    
-    
 }

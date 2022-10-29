@@ -1,17 +1,16 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net6.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
-    <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj" />
-    <ProjectReference Include="..\..\src\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
-    <ProjectReference Include="..\DotCart.Drivers.Microsoft.Tests\DotCart.Drivers.Microsoft.Tests.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Microsoft.Tests\DotCart.Drivers.Microsoft.Tests.csproj"/>
+    </ItemGroup>
 
 
 </Project>

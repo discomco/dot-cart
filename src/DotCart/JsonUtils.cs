@@ -4,7 +4,6 @@ namespace DotCart;
 
 public static class JsonUtils
 {
-
     public static T? FromBytes<T>(this byte[] data)
     {
         var jsonUtfReader = new Utf8JsonReader(data);
@@ -13,8 +12,8 @@ public static class JsonUtils
 
     public static byte[] ToBytes<T>(this T obj)
     {
-        return obj == null 
-            ? Array.Empty<byte>() 
+        return obj == null
+            ? Array.Empty<byte>()
             : JsonSerializer.SerializeToUtf8Bytes(obj);
     }
 }

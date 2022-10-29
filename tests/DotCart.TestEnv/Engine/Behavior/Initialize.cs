@@ -12,6 +12,13 @@ public partial class EngineAggregate
         IApply<Schema.Engine, Initialize.Evt>
 
 {
+    public IState Apply(Schema.Engine state, Initialize.Evt evt)
+    {
+        state.Id = evt.AggregateID.Value;
+        state.Status = EngineStatus.Initialized;
+        return state;
+    }
+
     public IFeedback Verify(Initialize.Cmd cmd)
     {
         var fbk = Feedback.New(cmd.AggregateID);
@@ -35,13 +42,6 @@ public partial class EngineAggregate
             new Initialize.Evt(cmd.AggregateID, Initialize.Payload.New(cmd.Payload.Engine))
         };
     }
-
-    public IState Apply(Schema.Engine state, Initialize.Evt evt)
-    {
-        state.Id = evt.AggregateID.Value;
-        state.Status = EngineStatus.Initialized;
-        return state;
-    }
 }
 
 public static class Initialize
@@ -52,16 +52,16 @@ public static class Initialize
 
     public record Payload : IPayload
     {
+        private Payload(Schema.Engine engine)
+        {
+            Engine = engine;
+        }
+
         public Schema.Engine Engine { get; }
 
         public static Payload New(Schema.Engine engine)
         {
             return new Payload(engine);
-        }
-
-        private Payload(Schema.Engine engine)
-        {
-            Engine = engine;
         }
     }
 

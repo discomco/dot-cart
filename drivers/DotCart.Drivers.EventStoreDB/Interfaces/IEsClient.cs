@@ -9,7 +9,7 @@ public interface IEsClient : IEsClientBase
         StreamRevision expectedRevision,
         IEnumerable<EventData> eventData,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
-        TimeSpan? deadline=null,
+        TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default);
 
@@ -18,7 +18,7 @@ public interface IEsClient : IEsClientBase
         StreamState expectedState,
         IEnumerable<EventData> eventData,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
-        TimeSpan? deadline=null,
+        TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default);
 
@@ -75,7 +75,7 @@ public interface IEsClient : IEsClientBase
         StreamPosition revision,
         long maxCount = 9223372036854775807,
         bool resolveLinkTos = false,
-        TimeSpan? deadline=null,
+        TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default);
 

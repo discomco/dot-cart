@@ -14,10 +14,12 @@ public static class PasswordUtils
     ///     The defaul t_ ma x_ passwor d_ length
     /// </summary>
     private static readonly int DefaultMaxPasswordLength = 10;
+
     private static readonly string PasswordCharsLcase = "abcdefgijkmnopqrstwxyz";
     private static readonly string PasswordCharsUcase = "ABCDEFGHJKLMNPQRSTWXYZ";
     private static readonly string PasswordCharsNumeric = "23456789";
     private static readonly string PasswordCharsSpecial = "*$-+?_&=!%{}/";
+
     public static bool IsEncodedSameAsPassword(string encoded, string plainText)
     {
         if (string.IsNullOrEmpty(encoded) && string.IsNullOrEmpty(plainText)) return true;
@@ -28,19 +30,29 @@ public static class PasswordUtils
         var salt = HexUtils.GetStringFromHex(saltHex);
         return encoded.Equals(saltHex + (salt + plainText).MD5Encode(), StringComparison.InvariantCultureIgnoreCase);
     }
-    public static string Generate() {
+
+    public static string Generate()
+    {
         return Generate(DefaultMinPasswordLength, DefaultMaxPasswordLength, true);
     }
-    public static string Generate(int length) {
+
+    public static string Generate(int length)
+    {
         return Generate(length, length, true);
     }
-    public static string Generate(bool useSpecialsChars) {
+
+    public static string Generate(bool useSpecialsChars)
+    {
         return Generate(DefaultMinPasswordLength, DefaultMaxPasswordLength, useSpecialsChars);
     }
-    public static string Generate(int length, bool useSpecialsChars) {
+
+    public static string Generate(int length, bool useSpecialsChars)
+    {
         return Generate(length, length, useSpecialsChars);
     }
-    public static string Generate(int minLength, int maxLength, bool useSpecialsChars) {
+
+    public static string Generate(int minLength, int maxLength, bool useSpecialsChars)
+    {
         char[] password = null; // This array will hold password characters.
         char[][] charGroups; // Create a local array containing supported password characters grouped by types.
 
@@ -121,14 +133,15 @@ public static class PasswordUtils
             // Add this character to the password.
             password[i] = charGroups[nextGroupIdx][nextCharIdx];
             // If we processed the last character in this group, start over.
-            if (lastCharIdx == 0) {
+            if (lastCharIdx == 0)
+            {
                 charsLeftInGroup[nextGroupIdx] = charGroups[nextGroupIdx].Length;
             }
             else
             {
-                if (lastCharIdx != nextCharIdx) {
-                    (charGroups[nextGroupIdx][lastCharIdx], charGroups[nextGroupIdx][nextCharIdx]) = (charGroups[nextGroupIdx][nextCharIdx], charGroups[nextGroupIdx][lastCharIdx]);
-                }
+                if (lastCharIdx != nextCharIdx)
+                    (charGroups[nextGroupIdx][lastCharIdx], charGroups[nextGroupIdx][nextCharIdx]) = (
+                        charGroups[nextGroupIdx][nextCharIdx], charGroups[nextGroupIdx][lastCharIdx]);
                 charsLeftInGroup[nextGroupIdx]--;
             }
 

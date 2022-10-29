@@ -6,7 +6,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Effects;
 
-
 public static class Inject
 {
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
@@ -16,14 +15,13 @@ public static class Inject
     }
 }
 
-
-internal class CmdHandler: ICmdHandler
+internal class CmdHandler : ICmdHandler
 {
     private readonly IAggregate _aggregate;
     private readonly IAggregateStore _aggregateStore;
 
     public CmdHandler(
-        IAggregate aggregate, 
+        IAggregate aggregate,
         IAggregateStore aggregateStore)
     {
         _aggregate = aggregate;
@@ -47,10 +45,10 @@ internal class CmdHandler: ICmdHandler
             fbk.SetError(e.AsError());
             Console.WriteLine(e);
         }
+
         return fbk;
     }
 }
-
 
 public interface ICmdHandler
 {

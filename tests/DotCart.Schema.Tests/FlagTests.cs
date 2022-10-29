@@ -4,8 +4,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.Schema.Tests;
 
-public class FlagTests: OutputTests
+public class FlagTests : OutputTests
 {
+    public FlagTests(ITestOutputHelper output) : base(output)
+    {
+    }
+
     [Fact]
     public void ShouldSetAFlag()
     {
@@ -13,7 +17,7 @@ public class FlagTests: OutputTests
         var es = (int)EngineStatus.Initialized;
         // WHEN
         es = es.SetFlag((int)EngineStatus.Started);
-        var hasStarted = es.HasFlag((int)EngineStatus.Started);  
+        var hasStarted = es.HasFlag((int)EngineStatus.Started);
         // THEN
         Assert.True(hasStarted);
     }
@@ -28,7 +32,7 @@ public class FlagTests: OutputTests
         es = es.UnsetFlag((int)EngineStatus.Started);
 
         es = es.SetFlag((int)EngineStatus.Stopped);
-        
+
         var HasNotStarted = !es.HasFlag((int)EngineStatus.Started);
         // THEN
         Assert.True(HasNotStarted);
@@ -67,13 +71,5 @@ public class FlagTests: OutputTests
         Assert.True(isStarted);
         Assert.False(isInitialized);
         Assert.False(isOverheated);
-        
     }
-    
-    
-    
-
-
-    public FlagTests(ITestOutputHelper output) : base(output)
-    {}
 }

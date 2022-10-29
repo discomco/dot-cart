@@ -5,7 +5,7 @@ namespace DotCart.Drivers.InMem;
 
 internal class MemEventStore : IEventStore
 {
-    private IDictionary<string, IEnumerable<IEvt>?> Streams = new Dictionary<string, IEnumerable<IEvt>?>();
+    private readonly IDictionary<string, IEnumerable<IEvt>?> Streams = new Dictionary<string, IEnumerable<IEvt>?>();
     public bool IsClosed { get; private set; }
 
 
@@ -17,10 +17,7 @@ internal class MemEventStore : IEventStore
     public void Load(IAggregate aggregate)
     {
         IEnumerable<IEvt>? evts = new List<IEvt>();
-        if (Streams.TryGetValue(aggregate.Id(), out evts))
-        {
-            aggregate.Load(evts);
-        }
+        if (Streams.TryGetValue(aggregate.Id(), out evts)) aggregate.Load(evts);
     }
 
     public void Save(IAggregate aggregate)

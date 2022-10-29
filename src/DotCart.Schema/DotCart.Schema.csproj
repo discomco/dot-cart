@@ -1,13 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DotCart\DotCart.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\DotCart\DotCart.csproj"/>
+    </ItemGroup>
 
 </Project>

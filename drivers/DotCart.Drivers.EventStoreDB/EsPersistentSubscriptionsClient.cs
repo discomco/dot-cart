@@ -33,7 +33,7 @@ internal class EsPersistentSubscriptionsClient : IEsPersistentSubscriptionsClien
         return _clt.CreateAsync(streamName, groupName, settings, deadline, userCredentials, cancellationToken);
     }
 
-    public Task DeleteAsync(string streamName, string groupName, 
+    public Task DeleteAsync(string streamName, string groupName,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
@@ -46,8 +46,8 @@ internal class EsPersistentSubscriptionsClient : IEsPersistentSubscriptionsClien
         string groupName,
         Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
         Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
-        UserCredentials? userCredentials = null, 
-        int bufferSize = 10, 
+        UserCredentials? userCredentials = null,
+        int bufferSize = 10,
         CancellationToken cancellationToken = default)
     {
         return _clt.SubscribeToStreamAsync(
@@ -60,10 +60,10 @@ internal class EsPersistentSubscriptionsClient : IEsPersistentSubscriptionsClien
             cancellationToken);
     }
 
-    public Task UpdateAsync(string streamName, string groupName, 
+    public Task UpdateAsync(string streamName, string groupName,
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
-        UserCredentials? userCredentials = null, 
+        UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
         return _clt.UpdateAsync(streamName, groupName, settings, deadline, userCredentials, cancellationToken);

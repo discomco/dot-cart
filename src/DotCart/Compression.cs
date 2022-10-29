@@ -19,6 +19,7 @@ public static class Compression
         inFile.CopyTo(compress);
         return new FileInfo(compressedFilePath);
     }
+
     public static FileInfo Decompress(FileInfo fi)
     {
         // Get the stream of the source file.
@@ -34,6 +35,7 @@ public static class Compression
 
         return new FileInfo(decompressedFilePath);
     }
+
     public static FileInfo Decompress(MemoryStream ms, string fileName)
     {
         // Get original file name
@@ -45,6 +47,7 @@ public static class Compression
         decompress.CopyTo(outFile);
         return new FileInfo(decompressedFilePath);
     }
+
     public static FileInfo Decompress(MemoryStream ms, string fileName, string temporaryPath)
     {
         // Get original file name

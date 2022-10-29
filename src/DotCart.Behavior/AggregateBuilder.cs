@@ -12,8 +12,6 @@ public static partial class Inject
     }
 }
 
-
-
 internal class AggregateBuilder : IAggregateBuilder
 {
     public AggregateBuilder(
@@ -26,4 +24,5 @@ internal class AggregateBuilder : IAggregateBuilder
 }
 
 public interface IAggregateBuilder
-{}
+{
+}

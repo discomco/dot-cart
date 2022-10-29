@@ -2,7 +2,6 @@ using DotCart.Contract;
 
 namespace DotCart.Behavior;
 
-
 public interface IExecResult
 {
     IFeedback Feedback { get; }
@@ -11,5 +10,5 @@ public interface IExecResult
 
 public record ExecResult(IFeedback Feedback, IEnumerable<IEvt> Events) : IExecResult
 {
-    public static ExecResult Empty => new (DotCart.Contract.Feedback.Empty, Array.Empty<IEvt>());
+    public static ExecResult Empty => new(Contract.Feedback.Empty, Array.Empty<IEvt>());
 }

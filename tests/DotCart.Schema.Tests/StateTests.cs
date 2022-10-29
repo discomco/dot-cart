@@ -8,6 +8,9 @@ namespace DotCart.Schema.Tests;
 
 public class StateTests : IoCTests
 {
+    public StateTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldCreateANewState()
@@ -18,7 +21,7 @@ public class StateTests : IoCTests
         var eng = newState();
         eng.Id = EngineID.New.Value;
         // THEN
-        Assert.NotNull(eng);
+        Assert.NotNull(eng.Details);
     }
 
     [Fact]
@@ -30,12 +33,9 @@ public class StateTests : IoCTests
         var eng1 = newState();
         var eng2 = newState();
         // THEN
-        Assert.NotNull(eng1);
-        Assert.NotNull(eng2);
-        Assert.NotSame(eng1,eng2);
-        
-        
-        
+        Assert.NotNull(eng1.Details);
+        Assert.NotNull(eng2.Details);
+        Assert.NotEqual(eng1, eng2);
     }
 
     [Fact]
@@ -59,25 +59,16 @@ public class StateTests : IoCTests
         // WHEN
         var eng = JsonSerializer.Deserialize<Engine>(s);
         // THEN
-        Assert.NotNull(eng);
         Assert.Equal("engine-20298432-4a89-4aac-8430-9ce1161e55fd", eng.Id);
         Assert.Equal(EngineStatus.Initialized, eng.Status);
-    }
-    
-    
-    
-    public StateTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

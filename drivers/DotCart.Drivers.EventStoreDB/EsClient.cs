@@ -8,7 +8,7 @@ namespace DotCart.Drivers.EventStoreDB;
 internal class EsClient : IEsClient
 {
     private readonly EventStoreClient _client;
-    private readonly int _maxRetries = DotCart.Drivers.Polly.Config.MaxRetries;
+    private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
 
 
@@ -23,7 +23,7 @@ internal class EsClient : IEsClient
     }
 
     public Task<IWriteResult> AppendToStreamAsync(
-        string streamName, 
+        string streamName,
         StreamRevision expectedRevision,
         IEnumerable<EventData> eventData,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
@@ -41,7 +41,7 @@ internal class EsClient : IEsClient
     }
 
     public Task<IWriteResult> AppendToStreamAsync(
-        string streamName, 
+        string streamName,
         StreamState expectedState,
         IEnumerable<EventData> eventData,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
@@ -56,7 +56,7 @@ internal class EsClient : IEsClient
                 eventData,
                 configureOperationOptions,
                 deadline,
-                userCredentials, 
+                userCredentials,
                 cancellationToken);
         }
         catch (Exception e)
@@ -96,7 +96,7 @@ internal class EsClient : IEsClient
 
     public Task<StreamMetadataResult> GetStreamMetadataAsync(string streamName,
         TimeSpan? deadline = null,
-        UserCredentials? userCredentials = null, 
+        UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
         return _retryPolicy.ExecuteAsync(() => _client.GetStreamMetadataAsync(
@@ -107,7 +107,7 @@ internal class EsClient : IEsClient
     }
 
     public Task<IWriteResult> SetStreamMetadataAsync(
-        string streamName, 
+        string streamName,
         StreamState expectedState,
         StreamMetadata metadata,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
@@ -121,12 +121,12 @@ internal class EsClient : IEsClient
             metadata,
             configureOperationOptions,
             deadline,
-            userCredentials, 
+            userCredentials,
             cancellationToken));
     }
 
     public Task<IWriteResult> SetStreamMetadataAsync(
-        string streamName, 
+        string streamName,
         StreamRevision expectedRevision,
         StreamMetadata metadata,
         Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
@@ -144,7 +144,7 @@ internal class EsClient : IEsClient
     }
 
     public IAsyncEnumerable<ResolvedEvent> ReadAllAsync(
-        Direction direction, 
+        Direction direction,
         Position position,
         long maxCount = 9223372036854775807,
         bool resolveLinkTos = false,
@@ -153,16 +153,16 @@ internal class EsClient : IEsClient
         CancellationToken cancellationToken = default)
     {
         return _client.ReadAllAsync(
-            direction, 
-            position, 
-            maxCount, 
+            direction,
+            position,
+            maxCount,
             resolveLinkTos,
             deadline,
             userCredentials, cancellationToken);
     }
 
     public EventStoreClient.ReadStreamResult ReadStreamAsync(
-        Direction direction, 
+        Direction direction,
         string streamName,
         StreamPosition revision,
         long maxCount = 9223372036854775807,
@@ -170,8 +170,8 @@ internal class EsClient : IEsClient
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _client.ReadStreamAsync(direction, 
-            streamName, revision, maxCount, 
+        return _client.ReadStreamAsync(direction,
+            streamName, revision, maxCount,
             resolveLinkTos, deadline, userCredentials, cancellationToken);
     }
 
@@ -223,12 +223,12 @@ internal class EsClient : IEsClient
     // }
 
     public Task<StreamSubscription> SubscribeToStreamAsync(
-        string streamName, 
+        string streamName,
         FromStream start,
-        Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared, 
+        Func<StreamSubscription, ResolvedEvent, CancellationToken, Task> eventAppeared,
         bool resolveLinkTos = false,
         Action<StreamSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
-        UserCredentials? userCredentials = null, 
+        UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
         return _retryPolicy.ExecuteAsync(() => _client.SubscribeToStreamAsync(
@@ -237,11 +237,11 @@ internal class EsClient : IEsClient
             eventAppeared,
             resolveLinkTos,
             subscriptionDropped,
-            userCredentials, 
+            userCredentials,
             cancellationToken));
     }
 
-    public Task<DeleteResult> TombstoneAsync(string streamName, 
+    public Task<DeleteResult> TombstoneAsync(string streamName,
         StreamRevision expectedRevision,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
@@ -255,7 +255,7 @@ internal class EsClient : IEsClient
     }
 
     public Task<DeleteResult> TombstoneAsync(
-        string streamName, 
+        string streamName,
         StreamState expectedState,
         TimeSpan? deadline,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)

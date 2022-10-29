@@ -8,10 +8,13 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemEventStoreTests : IoCTests
 {
-
     private IEventStore? _eventStore;
-    
-    
+
+    public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
+
+
     [Fact]
     public void ShouldResolveMemEventStore()
     {
@@ -30,12 +33,6 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(_eventStore);
         // AND
-        
-        
-    }
-
-    public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 
     protected override void Initialize()

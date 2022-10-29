@@ -10,9 +10,13 @@ namespace DotCart.Effects.Tests;
 
 public class CmdHandlerTests : IoCTests
 {
-
     private ICmdHandler _cmdHandler;
     private NewState<Engine> _newEngine;
+
+
+    public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldResolveCmdHandler()
@@ -29,7 +33,7 @@ public class CmdHandlerTests : IoCTests
         // WHEN
         var ch2 = Container.GetService<ICmdHandler>();
         // THEN
-        Assert.NotSame(ch1,ch2);
+        Assert.NotSame(ch1, ch2);
     }
 
     [Fact]
@@ -44,13 +48,6 @@ public class CmdHandlerTests : IoCTests
         var fbk = await _cmdHandler.Handle(initCmd);
         // THEN
         Assert.True(fbk.IsSuccess);
-    }
-    
-    
-   
-
-    public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 
     protected override void Initialize()

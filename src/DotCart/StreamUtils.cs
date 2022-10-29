@@ -2,73 +2,6 @@ namespace DotCart;
 
 public static class StreamUtils
 {
-   
-    public sealed class StreamWithProgress : Stream
-    {
-        private readonly FileStream _file;
-        private readonly long _length;
-        private long _bytesRead;
-        public StreamWithProgress(FileStream file)
-        {
-            _file = file;
-            _length = file.Length;
-            _bytesRead = 0;
-//            DoProgressChanged(_bytesRead, _length);
-        }
-        public override bool CanRead => true;
-        public override bool CanSeek => false;
-        public override bool CanWrite => false;
-        public override long Length => throw new Exception("The method or operation is not implemented.");
-        public override long Position
-        {
-            get => _bytesRead;
-            set => throw new Exception("The method or operation is not implemented.");
-        }
-        public event EventHandler<ProgressChangedEventArgs>? OnProgressChanged;
-        private void DoProgressChanged(long bytesRead, long length)
-        {
-            OnProgressChanged?.Invoke(this, new ProgressChangedEventArgs(bytesRead, length));
-        }
-        public double GetProgress()
-        {
-            return (double)_bytesRead / _file.Length;
-        }
-        public override void Flush()
-        {
-        }
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            var result = _file.Read(buffer, offset, count);
-            _bytesRead += result;
-            DoProgressChanged(_bytesRead, _length);
-            return result;
-        }
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-        public override void SetLength(long value)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-        public override void Write(byte[] buffer, int offset, int count)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-    }
-    
-    
-    public class ProgressChangedEventArgs : EventArgs
-    {
-        public long BytesRead;
-        public long Length;
-        public ProgressChangedEventArgs(long bytesRead, long length)
-        {
-            BytesRead = bytesRead;
-            Length = length;
-        }
-    }
-    
     public static Stream ToStream(this string s)
     {
         var stream = new MemoryStream();
@@ -79,8 +12,7 @@ public static class StreamUtils
         return stream;
     }
 
-    
-    
+
     public static byte[] ToBytes(this Stream stream)
     {
         long originalPosition = 0;
@@ -123,6 +55,7 @@ public static class StreamUtils
             if (stream.CanSeek) stream.Position = originalPosition;
         }
     }
+
     public static string AsString(this Stream sIn)
     {
         if (sIn.CanSeek)
@@ -131,10 +64,12 @@ public static class StreamUtils
         var s = sr.ReadToEnd();
         return s;
     }
+
     public static string AsBase64String(this Stream sIn)
     {
         return Convert.ToBase64String(sIn.ToByteArray());
     }
+
     public static void CopyStream(Stream input, Stream output)
     {
         var b = new byte[32768];
@@ -153,5 +88,83 @@ public static class StreamUtils
         var buffer = mem.GetBuffer();
         var length = mem.Length; // the actual length of the data 
         return mem.ToArray(); // makes another copy
+    }
+
+    public sealed class StreamWithProgress : Stream
+    {
+        private readonly FileStream _file;
+        private readonly long _length;
+        private long _bytesRead;
+
+        public StreamWithProgress(FileStream file)
+        {
+            _file = file;
+            _length = file.Length;
+            _bytesRead = 0;
+//            DoProgressChanged(_bytesRead, _length);
+        }
+
+        public override bool CanRead => true;
+        public override bool CanSeek => false;
+        public override bool CanWrite => false;
+        public override long Length => throw new Exception("The method or operation is not implemented.");
+
+        public override long Position
+        {
+            get => _bytesRead;
+            set => throw new Exception("The method or operation is not implemented.");
+        }
+
+        public event EventHandler<ProgressChangedEventArgs>? OnProgressChanged;
+
+        private void DoProgressChanged(long bytesRead, long length)
+        {
+            OnProgressChanged?.Invoke(this, new ProgressChangedEventArgs(bytesRead, length));
+        }
+
+        public double GetProgress()
+        {
+            return (double)_bytesRead / _file.Length;
+        }
+
+        public override void Flush()
+        {
+        }
+
+        public override int Read(byte[] buffer, int offset, int count)
+        {
+            var result = _file.Read(buffer, offset, count);
+            _bytesRead += result;
+            DoProgressChanged(_bytesRead, _length);
+            return result;
+        }
+
+        public override long Seek(long offset, SeekOrigin origin)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public override void SetLength(long value)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+
+        public override void Write(byte[] buffer, int offset, int count)
+        {
+            throw new Exception("The method or operation is not implemented.");
+        }
+    }
+
+
+    public class ProgressChangedEventArgs : EventArgs
+    {
+        public long BytesRead;
+        public long Length;
+
+        public ProgressChangedEventArgs(long bytesRead, long length)
+        {
+            BytesRead = bytesRead;
+            Length = length;
+        }
     }
 }

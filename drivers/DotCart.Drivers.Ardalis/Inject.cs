@@ -9,6 +9,5 @@ public static class Inject
     {
         return services
             .AddMicrosoftDrivers();
-    } 
-
+    }
 }

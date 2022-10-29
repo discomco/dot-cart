@@ -8,6 +8,7 @@ public static class DateTimeUtils
     public static TimeSpan UtcOffset = TimeZoneInfo.Local.GetUtcOffset(DateTime.Now);
     public static DateTime UtcTime => DateTime.Now - UtcOffset;
     public static DateTime UtcToday => UtcTime.Date;
+
     public static DateTime? ParseDate(string date)
     {
         return DateTime.ParseExact(date, DateFormat, CultureInfo.InvariantCulture);

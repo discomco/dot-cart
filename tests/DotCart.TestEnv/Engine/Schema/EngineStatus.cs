@@ -7,5 +7,5 @@ public enum EngineStatus
     Initialized = 1,
     Started = 2,
     Stopped = 4,
-    Overheated = 8,
+    Overheated = 8
 }

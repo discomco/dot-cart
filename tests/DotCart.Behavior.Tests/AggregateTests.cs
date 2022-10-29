@@ -10,12 +10,16 @@ namespace DotCart.Behavior.Tests;
 
 public class AggregateTests : IoCTests
 {
-    
     private readonly EngineID? _engineID = EngineID.New;
     private IEngineAggregate? _agg;
-    private IEnginePolicy? _startPolicy;
     private IAggregateBuilder? _builder;
-    private NewState<Engine>? _newState; 
+    private NewState<Engine>? _newState;
+    private IEnginePolicy? _startPolicy;
+
+    public AggregateTests(ITestOutputHelper output, IoCTestContainer container)
+        : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldBeAbleToCreateEngineID()
@@ -32,7 +36,7 @@ public class AggregateTests : IoCTests
     {
         // GIVEN
         // WHEN
-        var agg =Container.GetService<IEngineAggregate>();
+        var agg = Container.GetService<IEngineAggregate>();
         // THEN
         Assert.NotNull(agg);
         var state = agg.GetState();
@@ -55,10 +59,10 @@ public class AggregateTests : IoCTests
         var throttleUpEvt = ThrottleUp.Evt.New(_engineID, throttleUpPayload);
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
-        var events = new IEvt[] { initEvt, startEvt, throttleUpEvt };
+        var events = new[] { initEvt, startEvt, throttleUpEvt };
         _agg.Load(events);
         // THEN
-        Assert.Equal(2,_agg.Version);
+        Assert.Equal(2, _agg.Version);
     }
 
 
@@ -72,16 +76,14 @@ public class AggregateTests : IoCTests
         // WHEN
         var eng = _newState();
         eng.Id = _engineID.Value;
-        var cmd = TestEnv.Engine.Behavior.Initialize.Cmd.New(_engineID, TestEnv.Engine.Behavior.Initialize.Payload.New(eng));
+        var cmd = TestEnv.Engine.Behavior.Initialize.Cmd.New(_engineID,
+            TestEnv.Engine.Behavior.Initialize.Payload.New(eng));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Engine>();
         // THEN
         Assert.NotNull(feedback);
-        if (!feedback.IsSuccess)
-        {
-            Output.WriteLine(feedback.ErrState.ToString());
-        }
-        
+        if (!feedback.IsSuccess) Output.WriteLine(feedback.ErrState.ToString());
+
         Assert.True(feedback.IsSuccess);
         Assert.True(state.Status.HasFlag(EngineStatus.Initialized));
 //        Thread.Sleep(1_000);
@@ -99,22 +101,13 @@ public class AggregateTests : IoCTests
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Engine>();
         // THEN
-        if (!feedback.IsSuccess)
-        {
-            Output.WriteLine(feedback.ErrState.ToString());
-            
-        }
+        if (!feedback.IsSuccess) Output.WriteLine(feedback.ErrState.ToString());
         Assert.NotNull(feedback);
         Assert.True(feedback.IsSuccess);
         Assert.True(((int)state.Status).HasAllFlags(
-            (int)EngineStatus.Initialized, 
+            (int)EngineStatus.Initialized,
             (int)EngineStatus.Started));
         Output.WriteLine($"{state}");
-    }
-
-    public AggregateTests(ITestOutputHelper output, IoCTestContainer container) 
-        : base(output, container)
-    {
     }
 
     protected override void Initialize()
@@ -126,13 +119,12 @@ public class AggregateTests : IoCTests
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-       var s = services
-           .AddEngineAggregate()
+        var s = services
+            .AddEngineAggregate()
             .AddAggregateBuilder();
     }
 }

@@ -9,7 +9,7 @@ public class OrSpecification<T> : Specification<T>
         ISpecification<T> specification1,
         ISpecification<T> specification2)
     {
-        _specification1 = specification1; 
+        _specification1 = specification1;
         _specification2 = specification2;
     }
 

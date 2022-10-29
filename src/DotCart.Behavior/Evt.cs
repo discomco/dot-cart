@@ -3,19 +3,20 @@ using DotCart.Schema;
 namespace DotCart.Behavior;
 
 public abstract record Evt<TPayload>(
-    string EventType, 
-    IID AggregateID, 
+    string EventType,
+    IID AggregateID,
     TPayload Payload) : IEvt
-    where TPayload: IPayload
+    where TPayload : IPayload
 {
+    public TPayload Payload { get; } = Payload;
     public string EventId { get; } = GuidUtils.NewGuid;
-    
+
     public byte[] Data { get; }
-    
+
     public DateTime TimeStamp { get; }
-    
+
     public string AggregateType { get; }
-    
+
     public string AggregateId => AggregateID.Value;
 
     public long Version { get; private set; }
@@ -26,16 +27,16 @@ public abstract record Evt<TPayload>(
     {
         return Payload;
     }
+
     public IID AggregateID { get; } = AggregateID;
+
     public void SetVersion(long version)
     {
         Version = version;
     }
 
-    public TPayload Payload { get; } = Payload;
     public string EventType { get; } = EventType;
 }
-
 
 public interface IEvt
 {
@@ -47,14 +48,13 @@ public interface IEvt
     string AggregateId { get; }
     long Version { get; }
     byte[] MetaData { get; }
-    IPayload GetPayload();
     IID AggregateID { get; }
+    IPayload GetPayload();
 
     void SetVersion(long version);
 }
 
-
-public interface IEvt<out TPayload> : IEvt where TPayload:IPayload
+public interface IEvt<out TPayload> : IEvt where TPayload : IPayload
 {
     TPayload Payload { get; }
 }

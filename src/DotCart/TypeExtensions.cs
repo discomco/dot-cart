@@ -14,6 +14,9 @@ namespace DotCart;
 
 public static class TypeExtensions
 {
+    private static readonly ConcurrentDictionary<Type, string> PrettyPrintCache =
+        new();
+
     public static IEnumerable<Type> KnownTypes(this Type type)
     {
         return Attribute
@@ -36,10 +39,6 @@ public static class TypeExtensions
         xml.Load(tr);
         return xml;
     }
-
-
-    private static readonly ConcurrentDictionary<Type, string> PrettyPrintCache =
-        new();
 
     public static string PrettyPrint(this Type type)
     {
@@ -70,9 +69,4 @@ public static class TypeExtensions
             ? $"{nameParts[0]}<{new string(',', genericArguments.Length - 1)}>"
             : $"{nameParts[0]}<{string.Join(",", genericArguments.Select(t => PrettyPrintRecursive(t, depth + 1)))}>";
     }
-
-
-
-
-
 }

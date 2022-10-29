@@ -8,17 +8,16 @@ public interface IEnginePolicy : IDomainPolicy<IEngineAggregate>
 {
 }
 
-
 public interface IEngineAggregate : IAggregate<Schema.Engine, EngineID>
 {
-   
 }
+
 public partial class EngineAggregate : Aggregate<Schema.Engine, EngineID>, IEngineAggregate
 {
     public EngineAggregate(
-        NewState<Schema.Engine> newState, 
-        ITopicPubSub pubSub) 
+        NewState<Schema.Engine> newState,
+        ITopicPubSub pubSub)
         : base(newState, pubSub)
-    {}
-  
+    {
+    }
 }

@@ -1,6 +1,4 @@
-
 namespace DotCart.Behavior;
-
 
 public interface IDomainPolicy
 {
@@ -10,5 +8,4 @@ public interface IDomainPolicy
 public interface IDomainPolicy<in TAggregate> : IDomainPolicy
     where TAggregate : IAggregate
 {
-    
 }

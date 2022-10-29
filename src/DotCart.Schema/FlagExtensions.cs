@@ -1,8 +1,7 @@
 namespace DotCart.Schema;
 
-public static class FlagExtensions  
+public static class FlagExtensions
 {
-
     public static bool HasAllFlags(this int source, params int[] flags)
     {
         var res = true;
@@ -12,9 +11,10 @@ public static class FlagExtensions
             if (res == false)
                 return false;
         }
+
         return res;
     }
-    
+
     public static bool HasFlag(this int flags, int flag)
     {
         return (flags & flag) == flag;
@@ -44,5 +44,4 @@ public static class FlagExtensions
     {
         return oldFlags.Aggregate(flags, (current, flag) => current.UnsetFlag(flag));
     }
-    
 }

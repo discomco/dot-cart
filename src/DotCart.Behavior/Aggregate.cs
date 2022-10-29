@@ -11,15 +11,15 @@ public interface IAggregate
 {
     bool IsNew { get; }
     string Name { get; }
-    string Id();
     long Version { get; }
+    IEnumerable<IEvt> UncommittedEvents { get; }
+    string Id();
     IID GetID();
     Task<IFeedback> ExecuteAsync(ICmd cmd);
     IState GetState();
     void SetID(IID getId);
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
-    IEnumerable<IEvt> UncommittedEvents { get; }
     void InjectPolicies(IEnumerable<IDomainPolicy> policies);
 }
 
@@ -27,8 +27,9 @@ public interface IAggregate<TState, TID> : IAggregate
     where TState : IState
     where TID : IID
 {
-    public IAggregate SetID(TID id);
     public TID ID { get; }
+
+    public IAggregate SetID(TID id);
     // bool IsNew();
     // bool HasSourceId(IID sourceId);
 }
@@ -36,34 +37,20 @@ public interface IAggregate<TState, TID> : IAggregate
 public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where TState : IState
     where TID : ID<TID>
 {
-    private object _mutex = new();
-
     private const long _newVersion = -1;
 
-    public void InjectPolicies(IEnumerable<IDomainPolicy> aggregatePolicies)
-    {
-        foreach (var policy in aggregatePolicies)
-        {
-            policy.SetBehavior(this);
-        }
-    }
-
-    public void ClearUncommittedEvents()
-    {
-        _uncommittedEvents.Clear();
-    }
-
-    public IEnumerable<IEvt> UncommittedEvents => _uncommittedEvents;
+    private readonly ITopicPubSub _pubSub;
 
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
 
-    public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>(); 
+    public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>();
+    private object _mutex = new();
 
-    public string Type { get; set; }
-
-    private bool _withAppliedEvents = false;
+    private IEnumerable<IDomainPolicy> _policies = Array.Empty<IDomainPolicy>();
 
     protected TState _state;
+
+    private bool _withAppliedEvents = false;
 
     protected Aggregate(
         NewState<TState> newState,
@@ -73,6 +60,20 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         _pubSub = pubSub;
         Version = _newVersion;
     }
+
+    public string Type { get; set; }
+
+    public void InjectPolicies(IEnumerable<IDomainPolicy> aggregatePolicies)
+    {
+        foreach (var policy in aggregatePolicies) policy.SetBehavior(this);
+    }
+
+    public void ClearUncommittedEvents()
+    {
+        _uncommittedEvents.Clear();
+    }
+
+    public IEnumerable<IEvt> UncommittedEvents => _uncommittedEvents;
 
     public IState GetState()
     {
@@ -90,7 +91,7 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         // {
         //     _state = ApplyEvent(_state, evt, ++Version);
         // }
-       
+
         _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
     }
 
@@ -117,17 +118,6 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         return this;
     }
 
-    private async Task RaiseEvent(IEvt evt)
-    {
-        _state = ApplyEvent(_state, evt, Version++);
-        _uncommittedEvents.Add(evt);
-        await _pubSub.PublishAsync(evt.EventType, evt);
-    }
-
-    private IEnumerable<IDomainPolicy> _policies = Array.Empty<IDomainPolicy>();
-
-    private readonly ITopicPubSub _pubSub;
-
 
     public async Task<IFeedback> ExecuteAsync(ICmd cmd)
     {
@@ -135,15 +125,12 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         try
         {
             fbk = ((dynamic)this).Verify((dynamic)cmd);
-            
+
             if (!fbk.IsSuccess) return fbk;
-            
+
             IEnumerable<IEvt> events = ((dynamic)this).Raise((dynamic)cmd);
-            
-            foreach (var @event in events)
-            {
-                await RaiseEvent(@event);
-            }
+
+            foreach (var @event in events) await RaiseEvent(@event);
             fbk.SetPayload(_state);
         }
         catch (Exception e)
@@ -154,6 +141,13 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         return fbk;
     }
 
+    private async Task RaiseEvent(IEvt evt)
+    {
+        _state = ApplyEvent(_state, evt, Version++);
+        _uncommittedEvents.Add(evt);
+        await _pubSub.PublishAsync(evt.EventType, evt);
+    }
+
     private TState ApplyEvent(TState state, IEvt evt, long version)
     {
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId))) return _state;
@@ -162,4 +156,3 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
         return ((dynamic)this).Apply(state, (dynamic)evt);
     }
 }
-

@@ -3,7 +3,7 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
-public interface IID<TID> : IID 
+public interface IID<TID> : IID
     where TID : IID<TID>
 {
 }
@@ -13,14 +13,13 @@ public interface IID
     string Value { get; }
 }
 
-public abstract record ID<T> :  IID<T>
+public abstract record ID<T> : IID<T>
     where T : IID<T>
 {
-    public string Value { get; }
+    protected static readonly string Prefix = GetPrefix();
 
     private readonly Lazy<Guid> _lazyGuid;
-    
-    protected static readonly string Prefix = GetPrefix();
+    public string Value { get; }
 
     private static string GetPrefix()
     {
@@ -28,15 +27,14 @@ public abstract record ID<T> :  IID<T>
             (IDPrefixAttribute[])typeof(T).GetCustomAttributes(typeof(IDPrefixAttribute), true);
         if (prefixAttributes.Length <= 0)
             throw IDPrefixNotSetException.New;
-            // Let's throw an exception Instead.
-            //return typeof(T).FullName.Replace(".", "").ToLower();
+        // Let's throw an exception Instead.
+        //return typeof(T).FullName.Replace(".", "").ToLower();
         var att = prefixAttributes[0];
         return att.Prefix;
-    }
-
-    // ReSharper disable StaticMemberInGenericType
+    } // ReSharper disable StaticMemberInGenericType
 
     private static readonly Regex NameReplace = new("Id$");
+
     // private static readonly string Name = NameReplace.Replace(typeof(T).Name, string.Empty).ToLowerInvariant();
     private static readonly Regex ValueValidation = new(
         @"^[a-z0-9]+\-(?<guid>[a-f0-9]{8}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{4}\-[a-f0-9]{12})$",
@@ -143,6 +141,7 @@ public abstract record ID<T> :  IID<T>
             if (validationErrors.Any())
                 throw new ArgumentException($"Identity is invalid: {string.Join(", ", validationErrors)}");
         }
+
         Value = value;
         _lazyGuid = new Lazy<Guid>(() => Guid.Parse(ValueValidation.Match(Value).Groups["guid"].Value));
     }
@@ -156,6 +155,4 @@ public abstract record ID<T> :  IID<T>
     {
         return _lazyGuid.Value;
     }
-
-
 }

@@ -8,4 +8,3 @@ public interface ISnapshotStore : IClose
     Task<Snapshot> SaveSnapshot(IAggregate aggregate);
     Task<Snapshot> GetSnapshot(string aggregateId);
 }
-

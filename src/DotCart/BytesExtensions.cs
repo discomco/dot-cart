@@ -24,6 +24,7 @@ public static class BytesExtensions
         // Return the byte array
         return encodedData;
     }
+
     public static byte[] DecodeBase64(this byte[] data)
     {
         // Reconstruct a string from input data
@@ -39,6 +40,7 @@ public static class BytesExtensions
 
         return decodedData;
     }
+
     public static Stream ToStream(this byte[] input)
     {
         var sOut = new MemoryStream();

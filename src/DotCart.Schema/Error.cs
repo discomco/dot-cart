@@ -5,6 +5,7 @@ namespace DotCart.Schema;
 public enum ErrorCode
 {
     Unknown = 0,
+
     // Informational 1xx
     Continue = 100,
     SwitchingProtocols = 101,

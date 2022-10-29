@@ -3,8 +3,8 @@
 ## OUTLINE
 
 - [DotCart.Domain Package](#dotcartdomain-package)
-  - [OUTLINE](#outline)
-  - [DESCRIPTION](#description)
+    - [OUTLINE](#outline)
+    - [DESCRIPTION](#description)
 
 ## DESCRIPTION
 

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-
 namespace DotCart.TestKit;
 
 public class IoCTestContainer : IDisposable
@@ -11,10 +10,10 @@ public class IoCTestContainer : IDisposable
         Services.AddTestHelpers();
     }
 
-    public IServiceCollection Services { get;  } = new ServiceCollection();
+    public IServiceCollection Services { get; } = new ServiceCollection();
     private IServiceProvider Provider => Services.BuildServiceProvider();
-    
- 
+
+
     public void Dispose()
     {
     }

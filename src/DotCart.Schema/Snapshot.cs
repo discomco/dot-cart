@@ -1,6 +1,5 @@
 namespace DotCart.Schema;
 
-
 public class Snapshot
 {
     public string Id { get; set; }

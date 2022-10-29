@@ -8,7 +8,7 @@ public static partial class Inject
     {
         return services
             .AddSingleton<IPubSub, PubSub>();
-    } 
+    }
 }
 
 internal class PubSub : IPubSub

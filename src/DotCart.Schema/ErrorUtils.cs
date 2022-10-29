@@ -26,5 +26,4 @@ public static class ErrorUtils
         foreach (var it in source) target.Add(it);
         return target;
     }
-
 }

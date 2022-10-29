@@ -4,8 +4,6 @@ namespace DotCart.Schema;
 
 public class IDPrefixNotSetException : Exception
 {
-    public static IDPrefixNotSetException New => new("[IDPrefix] attribute not set on the ID");
-    
     public IDPrefixNotSetException()
     {
     }
@@ -21,4 +19,6 @@ public class IDPrefixNotSetException : Exception
     public IDPrefixNotSetException(string? message, Exception? innerException) : base(message, innerException)
     {
     }
+
+    public static IDPrefixNotSetException New => new("[IDPrefix] attribute not set on the ID");
 }

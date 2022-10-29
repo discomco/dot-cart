@@ -2,6 +2,7 @@
 using System.Text;
 
 namespace DotCart;
+
 public static class GuidUtils
 {
     public const string TEST_GUID = "7e577e57-7e57-7e57-7e57-7e577e577e57";
@@ -39,8 +40,8 @@ public static class GuidUtils
     {
         return new Guid(value.ToByteArray());
     }
-    
-        public static class Comb
+
+    public static class Comb
     {
         public static Guid Create()
         {
@@ -123,6 +124,7 @@ public static class GuidUtils
             SwapByteOrder(newGuid);
             return new Guid(newGuid);
         }
+
         private static void SwapByteOrder(IList<byte> guid)
         {
             SwapBytes(guid, 0, 3);
@@ -130,10 +132,12 @@ public static class GuidUtils
             SwapBytes(guid, 4, 5);
             SwapBytes(guid, 6, 7);
         }
+
         private static void SwapBytes(IList<byte> guid, int left, int right)
         {
             (guid[left], guid[right]) = (guid[right], guid[left]);
         }
+
         public static class Namespaces
         {
             public static readonly Guid Events = Guid.Parse("387F5B61-9E98-439A-BFF1-15AD0EA91EA0");
@@ -141,6 +145,4 @@ public static class GuidUtils
             public static readonly Guid Commands = Guid.Parse("4286D89F-7F92-430B-8E00-E468FE3C3F59");
         }
     }
-
-    
 }

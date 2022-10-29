@@ -3,9 +3,8 @@
 ## OUTLINE
 
 - [DotCart.TestKit Package](#dotcarttestkit-package)
-  - [OUTLINE](#outline)
-  - [DESCRIPTION](#description)
-
+    - [OUTLINE](#outline)
+    - [DESCRIPTION](#description)
 
 ## DESCRIPTION
 

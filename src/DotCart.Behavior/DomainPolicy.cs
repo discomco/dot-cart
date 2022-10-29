@@ -14,11 +14,11 @@ public abstract class DomainPolicy<TAggregate, TEvt> : IDomainPolicy<TAggregate>
         pubSub.Subscribe(topic, Enforce);
     }
 
-    protected abstract Task Enforce(IEvt evt);
 
-
-    public void SetBehavior(IAggregate aggregate) 
+    public void SetBehavior(IAggregate aggregate)
     {
         Aggregate = aggregate;
     }
+
+    protected abstract Task Enforce(IEvt evt);
 }

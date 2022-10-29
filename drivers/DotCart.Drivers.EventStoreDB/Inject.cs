@@ -12,10 +12,10 @@ public static class Inject
         return services?
             .AddEventStore(s =>
             {
-                s.ConnectivitySettings.Insecure = EventStoreConfig.Insecure;
-                s.ConnectivitySettings.Address = new Uri(EventStoreConfig.Uri);
-                s.DefaultCredentials = new UserCredentials(EventStoreConfig.UserName, EventStoreConfig.Password);
-                if (EventStoreConfig.UseTls) s.ChannelCredentials = new SslCredentials();
+                s.ConnectivitySettings.Insecure = Config.Insecure;
+                s.ConnectivitySettings.Address = new Uri(Config.Uri);
+                s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
+                if (Config.UseTls) s.ChannelCredentials = new SslCredentials();
             })
             .AddSingleton<IEsPersistentSubscriptionsClient, EsPersistentSubscriptionsClient>()
             .AddSingleton<IEsClient, EsClient>();
