@@ -1,7 +1,7 @@
 using System.Runtime.Serialization;
+using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
-using DotCart.Drivers.Ardalis;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 
@@ -9,7 +9,7 @@ namespace DotCart.TestEnv.Engine.Behavior;
 
 public partial class EngineAggregate
     : IExec<Initialize.Cmd>,
-        IApply<Initialize.Evt>
+        IApply<Schema.Engine, Initialize.Evt>
 
 {
     public IFeedback Verify(Initialize.Cmd cmd)
@@ -17,7 +17,7 @@ public partial class EngineAggregate
         var fbk = Feedback.New(cmd.AggregateID);
         try
         {
-            DotGuard.Against.IsAlreadyInitialized(_state);
+            Guard.Against.IsAlreadyInitialized(_state);
         }
         catch (Exception e)
         {
@@ -36,10 +36,11 @@ public partial class EngineAggregate
         };
     }
 
-    public void Apply(Initialize.Evt evt)
+    public IState Apply(Schema.Engine state, Initialize.Evt evt)
     {
-        _state.Id = evt.AggregateID.Value;
-        _state.Status = EngineStatus.Initialized;
+        state.Id = evt.AggregateID.Value;
+        state.Status = EngineStatus.Initialized;
+        return state;
     }
 }
 
@@ -48,7 +49,7 @@ public static class Initialize
     public const string CmdTopic = "test:engine:initialize:v1";
     public const string EvtTopic = "test:engine:initialized:v1";
 
-    public static void IsAlreadyInitialized(this IClause guard, Schema.Engine state)
+    public static void IsAlreadyInitialized(this IGuardClause guard, Schema.Engine state)
     {
         if (((int)state.Status).HasFlag((int)EngineStatus.Initialized))
         {

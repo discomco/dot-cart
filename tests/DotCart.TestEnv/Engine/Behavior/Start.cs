@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Drivers.Ardalis;
@@ -10,14 +11,14 @@ namespace DotCart.TestEnv.Engine.Behavior;
 
 public partial class EngineAggregate :
     IExec<Start.Cmd>,
-    IApply<Start.Evt>
+    IApply<Schema.Engine, Start.Evt>
 {
     public IFeedback Verify(Start.Cmd cmd)
     {
         var fbk = Feedback.Empty;
         try
         {
-            DotGuard.Against.StateIsNotInitialized(_state);
+            Guard.Against.StateIsNotInitialized(_state);
         }
         catch (Exception e)
         {
@@ -34,9 +35,10 @@ public partial class EngineAggregate :
         };
     }
 
-    public void Apply(Start.Evt evt)
+    public IState Apply(Schema.Engine state, Start.Evt evt)
     {
-        _state.Status = (EngineStatus)((int)_state.Status).SetFlag((int)EngineStatus.Started);
+        state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
+        return state;
     }
 }
 
@@ -71,7 +73,7 @@ public static class Start
             .AddTransient<IEnginePolicy, StartOnInitializedPolicy>();
     }
     
-    public static void StateIsNotInitialized(this IClause guard, Schema.Engine state)
+    public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
     {
         if (((int)state.Status).NotHasFlag((int)EngineStatus.Initialized))
             throw new NotInitializedException($"engine {state.Id}  is not initialized");

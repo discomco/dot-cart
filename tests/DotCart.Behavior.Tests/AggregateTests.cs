@@ -1,4 +1,5 @@
 using DotCart.Schema;
+using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
@@ -54,6 +55,10 @@ public class AggregateTests : IoCTests
         var state = feedback.GetPayload<Engine>();
         // THEN
         Assert.NotNull(feedback);
+        if (!feedback.IsSuccess)
+        {
+            Output.WriteLine(feedback.ErrState.ToString());
+        }
         
         Assert.True(feedback.IsSuccess);
         Assert.True(state.Status.HasFlag(EngineStatus.Initialized));
@@ -72,6 +77,11 @@ public class AggregateTests : IoCTests
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Engine>();
         // THEN
+        if (!feedback.IsSuccess)
+        {
+            Output.WriteLine(feedback.ErrState.ToString());
+            
+        }
         Assert.NotNull(feedback);
         Assert.True(feedback.IsSuccess);
         Assert.True(((int)state.Status).HasAllFlags(
@@ -100,6 +110,7 @@ public class AggregateTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
        var s = services
+           .AddEngineAggregate()
             .AddAggregateBuilder();
     }
 }

@@ -117,7 +117,7 @@ public class Aggregate<TState, TID> : IAggregate<TState, TID>, IAggregate where 
 
     private async Task RaiseEvent(IEvt evt)
     {
-        ApplyEvent(_state, evt, Version++);
+        _state = ApplyEvent(_state, evt, Version++);
         _uncommittedEvents.Add(evt);
         await _pubSub.PublishAsync(evt.Topic, evt);
     }
