@@ -8,7 +8,7 @@ public static partial class Inject
     public static IServiceCollection AddAggregateBuilder(this IServiceCollection services)
     {
         return services
-            .AddTopicPubSub()
+            .AddTopicMediator()
             .AddTransient<IAggregateBuilder, AggregateBuilder>();
     }
 }

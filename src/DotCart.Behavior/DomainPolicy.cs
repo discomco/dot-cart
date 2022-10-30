@@ -13,10 +13,10 @@ public abstract class DomainPolicy<TEvt> : IDomainPolicy
     protected DomainPolicy
     (
         string topic,
-        ITopicPubSub pubSub
+        ITopicMediator mediator
     )
     {
-        pubSub.Subscribe(topic, Enforce);
+        mediator.Subscribe(topic, Enforce);
     }
 
 

@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestKit;
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddTestHelpers(this IServiceCollection services)
     {

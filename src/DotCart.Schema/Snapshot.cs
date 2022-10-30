@@ -1,9 +1,9 @@
 namespace DotCart.Schema;
 
-public class Snapshot
+public record Snapshot(string Id, string BehaviorType, byte[] Data, long Version)
 {
-    public string Id { get; set; }
-    public string BehaviorType { get; set; }
-    public byte[] Data { get; set; }
-    public long Version { get; set; }
+    public string Id { get; } = Id;
+    public string BehaviorType { get; } = BehaviorType;
+    public byte[] Data { get; } = Data;
+    public long Version { get; } = Version;
 }

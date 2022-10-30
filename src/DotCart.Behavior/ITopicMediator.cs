@@ -1,0 +1,2 @@
+namespace DotCart.Behavior;
+

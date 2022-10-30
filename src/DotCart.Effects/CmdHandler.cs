@@ -3,6 +3,7 @@ using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DotCart.Effects;
 
@@ -44,14 +45,17 @@ internal class CmdHandler : ICmdHandler
         catch (Exception e)
         {
             fbk.SetError(e.AsError());
-            Console.WriteLine(e);
+            Log.Error(e.Message); 
         }
-
         return fbk;
+    }
+
+    public void Dispose()
+    {
     }
 }
 
-public interface ICmdHandler
+public interface ICmdHandler : IEffect
 {
     Task<IFeedback> Handle(ICmd cmd);
 }

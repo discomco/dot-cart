@@ -54,7 +54,6 @@ public class AggregateTests : IoCTests
         _agg.Load(events);
         // THEN
         Assert.Equal(2, _agg.Version);
-        
     }
 
 

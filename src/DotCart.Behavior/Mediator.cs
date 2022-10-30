@@ -4,14 +4,14 @@ namespace DotCart.Behavior;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddPubSub(this IServiceCollection services)
+    public static IServiceCollection AddMediator(this IServiceCollection services)
     {
         return services
-            .AddSingleton<IPubSub, PubSub>();
+            .AddSingleton<IMediator, Mediator>();
     }
 }
 
-internal class PubSub : IPubSub
+internal class Mediator : IMediator
 {
     private static readonly AsyncLocal<Dictionary<Type, List<object>>> handlers =
         new();

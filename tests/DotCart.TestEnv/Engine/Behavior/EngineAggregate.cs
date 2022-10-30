@@ -7,9 +7,8 @@ namespace DotCart.TestEnv.Engine.Behavior;
 public partial class EngineAggregate : Aggregate<Schema.Engine, EngineID>
 {
     public EngineAggregate(
-        NewState<Schema.Engine> newState,
-        ITopicPubSub pubSub)
-        : base(newState, pubSub)
+        NewState<Schema.Engine> newState)
+        : base(newState)
     {
     }
 }

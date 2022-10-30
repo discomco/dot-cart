@@ -9,7 +9,7 @@ public static class Inject
     public static IServiceCollection AddEngineAggregate(this IServiceCollection services)
     {
         return services
-            .AddTopicPubSub()
+            .AddTopicMediator()
             .AddSingleton(Schema.Engine.Ctor)
             .AddTransient<IAggregate, EngineAggregate>()
             .AddStartOnInitializedPolicy();

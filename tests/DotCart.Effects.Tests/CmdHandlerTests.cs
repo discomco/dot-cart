@@ -4,7 +4,6 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
-using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -29,7 +28,7 @@ public class CmdHandlerTests : IoCTests
     }
 
     [Fact]
-    public void ShouldResolveAggregateStore()
+    public void ShouldResolveMemEventStore()
     {
         // GIVEN
         Assert.NotNull(Container);
@@ -81,7 +80,6 @@ public class CmdHandlerTests : IoCTests
             .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddMemEventStore()
-//            .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddCmdHandler();
     }
 }

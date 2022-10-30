@@ -61,7 +61,7 @@ public static class Start
 
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.IEvt>
     {
-        public StartOnInitializedPolicy(ITopicPubSub pubSub) : base(Initialize.EvtTopic, pubSub)
+        public StartOnInitializedPolicy(ITopicMediator mediator) : base(Initialize.EvtTopic, mediator)
         {
         }
 

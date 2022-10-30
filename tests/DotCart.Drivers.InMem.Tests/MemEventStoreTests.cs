@@ -28,7 +28,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var me = Container.GetService<IAggregateStore>();
+        var me = Container.GetService<IMemEventStore>();
         // THEN
         Assert.NotNull(me);
     }
