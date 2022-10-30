@@ -22,7 +22,7 @@ public static class TypeExtensions
         return Attribute
             .GetCustomAttributes(type)
             .OfType<KnownTypeAttribute>()
-            .Select(attr => attr.Type);
+            .Select(attr => attr.Type)!;
     }
 
 

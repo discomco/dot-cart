@@ -49,6 +49,7 @@ public static class Start
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
         return services
+            .AddAggregateBuilder()
             .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
     }
 

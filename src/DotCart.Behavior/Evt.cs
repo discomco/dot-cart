@@ -17,7 +17,7 @@ public abstract record Evt<TPayload>(
 
     public string AggregateId => AggregateID.Value;
 
-    public long Version { get; private set; }
+    public long Version { get; private set; } = long.MaxValue;
 
     public byte[] MetaData { get; }
 

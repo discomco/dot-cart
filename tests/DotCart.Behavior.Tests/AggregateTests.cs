@@ -49,17 +49,7 @@ public class AggregateTests : IoCTests
         // GIVEN
         Assert.NotNull(_agg);
         // AND
-        var initPayload = TestEnv.Engine.Behavior.Initialize.Payload.New(_newState());
-        var initEvt = TestEnv.Engine.Behavior.Initialize.Evt.New(_engineID, initPayload);
-        // AND
-        var startPayload = Start.Payload.New;
-        var startEvt = Start.Evt.New(_engineID, startPayload);
-        // AND
-        var throttleUpPayload = ThrottleUp.Payload.New(5);
-        var throttleUpEvt = ThrottleUp.Evt.New(_engineID, throttleUpPayload);
-//        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
-        // WHEN
-        var events = new[] { initEvt, startEvt, throttleUpEvt };
+        var events = HelperFuncs.CreateEngineEvents(_engineID, _newState);
         _agg.SetID(_engineID);
         _agg.Load(events);
         // THEN

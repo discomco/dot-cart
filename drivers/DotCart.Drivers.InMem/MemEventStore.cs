@@ -1,11 +1,20 @@
+using System.Collections;
+using System.Collections.Immutable;
 using DotCart.Behavior;
 using DotCart.Effects;
+using DotCart.Schema;
 
 namespace DotCart.Drivers.InMem;
 
-internal class MemEventStore : IEventStore
+public interface IMemEventStore : IEventStore
 {
-    private readonly IDictionary<string, IEnumerable<IEvt>?> Streams = new Dictionary<string, IEnumerable<IEvt>?>();
+    IEnumerable GetStream(IID engineId);
+}
+
+
+internal class MemEventStore : IMemEventStore
+{
+    private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams = ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
     public bool IsClosed { get; private set; }
 
 
@@ -22,7 +31,12 @@ internal class MemEventStore : IEventStore
 
     public void Save(IAggregate aggregate)
     {
-        Streams[aggregate.Id()] = aggregate.UncommittedEvents;
+        Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList() );
         aggregate.ClearUncommittedEvents();
+    }
+
+    public IEnumerable GetStream(IID engineId)
+    {
+        return Streams[engineId.Value];
     }
 }

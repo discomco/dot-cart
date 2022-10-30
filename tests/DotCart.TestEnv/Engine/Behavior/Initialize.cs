@@ -96,10 +96,11 @@ public static class Initialize
     public record Evt(IID AggregateID, Payload Payload)
         : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
-        public static Evt New(EngineID engineId, Payload initPayload)
+        public static Evt New(IID engineId, Payload initPayload)
         {
             return new Evt(engineId, initPayload);
         }
+        
     }
 
     public interface ICmd : ICmd<Payload>
@@ -109,7 +110,7 @@ public static class Initialize
     public record Cmd(IID AggregateID, Payload Payload)
         : Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
     {
-        public static ICmd New(EngineID engineId, Payload payload)
+        public static ICmd New(IID engineId, Payload payload)
         {
             return new Cmd(engineId, payload);
         }

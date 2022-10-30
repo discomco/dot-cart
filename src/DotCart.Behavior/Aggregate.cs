@@ -89,7 +89,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
             // {
             //     _state = ApplyEvent(_state, evt, ++Version);
             // }
-            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
+            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, evt.Version));
         }
         catch (Exception e)
         {
@@ -142,8 +142,11 @@ public abstract class Aggregate<TState, TID> : IAggregate
 
     private async Task RaiseEvent(IEvt evt)
     {
-        if (Version>= evt.Version) {return;}
-        _state = ApplyEvent(_state, evt, Version++);
+        if (Version >= evt.Version)
+        {
+            return;
+        }
+        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
         await _pubSub.PublishAsync(evt.EventType, evt);
     }
