@@ -16,3 +16,4 @@ public interface IClose
 public interface IEventStore : IAggregateStore
 {
 }
+

@@ -8,6 +8,6 @@ public static class Inject
     public static IServiceCollection AddMemEventStore(this IServiceCollection services)
     {
         return services
-            .AddSingleton<IEventStore, MemEventStore>();
+            .AddSingleton<IAggregateStore, MemEventStore>();
     }
 }

@@ -5,14 +5,8 @@ public interface IDomainPolicy
     void SetBehavior(IAggregate aggregate);
 }
 
-public interface IDomainPolicy<in TAggregate> : IDomainPolicy
-    where TAggregate : IAggregate
-{
-}
 
-
-public abstract class DomainPolicy<TAggregate, TEvt> : IDomainPolicy<TAggregate>
-    where TAggregate : IAggregate
+public abstract class DomainPolicy<TEvt> : IDomainPolicy
 {
     protected IAggregate? Aggregate;
 

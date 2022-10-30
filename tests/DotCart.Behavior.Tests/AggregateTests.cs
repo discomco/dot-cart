@@ -11,10 +11,10 @@ namespace DotCart.Behavior.Tests;
 public class AggregateTests : IoCTests
 {
     private readonly EngineID? _engineID = EngineID.New;
-    private IEngineAggregate? _agg;
+    private IAggregate? _agg;
     private IAggregateBuilder? _builder;
     private NewState<Engine>? _newState;
-    private IEnginePolicy? _startPolicy;
+    private IDomainPolicy? _startPolicy;
 
     public AggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
@@ -36,7 +36,7 @@ public class AggregateTests : IoCTests
     {
         // GIVEN
         // WHEN
-        var agg = Container.GetService<IEngineAggregate>();
+        var agg = Container.GetService<IAggregate>();
         // THEN
         Assert.NotNull(agg);
         var state = agg.GetState();
@@ -114,9 +114,9 @@ public class AggregateTests : IoCTests
 
     protected override void Initialize()
     {
-        _agg = Container.GetService<IEngineAggregate>();
         _builder = Container.GetService<IAggregateBuilder>();
         _newState = Container.GetService<NewState<Engine>>();
+        _agg = _builder.Build();
     }
 
     protected override void SetTestEnvironment()

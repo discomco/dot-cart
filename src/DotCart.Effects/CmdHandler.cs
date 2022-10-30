@@ -11,6 +11,7 @@ public static class Inject
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
     {
         return services
+            .AddAggregateBuilder()
             .AddTransient<ICmdHandler, CmdHandler>();
     }
 }
@@ -21,10 +22,10 @@ internal class CmdHandler : ICmdHandler
     private readonly IAggregateStore _aggregateStore;
 
     public CmdHandler(
-        IAggregate aggregate,
+        IAggregateBuilder aggBuilder,
         IAggregateStore aggregateStore)
     {
-        _aggregate = aggregate;
+        _aggregate = aggBuilder.Build();
         _aggregateStore = aggregateStore;
     }
 

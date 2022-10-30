@@ -1,3 +1,5 @@
+using DotCart.Behavior;
+using DotCart.Drivers.InMem;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
@@ -12,6 +14,7 @@ public class CmdHandlerTests : IoCTests
 {
     private ICmdHandler _cmdHandler;
     private NewState<Engine> _newEngine;
+    private IAggregateStore _aggStore;
 
 
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -26,6 +29,17 @@ public class CmdHandlerTests : IoCTests
     }
 
     [Fact]
+    public void ShouldResolveAggregateStore()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var es = Container.GetRequiredService<IAggregateStore>();
+        // THEN
+        Assert.NotNull(es);
+    }
+
+    [Fact]
     public void ShouldResolveDifferentHandlers()
     {
         // GIVEN
@@ -37,7 +51,7 @@ public class CmdHandlerTests : IoCTests
     }
 
     [Fact]
-    public async Task ShouldProcessInitializeCmd()
+    public async Task ShouldHandleInitializeCmd()
     {
         // GIVEN
         var engineID = EngineID.New;
@@ -52,8 +66,9 @@ public class CmdHandlerTests : IoCTests
 
     protected override void Initialize()
     {
-        _cmdHandler = Container.GetService<ICmdHandler>();
-        _newEngine = Container.GetService<NewState<Engine>>();
+        _cmdHandler = Container.GetRequiredService<ICmdHandler>();
+        _newEngine = Container.GetRequiredService<NewState<Engine>>();
+        _aggStore = Container.GetRequiredService<IAggregateStore>();
     }
 
     protected override void SetTestEnvironment()
@@ -64,7 +79,9 @@ public class CmdHandlerTests : IoCTests
     {
         services
             .AddEngineAggregate()
-            .AddTransient(_ => A.Fake<IAggregateStore>())
+            .AddAggregateBuilder()
+            .AddMemEventStore()
+//            .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddCmdHandler();
     }
 }

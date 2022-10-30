@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Behavior;
@@ -14,15 +15,23 @@ public static partial class Inject
 
 internal class AggregateBuilder : IAggregateBuilder
 {
+    private readonly IAggregate _aggregate;
     public AggregateBuilder(
         IAggregate aggregate,
         IEnumerable<IDomainPolicy> policies
     )
     {
-        aggregate.InjectPolicies(policies);
+        _aggregate = aggregate;
+        _aggregate.InjectPolicies(policies);
+    }
+
+    public IAggregate Build()
+    {
+        return _aggregate;
     }
 }
 
 public interface IAggregateBuilder
 {
+    IAggregate Build();
 }

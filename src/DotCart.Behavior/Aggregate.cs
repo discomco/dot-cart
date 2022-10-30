@@ -26,7 +26,7 @@ public interface IAggregate
     string GetName();
 }
 
-public class Aggregate<TState, TID> : IAggregate 
+public abstract class Aggregate<TState, TID> : IAggregate 
     where TState : IState
     where TID : ID<TID>
 {

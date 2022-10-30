@@ -4,15 +4,7 @@ using DotCart.TestEnv.Engine.Schema;
 
 namespace DotCart.TestEnv.Engine.Behavior;
 
-public interface IEnginePolicy : IDomainPolicy<IEngineAggregate>
-{
-}
-
-public interface IEngineAggregate : IAggregate
-{
-}
-
-public partial class EngineAggregate : Aggregate<Schema.Engine, EngineID>, IEngineAggregate
+public partial class EngineAggregate : Aggregate<Schema.Engine, EngineID>
 {
     public EngineAggregate(
         NewState<Schema.Engine> newState,

@@ -9,8 +9,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
-        <PackageReference Include="xunit" Version="2.4.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+        <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -22,9 +22,10 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
-        <ProjectReference Include="..\DotCart.Behavior.Tests\DotCart.Behavior.Tests.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
+        <ProjectReference Include="..\DotCart.Behavior.Tests\DotCart.Behavior.Tests.csproj" />
     </ItemGroup>
 
 </Project>

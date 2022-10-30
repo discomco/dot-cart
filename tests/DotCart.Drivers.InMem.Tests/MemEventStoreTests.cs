@@ -8,7 +8,7 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemEventStoreTests : IoCTests
 {
-    private IEventStore? _eventStore;
+    private IAggregateStore? _aggStore;
 
     public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -21,7 +21,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var me = Container.GetService<IEventStore>();
+        var me = Container.GetService<IAggregateStore>();
         // THEN
         Assert.NotNull(me);
     }
@@ -31,13 +31,13 @@ public class MemEventStoreTests : IoCTests
     public void ShouldSaveAggregate()
     {
         // GIVEN
-        Assert.NotNull(_eventStore);
+        Assert.NotNull(_aggStore);
         // AND
     }
 
     protected override void Initialize()
     {
-        _eventStore = Container.GetRequiredService<IEventStore>();
+        _aggStore = Container.GetRequiredService<IAggregateStore>();
     }
 
     protected override void SetTestEnvironment()

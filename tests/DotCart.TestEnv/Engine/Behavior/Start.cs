@@ -49,7 +49,7 @@ public static class Start
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
         return services
-            .AddTransient<IEnginePolicy, StartOnInitializedPolicy>();
+            .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
     }
 
     public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
@@ -58,7 +58,7 @@ public static class Start
             throw new NotInitializedException($"engine {state.Id}  is not initialized");
     }
 
-    public class StartOnInitializedPolicy : DomainPolicy<IEngineAggregate, Initialize.IEvt>, IEnginePolicy
+    public class StartOnInitializedPolicy : DomainPolicy<Initialize.IEvt>
     {
         public StartOnInitializedPolicy(ITopicPubSub pubSub) : base(Initialize.EvtTopic, pubSub)
         {
