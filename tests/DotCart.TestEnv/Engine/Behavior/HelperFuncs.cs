@@ -37,6 +37,7 @@ public static class HelperFuncs
             var fbk = await aggregate.ExecuteAsync(command);
             accu.Add(fbk);
         }
+
         return accu;
     }
 }

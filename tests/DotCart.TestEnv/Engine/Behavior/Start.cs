@@ -1,7 +1,6 @@
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
-using DotCart.Effects;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,7 +46,7 @@ public static class Start
     private const string CmdTopic = "engine:start:v1";
     private const string EvtTopic = "engine:started:v1";
 
-    private static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New); 
+    private static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
 
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
@@ -66,7 +65,6 @@ public static class Start
 
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
     {
-
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
         // {
         //     var cmd = Cmd.New(evt.AggregateID, Payload.New);
@@ -75,8 +73,8 @@ public static class Start
         // }
 
         public StartOnInitializedPolicy(
-            ITopicMediator mediator, 
-            Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd) 
+            ITopicMediator mediator,
+            Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd)
             : base(mediator, evt2Cmd)
         {
         }

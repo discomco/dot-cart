@@ -7,7 +7,7 @@ using Serilog;
 
 namespace DotCart.Effects;
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
     {
@@ -47,11 +47,11 @@ internal class CmdHandler : ICmdHandler
             fbk.SetError(e.AsError());
             Log.Error(e.Message);
         }
+
         return fbk;
     }
 
     public void Dispose()
     {
     }
-
 }

@@ -29,6 +29,11 @@ public abstract class Projection<TState, TEvt> : BackgroundService, IProjection<
         _store = store;
     }
 
+    public void SetSpoke(ISpoke spoke)
+    {
+        _spoke = spoke;
+    }
+
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
         await Run(() =>
@@ -71,9 +76,4 @@ public abstract class Projection<TState, TEvt> : BackgroundService, IProjection<
     }
 
     protected abstract TState Project(TState state, IEvt evt);
- 
-    public void SetSpoke(ISpoke spoke)
-    {
-        _spoke = spoke;
-    }
 }

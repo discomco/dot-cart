@@ -1,12 +1,9 @@
-using DotCart.Behavior;
-using DotCart.Spoke;
-
 namespace DotCart.Effects;
 
 public class SpokeBuilder : ISpokeBuilder
 {
-    private readonly ISpoke _spoke;
     private readonly IEnumerable<IEffect> _effects;
+    private readonly ISpoke _spoke;
 
     public SpokeBuilder(
         ISpoke spoke,
@@ -21,8 +18,6 @@ public class SpokeBuilder : ISpokeBuilder
         return _spoke;
     }
 }
-
-
 
 public interface ISpokeBuilder
 {

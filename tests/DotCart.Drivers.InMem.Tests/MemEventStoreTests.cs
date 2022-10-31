@@ -51,8 +51,8 @@ public class MemEventStoreTests : IoCTests
         Assert.NotEmpty(_agg.UncommittedEvents);
         // WHEN
         await _aggStore.SaveAsync(_agg).ConfigureAwait(false);
-        
-   //     Assert.NotEmpty(_agg.UncommittedEvents);
+
+        //     Assert.NotEmpty(_agg.UncommittedEvents);
         // THEN
         Assert.NotEmpty(_aggStore.GetStream(_engineId));
         return _aggStore;
@@ -66,7 +66,6 @@ public class MemEventStoreTests : IoCTests
         // WHEN
         await _aggStore.LoadAsync(_agg);
         // THEN
-        
     }
 
     protected override void Initialize()

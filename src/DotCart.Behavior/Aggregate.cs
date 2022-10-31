@@ -31,6 +31,8 @@ public abstract class Aggregate<TState, TID> : IAggregate
 {
     private const long _newVersion = -1;
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
+
+    private readonly object execMutex = new();
     public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>();
     protected TState _state;
     private bool _withAppliedEvents = false;
@@ -75,10 +77,6 @@ public abstract class Aggregate<TState, TID> : IAggregate
         try
         {
             Guard.Against.BehaviorIDNotSet(this);
-            // foreach (var evt in events)
-            // {
-            //     _state = ApplyEvent(_state, evt, ++Version);
-            // }
             _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
         }
         catch (Exception e)
@@ -97,8 +95,6 @@ public abstract class Aggregate<TState, TID> : IAggregate
         return ID.Value;
     }
 
-    private readonly object execMutex = new();
-
     public async Task<IFeedback> ExecuteAsync(ICmd cmd)
     {
         var feedback = Feedback.New(cmd.GetID());
@@ -116,6 +112,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
         {
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 
@@ -132,8 +129,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
         _uncommittedEvents.Add(evt);
         //await _mediator.PublishAsync(evt.MsgType, evt);
     }
-    
-    
+
 
     private TState ApplyEvent(TState state, IEvt evt, long version)
     {

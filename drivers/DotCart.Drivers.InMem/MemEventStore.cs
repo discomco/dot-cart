@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using DotCart.Behavior;
-using DotCart.Effects;
 using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -27,6 +26,11 @@ internal class MemEventStore : IMemEventStore
 {
     private readonly IMemProjector _projector;
 
+    private readonly object loadMutex = new();
+
+
+    private readonly object saveMutex = new();
+
 
     private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams =
         ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
@@ -45,8 +49,6 @@ internal class MemEventStore : IMemEventStore
         IsClosed = true;
     }
 
-    private readonly object loadMutex = new();
-
     public Task LoadAsync(IAggregate aggregate)
     {
         return Task.Run(() =>
@@ -59,9 +61,6 @@ internal class MemEventStore : IMemEventStore
             }
         });
     }
-
-
-    private readonly object saveMutex = new();
 
     public async Task SaveAsync(IAggregate aggregate)
     {

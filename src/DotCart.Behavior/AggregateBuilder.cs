@@ -17,8 +17,8 @@ internal class AggregateBuilder : IAggregateBuilder
     private readonly IAggregate _aggregate;
 
     public AggregateBuilder(
-         IAggregate aggregate,
-         IEnumerable<IDomainPolicy> policies
+        IAggregate aggregate,
+        IEnumerable<IDomainPolicy> policies
     )
     {
         _aggregate = aggregate;

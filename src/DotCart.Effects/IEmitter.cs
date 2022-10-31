@@ -1,4 +1,3 @@
-using DotCart.Behavior;
 using DotCart.Contract;
 
 namespace DotCart.Effects;
