@@ -7,7 +7,7 @@ public static class ConsoleUtils
     public static ConsoleColor GetRandomConsoleColor()
     {
         var consoleColors = Enum.GetValues(typeof(ConsoleColor));
-        var col = (ConsoleColor)consoleColors.GetValue(RandCol.Next(consoleColors.Length));
+        var col = (ConsoleColor)(consoleColors.GetValue(RandCol.Next(consoleColors.Length)) ?? ConsoleColor.DarkCyan);
         if (col == ConsoleColor.Black)
             col = ConsoleColor.Green;
         if (col == ConsoleColor.Blue)

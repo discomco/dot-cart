@@ -1,10 +1,11 @@
 using DotCart.Behavior;
 using DotCart.Schema;
-using Microsoft.Extensions.Hosting;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
 namespace DotCart.Effects;
+
+public delegate TState Evt2State<TState, TEvt>(TState state, IEvt evt) where TState : IState where TEvt : IEvt;
 
 /// <summary>
 ///     A Projection is an active Unit of Effect (BackgroundService) that is defined
@@ -12,44 +13,36 @@ namespace DotCart.Effects;
 /// </summary>
 /// <typeparam name="TState"></typeparam>
 /// <typeparam name="TEvt"></typeparam>
-public abstract class Projection<TState, TEvt> : BackgroundService, IProjection<TState, TEvt>
+public class Projection<TDriver, TState, TEvt> : Reactor, IProjection<TState, TEvt>
+    where TDriver : IProjectionDriver<TState>
     where TState : IState
     where TEvt : IEvt
 {
     private readonly ITopicMediator _mediator;
-    private readonly IStore<TState> _store;
-    private ISpoke _spoke;
+    private readonly IProjectionDriver<TState> _projectionDriver;
+    private readonly Evt2State<TState, TEvt> _evt2State;
 
     protected Projection(
         ITopicMediator mediator,
-        IStore<TState> store
-    )
+        IProjectionDriver<TState> projectionDriver,
+        Evt2State<TState, TEvt> evt2State)
     {
         _mediator = mediator;
-        _store = store;
+        _projectionDriver = projectionDriver;
+        _evt2State = evt2State;
     }
 
-    public void SetSpoke(ISpoke spoke)
+    private Task Handler(IEvt evt)
     {
-        _spoke = spoke;
-    }
-
-    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    {
-        await Run(() =>
+        return Run(async () =>
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-            }
-        }, stoppingToken).ConfigureAwait(false);
+            var state = await _projectionDriver.GetByIdAsync(evt.AggregateId).ConfigureAwait(false);
+            state = _evt2State(state, evt);
+            await _projectionDriver.SetAsync(evt.AggregateId, state).ConfigureAwait(false);
+        });
     }
 
-    public override Task StartAsync(CancellationToken cancellationToken)
-    {
-        return StartProjecting(cancellationToken);
-    }
-
-    private Task StartProjecting(CancellationToken cancellationToken)
+    protected override Task StartReactingAsync(CancellationToken cancellationToken)
     {
         return Run(() =>
         {
@@ -64,16 +57,8 @@ public abstract class Projection<TState, TEvt> : BackgroundService, IProjection<
         }, cancellationToken);
     }
 
-
-    private Task Handler(IEvt evt)
+    protected override Task StopReactingAsync(CancellationToken cancellationToken)
     {
-        return Run(async () =>
-        {
-            var state = await _store.GetByIdAsync(evt.AggregateId).ConfigureAwait(false);
-            state = Project(state, evt);
-            await _store.SetAsync(evt.AggregateId, state).ConfigureAwait(false);
-        });
+        return _mediator.UnsubscribeAsync(Topic.Get<TEvt>(), Handler);
     }
-
-    protected abstract TState Project(TState state, IEvt evt);
 }

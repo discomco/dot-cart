@@ -8,6 +8,7 @@ public interface ITopicPubSub<TMsg> where TMsg : IMsg
     void Subscribe(string topic, Action<TMsg> handler);
     void Subscribe(string topic, Func<TMsg, Task> handler);
     Task PublishAsync(string topic, TMsg msg);
+    Task UnsubscribeAsync(string topic, Func<IEvt, Task> handler);
 }
 
 public abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
@@ -27,7 +28,6 @@ public abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
     {
         GetHandlersOf(topic).Add(handler);
     }
-
     public async Task PublishAsync(string topic, TMsg msg)
     {
         foreach (var handler in GetHandlersOf(topic))
@@ -48,6 +48,11 @@ public abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
                 Log.Fatal(e.Message);
                 throw;
             }
+    }
+
+    public Task UnsubscribeAsync(string topic, Func<IEvt, Task> handler)
+    {
+        return Task.Run(() => { GetHandlersOf(topic).Remove(handler); });
     }
 
     public void Dispose()

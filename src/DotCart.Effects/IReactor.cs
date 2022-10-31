@@ -1,6 +1,6 @@
 namespace DotCart.Effects;
 
-public interface IEffect
+public interface IReactor
 {
     void SetSpoke(ISpoke spoke);
 }

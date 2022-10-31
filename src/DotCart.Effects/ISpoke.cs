@@ -2,5 +2,5 @@ namespace DotCart.Effects;
 
 public interface ISpoke
 {
-    void Inject(params IEffect[] effects);
+    void Inject(params IReactor[] effects);
 }

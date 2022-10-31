@@ -1,4 +1,5 @@
 using DotCart.Behavior;
+using DotCart.Effects;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.InMem;
@@ -9,7 +10,6 @@ public static partial class Inject
     {
         return services
             .AddTopicMediator()
-            .AddSingleton<IProjector, MemProjector>()
             .AddSingleton<IMemProjector, MemProjector>();
     }
 }
@@ -34,6 +34,7 @@ internal sealed class MemProjector : IMemProjector
     }
 }
 
-public interface IMemProjector : IProjector
+public interface IMemProjector
 {
+    Task Project(IEvt evt);
 }
