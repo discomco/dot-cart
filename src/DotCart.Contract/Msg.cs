@@ -16,12 +16,14 @@ public abstract record Msg<TPayload>(string MsgType, TPayload Payload) : IMsg
 {
     public string MsgId { get; } = GuidUtils.NewGuid;
     public string MsgType { get; } = MsgType;
+
     public IPayload GetPayload()
     {
         return Payload;
     }
+
     public DateTime TimeStamp { get; private set; } = DateTime.UtcNow;
-    
+
     public void SetTimeStamp(DateTime timeStamp)
     {
         TimeStamp = timeStamp;

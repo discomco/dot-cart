@@ -32,5 +32,4 @@ public static class Guards
 
         public static Exception New => new BehaviorIDNotSetException();
     }
-    
 }

@@ -1,11 +1,9 @@
-using DotCart.Behavior;
-
-namespace DotCart.Effects;
+namespace DotCart.Behavior;
 
 public interface IAggregateStore : IClose
 {
-    void Load(IAggregate aggregate);
-    void Save(IAggregate aggregate);
+    Task LoadAsync(IAggregate aggregate);
+    Task SaveAsync(IAggregate aggregate);
 }
 
 public interface IClose
@@ -16,4 +14,3 @@ public interface IClose
 public interface IEventStore : IAggregateStore
 {
 }
-

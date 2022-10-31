@@ -11,9 +11,9 @@ namespace DotCart.Effects.Tests;
 
 public class CmdHandlerTests : IoCTests
 {
+    private IAggregateStore _aggStore;
     private ICmdHandler _cmdHandler;
     private NewState<Engine> _newEngine;
-    private IAggregateStore _aggStore;
 
 
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)

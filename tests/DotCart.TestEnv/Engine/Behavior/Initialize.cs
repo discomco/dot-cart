@@ -93,6 +93,7 @@ public static class Initialize
     {
     }
 
+    [Topic(EvtTopic)]
     public record Evt(IID AggregateID, Payload Payload)
         : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
@@ -100,7 +101,6 @@ public static class Initialize
         {
             return new Evt(engineId, initPayload);
         }
-        
     }
 
     public interface ICmd : ICmd<Payload>

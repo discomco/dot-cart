@@ -1,6 +1,6 @@
 namespace DotCart.Behavior;
 
-public interface IMediator : IEffect,IDisposable
+public interface IMediator : IDisposable
 {
     void Subscribe<T>(Action<T> handler);
     void Subscribe<T>(Func<T, Task> handler);

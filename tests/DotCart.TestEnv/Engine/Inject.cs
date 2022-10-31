@@ -11,7 +11,6 @@ public static class Inject
         return services
             .AddTopicMediator()
             .AddSingleton(Schema.Engine.Ctor)
-            .AddTransient<IAggregate, EngineAggregate>()
-            .AddStartOnInitializedPolicy();
+            .AddTransient<IAggregate, EngineAggregate>();
     }
 }

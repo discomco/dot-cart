@@ -39,11 +39,4 @@ public static class HelperFuncs
         }
         return accu;
     }
-    
-    
-    
-    
-    
-    
-
 }

@@ -21,7 +21,7 @@ public record Dto(string AggId, byte[] Data) : IDto
 public interface IDto
 {
     string AggId { get; }
-    byte[] Data { get;  }
+    byte[] Data { get; }
     T GetPayload<T>();
     void SetPayload<T>(T state);
 }

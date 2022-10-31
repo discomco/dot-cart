@@ -1,6 +1,7 @@
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
+using DotCart.Effects;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
@@ -43,15 +44,19 @@ public partial class EngineAggregate :
 
 public static class Start
 {
-    public const string CmdTopic = "engine:start:v1";
-    public const string EvtTopic = "engine:started:v1";
+    private const string CmdTopic = "engine:start:v1";
+    private const string EvtTopic = "engine:started:v1";
+
+    private static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New); 
 
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
         return services
             .AddAggregateBuilder()
+            .AddTransient(_ => evt2Cmd)
             .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
     }
+
 
     public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
     {
@@ -59,17 +64,21 @@ public static class Start
             throw new NotInitializedException($"engine {state.Id}  is not initialized");
     }
 
-    public class StartOnInitializedPolicy : DomainPolicy<Initialize.IEvt>
+    public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
     {
-        public StartOnInitializedPolicy(ITopicMediator mediator) : base(Initialize.EvtTopic, mediator)
-        {
-        }
 
-        protected override async Task Enforce(DotCart.Behavior.IEvt evt)
+        // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
+        // {
+        //     var cmd = Cmd.New(evt.AggregateID, Payload.New);
+        //     var fbk = await Aggregate.ExecuteAsync(cmd);
+        //     Console.WriteLine(fbk.GetPayload<Schema.Engine>());
+        // }
+
+        public StartOnInitializedPolicy(
+            ITopicMediator mediator, 
+            Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd) 
+            : base(mediator, evt2Cmd)
         {
-            var cmd = Cmd.New(evt.AggregateID, Payload.New);
-            var fbk = await Aggregate.ExecuteAsync(cmd);
-            Console.WriteLine(fbk.GetPayload<Schema.Engine>());
         }
     }
 
@@ -97,13 +106,14 @@ public static class Start
     {
     }
 
+    [Topic(EvtTopic)]
     public record Evt
         (IID AggregateID, Payload Payload) :
             Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
         public static Evt New(IID engineID, Payload payload)
         {
-            return new(engineID, payload);
+            return new Evt(engineID, payload);
         }
     }
 }

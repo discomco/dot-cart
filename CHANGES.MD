@@ -1,12 +1,10 @@
 # DOT-CART Ecosystem - Changes
 
-
 ## 2022.10.30
 
 - Added Yaml Support
 - Added TestHelpers
 - Added MemEventStore for Testing
-
 
 ## 2022.10.29
 

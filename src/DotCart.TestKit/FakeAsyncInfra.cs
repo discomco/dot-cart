@@ -1,8 +1,6 @@
 ﻿using DotCart.Behavior;
 using DotCart.Contract;
-using DotCart.Effects;
 using Microsoft.Extensions.DependencyInjection;
-
 
 namespace DotCart.TestKit;
 
@@ -19,6 +17,6 @@ public class FakeAsyncInfra : TopicPubSub<IFact>, IFakeAsyncInfra
 {
 }
 
-public interface IFakeAsyncInfra: ITopicPubSub<IFact>
+public interface IFakeAsyncInfra : ITopicPubSub<IFact>
 {
 }

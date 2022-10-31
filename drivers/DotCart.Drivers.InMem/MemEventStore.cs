@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Immutable;
 using DotCart.Behavior;
 using DotCart.Effects;
@@ -12,13 +11,13 @@ public interface IMemEventStore : IEventStore
     IEnumerable<IEvt> GetStream(IID engineId);
 }
 
-
 public static partial class Inject
 {
     public static IServiceCollection AddMemEventStore(this IServiceCollection services)
     {
         return services
             .AddTopicMediator()
+            .AddMemProjector()
             .AddSingleton<IAggregateStore, MemEventStore>()
             .AddSingleton<IMemEventStore, MemEventStore>();
     }
@@ -26,17 +25,18 @@ public static partial class Inject
 
 internal class MemEventStore : IMemEventStore
 {
+    private readonly IMemProjector _projector;
 
 
-    public MemEventStore(ITopicMediator mediator)
+    private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams =
+        ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
+
+
+    public MemEventStore(IMemProjector projector)
     {
-        _mediator = mediator;
+        _projector = projector;
     }
-    
-    
-    private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams = ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
-    
-    private readonly ITopicMediator _mediator;
+
     public bool IsClosed { get; private set; }
 
 
@@ -45,21 +45,30 @@ internal class MemEventStore : IMemEventStore
         IsClosed = true;
     }
 
-    public void Load(IAggregate aggregate)
+    private readonly object loadMutex = new();
+
+    public Task LoadAsync(IAggregate aggregate)
     {
-        IEnumerable<IEvt>? evts = new List<IEvt>();
-        if (Streams.TryGetValue(aggregate.Id(), out evts)) aggregate.Load(evts);
+        return Task.Run(() =>
+        {
+            lock (loadMutex)
+            {
+                IEnumerable<IEvt>? evts = new List<IEvt>();
+                if (Streams.TryGetValue(aggregate.Id(), out evts))
+                    aggregate.Load(evts);
+            }
+        });
     }
 
-    public void Save(IAggregate aggregate)
+
+    private readonly object saveMutex = new();
+
+    public async Task SaveAsync(IAggregate aggregate)
     {
-        Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList() );
+        Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
         aggregate.ClearUncommittedEvents();
-        if (_mediator == null) return;
         foreach (var evt in GetStream(aggregate.ID))
-        {
-            _mediator.PublishAsync(evt.MsgType, evt);
-        }
+            await _projector.Project(evt);
     }
 
     public IEnumerable<IEvt> GetStream(IID engineId)

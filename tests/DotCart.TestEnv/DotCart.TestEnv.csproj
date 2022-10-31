@@ -7,9 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.Microsoft.Tests\DotCart.Drivers.Microsoft.Tests.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Microsoft.Tests\DotCart.Drivers.Microsoft.Tests.csproj"/>
     </ItemGroup>
 
 

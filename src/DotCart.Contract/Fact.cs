@@ -6,8 +6,8 @@ public interface IFact : IDto, IMsg
 {
 }
 
-public abstract record Fact<TPayload>(string AggId, byte[] Data) : Dto(AggId, Data), IFact 
-    where TPayload:IPayload
+public abstract record Fact<TPayload>(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    where TPayload : IPayload
 {
     public string MsgId { get; }
     public string MsgType { get; }

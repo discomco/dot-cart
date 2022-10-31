@@ -7,7 +7,7 @@ using Serilog;
 
 namespace DotCart.Effects;
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
     {
@@ -38,14 +38,14 @@ internal class CmdHandler : ICmdHandler
             Guard.Against.Null(cmd);
             var aggId = cmd.GetID();
             _aggregate.SetID(aggId);
-            _aggregateStore.Load(_aggregate);
+            _aggregateStore.LoadAsync(_aggregate);
             fbk = await _aggregate.ExecuteAsync(cmd);
-            _aggregateStore.Save(_aggregate);
+            _aggregateStore.SaveAsync(_aggregate);
         }
         catch (Exception e)
         {
             fbk.SetError(e.AsError());
-            Log.Error(e.Message); 
+            Log.Error(e.Message);
         }
         return fbk;
     }
@@ -53,9 +53,5 @@ internal class CmdHandler : ICmdHandler
     public void Dispose()
     {
     }
-}
 
-public interface ICmdHandler : IEffect
-{
-    Task<IFeedback> Handle(ICmd cmd);
 }

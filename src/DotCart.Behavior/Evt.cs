@@ -14,10 +14,12 @@ public abstract record Evt<TPayload>(
     public long Version { get; private set; } = long.MaxValue;
     public byte[] MetaData { get; }
     public IID AggregateID { get; } = AggregateID;
+
     public void SetVersion(long version)
     {
         Version = version;
     }
+
     public void SetBehaviorType(string type)
     {
         BehaviorType = type;

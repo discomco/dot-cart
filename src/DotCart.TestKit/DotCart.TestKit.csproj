@@ -7,18 +7,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0" />
-        <PackageReference Include="FakeItEasy" Version="7.3.1" />
-        <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0" />
+        <PackageReference Include="AutoFixture.Xunit2" Version="4.17.0"/>
+        <PackageReference Include="FakeItEasy" Version="7.3.1"/>
+        <PackageReference Include="Microsoft.AspNetCore" Version="2.2.0"/>
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="6.0.0"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
-        <ProjectReference Include="..\DotCart.Behavior\DotCart.Behavior.csproj" />
-        <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
-        <ProjectReference Include="..\DotCart\DotCart.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\DotCart.Behavior\DotCart.Behavior.csproj"/>
+        <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj"/>
+        <ProjectReference Include="..\DotCart\DotCart.csproj"/>
     </ItemGroup>
 
 </Project>

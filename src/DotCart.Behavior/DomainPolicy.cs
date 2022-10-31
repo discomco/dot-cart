@@ -1,22 +1,36 @@
+using DotCart.Contract;
+using Serilog;
+
 namespace DotCart.Behavior;
 
-public interface IDomainPolicy
-{
-    void SetBehavior(IAggregate aggregate);
-}
 
+public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(TEvt Evt) where TEvt: IEvt where TCmd: ICmd;
 
-public abstract class DomainPolicy<TEvt> : IDomainPolicy
+public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt where TCmd : ICmd
 {
+    private readonly Evt2Cmd<TEvt,TCmd> _evt2Cmd;
     protected IAggregate? Aggregate;
 
     protected DomainPolicy
     (
-        string topic,
-        ITopicMediator mediator
+        ITopicMediator mediator,
+        Evt2Cmd<TEvt,TCmd> evt2Cmd
     )
     {
-        mediator.Subscribe(topic, Enforce);
+        _evt2Cmd = evt2Cmd;
+        mediator.Subscribe(Topic.Get<TEvt>(), HandleEvt);
+    }
+
+    private Task HandleEvt(IEvt arg)
+    {
+        return Task.Run(async () =>
+        {
+            var fbk = await Enforce((TEvt)arg);
+            if (!fbk.IsSuccess)
+            {
+                Log.Error(fbk.ErrState.ToString());
+            }
+        });
     }
 
 
@@ -25,5 +39,9 @@ public abstract class DomainPolicy<TEvt> : IDomainPolicy
         Aggregate = aggregate;
     }
 
-    protected abstract Task Enforce(IEvt evt);
+    private Task<IFeedback> Enforce(TEvt evt)
+    {
+        var cmd = _evt2Cmd(evt);
+        return Aggregate.ExecuteAsync(cmd);
+    }
 }

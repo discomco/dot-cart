@@ -12,8 +12,8 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemEventStoreTests : IoCTests
 {
-    private IMemEventStore? _aggStore;
     private IAggregate _agg;
+    private IMemEventStore? _aggStore;
     private IID _engineId;
     private NewState<Engine> _newEngine;
 
@@ -35,7 +35,7 @@ public class MemEventStoreTests : IoCTests
 
 
     [Fact]
-    public async Task ShouldSaveAggregate()
+    public async Task<IMemEventStore> ShouldSaveAggregate()
     {
         // GIVEN
         Assert.NotNull(_aggStore);
@@ -50,9 +50,23 @@ public class MemEventStoreTests : IoCTests
         // AND
         Assert.NotEmpty(_agg.UncommittedEvents);
         // WHEN
-        _aggStore.Save(_agg);
+        await _aggStore.SaveAsync(_agg).ConfigureAwait(false);
+        
+   //     Assert.NotEmpty(_agg.UncommittedEvents);
         // THEN
         Assert.NotEmpty(_aggStore.GetStream(_engineId));
+        return _aggStore;
+    }
+
+    [Fact]
+    public async Task ShouldLoadAggregate()
+    {
+        // GIVEN
+        _aggStore = await ShouldSaveAggregate();
+        // WHEN
+        await _aggStore.LoadAsync(_agg);
+        // THEN
+        
     }
 
     protected override void Initialize()
@@ -72,6 +86,8 @@ public class MemEventStoreTests : IoCTests
     {
         services
             .AddEngineAggregate()
+            .AddStartOnInitializedPolicy()
+            .AddCmdHandler()
             .AddMemEventStore();
     }
 }

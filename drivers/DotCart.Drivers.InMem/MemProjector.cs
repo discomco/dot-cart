@@ -9,12 +9,16 @@ public static partial class Inject
     {
         return services
             .AddTopicMediator()
-            .AddSingleton<IProjector, MemProjector>();
+            .AddSingleton<IProjector, MemProjector>()
+            .AddSingleton<IMemProjector, MemProjector>();
     }
 }
 
-
-
+/// <summary>
+///     MemProjector is an in-memory Unit of Effect,
+///     that is meant to be injected into an AggregateStore
+///     It offers a straightforward interface to project events onto the TopicMediator
+/// </summary>
 internal sealed class MemProjector : IMemProjector
 {
     private readonly ITopicMediator _mediator;
@@ -32,5 +36,4 @@ internal sealed class MemProjector : IMemProjector
 
 public interface IMemProjector : IProjector
 {
-    
 }
