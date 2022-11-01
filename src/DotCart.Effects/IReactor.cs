@@ -1,6 +1,10 @@
+using DotCart.Contract;
+
 namespace DotCart.Effects;
 
 public interface IReactor
 {
-    void SetSpoke(ISpoke spoke);
+    Task HandleAsync(IMsg msg);
+    void SetSpoke(ISpoke spoke);    
 }
+

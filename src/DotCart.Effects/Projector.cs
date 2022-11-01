@@ -1,5 +1,7 @@
 using DotCart.Behavior;
-using Microsoft.Extensions.Hosting;
+using DotCart.Contract;
+using DotCart.Effects.Drivers;
+
 
 namespace DotCart.Effects;
 
@@ -15,20 +17,20 @@ public class Projector : Reactor, IProjector
         _mediator = mediator;
         _projectorDriver = projectorDriver;
     }
-    
 
-    public Task Project(IEvt evt)
-    {
-        throw new NotImplementedException();
-    }
 
     protected override Task StartReactingAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _projectorDriver.StartStreamingAsync(cancellationToken);
     }
 
     protected override Task StopReactingAsync(CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return _projectorDriver.StopStreamingAsync(cancellationToken);
+    }
+
+    public override Task HandleAsync(IMsg msg)
+    {
+        return _mediator.PublishAsync(msg.MsgType, (IEvt)msg);
     }
 }

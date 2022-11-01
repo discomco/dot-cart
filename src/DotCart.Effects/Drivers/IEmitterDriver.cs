@@ -1,6 +1,6 @@
 using DotCart.Contract;
 
-namespace DotCart.Effects;
+namespace DotCart.Effects.Drivers;
 
 public interface IEmitterDriver : IDriver
 {

@@ -13,5 +13,9 @@
         <ProjectReference Include="..\DotCart.Behavior\DotCart.Behavior.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove="DotCart.Effects.csproj.DotSettings" />
+    </ItemGroup>
+
 
 </Project>

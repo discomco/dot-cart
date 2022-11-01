@@ -1,4 +1,4 @@
-namespace DotCart.Effects;
+namespace DotCart.Effects.Drivers;
 
 public interface IListenerDriver: IDriver
 {

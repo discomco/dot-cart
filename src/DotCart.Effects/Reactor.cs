@@ -1,3 +1,4 @@
+using DotCart.Contract;
 using Microsoft.Extensions.Hosting;
 
 namespace DotCart.Effects;
@@ -30,4 +31,5 @@ public abstract class Reactor : BackgroundService, IReactor
     {
         spoke.Inject(this);
     }
+    public abstract Task HandleAsync(IMsg msg);
 }

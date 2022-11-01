@@ -1,4 +1,6 @@
-﻿namespace DotCart.Contract;
+﻿using DotCart.Schema;
+
+namespace DotCart.Contract;
 
 public record Dto(string AggId, byte[] Data) : IDto
 {
@@ -16,9 +18,23 @@ public record Dto(string AggId, byte[] Data) : IDto
     {
         Data = state.ToBytes();
     }
+
+    public string MsgId { get; }
+    public string MsgType { get; }
+    public DateTime TimeStamp { get; private set; }
+
+    public void SetTimeStamp(DateTime timeStamp)
+    {
+        TimeStamp = timeStamp;
+    }
+
+    public IPayload GetPayload()
+    {
+        return GetPayload<IPayload>();
+    }
 }
 
-public interface IDto
+public interface IDto : IMsg
 {
     string AggId { get; }
     byte[] Data { get; }

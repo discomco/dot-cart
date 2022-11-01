@@ -1,6 +1,6 @@
 using DotCart.Schema;
 
-namespace DotCart.Effects;
+namespace DotCart.Effects.Drivers;
 
 public interface IProjectionDriver<TState> : IDriver
     where TState : IState

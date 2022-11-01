@@ -1,4 +1,6 @@
 using DotCart.Behavior;
+using DotCart.Contract;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using Serilog;
 using static System.Threading.Tasks.Task;
@@ -60,5 +62,10 @@ public class Projection<TDriver, TState, TEvt> : Reactor, IProjection<TState, TE
     protected override Task StopReactingAsync(CancellationToken cancellationToken)
     {
         return _mediator.UnsubscribeAsync(Topic.Get<TEvt>(), Handler);
+    }
+
+    public override Task HandleAsync(IMsg msg)
+    {
+        throw new NotImplementedException();
     }
 }

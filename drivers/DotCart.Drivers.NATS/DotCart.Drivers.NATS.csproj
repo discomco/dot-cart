@@ -6,5 +6,20 @@
     <Nullable>enable</Nullable>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="NATS.Client.Extensions.DependencyInjection" Version="1.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
+    <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
+    <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="ResponderDriver.cs" />
+    <Compile Remove="STANRequester.cs" />
+  </ItemGroup>
 
 </Project>

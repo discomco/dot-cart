@@ -1,6 +1,7 @@
 using DotCart.Behavior;
 using DotCart.Contract;
-using Microsoft.Extensions.Hosting;
+using DotCart.Effects.Drivers;
+
 
 namespace DotCart.Effects;
 
@@ -10,7 +11,8 @@ public delegate TCmd Hope2Cmd<in THope, out TCmd>(THope hope)
     where TCmd: ICmd;
 
 
-public abstract class Responder<THope, TCmd> : BackgroundService, IResponder 
+public abstract class Responder<TDriver,THope, TCmd> : Reactor, IResponder
+    where TDriver: IResponderDriver
     where THope : IHope 
     where TCmd : ICmd 
 {
@@ -19,21 +21,24 @@ public abstract class Responder<THope, TCmd> : BackgroundService, IResponder
     private readonly IResponderDriver _responderDriver;
 
     public Responder(
+        IResponderDriver responderDriver,
         ICmdHandler cmdHandler,
-        Hope2Cmd<THope, TCmd> hope2Cmd,
-        IResponderDriver responderDriver)
+        Hope2Cmd<THope, TCmd> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
         _responderDriver = responderDriver;
     }
 
-}
 
-public interface IResponderDriver
-{
-}
+    protected override Task StartReactingAsync(CancellationToken cancellationToken)
+    {
+        _responderDriver.SetReactor(this);
+        return _responderDriver.StartRespondingAsync(cancellationToken);
+    }
 
-public interface IResponder
-{
+    protected override Task StopReactingAsync(CancellationToken cancellationToken)
+    {
+        return _responderDriver.StopRespondingAsync(cancellationToken);
+    }
 }
