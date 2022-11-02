@@ -30,7 +30,7 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                Thread.Sleep(10_000);
+                Thread.Sleep(500);
                 var hope = _generateHope();
                 await _reactor.HandleAsync(hope);
             }

@@ -90,6 +90,12 @@ public abstract record ID<T> : IID<T>
         return With(guid);
     }
 
+
+    public static T FromIdString(string id)
+    {
+        return NewComb(id);
+    }
+
     public static T With(string value)
     {
         try

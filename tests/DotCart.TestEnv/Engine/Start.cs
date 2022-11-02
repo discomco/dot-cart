@@ -3,6 +3,8 @@ using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Drivers.InMem;
+using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Schema;
@@ -44,10 +46,55 @@ public partial class Aggregate :
     }
 }
 
+
+public static partial class Inject
+{
+
+    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
+    {
+        return services
+            .AddAggregateBuilder()
+            .AddTransient(_ => Start.evt2Cmd)
+            .AddTransient<IDomainPolicy, Start.StartOnInitializedPolicy>();
+    }
+
+    public static IServiceCollection AddStartEffects(this IServiceCollection services)
+    {
+        return services
+            .AddStartResponder();
+    }
+
+    public static IServiceCollection AddStartResponder(this IServiceCollection services)
+    {
+        return services
+            .AddMemEventStore()
+            .AddAggregateBuilder()
+            .AddEngineAggregate()
+            .AddStartOnInitializedPolicy()
+            .AddCmdHandler()
+            .AddStartHopeGenerator()
+            .AddTransient(_ => Start._hope2Cmd)
+            .AddSingleton<IResponderDriver<Start.Hope>, Start.ResponderDriver>()
+            .AddHostedService<Start.Responder>();
+    }
+
+   
+    public static IServiceCollection AddStartHopeGenerator(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Start._generateHope);
+    }
+    
+}
+
+
 public static class Start
 {
     private const string CmdTopic = "engine:start:v1";
     private const string EvtTopic = "engine:started:v1";
+    
+    
+    #region Schema
     public class Exception : System.Exception
     {
         public static Exception New(string message)
@@ -71,20 +118,31 @@ public static class Start
         {
         }
     }
+    #endregion
+    
+    
+    #region Contract
     public record Payload : IPayload
     {
         public static readonly Payload New = new();
     }
-    private static GenerateHope<Hope> _generateHope => () => {
+
+    internal static GenerateHope<Hope> _generateHope => () => {
         var pl = Payload.New;
         var aggId = EngineID.New;
         return Hope.New(aggId.Value, pl.ToBytes());
     };
+    
     public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
     {
         public static Hope New(string aggId, byte[] data) => new(aggId, data);
     }
-    private static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
+    #endregion
+
+    
+    
+    # region Behavior
+    internal static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
     {
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
@@ -101,18 +159,7 @@ public static class Start
         {
         }
     }
-    public static IServiceCollection AddStartHopeGenerator(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _generateHope);
-    }
-    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
-    {
-        return services
-            .AddAggregateBuilder()
-            .AddTransient(_ => evt2Cmd)
-            .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
-    }
+
     public interface ICmd : ICmd<Payload>
     {
     }
@@ -138,4 +185,30 @@ public static class Start
             return new Evt(engineID, payload);
         }
     }
+    #endregion
+    
+    #region Effects
+
+    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd = 
+        hope => 
+            Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
+
+    public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
+    {
+        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
+        {
+        }
+    }
+
+    public class Responder : Responder<ResponderDriver, Hope, Cmd>
+    {
+        public Responder(IResponderDriver<Hope> responderDriver,
+            ICmdHandler cmdHandler,
+            Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver,
+            cmdHandler,
+            hope2Cmd)
+        {
+        }
+    }
+    #endregion
 }

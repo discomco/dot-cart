@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine;
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddEngineAggregate(this IServiceCollection services)
     {

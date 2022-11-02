@@ -1,4 +1,5 @@
 using System.Runtime.Serialization;
+using System.Text.Json.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
@@ -49,7 +50,21 @@ public partial class Aggregate
     }
 }
 
-
+public static partial class Inject
+{
+    public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
+    {
+        return services
+            .AddMemEventStore()
+            .AddAggregateBuilder()
+            .AddEngineAggregate()
+            .AddCmdHandler()
+            .AddTransient(_ => Initialize._genHope)
+            .AddTransient(_ => Initialize._hope2Cmd)
+            .AddSingleton<IResponderDriver<Initialize.Hope>, Initialize.ResponderDriver>()
+            .AddHostedService<Initialize.Responder>();
+    }
+}
 
 public static class Initialize
 {
@@ -58,6 +73,10 @@ public static class Initialize
 
     public record Payload : IPayload
     {
+        public Payload()
+        {
+        }
+
         private Payload(Engine.Schema.Engine engine)
         {
             Engine = engine;
@@ -129,34 +148,25 @@ public static class Initialize
             return new Cmd(engineId, payload);
         }
     }
-    
-    
-    
+
+
     #region Effects
-    
-    
-    
-    public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
-    {
-        return services
-            .AddMemEventStore()
-            .AddEngineAggregate()
-            .AddCmdHandler()
-            .AddTransient(_ => _genHope)
-            .AddTransient(_ => _hope2Cmd)
-            .AddSingleton<IResponderDriver<Hope>, ResponderDriver>()
-            .AddHostedService<Responder>();
-    }
 
-    private static Hope2Cmd<Hope, Cmd> _hope2Cmd => hope => Cmd.New(ID<EngineID>.FromGuidString(hope.AggId), hope.Data.FromBytes<Payload>());
+    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd =
+        hope => Cmd.New(
+            ID<EngineID>.FromIdString(hope.AggId),
+            hope.Data.FromBytes<Payload>()
+        );
 
-    private static GenerateHope<Hope> _genHope => () =>
-    {
-        var eng = TestEnv.Engine.Schema.Engine.Ctor();
-        var aggID = EngineID.New;
-        var pl = Payload.New(eng);
-        return Hope.New(aggID.Value, pl.ToBytes());
-    };
+    internal static readonly GenerateHope<Hope> _genHope =
+        () =>
+        {
+            var eng = TestEnv.Engine.Schema.Engine.Ctor();
+            var aggID = EngineID.New;
+            var pl = Payload.New(eng);
+            return Hope.New(aggID.Value, pl.ToBytes());
+        };
+
     public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
     {
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
@@ -172,12 +182,7 @@ public static class Initialize
             Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
         {
         }
-
-        public override Task HandleAsync(IMsg msg)
-        {
-            throw new NotImplementedException();
-        }
     }
-    
+
     #endregion
 }

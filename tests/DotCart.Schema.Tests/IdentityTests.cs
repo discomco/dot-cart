@@ -27,7 +27,7 @@ public class IdentityTests
 
 
     [Fact]
-    public void ShouldThrowAnExeptionIfNoPrefixIDPresent()
+    public void ShouldThrowAnExceptionIfNoPrefixIDPresent()
     {
         try
         {
