@@ -12,6 +12,13 @@ public static class Guards
             throw Initialize.Exception.New($"Engine {state.Id} is already initialized.");
         return guard;
     }
+    
+    public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
+    {
+        if (((int)state.Status).NotHasFlag((int)EngineStatus.Initialized))
+            throw Initialize.Exception.New($"engine {state.Id}  is not initialized");
+    }
+
 
     public static IGuardClause EngineNotStarted(this IGuardClause guard, Schema.Engine state)
     {

@@ -1,23 +1,38 @@
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Effects.Drivers;
+using Microsoft.Extensions.DependencyInjection;
 
 
 namespace DotCart.Effects;
 
-public class Projector : Reactor, IProjector
+public static partial class Inject
+{
+    public static IServiceCollection AddProjector(this IServiceCollection services)
+    {
+        return services
+            .AddHostedService<Projector>();
+    }
+}
+
+public interface IProjector: IReactor
+{
+
+}
+
+public class Projector : Reactor, IProjector 
 {
     private readonly ITopicMediator _mediator;
     private readonly IProjectorDriver _projectorDriver;
 
     public Projector(
-        ITopicMediator mediator, 
-        IProjectorDriver projectorDriver)
+        IProjectorDriver projectorDriver,
+        ITopicMediator mediator
+    )
     {
         _mediator = mediator;
         _projectorDriver = projectorDriver;
     }
-
 
     protected override Task StartReactingAsync(CancellationToken cancellationToken)
     {

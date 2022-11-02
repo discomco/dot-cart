@@ -13,7 +13,7 @@ public class CmdHandlerTests : IoCTests
 {
     private IAggregateStore _aggStore;
     private ICmdHandler _cmdHandler;
-    private NewState<Engine> _newEngine;
+    private NewState<TestEnv.Engine.Schema.Engine> _newEngine;
 
 
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -55,8 +55,8 @@ public class CmdHandlerTests : IoCTests
         // GIVEN
         var engineID = EngineID.New;
         var engine = _newEngine();
-        var payload = TestEnv.Engine.Behavior.Initialize.Payload.New(engine);
-        var initCmd = TestEnv.Engine.Behavior.Initialize.Cmd.New(engineID, payload);
+        var payload = TestEnv.Engine.Initialize.Payload.New(engine);
+        var initCmd = TestEnv.Engine.Initialize.Cmd.New(engineID, payload);
         // WHEN
         var fbk = await _cmdHandler.Handle(initCmd);
         // THEN
@@ -66,7 +66,7 @@ public class CmdHandlerTests : IoCTests
     protected override void Initialize()
     {
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
-        _newEngine = Container.GetRequiredService<NewState<Engine>>();
+        _newEngine = Container.GetRequiredService<NewState<TestEnv.Engine.Schema.Engine>>();
         _aggStore = Container.GetRequiredService<IAggregateStore>();
     }
 

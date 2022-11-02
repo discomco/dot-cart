@@ -2,15 +2,20 @@ using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
+using DotCart.Drivers.InMem;
+using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
+using DotCart.TestEnv.Engine.Behavior;
+using DotCart.TestEnv.Engine.Effects;
 using DotCart.TestEnv.Engine.Schema;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
-public partial class EngineAggregate
+public partial class Aggregate
     : ITry<Initialize.Cmd>,
         IApply<Schema.Engine, Initialize.Evt>
-
 {
     public IState Apply(Schema.Engine state, Initialize.Evt evt)
     {
@@ -44,22 +49,23 @@ public partial class EngineAggregate
     }
 }
 
+
+
 public static class Initialize
 {
     public const string CmdTopic = "test:engine:initialize:v1";
     public const string EvtTopic = "test:engine:initialized:v1";
 
-
     public record Payload : IPayload
     {
-        private Payload(Schema.Engine engine)
+        private Payload(Engine.Schema.Engine engine)
         {
             Engine = engine;
         }
 
-        public Schema.Engine Engine { get; }
+        public Engine.Schema.Engine Engine { get; }
 
-        public static Payload New(Schema.Engine engine)
+        public static Payload New(Engine.Schema.Engine engine)
         {
             return new Payload(engine);
         }
@@ -89,6 +95,14 @@ public static class Initialize
         }
     }
 
+    public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
+    {
+        public static Hope New(string aggId, byte[] data)
+        {
+            return new Hope(aggId, data);
+        }
+    }
+
     public interface IEvt : IEvt<Payload>
     {
     }
@@ -110,9 +124,60 @@ public static class Initialize
     public record Cmd(IID AggregateID, Payload Payload)
         : Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
     {
-        public static ICmd New(IID engineId, Payload payload)
+        public static Cmd New(IID engineId, Payload payload)
         {
             return new Cmd(engineId, payload);
         }
     }
+    
+    
+    
+    #region Effects
+    
+    
+    
+    public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
+    {
+        return services
+            .AddMemEventStore()
+            .AddEngineAggregate()
+            .AddCmdHandler()
+            .AddTransient(_ => _genHope)
+            .AddTransient(_ => _hope2Cmd)
+            .AddSingleton<IResponderDriver<Hope>, ResponderDriver>()
+            .AddHostedService<Responder>();
+    }
+
+    private static Hope2Cmd<Hope, Cmd> _hope2Cmd => hope => Cmd.New(ID<EngineID>.FromGuidString(hope.AggId), hope.Data.FromBytes<Payload>());
+
+    private static GenerateHope<Hope> _genHope => () =>
+    {
+        var eng = TestEnv.Engine.Schema.Engine.Ctor();
+        var aggID = EngineID.New;
+        var pl = Payload.New(eng);
+        return Hope.New(aggID.Value, pl.ToBytes());
+    };
+    public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
+    {
+        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
+        {
+        }
+    }
+
+    public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
+    {
+        public Responder(
+            IResponderDriver<Hope> responderDriver,
+            ICmdHandler cmdHandler,
+            Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
+        {
+        }
+
+        public override Task HandleAsync(IMsg msg)
+        {
+            throw new NotImplementedException();
+        }
+    }
+    
+    #endregion
 }

@@ -67,8 +67,8 @@ public class AggregateTests : IoCTests
         // WHEN
         var eng = _newState();
         eng.Id = _engineID.Value;
-        var cmd = TestEnv.Engine.Behavior.Initialize.Cmd.New(_engineID,
-            TestEnv.Engine.Behavior.Initialize.Payload.New(eng));
+        var cmd = TestEnv.Engine.Initialize.Cmd.New(_engineID,
+            TestEnv.Engine.Initialize.Payload.New(eng));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Engine>();
         // THEN

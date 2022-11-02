@@ -1,5 +1,11 @@
 # DOT-CART Ecosystem - Changes
 
+## 2022.11.02
+
+- Added Base Effects
+- Added TestEnv Initialize Effects - Responder
+
+
 ## 2022.10.30
 
 - Added Yaml Support

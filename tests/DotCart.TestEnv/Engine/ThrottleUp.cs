@@ -3,10 +3,11 @@ using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Schema;
+using DotCart.TestEnv.Engine.Behavior;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
-public partial class EngineAggregate :
+public partial class Aggregate :
     ITry<ThrottleUp.Cmd>,
     IApply<Schema.Engine, ThrottleUp.Evt>
 {
@@ -40,6 +41,7 @@ public partial class EngineAggregate :
         };
     }
 }
+
 
 public static class ThrottleUp
 {

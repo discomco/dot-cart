@@ -2,11 +2,14 @@ using DotCart.Behavior;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
-public partial class EngineAggregate : Aggregate<Schema.Engine, EngineID>
+
+
+
+public partial class Aggregate : Aggregate<Schema.Engine, EngineID>
 {
-    public EngineAggregate(
+    public Aggregate(
         NewState<Schema.Engine> newState)
         : base(newState)
     {

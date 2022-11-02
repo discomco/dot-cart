@@ -1,5 +1,8 @@
 namespace DotCart.Contract;
 
+
+
+
 public interface IHope : IDto
 {
 }

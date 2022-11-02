@@ -1,13 +1,16 @@
+using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
+using DotCart.Drivers.InMem;
 using DotCart.Schema;
+using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
-public partial class EngineAggregate :
+public partial class Aggregate :
     ITry<Start.Cmd>,
     IApply<Schema.Engine, Start.Evt>
 {
@@ -45,24 +48,43 @@ public static class Start
 {
     private const string CmdTopic = "engine:start:v1";
     private const string EvtTopic = "engine:started:v1";
+    public class Exception : System.Exception
+    {
+        public static Exception New(string message)
+        {
+            return new Exception(message);
+        }
 
+        public Exception()
+        {
+        }
+
+        protected Exception(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+
+        public Exception(string? message) : base(message)
+        {
+        }
+
+        public Exception(string? message, System.Exception? innerException) : base(message, innerException)
+        {
+        }
+    }
+    public record Payload : IPayload
+    {
+        public static readonly Payload New = new();
+    }
+    private static GenerateHope<Hope> _generateHope => () => {
+        var pl = Payload.New;
+        var aggId = EngineID.New;
+        return Hope.New(aggId.Value, pl.ToBytes());
+    };
+    public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
+    {
+        public static Hope New(string aggId, byte[] data) => new(aggId, data);
+    }
     private static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
-
-    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
-    {
-        return services
-            .AddAggregateBuilder()
-            .AddTransient(_ => evt2Cmd)
-            .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
-    }
-
-
-    public static void StateIsNotInitialized(this IGuardClause guard, Schema.Engine state)
-    {
-        if (((int)state.Status).NotHasFlag((int)EngineStatus.Initialized))
-            throw new NotInitializedException($"engine {state.Id}  is not initialized");
-    }
-
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
     {
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
@@ -79,17 +101,21 @@ public static class Start
         {
         }
     }
-
-    public record Payload : IPayload
+    public static IServiceCollection AddStartHopeGenerator(this IServiceCollection services)
     {
-        public static readonly Payload New = new();
+        return services
+            .AddTransient(_ => _generateHope);
     }
-
+    public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
+    {
+        return services
+            .AddAggregateBuilder()
+            .AddTransient(_ => evt2Cmd)
+            .AddTransient<IDomainPolicy, StartOnInitializedPolicy>();
+    }
     public interface ICmd : ICmd<Payload>
     {
     }
-
-
     public record Cmd
         (IID AggregateID, Payload Payload) :
             Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
@@ -99,11 +125,9 @@ public static class Start
             return new Cmd(aggID, payload);
         }
     }
-
     public interface IEvt : IEvt<Payload>
     {
     }
-
     [Topic(EvtTopic)]
     public record Evt
         (IID AggregateID, Payload Payload) :
