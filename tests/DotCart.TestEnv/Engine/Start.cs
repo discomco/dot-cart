@@ -7,6 +7,7 @@ using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Behavior;
+using DotCart.TestEnv.Engine.Effects;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -61,7 +62,17 @@ public static partial class Inject
     public static IServiceCollection AddStartEffects(this IServiceCollection services)
     {
         return services
+            .AddStartedToMemDocProjection()
             .AddStartResponder();
+    }
+
+    public static IServiceCollection AddStartedToMemDocProjection(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton(_ => Start._evt2State)
+            .AddEngineMemStore()
+            .AddSingleton<IProjectionDriver<Schema.Engine>, EngineProjectionDriver>()
+            .AddHostedService<Start.ToMemDocProjection>();
     }
 
     public static IServiceCollection AddStartResponder(this IServiceCollection services)
@@ -189,6 +200,12 @@ public static class Start
     
     #region Effects
 
+    internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, evt) =>
+    {
+        ((int)state.Status).SetFlag((int)EngineStatus.Started);
+        return state;
+    };
+
     internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd = 
         hope => 
             Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
@@ -210,5 +227,18 @@ public static class Start
         {
         }
     }
+    
+    
+    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
+    {
+        public ToMemDocProjection(ITopicMediator mediator,
+            IProjectionDriver<Schema.Engine> projectionDriver,
+            Evt2State<Schema.Engine, Evt> evt2State) : base(mediator,
+            projectionDriver,
+            evt2State)
+        {
+        }
+    }
+
     #endregion
 }
