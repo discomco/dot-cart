@@ -65,6 +65,6 @@ public class MemStoreTests : IoCTests
         services
             .AddEngineAggregate()
             .AddCmdHandler()
-            .AddEngineStore();
+            .AddEngineMemStore();
     }
 }

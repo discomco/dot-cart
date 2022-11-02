@@ -25,7 +25,7 @@ public interface IProjection<TDriver, TState, in TEvt> : IReactor
 /// This type depends on the supporting backing service to which the Projection Projects its State.</typeparam>
 /// <typeparam name="TState">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public class Projection<TDriver, TState, TEvt> : Reactor, IProjection<TDriver, TState, TEvt>
+public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<TDriver, TState, TEvt>
     where TDriver : IProjectionDriver<TState>
     where TState : IState
     where TEvt : IEvt

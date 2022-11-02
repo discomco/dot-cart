@@ -55,6 +55,26 @@ public static partial class Inject
     public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
     {
         return services
+            .AddInitializeResponder()
+            .AddInitializedToMemDocProjection();
+    }
+
+
+    public static IServiceCollection AddInitializedToMemDocProjection(this IServiceCollection services)
+    {
+        return services
+            .AddTopicMediator()
+            .AddEngineMemStore()
+            .AddSingleton( _ => Initialize._evt2State)
+            .AddSingleton<IProjectionDriver<Schema.Engine>, EngineProjectionDriver>()
+            .AddHostedService<Initialize.ToMemDocProjection>();
+    }
+    
+
+
+    public static IServiceCollection AddInitializeResponder(this IServiceCollection services)
+    {
+        return services
             .AddMemEventStore()
             .AddAggregateBuilder()
             .AddEngineAggregate()
@@ -64,6 +84,9 @@ public static partial class Inject
             .AddSingleton<IResponderDriver<Initialize.Hope>, Initialize.ResponderDriver>()
             .AddHostedService<Initialize.Responder>();
     }
+    
+    
+    
 }
 
 public static class Initialize
@@ -167,19 +190,40 @@ public static class Initialize
             return Hope.New(aggID.Value, pl.ToBytes());
         };
 
+    public static Evt2State<Schema.Engine, Evt> _evt2State => (state, evt) =>
+    {
+        if (evt == null) return state;
+        if (evt.GetPayload<Schema.Engine>() == null) return state;
+        state = evt.GetPayload<Schema.Engine>();
+        state.Id = evt.AggregateId;
+        state.Status = EngineStatus.Initialized;
+        return state;
+    };
+
     public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
     {
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
         {
         }
     }
-
     public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
     {
         public Responder(
             IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
             Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
+        {
+        }
+    }
+    
+    
+    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
+    {
+        public ToMemDocProjection(ITopicMediator mediator,
+            IProjectionDriver<Schema.Engine> projectionDriver,
+            Evt2State<Schema.Engine, Evt> evt2State) : base(mediator,
+            projectionDriver,
+            evt2State)
         {
         }
     }

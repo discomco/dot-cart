@@ -11,6 +11,13 @@ public static partial class Inject
     }
 }
 
+public interface IMediator : IDisposable
+{
+    void Subscribe<T>(Action<T> handler);
+    void Subscribe<T>(Func<T, Task> handler);
+    Task PublishAsync<T>(T publishedEvent);
+}
+
 internal class Mediator : IMediator
 {
     private static readonly AsyncLocal<Dictionary<Type, List<object>>> handlers =
