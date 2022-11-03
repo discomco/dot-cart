@@ -38,24 +38,31 @@ public abstract class EffectsTests<
     [Fact]
     public async Task ShouldStartResponder()
     {
-        // GIVEN
-        Assert.NotNull(_responder);
-        Assert.NotNull(_aggregateStore);
-        Assert.NotNull(_aggregate);
-        var tokenSource = new CancellationTokenSource(100);
-        var cancellationToken = tokenSource.Token;
-        // WHEN
-        await Task.Run(async () =>
+        try
         {
-            await _responder.StartAsync(cancellationToken);
-            while (!cancellationToken.IsCancellationRequested)
+            Assert.NotNull(_responder);
+            Assert.NotNull(_aggregateStore);
+            Assert.NotNull(_aggregate);
+            var tokenSource = new CancellationTokenSource(1000);
+            var cancellationToken = tokenSource.Token;
+            // WHEN
+            await Task.Run(async () =>
             {
-                Thread.SpinWait(5);
-                Output.WriteLine("Waiting");
-            }
-        }, cancellationToken);
-        var aStore = Container.GetRequiredService<IAggregateStore>();
-        var t = aStore.GetType();
+                await _responder.StartAsync(cancellationToken);
+                while (!cancellationToken.IsCancellationRequested)
+                {
+                    Thread.SpinWait(5);
+                    Output.WriteLine("Waiting");
+                }
+            }, cancellationToken);
+            var aStore = Container.GetRequiredService<IAggregateStore>();
+            var t = aStore.GetType();
+        }
+        catch (TaskCanceledException e)
+        {
+            Assert.True(true);
+        }
+        // GIVEN
     }
     [Fact]
     public void ShouldResolveReadModelStore()
