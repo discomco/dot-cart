@@ -4,7 +4,7 @@ using DotCart.Effects.Drivers;
 
 namespace DotCart.Effects;
 
-public delegate TCmd Hope2Cmd<in THope, out TCmd>(THope hope)
+public delegate TCmd Hope2Cmd<out TCmd,in THope>(THope hope)
     where THope : IHope
     where TCmd : ICmd;
 
@@ -21,13 +21,13 @@ public abstract class Responder<TDriver, THope, TCmd> : Reactor, IResponder<TDri
     where TCmd : ICmd
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<THope, TCmd> _hope2Cmd;
+    private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
     private readonly IResponderDriver<THope> _responderDriver;
 
     public Responder(
         IResponderDriver<THope> responderDriver,
         ICmdHandler cmdHandler,
-        Hope2Cmd<THope, TCmd> hope2Cmd)
+        Hope2Cmd<TCmd,THope> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;

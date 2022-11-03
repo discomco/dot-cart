@@ -83,6 +83,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
         {
             Guard.Against.BehaviorIDNotSet(this);
             _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
+            
         }
         catch (Exception e)
         {

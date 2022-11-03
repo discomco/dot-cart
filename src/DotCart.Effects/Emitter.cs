@@ -6,7 +6,7 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Effects;
 
-public delegate TFact Evt2Fact<out TFact>(IEvt evt) where TFact : IFact;
+public delegate TFact Evt2Fact<out TFact, in TEvt>(TEvt evt) where TFact : IFact where TEvt: IEvt;
 
 public interface IEmitter : IReactor
 {
@@ -18,13 +18,13 @@ public abstract class Emitter<TDriver, TEvt, TFact> : Reactor, IEmitter
     where TFact : IFact
 {
     private readonly IEmitterDriver _emitterDriver;
-    private readonly Evt2Fact<TFact> _evt2Fact;
+    private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
     private readonly ITopicMediator _mediator;
 
     protected Emitter(
         IEmitterDriver emitterDriver,
         ITopicMediator mediator,
-        Evt2Fact<TFact> evt2Fact)
+        Evt2Fact<TFact, TEvt> evt2Fact)
     {
         _mediator = mediator;
         _evt2Fact = evt2Fact;
@@ -50,7 +50,7 @@ public abstract class Emitter<TDriver, TEvt, TFact> : Reactor, IEmitter
     {
         return Run(() =>
         {
-            var fact = _evt2Fact(evt);
+            var fact = _evt2Fact((TEvt)evt);
             _emitterDriver.EmitFact(fact);
         });
     }

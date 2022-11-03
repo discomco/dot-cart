@@ -55,7 +55,15 @@ public static partial class Inject
     {
         return services
             .AddInitializeResponder()
+            .AddInitializedEmitter()
             .AddInitializedToMemDocProjection();
+    }
+
+    public static IServiceCollection AddInitializedEmitter(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Initialize._evt2Fact);
+
     }
 
 
@@ -86,9 +94,12 @@ public static partial class Inject
 
 public static class Initialize
 {
+    public const string FactTopic = "test.engine.initialized.v1";
+    public const string HopeTopic = "test.engine.initialize.v1";
     public const string CmdTopic = "test:engine:initialize:v1";
     public const string EvtTopic = "test:engine:initialized:v1";
 
+    #region Contract Region =====================================
     public record Payload : IPayload
     {
         public Payload()
@@ -108,6 +119,24 @@ public static class Initialize
         }
     }
 
+    [Topic(HopeTopic)]
+    public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
+    {
+        public static Hope New(string aggId, byte[] data)
+        {
+            return new Hope(aggId, data);
+        }
+    }
+
+    [Topic(FactTopic)]
+    public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    {
+        public static Fact New(string aggId, byte[] data) => new(aggId, data);
+        public static Fact New(string aggId, Payload payload) => new(aggId, payload.ToBytes());
+    }
+    #endregion
+
+    #region Behavior Region =================================
     public class Exception : System.Exception
     {
         public Exception()
@@ -131,15 +160,6 @@ public static class Initialize
             return new Exception(msg);
         }
     }
-
-    public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
-    {
-        public static Hope New(string aggId, byte[] data)
-        {
-            return new Hope(aggId, data);
-        }
-    }
-
     public interface IEvt : IEvt<Payload>
     {
     }
@@ -158,6 +178,7 @@ public static class Initialize
     {
     }
 
+    [Topic(CmdTopic)]
     public record Cmd(IID AggregateID, Payload Payload)
         : Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
     {
@@ -166,11 +187,15 @@ public static class Initialize
             return new Cmd(engineId, payload);
         }
     }
+    #endregion
+
+    #region Effects Region ===========================================
+
+    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
+        evt => Fact.New(evt.AggregateID.Value, evt.Payload);
 
 
-    #region Effects
-
-    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd =
+    internal static readonly Hope2Cmd<Cmd,Hope> _hope2Cmd =
         hope => Cmd.New(
             ID<EngineID>.FromIdString(hope.AggId),
             hope.Data.FromBytes<Payload>()
@@ -195,7 +220,7 @@ public static class Initialize
         return state;
     };
 
-    public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
+    public class ResponderDriver : MemResponderDriver<Hope>
     {
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
         {
@@ -207,7 +232,7 @@ public static class Initialize
         public Responder(
             IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
+            Hope2Cmd<Cmd,Hope> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
         {
         }
     }

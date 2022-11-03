@@ -11,14 +11,14 @@ public class IDPrefixAttribute : Attribute
     public string Prefix { get; set; }
 }
 
-public static class Helper
+public static class IDPrefix
 {
-    public static string GetIdPrefix<TAggregateId>(this TAggregateId aggregateId)
-        where TAggregateId : IID
+    public static string Get<TID>()
+        where TID : IID
     {
         var prefixAttributes =
-            (IDPrefixAttribute[])typeof(TAggregateId).GetCustomAttributes(typeof(IDPrefixAttribute), true);
-        if (prefixAttributes.Length <= 0) return typeof(TAggregateId).FullName.Replace(".", "").ToLower();
+            (IDPrefixAttribute[])typeof(TID).GetCustomAttributes(typeof(IDPrefixAttribute), true);
+        if (prefixAttributes.Length <= 0) return typeof(TID).FullName.Replace(".", "").ToLower();
         var att = prefixAttributes[0];
         return att.Prefix;
     }

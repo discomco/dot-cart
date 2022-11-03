@@ -8,7 +8,7 @@ namespace DotCart.Contract.Tests;
 
 public class HopeTests : IoCTests
 {
-    private NewState<Engine> _newEngine;
+    private NewState<TestEnv.Engine.Schema.Engine> _newEngine;
 
     public HopeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -28,7 +28,7 @@ public class HopeTests : IoCTests
 
     protected override void Initialize()
     {
-        _newEngine = Container.GetRequiredService<NewState<Engine>>();
+        _newEngine = Container.GetRequiredService<NewState<TestEnv.Engine.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()
@@ -38,6 +38,6 @@ public class HopeTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSingleton(Engine.Ctor);
+            .AddStateCtor();
     }
 }

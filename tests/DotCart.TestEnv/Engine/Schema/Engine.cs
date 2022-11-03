@@ -1,11 +1,27 @@
 using System.Text.Json.Serialization;
 using DotCart.Schema;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine.Schema;
 
+
+public static partial class Inject
+{
+    public static IServiceCollection AddStateCtor(this IServiceCollection services)
+    {
+        return services
+            .AddIDCtor()
+            .AddSingleton(Engine.Ctor);
+    }
+}
+
+
+
 public record struct Engine : IState
 {
-    public static NewState<Engine> Ctor = () => new Engine();
+    public static readonly NewState<Engine> Ctor = () => new Engine();
+    
+    public static Engine New(string id, EngineStatus status, Details details) => new(id, status, details);
 
     public Engine()
     {

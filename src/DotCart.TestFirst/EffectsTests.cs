@@ -1,23 +1,39 @@
 using DotCart.Behavior;
+using DotCart.Contract;
 using DotCart.Effects;
+using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToDocProjection> : IoCTests
+public abstract class EffectsTests<
+    TState,
+    TEvt,
+    TCmd,
+    THope,
+    TFact,
+    TResponder,
+    TReadModelStore,
+    TToDocProjection
+> : IoCTests
+    where TState : IState
+    where TEvt : IEvt
+    where TCmd : ICmd
+    where THope : IHope
+    where TFact : IFact
     where TResponder : IReactor
 {
     protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
     protected IAggregateStore _aggregateStore;
     protected TResponder _responder;
+    private ICmdHandler _cmdHandler;
 
 
     protected EffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
-
 
     [Fact]
     public async Task ShouldStartResponder()
@@ -41,8 +57,6 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         var aStore = Container.GetRequiredService<IAggregateStore>();
         var t = aStore.GetType();
     }
-
-
     [Fact]
     public void ShouldResolveReadModelStore()
     {
@@ -53,7 +67,16 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN
         Assert.NotNull(rms);
     }
-
+    [Fact]
+    public void ShouldResolveCmdHandler()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var cmdHandler = Container.GetRequiredService<ICmdHandler>();
+        // THEN
+        Assert.NotNull(cmdHandler);
+    }
     [Fact]
     public void ShouldResolveToDocProjection()
     {
@@ -64,8 +87,6 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN 
         Assert.NotNull(toDoc);
     }
-
-
     [Fact]
     public void ShouldResolveAggregateStore()
     {
@@ -76,7 +97,27 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN
         Assert.NotNull(aggStore);
     }
+    [Fact]
+    public void ShouldResolveHope2Cmd()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var h2c = Container.GetRequiredService<Hope2Cmd<TCmd, THope>>();
+        // THEN
+        Assert.NotNull(h2c);
+    }
+    [Fact]
+    public void ShouldResolveEvt2Fact()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var e2f = Container.GetRequiredService<Evt2Fact<TFact, TEvt>>();
+        // THEN
+        Assert.NotNull(e2f);
 
+    }
     [Fact]
     public void ShouldResolveAggregateBuilder()
     {
@@ -87,7 +128,6 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN 
         Assert.NotNull(aggBuilder);
     }
-
     [Fact]
     public void ShouldResolveResponder()
     {
@@ -98,23 +138,22 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN
         Assert.NotNull(ir);
     }
-
     [Fact]
     public void ShouldResolveEvt2State()
     {
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var evt2State = Container.GetRequiredService<TEvt2State>();
+        var evt2State = Container.GetRequiredService<Evt2State<TState, TEvt>>();
         // THEN
         Assert.NotNull(evt2State);
     }
-
-
     protected override void Initialize()
     {
         _responder = Container.GetHostedService<TResponder>();
         _aggregateStore = Container.GetRequiredService<IAggregateStore>();
         _aggregate = Container.GetRequiredService<IAggregate>();
+        _cmdHandler = Container.GetRequiredService<ICmdHandler>();
+        _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();
     }
 }

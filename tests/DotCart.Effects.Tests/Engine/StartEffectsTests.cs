@@ -7,8 +7,12 @@ using Xunit.Abstractions;
 namespace DotCart.Effects.Tests.Engine;
 
 public class StartEffectsTests : EffectsTests<
+    TestEnv.Engine.Schema.Engine,
+    Start.Evt,
+    Start.Cmd,
+    Start.Hope,
+    Start.Fact,
     Start.Responder,
-    Evt2State<TestEnv.Engine.Schema.Engine, Start.Evt>,
     IStore<TestEnv.Engine.Schema.Engine>,
     Start.ToMemDocProjection
 >

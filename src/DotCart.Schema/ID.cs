@@ -3,10 +3,11 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
+public delegate TID NewID<out TID>() where TID : IID;
+
 public interface IID<TID> : IID
     where TID : IID<TID>
-{
-}
+{ }
 
 public interface IID
 {
@@ -16,6 +17,8 @@ public interface IID
 public abstract record ID<T> : IID<T>
     where T : IID<T>
 {
+    
+    
     protected static readonly string Prefix = GetPrefix();
 
     private readonly Lazy<Guid> _lazyGuid;

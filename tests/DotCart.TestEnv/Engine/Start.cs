@@ -61,7 +61,14 @@ public static partial class Inject
     {
         return services
             .AddStartedToMemDocProjection()
+            .AddStartEmitter()
             .AddStartResponder();
+    }
+
+    public static IServiceCollection AddStartEmitter(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Start._evt2Fact);
     }
 
     public static IServiceCollection AddStartedToMemDocProjection(this IServiceCollection services)
@@ -97,6 +104,8 @@ public static partial class Inject
 
 public static class Start
 {
+    private const string HopeTopic = "engine.start.v1";
+    private const string FactTopic = "engine.started.v1";
     private const string CmdTopic = "engine:start:v1";
     private const string EvtTopic = "engine:started:v1";
 
@@ -144,11 +153,34 @@ public static class Start
         return Hope.New(aggId.Value, pl.ToBytes());
     };
 
+    [Topic(FactTopic)]
+    public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    {
+        public static Fact New(string aggId, byte[] data)
+        {
+            return new Fact(aggId, data);
+        }
+
+        public static Fact New(string aggId, Payload payload)
+        {
+            return new Fact(aggId, payload.ToBytes());
+        }
+        
+        
+    }
+    
+
+    [Topic(HopeTopic)]
     public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
     {
         public static Hope New(string aggId, byte[] data)
         {
             return new Hope(aggId, data);
+        }
+        
+        public static Hope New(string aggId, Payload payload)
+        {
+            return new Hope(aggId, payload.ToBytes());
         }
     }
 
@@ -209,13 +241,16 @@ public static class Start
 
     #region Effects
 
-    internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, evt) =>
+    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact = 
+        evt => Fact.New(evt.AggregateId, evt.Payload);
+
+    internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, _) =>
     {
         ((int)state.Status).SetFlag((int)EngineStatus.Started);
         return state;
     };
 
-    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd =
+    internal static readonly Hope2Cmd<Cmd,Hope> _hope2Cmd =
         hope =>
             Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
 
@@ -230,7 +265,7 @@ public static class Start
     {
         public Responder(IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Hope, Cmd> hope2Cmd) : base(responderDriver,
+            Hope2Cmd<Cmd,Hope> hope2Cmd) : base(responderDriver,
             cmdHandler,
             hope2Cmd)
         {

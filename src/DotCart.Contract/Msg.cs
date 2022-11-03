@@ -22,6 +22,8 @@ public abstract record Msg(string MsgType, byte[] Data) : IMsg
             ? default
             : Data.FromBytes<TPayload>();
     }
+    
+    
 
     public DateTime TimeStamp { get; private set; } = DateTime.UtcNow;
 

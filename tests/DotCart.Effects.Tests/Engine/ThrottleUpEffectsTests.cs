@@ -1,3 +1,4 @@
+using DotCart.Drivers.InMem;
 using DotCart.TestEnv.Engine;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -6,18 +7,17 @@ using Xunit.Abstractions;
 
 namespace DotCart.Effects.Tests.Engine;
 
-public class InitializeEffectsTests : EffectsTests<
+public class ThrottleUpEffectsTests: EffectsTests<
     TestEnv.Engine.Schema.Engine,
-    Initialize.Evt,
-    Initialize.Cmd,
-    Initialize.Hope,
-    Initialize.Fact,
-    Initialize.Responder,
+    ThrottleUp.Evt,
+    ThrottleUp.Cmd,
+    ThrottleUp.Hope,
+    ThrottleUp.Fact,
+    ThrottleUp.Responder, 
     IStore<TestEnv.Engine.Schema.Engine>,
-    Initialize.ToMemDocProjection
->
+    ThrottleUp.ToMemDocProjection>
 {
-    public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ThrottleUpEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
 
@@ -28,6 +28,6 @@ public class InitializeEffectsTests : EffectsTests<
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddInitializeEffects();
+            .AddThrottleUpEffects();
     }
 }
