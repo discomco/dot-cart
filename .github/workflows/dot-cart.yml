@@ -28,7 +28,7 @@ jobs:
       - name: Build Packages
         run: dotnet build --configuration Release --no-restore
       - name: Test Packages
-        run: dotnet test --no-restore --verbosity normal
+        run: dotnet test --no-restore --verbosity minimal
 #      - name: Build Packages
 #        run: ./cid/build.sh DotCart.root.sln
 #      - name: Test Packages
