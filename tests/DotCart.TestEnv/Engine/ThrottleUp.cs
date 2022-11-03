@@ -32,10 +32,8 @@ public partial class Aggregate :
         }
         catch (Exception e)
         {
-            Console.WriteLine(e);
-            throw;
+            fbk.SetError(e.AsError());
         }
-
         return fbk;
     }
 
