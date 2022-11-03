@@ -25,10 +25,9 @@ public interface IAggregate
     string GetName();
 }
 
-public delegate IEnumerable<IEvt> TryCmd<in TCmd>(IState state, TCmd cmd) where TCmd: ICmd;
+public delegate IEnumerable<IEvt> TryCmd<in TCmd>(IState state, TCmd cmd) where TCmd : ICmd;
 
-public delegate IState ApplyEvt<in TEvt>(IState state, TEvt evt) where TEvt : IEvt; 
-
+public delegate IState ApplyEvt<in TEvt>(IState state, TEvt evt) where TEvt : IEvt;
 
 public abstract class Aggregate<TState, TID> : IAggregate
     where TState : IState
@@ -53,8 +52,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
     {
         foreach (var policy in aggregatePolicies) policy.SetBehavior(this);
     }
-    
-    
+
 
     public string GetName()
     {

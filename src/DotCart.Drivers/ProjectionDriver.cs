@@ -4,12 +4,12 @@ using DotCart.Schema;
 
 namespace DotCart.Drivers;
 
-public abstract class ProjectionDriver<TState> : IProjectionDriver<TState> where TState : IState
+public abstract class ProjectionDriver<TReadModel> : IProjectionDriver<TReadModel> where TReadModel : IState
 {
-    private readonly IStore<TState> _store;
+    private readonly IStore<TReadModel> _store;
     private IReactor _reactor;
 
-    protected ProjectionDriver(IStore<TState> store)
+    protected ProjectionDriver(IStore<TReadModel> store)
     {
         _store = store;
     }
@@ -19,13 +19,13 @@ public abstract class ProjectionDriver<TState> : IProjectionDriver<TState> where
         _reactor = reactor;
     }
 
-    public Task<TState> GetByIdAsync(string id)
+    public Task<TReadModel> GetByIdAsync(string id)
     {
         return _store.GetByIdAsync(id);
     }
 
-    public Task<TState> SetAsync(string id, TState state)
+    public Task<TReadModel> SetAsync(string id, TReadModel state)
     {
         return _store.SetAsync(id, state);
     }
-};
+}

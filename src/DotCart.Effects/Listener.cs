@@ -4,17 +4,17 @@ using DotCart.Effects.Drivers;
 
 namespace DotCart.Effects;
 
-public delegate TCmd Fact2Cmd<in TFact, out TCmd>(TFact fact) 
-    where TFact: IFact 
-    where TCmd: ICmd;
+public delegate TCmd Fact2Cmd<in TFact, out TCmd>(TFact fact)
+    where TFact : IFact
+    where TCmd : ICmd;
 
-public interface IListener: IReactor
+public interface IListener : IReactor
 {
 }
 
-public abstract class Listener<TDriver, TFact, TCmd>: Reactor, IListener 
-    where TDriver: IListenerDriver 
-    where TFact : IFact 
+public abstract class Listener<TDriver, TFact, TCmd> : Reactor, IListener
+    where TDriver : IListenerDriver
+    where TFact : IFact
     where TCmd : ICmd
 {
     private readonly ICmdHandler _cmdHandler;
@@ -24,13 +24,19 @@ public abstract class Listener<TDriver, TFact, TCmd>: Reactor, IListener
     protected Listener(
         ICmdHandler cmdHandler,
         TDriver driver,
-        Fact2Cmd<TFact,TCmd> fact2Cmd)
+        Fact2Cmd<TFact, TCmd> fact2Cmd)
     {
         _cmdHandler = cmdHandler;
         _driver = driver;
         _fact2Cmd = fact2Cmd;
     }
 
+    public override Task HandleAsync(IMsg msg)
+    {
+        var fact = (TFact)msg;
+        var cmd = _fact2Cmd(fact);
+        return _cmdHandler.Handle(cmd);
+    }
 
 
     protected override Task StartReactingAsync(CancellationToken cancellationToken)
@@ -42,12 +48,4 @@ public abstract class Listener<TDriver, TFact, TCmd>: Reactor, IListener
     {
         return _driver.StopListening<TFact>(cancellationToken);
     }
-
-    public override Task HandleAsync(IMsg msg)
-    {
-        var fact = (TFact)msg;
-        var cmd = _fact2Cmd(fact);
-        return _cmdHandler.Handle(cmd);
-    }
-    
 }

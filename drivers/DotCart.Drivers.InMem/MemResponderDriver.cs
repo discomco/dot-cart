@@ -6,15 +6,14 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.InMem;
 
-
-public delegate THope GenerateHope<out THope>() 
-    where THope: IHope;
+public delegate THope GenerateHope<out THope>()
+    where THope : IHope;
 
 /// <summary>
-/// MemResponderDriver is an in-memory responder driver mimicker. 
+///     MemResponderDriver is an in-memory responder driver mimicker.
 /// </summary>
 /// <typeparam name="THope"></typeparam>
-public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where THope: IHope
+public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where THope : IHope
 {
     private readonly GenerateHope<THope> _generateHope;
     private IReactor _reactor;

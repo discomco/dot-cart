@@ -1,5 +1,4 @@
 using System.Runtime.Serialization;
-using System.Text.Json.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Behavior;
 using DotCart.Contract;
@@ -65,11 +64,10 @@ public static partial class Inject
         return services
             .AddTopicMediator()
             .AddEngineMemStore()
-            .AddSingleton( _ => Initialize._evt2State)
+            .AddSingleton(_ => Initialize._evt2State)
             .AddSingleton<IProjectionDriver<Schema.Engine>, EngineProjectionDriver>()
             .AddHostedService<Initialize.ToMemDocProjection>();
     }
-    
 
 
     public static IServiceCollection AddInitializeResponder(this IServiceCollection services)
@@ -84,9 +82,6 @@ public static partial class Inject
             .AddSingleton<IResponderDriver<Initialize.Hope>, Initialize.ResponderDriver>()
             .AddHostedService<Initialize.Responder>();
     }
-    
-    
-    
 }
 
 public static class Initialize
@@ -100,14 +95,14 @@ public static class Initialize
         {
         }
 
-        private Payload(Engine.Schema.Engine engine)
+        private Payload(Schema.Engine engine)
         {
             Engine = engine;
         }
 
-        public Engine.Schema.Engine Engine { get; }
+        public Schema.Engine Engine { get; }
 
-        public static Payload New(Engine.Schema.Engine engine)
+        public static Payload New(Schema.Engine engine)
         {
             return new Payload(engine);
         }
@@ -184,7 +179,7 @@ public static class Initialize
     internal static readonly GenerateHope<Hope> _genHope =
         () =>
         {
-            var eng = TestEnv.Engine.Schema.Engine.Ctor();
+            var eng = Schema.Engine.Ctor();
             var aggID = EngineID.New;
             var pl = Payload.New(eng);
             return Hope.New(aggID.Value, pl.ToBytes());
@@ -206,6 +201,7 @@ public static class Initialize
         {
         }
     }
+
     public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
     {
         public Responder(
@@ -215,8 +211,8 @@ public static class Initialize
         {
         }
     }
-    
-    
+
+
     public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
     {
         public ToMemDocProjection(ITopicMediator mediator,

@@ -1,5 +1,4 @@
 using DotCart.Drivers;
-using DotCart.Drivers.InMem;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,7 +16,6 @@ public static partial class Inject
     }
 }
 
-
 public class EngineProjectionDriver : ProjectionDriver<Schema.Engine>, IEngineMemProjectionDriver
 {
     public EngineProjectionDriver(IStore<Schema.Engine> store) : base(store)
@@ -25,8 +23,6 @@ public class EngineProjectionDriver : ProjectionDriver<Schema.Engine>, IEngineMe
     }
 }
 
-
 public interface IEngineMemProjectionDriver : IProjectionDriver<Schema.Engine>
 {
 }
-

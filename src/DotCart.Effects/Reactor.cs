@@ -5,6 +5,17 @@ namespace DotCart.Effects;
 
 public abstract class Reactor : BackgroundService, IReactor
 {
+    public override Task StartAsync(CancellationToken cancellationToken)
+    {
+        return StartReactingAsync(cancellationToken);
+    }
+
+    public void SetSpoke(ISpoke spoke)
+    {
+        spoke.Inject(this);
+    }
+
+    public abstract Task HandleAsync(IMsg msg);
     protected abstract Task StartReactingAsync(CancellationToken cancellationToken);
     protected abstract Task StopReactingAsync(CancellationToken cancellationToken);
 
@@ -17,19 +28,9 @@ public abstract class Reactor : BackgroundService, IReactor
             }
         }, stoppingToken).ConfigureAwait(false);
     }
-    
-    public override Task StartAsync(CancellationToken cancellationToken)
-    {
-        return StartReactingAsync(cancellationToken);
-    }
-  
+
     public override Task StopAsync(CancellationToken cancellationToken)
     {
         return StopReactingAsync(cancellationToken);
     }
-    public void SetSpoke(ISpoke spoke)
-    {
-        spoke.Inject(this);
-    }
-    public abstract Task HandleAsync(IMsg msg);
 }

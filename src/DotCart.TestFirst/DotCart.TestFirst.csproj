@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <IsPackable>true</IsPackable>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="xunit.assert" Version="2.4.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
+    <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
+  </ItemGroup>
+
+</Project>

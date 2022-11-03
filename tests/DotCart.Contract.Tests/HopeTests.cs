@@ -1,5 +1,4 @@
 using DotCart.Schema;
-using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,9 +6,13 @@ using Xunit.Abstractions;
 
 namespace DotCart.Contract.Tests;
 
-public class HopeTests: IoCTests
+public class HopeTests : IoCTests
 {
     private NewState<Engine> _newEngine;
+
+    public HopeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldCreateInitializeHope()
@@ -21,10 +24,6 @@ public class HopeTests: IoCTests
         var hope = TestEnv.Engine.Initialize.Hope.New(engine.Id, pl.ToBytes());
         // THEN
         Assert.NotNull(hope);
-    }
-
-    public HopeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 
     protected override void Initialize()

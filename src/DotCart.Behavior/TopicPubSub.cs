@@ -28,6 +28,7 @@ public abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
     {
         GetHandlersOf(topic).Add(handler);
     }
+
     public async Task PublishAsync(string topic, TMsg msg)
     {
         foreach (var handler in GetHandlersOf(topic))

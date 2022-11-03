@@ -6,6 +6,7 @@ public interface IAggregateBuilder
 {
     IAggregate Build();
 }
+
 public static partial class Inject
 {
     public static IServiceCollection AddAggregateBuilder(this IServiceCollection services)

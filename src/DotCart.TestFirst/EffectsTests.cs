@@ -1,19 +1,24 @@
 using DotCart.Behavior;
 using DotCart.Effects;
-using Xunit;
+using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestFirst;
 
-public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToDocProjection>: IoCTests 
-    where TResponder: IReactor
+public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToDocProjection> : IoCTests
+    where TResponder : IReactor
 {
-    protected TResponder _responder;
-    protected IAggregateStore _aggregateStore;
     protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
+    protected IAggregateStore _aggregateStore;
+    protected TResponder _responder;
 
-    
+
+    protected EffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
+
+
     [Fact]
     public async Task ShouldStartResponder()
     {
@@ -37,7 +42,7 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         var t = aStore.GetType();
     }
 
-    
+
     [Fact]
     public void ShouldResolveReadModelStore()
     {
@@ -60,8 +65,7 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         Assert.NotNull(toDoc);
     }
 
-    
-    
+
     [Fact]
     public void ShouldResolveAggregateStore()
     {
@@ -83,7 +87,7 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN 
         Assert.NotNull(aggBuilder);
     }
-    
+
     [Fact]
     public void ShouldResolveResponder()
     {
@@ -94,7 +98,7 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
         // THEN
         Assert.NotNull(ir);
     }
-    
+
     [Fact]
     public void ShouldResolveEvt2State()
     {
@@ -107,19 +111,10 @@ public abstract class EffectsTests<TResponder, TEvt2State, TReadModelStore, TToD
     }
 
 
-    
-
-
-    
     protected override void Initialize()
     {
         _responder = Container.GetHostedService<TResponder>();
         _aggregateStore = Container.GetRequiredService<IAggregateStore>();
         _aggregate = Container.GetRequiredService<IAggregate>();
-    }
-
-
-    protected EffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 }

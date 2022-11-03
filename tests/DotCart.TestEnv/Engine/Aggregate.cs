@@ -4,9 +4,6 @@ using DotCart.TestEnv.Engine.Schema;
 
 namespace DotCart.TestEnv.Engine;
 
-
-
-
 public partial class Aggregate : Aggregate<Schema.Engine, EngineID>
 {
     public Aggregate(

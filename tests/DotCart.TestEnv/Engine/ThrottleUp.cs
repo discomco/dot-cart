@@ -42,7 +42,6 @@ public partial class Aggregate :
     }
 }
 
-
 public static class ThrottleUp
 {
     public const string CmdTopic = "engine:trottle_up:v1";

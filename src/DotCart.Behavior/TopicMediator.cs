@@ -11,9 +11,8 @@ public static partial class Inject
     }
 }
 
-public interface ITopicMediator: ITopicPubSub<IEvt>, IDisposable
+public interface ITopicMediator : ITopicPubSub<IEvt>, IDisposable
 {
-    
 }
 
 internal sealed class TopicMediator : TopicPubSub<IEvt>, ITopicMediator

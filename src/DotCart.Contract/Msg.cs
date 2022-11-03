@@ -11,16 +11,15 @@ public interface IMsg
     TPayload GetPayload<TPayload>();
 }
 
-
-public abstract record Msg(string MsgType, byte[] Data): IMsg
+public abstract record Msg(string MsgType, byte[] Data) : IMsg
 {
     public string MsgId { get; } = GuidUtils.NewGuid;
     public string MsgType { get; } = MsgType;
 
     public TPayload GetPayload<TPayload>()
     {
-        return Data == null 
-            ? default 
+        return Data == null
+            ? default
             : Data.FromBytes<TPayload>();
     }
 
@@ -29,9 +28,10 @@ public abstract record Msg(string MsgType, byte[] Data): IMsg
     public void SetTimeStamp(DateTime timeStamp)
     {
         TimeStamp = timeStamp;
-    }    
+    }
 }
 
-public abstract record Msg<TPayload>(string MsgType, TPayload Payload) : Msg(MsgType, Payload.ToBytes()) where TPayload: IPayload
+public abstract record Msg<TPayload>(string MsgType, TPayload Payload) : Msg(MsgType, Payload.ToBytes())
+    where TPayload : IPayload
 {
 }

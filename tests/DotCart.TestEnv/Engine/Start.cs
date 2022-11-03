@@ -47,10 +47,8 @@ public partial class Aggregate :
     }
 }
 
-
 public static partial class Inject
 {
-
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
         return services
@@ -89,30 +87,24 @@ public static partial class Inject
             .AddHostedService<Start.Responder>();
     }
 
-   
+
     public static IServiceCollection AddStartHopeGenerator(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => Start._generateHope);
     }
-    
 }
-
 
 public static class Start
 {
     private const string CmdTopic = "engine:start:v1";
     private const string EvtTopic = "engine:started:v1";
-    
-    
+
+
     #region Schema
+
     public class Exception : System.Exception
     {
-        public static Exception New(string message)
-        {
-            return new Exception(message);
-        }
-
         public Exception()
         {
         }
@@ -128,32 +120,45 @@ public static class Start
         public Exception(string? message, System.Exception? innerException) : base(message, innerException)
         {
         }
+
+        public static Exception New(string message)
+        {
+            return new Exception(message);
+        }
     }
+
     #endregion
-    
-    
+
+
     #region Contract
+
     public record Payload : IPayload
     {
         public static readonly Payload New = new();
     }
 
-    internal static GenerateHope<Hope> _generateHope => () => {
+    internal static GenerateHope<Hope> _generateHope => () =>
+    {
         var pl = Payload.New;
         var aggId = EngineID.New;
         return Hope.New(aggId.Value, pl.ToBytes());
     };
-    
+
     public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
     {
-        public static Hope New(string aggId, byte[] data) => new(aggId, data);
+        public static Hope New(string aggId, byte[] data)
+        {
+            return new Hope(aggId, data);
+        }
     }
+
     #endregion
 
-    
-    
+
     # region Behavior
+
     internal static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
+
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
     {
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
@@ -174,6 +179,7 @@ public static class Start
     public interface ICmd : ICmd<Payload>
     {
     }
+
     public record Cmd
         (IID AggregateID, Payload Payload) :
             Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
@@ -183,9 +189,11 @@ public static class Start
             return new Cmd(aggID, payload);
         }
     }
+
     public interface IEvt : IEvt<Payload>
     {
     }
+
     [Topic(EvtTopic)]
     public record Evt
         (IID AggregateID, Payload Payload) :
@@ -196,8 +204,9 @@ public static class Start
             return new Evt(engineID, payload);
         }
     }
+
     #endregion
-    
+
     #region Effects
 
     internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, evt) =>
@@ -206,8 +215,8 @@ public static class Start
         return state;
     };
 
-    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd = 
-        hope => 
+    internal static readonly Hope2Cmd<Hope, Cmd> _hope2Cmd =
+        hope =>
             Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
 
     public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
@@ -227,8 +236,8 @@ public static class Start
         {
         }
     }
-    
-    
+
+
     public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
     {
         public ToMemDocProjection(ITopicMediator mediator,

@@ -6,6 +6,5 @@ public interface IReactor
 {
     Task StartAsync(CancellationToken cancellationToken);
     Task HandleAsync(IMsg msg);
-    void SetSpoke(ISpoke spoke);    
+    void SetSpoke(ISpoke spoke);
 }
-

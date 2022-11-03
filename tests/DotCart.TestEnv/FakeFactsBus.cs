@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestKit;
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddFakeFactsBus(this IServiceCollection services)
     {

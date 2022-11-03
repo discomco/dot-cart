@@ -3,7 +3,6 @@ using DotCart.Contract;
 using DotCart.Effects.Drivers;
 using Microsoft.Extensions.DependencyInjection;
 
-
 namespace DotCart.Effects;
 
 public static partial class Inject
@@ -15,12 +14,11 @@ public static partial class Inject
     }
 }
 
-public interface IProjector: IReactor
+public interface IProjector : IReactor
 {
-
 }
 
-public class Projector : Reactor, IProjector 
+public class Projector : Reactor, IProjector
 {
     private readonly ITopicMediator _mediator;
     private readonly IProjectorDriver _projectorDriver;
@@ -34,6 +32,11 @@ public class Projector : Reactor, IProjector
         _projectorDriver = projectorDriver;
     }
 
+    public override Task HandleAsync(IMsg msg)
+    {
+        return _mediator.PublishAsync(msg.MsgType, (IEvt)msg);
+    }
+
     protected override Task StartReactingAsync(CancellationToken cancellationToken)
     {
         return _projectorDriver.StartStreamingAsync(cancellationToken);
@@ -42,10 +45,5 @@ public class Projector : Reactor, IProjector
     protected override Task StopReactingAsync(CancellationToken cancellationToken)
     {
         return _projectorDriver.StopStreamingAsync(cancellationToken);
-    }
-
-    public override Task HandleAsync(IMsg msg)
-    {
-        return _mediator.PublishAsync(msg.MsgType, (IEvt)msg);
     }
 }
