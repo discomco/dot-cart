@@ -42,10 +42,10 @@ public class MemEventStoreTests : IoCTests
         Assert.NotNull(_engineId);
         Assert.NotNull(_newEngine);
         // AND
-        var cmds = HelperFuncs.InitializeScenario(_engineId, _newEngine);
+        var cmds = ScenariosAndStreams.InitializeScenario(_engineId, _newEngine);
         Assert.NotEmpty(cmds);
         _agg.SetID(_engineId);
-        var fbks = await HelperFuncs.RunScenario(_agg, cmds);
+        var fbks = await ScenariosAndStreams.RunScenario(_agg, cmds);
         // AND
         Assert.NotEmpty(_agg.UncommittedEvents);
         // WHEN

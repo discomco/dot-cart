@@ -5,14 +5,14 @@ using Polly.Retry;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-internal class EsClient : IEsClient
+internal class ESDBEventSourcingClient : IESDBEventSourcingClient
 {
     private readonly EventStoreClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
 
 
-    public EsClient(EventStoreClient client, AsyncRetryPolicy retryPolicy = null)
+    public ESDBEventSourcingClient(EventStoreClient client, AsyncRetryPolicy? retryPolicy = null)
     {
         _client = client;
         _retryPolicy = retryPolicy

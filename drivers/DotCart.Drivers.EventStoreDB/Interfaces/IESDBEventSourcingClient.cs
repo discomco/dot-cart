@@ -2,7 +2,7 @@ using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB.Interfaces;
 
-public interface IEsClient : IEsClientBase
+public interface IESDBEventSourcingClient : IESDBClientBase
 {
     Task<IWriteResult> AppendToStreamAsync(
         string streamName,

@@ -3,11 +3,11 @@ using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-internal class EsPersistentSubscriptionsClient : IEsPersistentSubscriptionsClient
+internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsClient
 {
     private readonly EventStorePersistentSubscriptionsClient _clt;
 
-    public EsPersistentSubscriptionsClient(EventStorePersistentSubscriptionsClient clt)
+    public ESDBPersistentSubscriptionsClient(EventStorePersistentSubscriptionsClient clt)
     {
         _clt = clt;
     }

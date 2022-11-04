@@ -11,7 +11,7 @@ namespace DotCart.Drivers.EventStoreDB.Interfaces;
 ///         on google.com
 ///     </a>
 /// </footer>
-public interface IEsPersistentSubscriptionsClient : IEsClientBase
+public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
 {
     public Task CreateAsync(
         string streamName,

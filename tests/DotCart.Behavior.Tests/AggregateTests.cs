@@ -48,7 +48,7 @@ public class AggregateTests : IoCTests
         // GIVEN
         Assert.NotNull(_agg);
         // AND
-        var events = HelperFuncs.CreateEngineEvents(_engineID, _newState);
+        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream(_engineID, _newState);
         _agg.SetID(_engineID);
         _agg.Load(events);
         // THEN

@@ -1,12 +1,38 @@
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Schema;
+using DotCart.TestEnv.Engine.Schema;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine;
+public delegate IEnumerable<ICmd> ScenarioGenerator<in TID, in TState>(TID ID, NewState<TState> newState)
+    where TID : IID
+    where TState : IState;
 
-public static class HelperFuncs
+public delegate IEnumerable<IEvt> EventStreamGenerator<in TID, in TState>(TID ID, NewState<TState> newState)
+    where TID : IID
+    where TState : IState;
+
+
+public static partial class Inject
 {
-    public static IEnumerable<IEvt> CreateEngineEvents(IID id, NewState<Schema.Engine> newEngine)
+    public static IServiceCollection AddInitializeEngineWithThrottleUpStream(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<EventStreamGenerator<EngineID,Schema.Engine>>(_ => ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream);
+    }
+
+    public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<ScenarioGenerator<EngineID, Schema.Engine>>(_ => ScenariosAndStreams.InitializeScenario);
+    }
+    
+}
+
+public static class ScenariosAndStreams
+{
+    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(IID id, NewState<Schema.Engine> newEngine)
     {
         var initPayload = Initialize.Payload.New(newEngine());
         var initEvt = Initialize.Evt.New(id, initPayload);

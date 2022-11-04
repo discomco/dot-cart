@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public static class Inject
+public static partial class Inject
 {
-    public static IServiceCollection AddDECEsClients(this IServiceCollection services)
+    public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
     {
         return services?
             .AddEventStore(s =>
@@ -17,8 +17,8 @@ public static class Inject
                 s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
                 if (Config.UseTls) s.ChannelCredentials = new SslCredentials();
             })
-            .AddSingleton<IEsPersistentSubscriptionsClient, EsPersistentSubscriptionsClient>()
-            .AddSingleton<IEsClient, EsClient>();
+            .AddSingleton<IESDBPersistentSubscriptionsClient, ESDBPersistentSubscriptionsClient>()
+            .AddSingleton<IESDBEventSourcingClient, ESDBEventSourcingClient>();
     }
 
 
