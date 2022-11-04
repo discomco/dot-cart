@@ -1,4 +1,5 @@
 using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Effects;
@@ -11,7 +12,7 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemStoreTests : IoCTests
 {
-    private IStore<Engine> _engStore;
+    private IModelStoreDriver<Engine> _engModelStoreDriver;
     private NewState<Engine> _newEngine;
 
 
@@ -25,7 +26,7 @@ public class MemStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var engStore = Container.GetRequiredService<IEngineStore>();
+        var engStore = Container.GetRequiredService<IEngineModelStoreDriver>();
         // THEN
         Assert.NotNull(engStore);
     }
@@ -34,7 +35,7 @@ public class MemStoreTests : IoCTests
     public void ShouldAddEnginesToStore()
     {
         // GIVEN
-        Assert.NotNull(_engStore);
+        Assert.NotNull(_engModelStoreDriver);
         Assert.NotNull(_newEngine);
         var eng1 = _newEngine();
         eng1.Details = Details.New("Engine1", "The First Engine");
@@ -42,17 +43,17 @@ public class MemStoreTests : IoCTests
         eng2.Details = Details.New("Engine2", "The Second Engine");
         // WHEN
         Task.WaitAll(
-            _engStore.SetAsync(eng1.Id, eng1),
-            _engStore.SetAsync(eng2.Id, eng2)
+            _engModelStoreDriver.SetAsync(eng1.Id, eng1),
+            _engModelStoreDriver.SetAsync(eng2.Id, eng2)
         );
         //  THEN
-        Assert.True(_engStore.Exists(eng1.Id).Result);
-        Assert.True(_engStore.Exists(eng2.Id).Result);
+        Assert.True(_engModelStoreDriver.Exists(eng1.Id).Result);
+        Assert.True(_engModelStoreDriver.Exists(eng2.Id).Result);
     }
 
     protected override void Initialize()
     {
-        _engStore = Container.GetRequiredService<IEngineStore>();
+        _engModelStoreDriver = Container.GetRequiredService<IEngineModelStoreDriver>();
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
     }
 

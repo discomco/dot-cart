@@ -6,7 +6,6 @@ using DotCart.Drivers.InMem;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
-using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Effects;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
@@ -202,5 +201,8 @@ public static class ThrottleUp
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
         {
         }
+
+        protected override void Dispose(bool disposing)
+        { }
     }
 }

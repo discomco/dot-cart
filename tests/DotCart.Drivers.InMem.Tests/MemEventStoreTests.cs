@@ -2,7 +2,6 @@ using DotCart.Behavior;
 using DotCart.Effects;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
-using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +12,7 @@ namespace DotCart.Drivers.InMem.Tests;
 public class MemEventStoreTests : IoCTests
 {
     private IAggregate _agg;
-    private IMemEventStore? _aggStore;
+    private IMemEventStoreDriver? _aggStore;
     private IID _engineId;
     private NewState<Engine> _newEngine;
 
@@ -28,14 +27,14 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var me = Container.GetService<IMemEventStore>();
+        var me = Container.GetService<IMemEventStoreDriver>();
         // THEN
         Assert.NotNull(me);
     }
 
 
     [Fact]
-    public async Task<IMemEventStore> ShouldSaveAggregate()
+    public async Task<IMemEventStoreDriver> ShouldSaveAggregate()
     {
         // GIVEN
         Assert.NotNull(_aggStore);
@@ -72,7 +71,7 @@ public class MemEventStoreTests : IoCTests
     {
         _engineId = EngineID.New;
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
-        _aggStore = Container.GetRequiredService<IMemEventStore>();
+        _aggStore = Container.GetRequiredService<IMemEventStoreDriver>();
         var builder = Container.GetRequiredService<IAggregateBuilder>();
         _agg = builder.Build();
     }

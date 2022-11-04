@@ -1,6 +1,5 @@
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
-using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;

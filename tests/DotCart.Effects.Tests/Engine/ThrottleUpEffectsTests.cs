@@ -1,4 +1,5 @@
 using DotCart.Drivers.InMem;
+using DotCart.Effects.Drivers;
 using DotCart.TestEnv.Engine;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -14,7 +15,7 @@ public class ThrottleUpEffectsTests: EffectsTests<
     ThrottleUp.Hope,
     ThrottleUp.Fact,
     ThrottleUp.Responder, 
-    IStore<TestEnv.Engine.Schema.Engine>,
+    IModelStoreDriver<TestEnv.Engine.Schema.Engine>,
     ThrottleUp.ToMemDocProjection>
 {
     public ThrottleUpEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)

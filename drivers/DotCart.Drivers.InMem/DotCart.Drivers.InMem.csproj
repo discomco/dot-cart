@@ -8,9 +8,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Drivers\DotCart.Drivers.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Drivers\DotCart.Drivers.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
     </ItemGroup>
 
 </Project>

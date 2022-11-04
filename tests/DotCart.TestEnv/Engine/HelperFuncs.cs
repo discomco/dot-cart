@@ -2,7 +2,7 @@ using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Schema;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
 public static class HelperFuncs
 {

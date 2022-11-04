@@ -2,7 +2,7 @@
 using DotCart.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestEnv;
 
 public static class Inject
 {

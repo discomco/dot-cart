@@ -1,8 +1,11 @@
 ﻿using DotCart.Schema;
 
-namespace DotCart.Effects;
+namespace DotCart.Effects.Drivers;
 
-public interface IStore<TState> : IDisposable where TState : IState
+public interface IModelStoreDriver<TState> :
+    IClose,
+    IDisposable 
+    where TState : IState
 {
     Task<TState> SetAsync(string id, TState doc);
     Task<bool> DeleteAsync(string id);

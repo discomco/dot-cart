@@ -1,11 +1,13 @@
 using System.Collections.Immutable;
 using DotCart.Behavior;
+using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.InMem;
 
-public interface IMemEventStore : IEventStore
+public interface IMemEventStoreDriver : IEventStoreDriver
 {
     IEnumerable<IEvt> GetStream(IID engineId);
 }
@@ -17,12 +19,11 @@ public static partial class Inject
         return services
             .AddTopicMediator()
             .AddMemProjector()
-            .AddSingleton<IAggregateStore, MemEventStore>()
-            .AddSingleton<IMemEventStore, MemEventStore>();
+            .AddSingleton<IAggregateStoreDriver, MemEventStoreDriver>();
     }
 }
 
-internal class MemEventStore : IMemEventStore
+internal class MemEventStoreDriver : IMemEventStoreDriver
 {
     private readonly IMemProjector _projector;
 
@@ -31,12 +32,14 @@ internal class MemEventStore : IMemEventStore
 
     private readonly object saveMutex = new();
 
+    private IReactor _reactor;
+
 
     private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams =
         ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
 
 
-    public MemEventStore(IMemProjector projector)
+    public MemEventStoreDriver(IMemProjector projector)
     {
         _projector = projector;
     }
@@ -73,5 +76,15 @@ internal class MemEventStore : IMemEventStore
     public IEnumerable<IEvt> GetStream(IID engineId)
     {
         return Streams[engineId.Value];
+    }
+
+    public void Dispose()
+    {
+        
+    }
+
+    public void SetReactor(IReactor reactor)
+    {
+        _reactor = reactor;
     }
 }

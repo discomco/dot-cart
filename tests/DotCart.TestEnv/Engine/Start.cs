@@ -6,7 +6,6 @@ using DotCart.Drivers.InMem;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
-using DotCart.TestEnv.Engine.Behavior;
 using DotCart.TestEnv.Engine.Effects;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
@@ -165,10 +164,8 @@ public static class Start
         {
             return new Fact(aggId, payload.ToBytes());
         }
-        
-        
     }
-    
+
 
     [Topic(HopeTopic)]
     public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
@@ -177,7 +174,7 @@ public static class Start
         {
             return new Hope(aggId, data);
         }
-        
+
         public static Hope New(string aggId, Payload payload)
         {
             return new Hope(aggId, payload.ToBytes());
@@ -241,7 +238,7 @@ public static class Start
 
     #region Effects
 
-    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact = 
+    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
         evt => Fact.New(evt.AggregateId, evt.Payload);
 
     internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, _) =>
@@ -250,7 +247,7 @@ public static class Start
         return state;
     };
 
-    internal static readonly Hope2Cmd<Cmd,Hope> _hope2Cmd =
+    internal static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
         hope =>
             Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
 
@@ -259,13 +256,17 @@ public static class Start
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
         {
         }
+
+        protected override void Dispose(bool disposing)
+        {
+        }
     }
 
     public class Responder : Responder<ResponderDriver, Hope, Cmd>
     {
         public Responder(IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd,Hope> hope2Cmd) : base(responderDriver,
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(responderDriver,
             cmdHandler,
             hope2Cmd)
         {

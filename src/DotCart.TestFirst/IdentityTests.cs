@@ -1,7 +1,8 @@
+using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.Schema.Tests;
+namespace DotCart.TestFirst;
 
 public abstract class IdentityTests<TID> : IoCTests where TID: IID
 {

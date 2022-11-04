@@ -2,7 +2,7 @@ using Ardalis.GuardClauses;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
 
-namespace DotCart.TestEnv.Engine.Behavior;
+namespace DotCart.TestEnv.Engine;
 
 public static class Guards
 {

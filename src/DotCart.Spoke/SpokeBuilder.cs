@@ -1,4 +1,6 @@
-namespace DotCart.Effects;
+using DotCart.Effects;
+
+namespace DotCart.Spoke;
 
 public class SpokeBuilder : ISpokeBuilder
 {

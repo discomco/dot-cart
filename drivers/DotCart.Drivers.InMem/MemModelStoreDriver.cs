@@ -1,10 +1,10 @@
 using System.Collections.Immutable;
-using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 
 namespace DotCart.Drivers.InMem;
 
-public abstract class MemStore<TState> : IStore<TState> where TState : IState
+public abstract class MemModelStoreDriver<TState> : IModelStoreDriver<TState> where TState : IState
 {
     private readonly object delMutex = new();
     private readonly object existMutex = new();
@@ -67,5 +67,10 @@ public abstract class MemStore<TState> : IStore<TState> where TState : IState
                     : InnerStore[id];
             }
         });
+    }
+
+    public void Close()
+    {
+        
     }
 }

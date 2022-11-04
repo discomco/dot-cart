@@ -18,7 +18,7 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
     private readonly GenerateHope<THope> _generateHope;
     private IReactor _reactor;
 
-    public MemResponderDriver(GenerateHope<THope> generateHope)
+    protected MemResponderDriver(GenerateHope<THope> generateHope)
     {
         _generateHope = generateHope;
     }
@@ -45,5 +45,12 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
     public void SetReactor(IReactor reactor)
     {
         _reactor = reactor;
+    }
+
+    protected abstract void Dispose(bool disposing);
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 }

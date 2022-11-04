@@ -1,6 +1,7 @@
 using DotCart.Behavior;
 using DotCart.Contract;
 using DotCart.Effects;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
@@ -26,7 +27,7 @@ public abstract class EffectsTests<
 {
     protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
-    protected IAggregateStore _aggregateStore;
+    protected IAggregateStoreDriver AggregateStoreDriver;
     protected TResponder _responder;
     private ICmdHandler _cmdHandler;
 
@@ -41,7 +42,7 @@ public abstract class EffectsTests<
         try
         {
             Assert.NotNull(_responder);
-            Assert.NotNull(_aggregateStore);
+            Assert.NotNull(AggregateStoreDriver);
             Assert.NotNull(_aggregate);
             var tokenSource = new CancellationTokenSource(1000);
             var cancellationToken = tokenSource.Token;
@@ -55,7 +56,7 @@ public abstract class EffectsTests<
                     Output.WriteLine("Waiting");
                 }
             }, cancellationToken);
-            var aStore = Container.GetRequiredService<IAggregateStore>();
+            var aStore = Container.GetRequiredService<IAggregateStoreDriver>();
             var t = aStore.GetType();
         }
         catch (TaskCanceledException e)
@@ -100,7 +101,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var aggStore = Container.GetRequiredService<IAggregateStore>();
+        var aggStore = Container.GetRequiredService<IAggregateStoreDriver>();
         // THEN
         Assert.NotNull(aggStore);
     }
@@ -158,7 +159,7 @@ public abstract class EffectsTests<
     protected override void Initialize()
     {
         _responder = Container.GetHostedService<TResponder>();
-        _aggregateStore = Container.GetRequiredService<IAggregateStore>();
+        AggregateStoreDriver = Container.GetRequiredService<IAggregateStoreDriver>();
         _aggregate = Container.GetRequiredService<IAggregate>();
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
         _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();

@@ -2,7 +2,7 @@ using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace DotCart.Contract.Tests;
+namespace DotCart.Drivers.Tests;
 
 public class ProjectionDriverTests : IoCTests
 {

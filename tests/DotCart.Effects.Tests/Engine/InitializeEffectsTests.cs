@@ -1,3 +1,4 @@
+using DotCart.Effects.Drivers;
 using DotCart.TestEnv.Engine;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -13,7 +14,7 @@ public class InitializeEffectsTests : EffectsTests<
     Initialize.Hope,
     Initialize.Fact,
     Initialize.Responder,
-    IStore<TestEnv.Engine.Schema.Engine>,
+    IModelStoreDriver<TestEnv.Engine.Schema.Engine>,
     Initialize.ToMemDocProjection
 >
 {

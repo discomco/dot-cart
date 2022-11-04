@@ -3,6 +3,12 @@ using Serilog;
 
 namespace DotCart.Behavior;
 
+
+public interface IDomainPolicy
+{
+    void SetBehavior(IAggregate aggregate);
+}
+
 public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(TEvt Evt) where TEvt : IEvt where TCmd : ICmd;
 
 public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt where TCmd : ICmd

@@ -1,5 +1,6 @@
 using DotCart.Behavior;
 using DotCart.Drivers.InMem;
+using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
@@ -11,7 +12,7 @@ namespace DotCart.Effects.Tests;
 
 public class CmdHandlerTests : IoCTests
 {
-    private IAggregateStore _aggStore;
+    private IAggregateStoreDriver _aggStoreDriver;
     private ICmdHandler _cmdHandler;
     private NewState<TestEnv.Engine.Schema.Engine> _newEngine;
 
@@ -33,7 +34,7 @@ public class CmdHandlerTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var es = Container.GetRequiredService<IAggregateStore>();
+        var es = Container.GetRequiredService<IAggregateStoreDriver>();
         // THEN
         Assert.NotNull(es);
     }
@@ -67,7 +68,7 @@ public class CmdHandlerTests : IoCTests
     {
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
         _newEngine = Container.GetRequiredService<NewState<TestEnv.Engine.Schema.Engine>>();
-        _aggStore = Container.GetRequiredService<IAggregateStore>();
+        _aggStoreDriver = Container.GetRequiredService<IAggregateStoreDriver>();
     }
 
     protected override void SetTestEnvironment()

@@ -6,12 +6,13 @@ namespace DotCart.Drivers;
 
 public abstract class ProjectionDriver<TReadModel> : IProjectionDriver<TReadModel> where TReadModel : IState
 {
-    private readonly IStore<TReadModel> _store;
+    private readonly IModelStoreDriver<TReadModel> _modelStoreDriver;
+    
     private IReactor _reactor;
 
-    protected ProjectionDriver(IStore<TReadModel> store)
+    protected ProjectionDriver(IModelStoreDriver<TReadModel> modelStoreDriver)
     {
-        _store = store;
+        _modelStoreDriver = modelStoreDriver;
     }
 
     public void SetReactor(IReactor reactor)
@@ -19,13 +20,33 @@ public abstract class ProjectionDriver<TReadModel> : IProjectionDriver<TReadMode
         _reactor = reactor;
     }
 
+    public Task<bool> Exists(string id)
+    {
+        throw new NotImplementedException();
+    }
+
     public Task<TReadModel> GetByIdAsync(string id)
     {
-        return _store.GetByIdAsync(id);
+        return _modelStoreDriver.GetByIdAsync(id);
     }
 
     public Task<TReadModel> SetAsync(string id, TReadModel state)
     {
-        return _store.SetAsync(id, state);
+        return _modelStoreDriver.SetAsync(id, state);
+    }
+
+    public Task<bool> DeleteAsync(string id)
+    {
+        return _modelStoreDriver.DeleteAsync(id);
+    }
+
+    public void Close()
+    {
+        _modelStoreDriver.Close();
+    }
+
+    public void Dispose()
+    {
+        _modelStoreDriver.Dispose();
     }
 }

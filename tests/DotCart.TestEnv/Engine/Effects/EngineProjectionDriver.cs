@@ -18,7 +18,7 @@ public static partial class Inject
 
 public class EngineProjectionDriver : ProjectionDriver<Schema.Engine>, IEngineMemProjectionDriver
 {
-    public EngineProjectionDriver(IStore<Schema.Engine> store) : base(store)
+    public EngineProjectionDriver(IModelStoreDriver<Schema.Engine> modelStoreDriver) : base(modelStoreDriver)
     {
     }
 }
