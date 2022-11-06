@@ -12,13 +12,49 @@ public interface IID<TID> : IID
 public interface IID
 {
     string Value { get; }
+
+//    string Id();
 }
+
+// public static class Checks
+// {
+//     public static string Prefix(this string seed)
+//     {
+//         
+//         Regex.
+//     }
+// }
+//
+//
+// public abstract record ID: IID
+// {
+//     public string Prefix { get; set; }
+//     public string Value { get; set; }
+//
+//     public ID(string prefix, string value)
+//     {
+//         Prefix = prefix.Prefix();
+//         Value = value.Value();
+//     }
+//
+//     public string Id()
+//     {
+//         return $"{Prefix}-{Value}";
+//     }
+//
+//     public static IID New(string prefix, Guid seed)
+//     {
+//         
+//     }
+// }
+//
+//
+
+
 
 public abstract record ID<T> : IID<T>
     where T : IID<T>
 {
-    
-    
     protected static readonly string Prefix = GetPrefix();
 
     private readonly Lazy<Guid> _lazyGuid;

@@ -239,7 +239,7 @@ public static class Start
     #region Effects
 
     internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
-        evt => Fact.New(evt.AggregateId, evt.Payload);
+        evt => Fact.New(evt.AggregateID.Value, evt.Payload);
 
     internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, _) =>
     {

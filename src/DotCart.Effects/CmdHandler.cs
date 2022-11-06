@@ -41,8 +41,8 @@ internal class CmdHandler : ICmdHandler
         try
         {
             Guard.Against.Null(cmd);
-            var aggId = cmd.GetID();
-            
+            var aggId = cmd.AggregateID;
+
             _aggregate.SetID(aggId);
             
             await _aggregateStoreDriver

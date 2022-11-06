@@ -2,8 +2,4 @@
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public record StoreEvent
-{
-    public long EventNumber { get; init; }
-    public IEvt Event { get; init; }
-}
+public record StoreEvent(IEvt Event, long EventNumber);

@@ -1,7 +1,10 @@
+using System.Runtime.InteropServices;
+using System.Text.Json;
 using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
+using DotCart.Schema;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -67,32 +70,59 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     public Task SaveAsync(IAggregate aggregate)
     {
-        throw new NotImplementedException();
+        var res = AppendEventsAsync(aggregate.ID, aggregate.UncommittedEvents);
+        aggregate.ClearUncommittedEvents();
+        return res;
     }
     
     
-    // private IEvt Deserialize<TAggregateId>(byte[] data)
-    // {
-    //     try
-    //     {
-    //         var settings = new JsonSerializerSettings {ContractResolver = new PrivateSetterContractResolver()};
-    //         return (IEvt) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data),
-    //             typeof(TEvent), settings);
-    //     }
-    //     catch (Exception e)
-    //     {
-    //         Console.WriteLine(e);
-    //         throw new EventStoreDeserializationException($"Failed to Deserialize eventTyp {typeof(TEvent)}", data, e);
-    //     }
-    // }
-    //
-    // private byte[] Serialize<TAggregateId>(IEvent<TAggregateId> @event)
-    // {
-    //     return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
-    // }
 
+    public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
+    {
+        var ret = new List<IEvt>();
+        var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Value, StreamPosition.Start);
+        var state = await readResult.ReadState.ConfigureAwait(false);
+        if (state == ReadState.StreamNotFound) return ret;
+        var storedEvents = await GetStoreEventsAsync(readResult);
+        return ret;
+    }
+
+    private static async Task<IEnumerable<StoreEvent>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult)
+    {
+        var res = new List<StoreEvent>();
+        await foreach (var evt in readResult)
+        {
+            var s = SerializationHelper.Deserialize(evt.Event.EventType, evt.Event.Data.ToArray());
+            var storedEvent = new StoreEvent(s, evt.Event.EventNumber.ToInt64());
+            res.Add(storedEvent);
+        }
+        return res;
+    } 
+
+
+
+
+    public async Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events)
+    {
+        var storeEvents = new List<EventData>();
+        storeEvents = events.Aggregate(storeEvents, (list, evt) =>
+        {
+            list.Add(Evt2EventData(evt));
+            return list;
+        });
+        var writeResult = await _client.AppendToStreamAsync(ID.Value, StreamState.Any, storeEvents);
+        return AppendResult.New(writeResult.NextExpectedStreamRevision.ToUInt64());
+    }
 
     
+    private EventData Evt2EventData(IEvt evt)
+    {
+        var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
+        var typeName = evt.GetType().AssemblyQualifiedName;
+        ReadOnlyMemory<byte> metaData = evt.MetaData;
+        ReadOnlyMemory<byte> data = evt.Data;
+        return new EventData(eventId, typeName, data, metaData);
+    }
     
     
 }

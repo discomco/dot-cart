@@ -88,4 +88,14 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
     {
         _reactor = reactor;
     }
+
+    public Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -11,27 +11,32 @@ public delegate IAggregate AggBuilder(AggCtor newAgg);
 
 public interface IAggregate
 {
-    IID ID { get; }
     bool IsNew { get; }
     long Version { get; }
-    IEnumerable<IEvt> UncommittedEvents { get; }
     string Id();
+    string GetName();
+    void InjectPolicies(IEnumerable<IDomainPolicy> policies);
+    IEnumerable<IEvt> UncommittedEvents { get; }
     Task<IFeedback> ExecuteAsync(ICmd cmd);
     IState GetState();
     IAggregate SetID(IID ID);
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
-    void InjectPolicies(IEnumerable<IDomainPolicy> policies);
-    string GetName();
+    IID ID { get; }
+}
+
+public interface IAggregate<out TID> : IAggregate
+  where TID : IID<TID>
+{
+
 }
 
 public delegate IEnumerable<IEvt> TryCmd<in TCmd>(IState state, TCmd cmd) where TCmd : ICmd;
 
 public delegate IState ApplyEvt<in TEvt>(IState state, TEvt evt) where TEvt : IEvt;
 
-public abstract class Aggregate<TState, TID> : IAggregate
+public abstract class Aggregate<TState> : IAggregate
     where TState : IState
-    where TID : ID<TID>
 {
     private const long _newVersion = -1;
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
@@ -104,7 +109,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
 
     public async Task<IFeedback> ExecuteAsync(ICmd cmd)
     {
-        var feedback = Feedback.New(cmd.GetID());
+        var feedback = Feedback.New(cmd.AggregateID);
         try
         {
             Guard.Against.BehaviorIDNotSet(this);
@@ -143,8 +148,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
         if (_uncommittedEvents.Any(x => Equals(x.MsgId, evt.MsgId)))
             return _state;
         Version = version;
-        evt.SetVersion(Version);
-        evt.SetBehaviorType(GetName());
+        evt.Version = Version;
         _appliedEvents.Add(evt);
         return ((dynamic)this).Apply(state, (dynamic)evt);
     }

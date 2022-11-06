@@ -1,8 +1,7 @@
 using DotCart.Behavior;
-using DotCart.Effects.Drivers;
 using DotCart.Schema;
 
-namespace DotCart.Effects;
+namespace DotCart.Effects.Drivers;
 
 public interface ISnapshotStoreDriver : IClose
 {

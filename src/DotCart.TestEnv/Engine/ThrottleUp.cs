@@ -89,7 +89,7 @@ public static partial class Inject
 public static class ThrottleUp
 {
     public static Evt2Fact<Fact, Evt> _evt2Fact => 
-        evt => Fact.New(evt.AggregateId, Payload.New(evt.Payload.Delta));
+        evt => Fact.New(evt.AggregateID.Value, Payload.New(evt.Payload.Delta));
     public static Hope2Cmd<Cmd, Hope> _hope2Cmd => 
         hope => Cmd.New(EngineID.FromIdString(hope.AggId), hope.GetPayload<Payload>());
 

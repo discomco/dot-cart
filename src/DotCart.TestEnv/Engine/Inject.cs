@@ -10,6 +10,7 @@ public static partial class Inject
         return services
             .AddTopicMediator()
             .AddSingleton(Schema.Engine.Ctor)
+            .AddSingleton(Schema.EngineID.Ctor)
             .AddTransient<IAggregate, Aggregate>();
     }
 }

@@ -62,7 +62,12 @@ public class CmdHandlerTests : IoCTests
         // WHEN
         var fbk = await _cmdHandler.Handle(initCmd);
         // THEN
+        if (!fbk.IsSuccess)
+        {
+            Output.WriteLine(fbk.ToString());
+        }
         Assert.True(fbk.IsSuccess);
+        
     }
 
     protected override void Initialize()
