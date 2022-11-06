@@ -2,7 +2,9 @@ using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
+using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
+
 
 namespace DotCart.Drivers.EventStoreDB;
 
@@ -50,13 +52,47 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     }
 
-    public Task LoadAsync(IAggregate aggregate)
+    public async Task LoadAsync(IAggregate aggregate)
     {
-        throw new NotImplementedException();
+        // var streamId = aggregate.ID.Value;
+        // var events = _client.ReadStreamAsync(Direction.Forwards, streamId, StreamPosition.Start);
+        // if (await events.ReadState == ReadState.StreamNotFound) return;
+        // await foreach (var evt in events)
+        // {
+        //     evt.Event.
+        //     
+        // }
+
     }
 
     public Task SaveAsync(IAggregate aggregate)
     {
         throw new NotImplementedException();
     }
+    
+    
+    // private IEvt Deserialize<TAggregateId>(byte[] data)
+    // {
+    //     try
+    //     {
+    //         var settings = new JsonSerializerSettings {ContractResolver = new PrivateSetterContractResolver()};
+    //         return (IEvt) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data),
+    //             typeof(TEvent), settings);
+    //     }
+    //     catch (Exception e)
+    //     {
+    //         Console.WriteLine(e);
+    //         throw new EventStoreDeserializationException($"Failed to Deserialize eventTyp {typeof(TEvent)}", data, e);
+    //     }
+    // }
+    //
+    // private byte[] Serialize<TAggregateId>(IEvent<TAggregateId> @event)
+    // {
+    //     return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
+    // }
+
+
+    
+    
+    
 }

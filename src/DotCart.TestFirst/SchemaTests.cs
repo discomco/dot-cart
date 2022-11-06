@@ -27,7 +27,6 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         var newID = Container.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(newID);
-
     }
 
     [Fact]

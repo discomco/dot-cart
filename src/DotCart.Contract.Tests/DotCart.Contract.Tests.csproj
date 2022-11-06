@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2"/>
-        <PackageReference Include="xunit" Version="2.4.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+        <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -21,11 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj"/>
+      <ProjectReference Include="..\DotCart.Schema\DotCart.Schema.csproj" />
+      <ProjectReference Include="..\DotCart.TestEnv\DotCart.TestEnv.csproj" />
+      <ProjectReference Include="..\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+      <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-        <EmbeddedResource Include="files\invictus.md"/>
-    </ItemGroup>
 
 </Project>

@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -22,11 +21,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
-        <ProjectReference Include="..\DotCart.Behavior.Tests\DotCart.Behavior.Tests.csproj" />
+        <EmbeddedResource Include="files\invictus.md" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\DotCart\DotCart.csproj" />
     </ItemGroup>
 
 </Project>

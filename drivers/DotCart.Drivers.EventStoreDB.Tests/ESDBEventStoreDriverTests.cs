@@ -6,6 +6,7 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
 using DotCart.TestKit;
+using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -104,26 +105,36 @@ public class ESDBEventStoreDriverTests : IoCTests
 
     
     // TODO: Implement TEST ShouldExecuteInitializeEngineScenario() 
-    // [Fact]
-    // public async Task ShouldExecuteInitializeEngineScenario()
-    // {
-    //     // GIVEN
-    //     Assert.NotNull(_scenarioGenerator);
-    //     Assert.NotNull(_cmdHandler);
-    //     // AND
-    //     var cmds = _scenarioGenerator(EngineID.New, _newEngine );
-    //     // WHEN
-    //     var res = true;
-    //     foreach (var cmd in cmds)
-    //     {
-    //         var fbk = await _cmdHandler.Handle(cmd);
-    //         res = res && fbk.IsSuccess;
-    //         Assert.NotNull(fbk);
-    //         Assert.True(fbk.IsSuccess);
-    //     }
-    //     // THEN
-    //     Assert.True(res);
-    // }
+    [Fact]
+    public async Task ShouldExecuteInitializeEngineScenario()
+    {
+        // GIVEN
+        Assert.NotNull(_scenarioGenerator);
+        Assert.NotNull(_cmdHandler);
+        // AND
+        var cmds = _scenarioGenerator(EngineID.New, _newEngine );
+        // WHEN
+        var res = true;
+        foreach (var cmd in cmds)
+        {
+            var fbk = await _cmdHandler.Handle(cmd);
+            res = res && fbk.IsSuccess;
+            Assert.NotNull(fbk);
+            if (fbk.IsSuccess) continue;
+            Output.WriteLine(fbk.ErrState.ToString());
+            break;
+        }
+        // THEN
+        Assert.True(res);
+    }
+
+    [Fact]
+    public void AggregateVersionMinus1ShouldReturnStart()
+    {
+        // GIVEN
+        ulong version = 0;
+        
+    }
     
 
     [Fact]
@@ -185,6 +196,8 @@ public class ESDBEventStoreDriverTests : IoCTests
             .AddInitializeEngineWithThrottleUpStream()
             .AddEngineAggregate()
             .AddAggregateBuilder()
-            .AddESDBEventStoreDriver();
+            .AddSingleton(_ => A.Fake<IESDBEventSourcingClient>())
+            .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
+            .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
     }
 }

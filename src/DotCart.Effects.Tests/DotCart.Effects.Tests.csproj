@@ -1,6 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
+        
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -21,11 +22,11 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Schema\DotCart.Schema.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
-        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
-        <ProjectReference Include="..\DotCart.TestEnv\DotCart.TestEnv.csproj" />
+      <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
+      <ProjectReference Include="..\DotCart.TestEnv\DotCart.TestEnv.csproj" />
+      <ProjectReference Include="..\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+      <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
+
 
 </Project>

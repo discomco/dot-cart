@@ -95,6 +95,7 @@ public abstract class Aggregate<TState, TID> : IAggregate
     public IID ID { get; private set; }
     public bool IsNew => Version == -1;
     public long Version { get; set; }
+    
 
     public string Id()
     {

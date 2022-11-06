@@ -42,10 +42,20 @@ internal class CmdHandler : ICmdHandler
         {
             Guard.Against.Null(cmd);
             var aggId = cmd.GetID();
+            
             _aggregate.SetID(aggId);
-            await _aggregateStoreDriver.LoadAsync(_aggregate).ConfigureAwait(false);
-            fbk = await _aggregate.ExecuteAsync(cmd).ConfigureAwait(false);
-            await _aggregateStoreDriver.SaveAsync(_aggregate).ConfigureAwait(false);
+            
+            await _aggregateStoreDriver
+                .LoadAsync(_aggregate)
+                .ConfigureAwait(false);
+            
+            fbk = await _aggregate
+                .ExecuteAsync(cmd)
+                .ConfigureAwait(false);
+            
+            await _aggregateStoreDriver
+                .SaveAsync(_aggregate)
+                .ConfigureAwait(false);
         }
         catch (Exception e)
         {
