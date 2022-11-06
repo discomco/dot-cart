@@ -228,8 +228,8 @@ public class ESDBEventStoreDriverTests : IoCTests
             .AddInitializeEngineWithThrottleUpStream()
             .AddEngineAggregate()
             .AddAggregateBuilder()
-            .AddConfiguredESDBClients()
-//            .AddSingleton(_ => A.Fake<IESDBEventSourcingClient>())
+//            .AddConfiguredESDBClients()
+            .AddSingleton(_ => A.Fake<IESDBEventSourcingClient>())
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
             .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
     }
