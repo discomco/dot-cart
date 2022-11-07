@@ -12,8 +12,7 @@ public interface IID<TID> : IID
 public interface IID
 {
     string Value { get; }
-
-//    string Id();
+    string Id();
 }
 
 // public static class Checks
@@ -59,6 +58,10 @@ public abstract record ID<T> : IID<T>
 
     private readonly Lazy<Guid> _lazyGuid;
     public string Value { get; }
+    public string Id()
+    {
+        return Value;
+    }
 
     private static string GetPrefix()
     {
@@ -119,13 +122,13 @@ public abstract record ID<T> : IID<T>
 
     public static T FromAnyString(string anyString)
     {
-        var guid = anyString.AnyStringToGuid();
+        var guid = anyString.GuidFromAnyString();
         return With(guid);
     }
 
     public static T FromDecimal(decimal value)
     {
-        var guid = value.FromDecimal();
+        var guid = value.GuidFromDecimal();
         return With(guid);
     }
 

@@ -7,9 +7,9 @@ using Xunit.Abstractions;
 
 namespace DotCart.Schema.Tests;
 
-public class IdentityTests : IdentityTests<EngineID>
+public class IDTests : IDTests<EngineID>
 {
-    public IdentityTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
 
@@ -21,4 +21,5 @@ public class IdentityTests : IdentityTests<EngineID>
         services
             .AddIDCtor();
     }
+    
 }

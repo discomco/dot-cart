@@ -16,10 +16,10 @@ public static partial class Inject
 
 public static class Constants
 {
-    public const string IdPrefix = "engine";
+    public const string EngineIDPrefix = "engine";
 }
 
-[IDPrefix(Constants.IdPrefix)]
+[IDPrefix(Constants.EngineIDPrefix)]
 public record EngineID : ID<EngineID>
 {
     public static NewID<EngineID> Ctor => () => New;

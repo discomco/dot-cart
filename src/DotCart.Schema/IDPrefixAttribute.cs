@@ -18,7 +18,8 @@ public static class IDPrefix
     {
         var prefixAttributes =
             (IDPrefixAttribute[])typeof(TID).GetCustomAttributes(typeof(IDPrefixAttribute), true);
-        if (prefixAttributes.Length <= 0) return typeof(TID).FullName.Replace(".", "").ToLower();
+        if (prefixAttributes.Length <= 0)
+            throw new IDPrefixNotSetException($"[IDPrefix] attribute is not set for {typeof(TID)} ");
         var att = prefixAttributes[0];
         return att.Prefix;
     }

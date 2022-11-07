@@ -12,14 +12,14 @@ public static class GuidUtils
     public static string NewGuid => Guid.NewGuid().ToString();
     public static string LowerCaseGuid => NewGuid.ToLowerInvariant();
 
-    public static Guid ToGuid(this int value)
+    public static Guid GuidFromInt(this int value)
     {
         var bytes = new byte[16];
         BitConverter.GetBytes(value).CopyTo(bytes, 0);
         return new Guid(bytes);
     }
 
-    public static int ToInt(this Guid value)
+    public static int GuidToInt(this Guid value)
     {
         var b = value.ToByteArray();
         var bint = BitConverter.ToInt32(b, 0);
@@ -27,7 +27,7 @@ public static class GuidUtils
     }
 
 
-    public static Guid AnyStringToGuid(this string anyString)
+    public static Guid GuidFromAnyString(this string anyString)
     {
         // Create a new instance of the MD5CryptoServiceProvider object.
         var md5Hasher = MD5.Create();
@@ -36,7 +36,7 @@ public static class GuidUtils
         return new Guid(data);
     }
 
-    public static Guid FromDecimal(this decimal value)
+    public static Guid GuidFromDecimal(this decimal value)
     {
         return new Guid(value.ToByteArray());
     }
@@ -61,10 +61,6 @@ public static class GuidUtils
             return new Guid(destinationArray);
         }
 
-        public static Guid Empty()
-        {
-            return Guid.Empty;
-        }
     }
 
     /// <summary>

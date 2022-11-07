@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class IdentityTests<TID> : IoCTests where TID: IID
+public abstract class IDTests<TID> : IoCTests where TID: IID
 {
 
     protected NewID<TID> NewID; 
@@ -72,7 +72,7 @@ public abstract class IdentityTests<TID> : IoCTests where TID: IID
     }
 
 
-    protected IdentityTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    protected IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
 
