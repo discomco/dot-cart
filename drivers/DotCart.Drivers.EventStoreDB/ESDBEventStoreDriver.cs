@@ -78,7 +78,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
     {
         var ret = new List<IEvt>();
-        var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Value, StreamPosition.Start);
+        var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Id(), StreamPosition.Start);
         var state = await readResult.ReadState.ConfigureAwait(false);
         if (state == ReadState.StreamNotFound) return ret;
         return await GetStoreEventsAsync(readResult);
@@ -107,7 +107,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
             list.Add(Evt2EventData(evt));
             return list;
         });
-        var writeResult = await _client.AppendToStreamAsync(ID.Value, StreamState.Any, storeEvents);
+        var writeResult = await _client.AppendToStreamAsync(ID.Id(), StreamState.Any, storeEvents);
         return AppendResult.New(writeResult.NextExpectedStreamRevision.ToUInt64());
     }
 

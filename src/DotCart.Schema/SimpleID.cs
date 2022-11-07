@@ -38,7 +38,7 @@ public record SimpleID: IID
 
 public static class SimpleIDFuncs
 {
-    public const char PrefixSeparator = '=';
+    public const char PrefixSeparator = '.';
     public static SimpleID IDFromIdString(this string idString)
     {
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))
