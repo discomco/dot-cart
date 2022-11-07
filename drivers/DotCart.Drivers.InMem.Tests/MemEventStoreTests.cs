@@ -15,12 +15,26 @@ public class MemEventStoreTests : IoCTests
     private IAggregate _agg;
     private IMemEventStoreDriver? _aggStore;
     private IID _engineId;
+    private NewSimpleID<SimpleEngineID> _newEngineID;
     private NewState<Engine> _newEngine;
 
     public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
 
+    [Fact]
+    public void ShouldResolveIDCtor()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var newEngineID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        // THEN
+        Assert.NotNull(newEngineID);
+    }
+
+    
+    
 
     [Fact]
     public void ShouldResolveMemEventStore()
@@ -70,11 +84,13 @@ public class MemEventStoreTests : IoCTests
 
     protected override void Initialize()
     {
-        _engineId = EngineID.New;
+
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
         _aggStore = Container.GetRequiredService<IMemEventStoreDriver>();
         var builder = Container.GetRequiredService<IAggregateBuilder>();
         _agg = builder.Build();
+        _newEngineID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        _engineId = _newEngineID();
     }
 
     protected override void SetTestEnvironment()

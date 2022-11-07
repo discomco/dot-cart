@@ -54,9 +54,9 @@ public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<T
     {
         return Run(async () =>
         {
-            var state = await _projectionDriver.GetByIdAsync(evt.AggregateId).ConfigureAwait(false);
+            var state = await _projectionDriver.GetByIdAsync(evt.AggregateID.Id()).ConfigureAwait(false);
             state = _evt2State(state, evt);
-            await _projectionDriver.SetAsync(evt.AggregateId, state).ConfigureAwait(false);
+            await _projectionDriver.SetAsync(evt.AggregateID.Id(), state).ConfigureAwait(false);
         });
     }
 

@@ -3,56 +3,15 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
-public delegate TID NewID<out TID>() where TID : IID;
+public delegate TID NewTypedID<out TID>() where TID : IID;
 
-public interface IID<TID> : IID
-    where TID : IID<TID>
+public interface ITypedID<TID> : IID
+    where TID : ITypedID<TID>
 { }
 
-public interface IID
-{
-    string Value { get; }
-    string Id();
-}
 
-// public static class Checks
-// {
-//     public static string Prefix(this string seed)
-//     {
-//         
-//         Regex.
-//     }
-// }
-//
-//
-// public abstract record ID: IID
-// {
-//     public string Prefix { get; set; }
-//     public string Value { get; set; }
-//
-//     public ID(string prefix, string value)
-//     {
-//         Prefix = prefix.Prefix();
-//         Value = value.Value();
-//     }
-//
-//     public string Id()
-//     {
-//         return $"{Prefix}-{Value}";
-//     }
-//
-//     public static IID New(string prefix, Guid seed)
-//     {
-//         
-//     }
-// }
-//
-//
-
-
-
-public abstract record ID<T> : IID<T>
-    where T : IID<T>
+public abstract record TypedID<T> : ITypedID<T>
+    where T : ITypedID<T>
 {
     protected static readonly string Prefix = GetPrefix();
 
@@ -181,7 +140,7 @@ public abstract record ID<T> : IID<T>
                 $"Identity '{value}' of type '{typeof(T).PrettyPrint()}' does not follow the syntax '[NAME]-[GUID]' in lower case";
     }
 
-    protected ID(string value)
+    protected TypedID(string value)
     {
         if (Config.IdCreationPolicy == IDCreationPolicy.Strict)
         {

@@ -16,12 +16,12 @@ public class ESDBEventStoreDriverTests : IoCTests
 {
     
     private IEventStoreDriver _eventStoreDriver;
-    private EventStreamGenerator<EngineID, Engine> _newEventStream;
-    private ScenarioGenerator<EngineID, Engine> _newScenario;
+    private EventStreamGenerator<SimpleEngineID, Engine> _newEventStream;
+    private ScenarioGenerator<SimpleEngineID, Engine> _newScenario;
     private NewState<Engine> _newEngine;
     private IAggregate _aggregate;
     private ICmdHandler _cmdHandler;
-    private NewID<EngineID> _newEngineID;
+    private NewSimpleID<SimpleEngineID> _newID;
     private IAggregateBuilder _aggregateBuilder;
 
     [Fact]
@@ -77,7 +77,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var es = Container.GetRequiredService<EventStreamGenerator<EngineID, Engine>>();
+        var es = Container.GetRequiredService<EventStreamGenerator<SimpleEngineID, Engine>>();
         // THEN
         Assert.NotNull(es);
     }
@@ -88,7 +88,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var scGen = Container.GetRequiredService<ScenarioGenerator<EngineID, Engine>>();
+        var scGen = Container.GetRequiredService<ScenarioGenerator<SimpleEngineID, Engine>>();
         // THEN
         Assert.NotNull(scGen);
     }
@@ -99,7 +99,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(_newScenario);
         // WHEN
-        var cmds = _newScenario(EngineID.New, _newEngine );
+        var cmds = _newScenario(_newID(), _newEngine );
         // THEN
         Assert.NotNull(cmds);
         Assert.NotEmpty(cmds);
@@ -114,7 +114,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         Assert.NotNull(_newScenario);
         Assert.NotNull(_cmdHandler);
         // AND
-        var cmds = _newScenario(EngineID.New, _newEngine );
+        var cmds = _newScenario(_newID(), _newEngine );
         // WHEN
         var res = true;
         foreach (var cmd in cmds)
@@ -180,7 +180,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         Assert.NotNull(_eventStoreDriver);
         Assert.NotNull(_newEventStream);
         // WHEN
-        var ID = _newEngineID();
+        var ID = _newID();
         var events = _newEventStream(ID, _newEngine);
         var res = await _eventStoreDriver.AppendEventsAsync(ID, events);
         // THEN
@@ -213,7 +213,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     {
         // GIVEN
         Dictionary<string,byte[]> serializedEvents = new();
-        var ID = _newEngineID();
+        var ID = _newID();
         var events = _newEventStream(ID, _newEngine);
         // WHEN
         foreach (var evt in events)
@@ -229,12 +229,11 @@ public class ESDBEventStoreDriverTests : IoCTests
     protected override void Initialize()
     {
         _eventStoreDriver = Container.GetRequiredService<IEventStoreDriver>();
-        _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID, Engine>>();
-        _newScenario = Container.GetRequiredService<ScenarioGenerator<EngineID, Engine>>();
+        _newEventStream = Container.GetRequiredService<EventStreamGenerator<SimpleEngineID, Engine>>();
+        _newScenario = Container.GetRequiredService<ScenarioGenerator<SimpleEngineID, Engine>>();
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
-        _newEngineID = Container.GetRequiredService<NewID<EngineID>>();
+        _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
-        
         _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();
     }

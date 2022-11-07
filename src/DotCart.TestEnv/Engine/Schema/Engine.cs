@@ -10,7 +10,8 @@ public static partial class Inject
     public static IServiceCollection AddStateCtor(this IServiceCollection services)
     {
         return services
-            .AddIDCtor()
+//            .AddTypedEngineIDCtor()
+            .AddEngineIDCtor()
             .AddSingleton(Engine.Ctor);
     }
 }
@@ -26,7 +27,7 @@ public record struct Engine : IState
     public Engine()
     {
         Details = Details.New("New Engine");
-        Id = EngineID.New.Value;
+        Id = SimpleEngineID.New().Id();
         Status = EngineStatus.Unknown;
     }
 

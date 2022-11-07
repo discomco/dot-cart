@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Schema.Tests;
 
-public class IDTests : IDTests<EngineID>
+public class IDTests : IDTests<TypedEngineID>
 {
     public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -19,7 +19,7 @@ public class IDTests : IDTests<EngineID>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddIDCtor();
+            .AddTypedEngineIDCtor();
     }
     
 }

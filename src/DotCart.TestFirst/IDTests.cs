@@ -7,7 +7,7 @@ namespace DotCart.TestFirst;
 public abstract class IDTests<TID> : IoCTests where TID: IID
 {
 
-    protected NewID<TID> NewID; 
+    protected NewTypedID<TID> NewTypedId; 
     
     [Fact]
     public void ShouldResolveIDCtor()
@@ -15,7 +15,7 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var ID = NewID();
+        var ID = NewTypedId();
         // THEN 
         Assert.NotNull(ID);
     }
@@ -25,9 +25,9 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
     public void ShouldCreateID()
     {
         // GIVEN
-        Assert.NotNull(NewID);
+        Assert.NotNull(NewTypedId);
         // WHEN
-        var ID = NewID();
+        var ID = NewTypedId();
         // THEN
         Assert.NotNull(ID);
     }
@@ -36,9 +36,9 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
     public void ShouldBeAbleToCreateAnIDFromNew()
     {
         // GIVEN
-        Assert.NotNull(NewID);
+        Assert.NotNull(NewTypedId);
         // WHEN
-        var ID = NewID();
+        var ID = NewTypedId();
         // THEN
         Assert.NotNull(ID);
     }
@@ -51,10 +51,10 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
         {
             var guid = GuidUtils.NewGuid;
             // WHEN
-            var ID = PrefixLessID.NewComb(guid);
+            var ID = PrefixLessTypedId.NewComb(guid);
             // THEN
             Assert.NotNull(ID);
-            Assert.Equal("my", IDPrefix.Get<PrefixLessID>());
+            Assert.Equal("my", IDPrefix.Get<PrefixLessTypedId>());
             Assert.Equal($"my-{guid}", ID.Value);
         }
         catch (Exception)
@@ -64,9 +64,9 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
         // GIVEN
     }
 
-    private record PrefixLessID : ID<PrefixLessID>
+    private record PrefixLessTypedId : TypedID<PrefixLessTypedId>
     {
-        public PrefixLessID(string value) : base(value)
+        public PrefixLessTypedId(string value) : base(value)
         {
         }
     }
@@ -78,7 +78,7 @@ public abstract class IDTests<TID> : IoCTests where TID: IID
 
     protected override void Initialize()
     {
-        NewID = Container.GetRequiredService<NewID<TID>>();
+        NewTypedId = Container.GetRequiredService<NewTypedID<TID>>();
     }
 
 

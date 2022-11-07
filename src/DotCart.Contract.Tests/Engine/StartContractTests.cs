@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Contract.Tests.Engine;
 
-public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, Start.Payload>
+public class StartContractTests: ContractTests<SimpleEngineID,Start.Hope, Start.Fact, Start.Payload>
 {
     public StartContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -28,7 +28,7 @@ public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, 
     {
         // GIVEN
         var pl = Start.Payload.New;
-        var ID = NewID();
+        var ID = _newID();
         // WHEN
         var fact = Start.Fact.New(ID.Value, pl.ToBytes());
         // THEN
@@ -38,7 +38,7 @@ public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, 
     public override void ShouldCreateFactFromPayload()
     {
         var pl = Start.Payload.New;
-        var ID = NewID();
+        var ID = _newID();
         // WHEN
         var fact = Start.Fact.New(ID.Value, pl);
         // THEN
@@ -49,7 +49,7 @@ public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, 
     public override void ShouldCreateHopeFromBytes()
     {
         var pl = Start.Payload.New;
-        var ID = NewID();
+        var ID = _newID();
         // WHEN
         var hope = Start.Hope.New(ID.Value, pl.ToBytes());
         // THEN
@@ -60,7 +60,7 @@ public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, 
     public override void ShouldCreateHopeFromPayload()
     {
         var pl = Start.Payload.New;
-        var ID = NewID();
+        var ID = _newID();
         // WHEN
         var hope = Start.Hope.New(ID.Value, pl);
         // THEN
@@ -75,6 +75,6 @@ public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddIDCtor();
+            .AddEngineIDCtor();
     }
 }

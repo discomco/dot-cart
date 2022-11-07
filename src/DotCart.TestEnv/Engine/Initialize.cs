@@ -18,7 +18,7 @@ public partial class Aggregate
 {
     public IState Apply(Schema.Engine state, Initialize.Evt evt)
     {
-        state.Id = evt.AggregateID.Value;
+        state.Id = evt.AggregateID.Id();
         state.Status = EngineStatus.Initialized;
         return state;
     }
@@ -43,7 +43,7 @@ public partial class Aggregate
     {
         return new[]
         {
-            new Initialize.Evt((EngineID)cmd.AggregateID, Initialize.Payload.New(cmd.Payload.Engine))
+            new Initialize.Evt((SimpleEngineID)cmd.AggregateID, Initialize.Payload.New(cmd.Payload.Engine))
         };
     }
 }
@@ -164,10 +164,10 @@ public static class Initialize
     }
 
     [Topic(EvtTopic)]
-    public record Evt(EngineID AggregateID, Payload Payload)
-        : Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload), IEvt
+    public record Evt(SimpleID AggregateID, Payload Payload)
+        : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
-        public static Evt New(EngineID engineID, Payload initPayload)
+        public static Evt New(SimpleID engineID, Payload initPayload)
         {
             return new Evt(engineID, initPayload);
         }
@@ -191,12 +191,12 @@ public static class Initialize
     #region Effects Region ===========================================
 
     internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
-        evt => Fact.New(evt.AggregateID.Value, evt.Payload);
+        evt => Fact.New(evt.AggregateID.Id(), evt.Payload);
 
 
     internal static readonly Hope2Cmd<Cmd,Hope> _hope2Cmd =
         hope => Cmd.New(
-            ID<EngineID>.FromIdString(hope.AggId),
+            TypedID<TypedEngineID>.FromIdString(hope.AggId),
             hope.Data.FromBytes<Payload>()
         );
 
@@ -204,7 +204,7 @@ public static class Initialize
         () =>
         {
             var eng = Schema.Engine.Ctor();
-            var aggID = EngineID.New;
+            var aggID = TypedEngineID.New;
             var pl = Payload.New(eng);
             return Hope.New(aggID.Value, pl.ToBytes());
         };
@@ -214,7 +214,7 @@ public static class Initialize
         if (evt == null) return state;
         if (evt.GetPayload<Schema.Engine>() == null) return state;
         state = evt.GetPayload<Schema.Engine>();
-        state.Id = evt.AggregateId;
+        state.Id = evt.AggregateID.Id();
         state.Status = EngineStatus.Initialized;
         return state;
     };

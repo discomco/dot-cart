@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Contract.Tests.Engine;
 
-public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, Initialize.Fact, Initialize.Payload>
+public class InitializeContractTests: ContractTests<SimpleEngineID,Initialize.Hope, Initialize.Fact, Initialize.Payload>
 {
 
     protected NewState<TestEnv.Engine.Schema.Engine> NewEngine;
@@ -41,7 +41,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     {
         // GIVEN
         var engine = TestEnv.Engine.Schema.Engine.New(
-            EngineID.New.Value, 
+            TypedEngineID.New.Value, 
             EngineStatus.Initialized,
             Details.New("Payload Details"));
         // WHEN
@@ -53,7 +53,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     public override void ShouldCreateFactFromBytes()
     {
         // GIVEN
-        var aggId = EngineID.New;
+        var aggId = TypedEngineID.New;
         var engine = NewEngine();
         var payload = TestEnv.Engine.Initialize.Payload.New(engine);
         // WHEN
@@ -65,7 +65,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     public override void ShouldCreateFactFromPayload()
     {
         // GIVEN
-        var aggId = EngineID.New;
+        var aggId = TypedEngineID.New;
         var engine = NewEngine();
         var payload = TestEnv.Engine.Initialize.Payload.New(engine);
         // WHEN
@@ -77,7 +77,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     public override void ShouldCreateHopeFromBytes()
     {
         // GIVEN
-        var aggId = EngineID.New;
+        var aggId = TypedEngineID.New;
         var engine = NewEngine();
         var payload = TestEnv.Engine.Initialize.Payload.New(engine);
         // WHEN
@@ -90,7 +90,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     public override void ShouldCreateHopeFromPayload()
     {
         // GIVEN
-        var aggId = EngineID.New;
+        var aggId = TypedEngineID.New;
         var engine = NewEngine();
         var payload = TestEnv.Engine.Initialize.Payload.New(engine);
         // WHEN

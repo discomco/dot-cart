@@ -11,14 +11,14 @@ public record Dto(string AggId, byte[] Data) : IDto
         Data = data;
     }
 
-    public T GetPayload<T>()
+    public T GetPayload<T>() where T : IPayload
     {
         return !Data.Any()
             ? default
             : Data.FromBytes<T>();
     }
 
-    public void SetPayload<T>(T state)
+    public void SetPayload<T>(T state) where T : IPayload
     {
         Data = state.ToBytes();
     }
@@ -31,17 +31,10 @@ public record Dto(string AggId, byte[] Data) : IDto
     {
         TimeStamp = timeStamp;
     }
-
-    public IPayload GetPayload()
-    {
-        return GetPayload<IPayload>();
-    }
 }
 
 public interface IDto : IMsg
 {
     string AggId { get; }
-    byte[] Data { get; }
-    T GetPayload<T>();
-    void SetPayload<T>(T state);
+
 }

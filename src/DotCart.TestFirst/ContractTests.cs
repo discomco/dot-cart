@@ -13,7 +13,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     where TPayload : IPayload
 {
 
-    protected NewID<TID> NewID;
+    protected NewSimpleID<TID> _newID;
 
     protected ContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -60,7 +60,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var ctor = Container.GetRequiredService<NewID<TID>>();
+        var ctor = Container.GetRequiredService<NewSimpleID<TID>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -69,9 +69,9 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     public void ShouldCreateID()
     {
         // GIVEN
-        Assert.NotNull(NewID);
+        Assert.NotNull(_newID);
         // WHEN
-        var ID = NewID();
+        var ID = _newID();
         // THEN
         Assert.NotNull(ID);
     }
@@ -80,9 +80,9 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     public void ShouldIDBeOfTypeTID()
     {
         // GIVEN
-        Assert.NotNull(NewID);
+        Assert.NotNull(_newID);
         // WHEN
-        var ID = NewID();
+        var ID = _newID();
         // THEN
         Assert.IsType<TID>(ID);
     }
@@ -91,7 +91,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 
     protected override void Initialize()
     {
-        NewID = Container.GetRequiredService<NewID<TID>>();
+        _newID = Container.GetRequiredService<NewSimpleID<TID>>();
     }
 
 }

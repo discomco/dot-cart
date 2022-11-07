@@ -2,7 +2,7 @@
 
 namespace DotCart.Schema;
 
-public static class IdentityExtensions
+public static class TypedIDExtensions
 {
     public static byte[] GetBytes(this IID iid)
     {

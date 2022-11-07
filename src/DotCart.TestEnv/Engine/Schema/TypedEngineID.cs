@@ -6,10 +6,10 @@ namespace DotCart.TestEnv.Engine.Schema;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddIDCtor(this IServiceCollection services)
+    public static IServiceCollection AddTypedEngineIDCtor(this IServiceCollection services)
     {
         return services
-            .AddSingleton(EngineID.Ctor);
+            .AddSingleton(TypedEngineID.Ctor);
     }
 }
 
@@ -20,10 +20,10 @@ public static class Constants
 }
 
 [IDPrefix(Constants.EngineIDPrefix)]
-public record EngineID : ID<EngineID>
+public record TypedEngineID : TypedID<TypedEngineID>
 {
-    public static NewID<EngineID> Ctor => () => New;
-    public EngineID(string value) : base(value)
+    public static NewTypedID<TypedEngineID> Ctor => () => New;
+    public TypedEngineID(string value) : base(value)
     {
     }
 }

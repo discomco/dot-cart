@@ -9,7 +9,7 @@ namespace DotCart.Behavior.Tests;
 
 public class AggregateTests : IoCTests
 {
-    private readonly EngineID? _engineID = EngineID.New;
+    private IID _engineID => SimpleEngineID.New();
     private IAggregate? _agg;
     private IAggregateBuilder? _builder;
     private NewState<Engine>? _newState;
@@ -25,7 +25,7 @@ public class AggregateTests : IoCTests
     {
         // GIVEN
         // WHEN
-        var ID = EngineID.New;
+        var ID = TypedEngineID.New;
         // THEN
         Assert.NotNull(ID);
     }
@@ -48,7 +48,7 @@ public class AggregateTests : IoCTests
         // GIVEN
         Assert.NotNull(_agg);
         // AND
-        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream(_engineID, _newState);
+        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream((SimpleEngineID)_engineID, _newState);
         _agg.SetID(_engineID);
         _agg.Load(events);
         // THEN

@@ -25,7 +25,7 @@
       <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj" />
       <ProjectReference Include="..\..\src\DotCart.TestEnv\DotCart.TestEnv.csproj" />
       <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
-      <ProjectReference Include="..\..\tests\DotCart.TestEnv\DotCart.TestEnv.csproj" />
+      <ProjectReference Include="..\..\src\DotCart.TestEnv\DotCart.TestEnv.csproj" />
       <ProjectReference Include="..\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj" />
     </ItemGroup>
 

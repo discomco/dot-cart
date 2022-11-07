@@ -41,7 +41,7 @@ public partial class Aggregate :
     {
         return new[]
         {
-            Start.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
+            Start.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
         };
     }
 }
@@ -148,7 +148,7 @@ public static class Start
     internal static GenerateHope<Hope> _generateHope => () =>
     {
         var pl = Payload.New;
-        var aggId = EngineID.New;
+        var aggId = TypedEngineID.New;
         return Hope.New(aggId.Value, pl.ToBytes());
     };
 
@@ -224,10 +224,10 @@ public static class Start
     }
 
     [Topic(EvtTopic)]
-    public record Evt(EngineID AggregateID, Payload Payload) :
-            Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload), IEvt
+    public record Evt(SimpleID AggregateID, Payload Payload) :
+            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
-        public static Evt New(EngineID engineID, Payload payload)
+        public static Evt New(SimpleEngineID engineID, Payload payload)
         {
             return new Evt(engineID, payload);
         }
@@ -238,7 +238,7 @@ public static class Start
     #region Effects
 
     internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
-        evt => Fact.New(evt.AggregateID.Value, evt.Payload);
+        evt => Fact.New(evt.AggregateID.Id(), evt.Payload);
 
     internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, _) =>
     {
@@ -248,7 +248,7 @@ public static class Start
 
     internal static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
         hope =>
-            Cmd.New(EngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
+            Cmd.New(TypedEngineID.FromIdString(hope.AggId), hope.Data.FromBytes<Payload>());
 
     public class ResponderDriver : MemResponderDriver<Hope>, IResponderDriver<Hope>
     {

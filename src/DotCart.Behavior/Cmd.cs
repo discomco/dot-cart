@@ -6,15 +6,12 @@ public interface ICmd
 {
     IID AggregateID { get; }
     string Topic { get; }
-
-
 }
 
-
 public interface ICmd<out TPayload> : ICmd
-    where TPayload : IPayload 
+    where TPayload : IPayload
+
 {
-   
     TPayload Payload { get; }
 }
 
@@ -26,4 +23,5 @@ public abstract record Cmd<TPayload>(
     where TPayload : IPayload 
 {
     public TPayload Payload { get; } = Payload;
+    public IID AggregateID { get; } = AggregateID;
 }

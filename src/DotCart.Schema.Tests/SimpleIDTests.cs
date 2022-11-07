@@ -7,8 +7,7 @@ namespace DotCart.Schema.Tests;
 
 public class SimpleIDTests: IoCTests
 {
-
-    protected NewSimpleID<SimpleEngineID> _newEngineID;
+    protected NewSimpleID<SimpleEngineID> _newID;
 
     [Fact]
     public void ShouldResolveSimpleIDCtor()
@@ -16,22 +15,33 @@ public class SimpleIDTests: IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        var newSimpleId = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
         // THEN
-        Assert.NotNull(_newID);
+        Assert.NotNull(newSimpleId);
     }
 
     [Fact]
     public void ShouldCreateASimpleID()
     {
         // GIVEN
-        Assert.NotNull(_newEngineID);
-        // WHEN
-        var _newID = _newEngineID();
-        // THEN
         Assert.NotNull(_newID);
-        Assert.Equal(Constants.EngineIDPrefix, _newID.Prefix);
+        // WHEN
+        var newID = _newID();
+        // THEN
+        Assert.NotNull(newID);
+        Assert.Equal(Constants.EngineIDPrefix, newID.Prefix);
+    }
 
+    [Fact]
+    public void ShouldCreateFromIdString()
+    {
+        // GIVEN
+        Assert.NotNull(_newID);
+        // WHEN
+        var newID = _newID();
+        var newerID = newID.Id().IDFromIdString();
+        Assert.NotNull(newerID);
+        Assert.Equal(newID.Id(), newerID.Id());
     }
     
     
@@ -41,7 +51,7 @@ public class SimpleIDTests: IoCTests
 
     protected override void Initialize()
     {
-        _newEngineID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
     }
 
     protected override void SetTestEnvironment()
@@ -51,6 +61,6 @@ public class SimpleIDTests: IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSimpleIDCtor();
+            .AddEngineIDCtor();
     }
 }

@@ -40,7 +40,7 @@ public partial class Aggregate :
     {
         return new[]
         {
-            ThrottleUp.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
+            ThrottleUp.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
         };
     }
 }
@@ -89,9 +89,9 @@ public static partial class Inject
 public static class ThrottleUp
 {
     public static Evt2Fact<Fact, Evt> _evt2Fact => 
-        evt => Fact.New(evt.AggregateID.Value, Payload.New(evt.Payload.Delta));
+        evt => Fact.New(evt.AggregateID.Id(), Payload.New(evt.Payload.Delta));
     public static Hope2Cmd<Cmd, Hope> _hope2Cmd => 
-        hope => Cmd.New(EngineID.FromIdString(hope.AggId), hope.GetPayload<Payload>());
+        hope => Cmd.New(TypedEngineID.FromIdString(hope.AggId), hope.GetPayload<Payload>());
 
     public const string FactTopic = "engine.throttled_up.v1";
     public const string HopeTopic = "engine.throttle_up.v1";
@@ -115,19 +115,19 @@ public static class ThrottleUp
     }
     
     
-    public record Evt(EngineID AggregateID, Payload Payload)
-        : Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload)
+    public record Evt(SimpleID AggregateID, Payload Payload)
+        : Evt<Payload>(EvtTopic, AggregateID, Payload)
     {
-        public static IEvt New(EngineID aggID, Payload payload)
+        public static IEvt New(SimpleEngineID aggId, Payload payload)
         {
-            return new Evt(aggID, payload);
+            return new Evt(aggId, payload);
         }
     }
 
 
     public static GenerateHope<Hope> _generateHope => () =>
     {
-        var engineID = EngineID.New;
+        var engineID = TypedEngineID.New;
         var pl = Payload.New(Random.Shared.Next(20));
         return Hope.New(engineID.Value, pl);
     };
