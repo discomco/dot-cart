@@ -22,6 +22,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     private IAggregate _aggregate;
     private ICmdHandler _cmdHandler;
     private NewID<EngineID> _newEngineID;
+    private IAggregateBuilder _aggregateBuilder;
 
     [Fact]
     public void ShouldResolveESDBWriterClient()
@@ -129,7 +130,6 @@ public class ESDBEventStoreDriverTests : IoCTests
         Assert.True(res);
     }
 
-  
 
     [Fact]
     public void ShouldResolveCmdHandler()
@@ -155,14 +155,18 @@ public class ESDBEventStoreDriverTests : IoCTests
         Assert.NotNull(ctor);
     }
 
-    // TODO: Implement TEST ShouldSaveAggregate() 
-    // [Fact]
-    // public void ShouldSaveAggregate()
-    // {
-    //     Assert.Fail("");
-    //     // GIVEN 
-    //     Assert.NotNull(_eventStreamGenerator);
-    // }
+
+    [Fact]
+    public void ShouldSaveAggregate()
+    {
+        // GIVEN 
+        Assert.NotNull(_aggregate);
+        Assert.NotNull(_eventStoreDriver);
+        // WHEN
+        var res =  _eventStoreDriver.SaveAsync(_aggregate);
+        // THEN
+        Assert.NotNull(res);
+    }
     
 
     public ESDBEventStoreDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -181,6 +185,22 @@ public class ESDBEventStoreDriverTests : IoCTests
         var res = await _eventStoreDriver.AppendEventsAsync(ID, events);
         // THEN
         Assert.NotNull(res);
+    }
+
+
+    [Fact]
+    public async Task ShouldLoadEvents()
+    {
+        // GIVEN
+        Assert.NotNull(_eventStoreDriver);
+        // WHEN
+        var ID = _newEngineID();
+        var events = _newEventStream(ID, _newEngine);
+        var res = await _eventStoreDriver.AppendEventsAsync(ID, events);
+        var readEvents = await _eventStoreDriver.ReadEventsAsync(ID);
+        // THEN
+        Assert.Equal(events.Count(), readEvents.Count());
+
     }
     
     
@@ -214,6 +234,9 @@ public class ESDBEventStoreDriverTests : IoCTests
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
         _newEngineID = Container.GetRequiredService<NewID<EngineID>>();
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
+        
+        _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        _aggregate = _aggregateBuilder.Build();
     }
 
     protected override void SetTestEnvironment()
@@ -228,8 +251,8 @@ public class ESDBEventStoreDriverTests : IoCTests
             .AddInitializeEngineWithThrottleUpStream()
             .AddEngineAggregate()
             .AddAggregateBuilder()
-//            .AddConfiguredESDBClients()
-            .AddSingleton(_ => A.Fake<IESDBEventSourcingClient>())
+            .AddConfiguredESDBClients()
+//            .AddSingleton(_ => A.Fake<IESDBEventSourcingClient>())
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
             .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
     }

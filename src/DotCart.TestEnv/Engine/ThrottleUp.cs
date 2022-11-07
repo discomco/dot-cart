@@ -40,7 +40,7 @@ public partial class Aggregate :
     {
         return new[]
         {
-            ThrottleUp.Evt.New(cmd.AggregateID, cmd.Payload)
+            ThrottleUp.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
         };
     }
 }
@@ -115,10 +115,10 @@ public static class ThrottleUp
     }
     
     
-    public record Evt(IID AggregateID, Payload Payload)
-        : Evt<Payload>(EvtTopic, AggregateID, Payload)
+    public record Evt(EngineID AggregateID, Payload Payload)
+        : Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload)
     {
-        public static IEvt New(IID aggID, Payload payload)
+        public static IEvt New(EngineID aggID, Payload payload)
         {
             return new Evt(aggID, payload);
         }

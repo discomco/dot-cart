@@ -1,5 +1,3 @@
-using System.Runtime.InteropServices;
-using System.Text.Json;
 using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Effects;
@@ -83,18 +81,17 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Value, StreamPosition.Start);
         var state = await readResult.ReadState.ConfigureAwait(false);
         if (state == ReadState.StreamNotFound) return ret;
-        var storedEvents = await GetStoreEventsAsync(readResult);
-        return ret;
+        return await GetStoreEventsAsync(readResult);
     }
 
-    private static async Task<IEnumerable<StoreEvent>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult)
+    private static async Task<IEnumerable<IEvt>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult)
     {
-        var res = new List<StoreEvent>();
+        var res = new List<IEvt>();
         await foreach (var evt in readResult)
         {
-            var s = SerializationHelper.Deserialize(evt.Event.EventType, evt.Event.Data.ToArray());
-            var storedEvent = new StoreEvent(s, evt.Event.EventNumber.ToInt64());
-            res.Add(storedEvent);
+            var e = SerializationHelper.Deserialize(evt.Event.EventType, evt.Event.Data.ToArray());
+            e.SetVersion(evt.Event.EventNumber.ToInt64());
+            res.Add(e);
         }
         return res;
     } 

@@ -32,7 +32,7 @@ public static partial class Inject
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(IID id, NewState<Schema.Engine> newEngine)
+    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(EngineID id, NewState<Schema.Engine> newEngine)
     {
         var initPayload = Initialize.Payload.New(newEngine());
         var initEvt = Initialize.Evt.New(id, initPayload);

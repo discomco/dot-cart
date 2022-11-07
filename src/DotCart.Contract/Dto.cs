@@ -6,6 +6,10 @@ public record Dto(string AggId, byte[] Data) : IDto
 {
     public string AggId { get; } = AggId;
     public byte[] Data { get; private set; } = Data;
+    public void SetData(byte[] data)
+    {
+        Data = data;
+    }
 
     public T GetPayload<T>()
     {

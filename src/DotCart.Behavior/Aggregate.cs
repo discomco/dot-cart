@@ -11,29 +11,27 @@ public delegate IAggregate AggBuilder(AggCtor newAgg);
 
 public interface IAggregate
 {
+    Task<IFeedback> ExecuteAsync(ICmd cmd);
+    IID ID { get; }
+    IAggregate SetID(IID ID);
+
     bool IsNew { get; }
     long Version { get; }
     string Id();
     string GetName();
     void InjectPolicies(IEnumerable<IDomainPolicy> policies);
     IEnumerable<IEvt> UncommittedEvents { get; }
-    Task<IFeedback> ExecuteAsync(ICmd cmd);
     IState GetState();
-    IAggregate SetID(IID ID);
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
-    IID ID { get; }
 }
 
-public interface IAggregate<out TID> : IAggregate
-  where TID : IID<TID>
-{
 
-}
+public delegate IEnumerable<IEvt> TryCmd<in TCmd>(IState state, ICmd cmd)
+    where TCmd : ICmd; 
 
-public delegate IEnumerable<IEvt> TryCmd<in TCmd>(IState state, TCmd cmd) where TCmd : ICmd;
-
-public delegate IState ApplyEvt<in TEvt>(IState state, TEvt evt) where TEvt : IEvt;
+public delegate IState ApplyEvt<TID,in TEvt>(IState state, TEvt evt) 
+    where TEvt : IEvt;
 
 public abstract class Aggregate<TState> : IAggregate
     where TState : IState

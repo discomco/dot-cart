@@ -17,7 +17,7 @@ public abstract record Msg(string MsgType, byte[] Data) : IMsg
     public string MsgId { get; } = GuidUtils.NewGuid;
     public string MsgType { get; } = MsgType;
 
-    public byte[] Data { get; } = Data;
+    public byte[] Data { get; set; } = Data;
 
     public TPayload GetPayload<TPayload>()
     {
@@ -31,6 +31,7 @@ public abstract record Msg(string MsgType, byte[] Data) : IMsg
     {
         TimeStamp = timeStamp;
     }
+    
 }
 
 public abstract record Msg<TPayload>(string MsgType, TPayload Payload) 

@@ -41,7 +41,7 @@ public partial class Aggregate :
     {
         return new[]
         {
-            Start.Evt.New(cmd.AggregateID, cmd.Payload)
+            Start.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
         };
     }
 }
@@ -224,11 +224,10 @@ public static class Start
     }
 
     [Topic(EvtTopic)]
-    public record Evt
-        (IID AggregateID, Payload Payload) :
-            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
+    public record Evt(EngineID AggregateID, Payload Payload) :
+            Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
-        public static Evt New(IID engineID, Payload payload)
+        public static Evt New(EngineID engineID, Payload payload)
         {
             return new Evt(engineID, payload);
         }

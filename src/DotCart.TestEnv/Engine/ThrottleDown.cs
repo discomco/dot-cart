@@ -1,6 +1,7 @@
 using System.Runtime.Serialization;
 using DotCart.Behavior;
 using DotCart.Schema;
+using DotCart.TestEnv.Engine.Schema;
 
 namespace DotCart.TestEnv.Engine;
 
@@ -17,9 +18,10 @@ public static class ThrottleDown
         }
     }
 
-    public record Evt(IID AggregateID, Payload Payload) : Evt<Payload>(EvtTopic, AggregateID, Payload)
+    public record Evt(EngineID AggregateID, Payload Payload) 
+        : Evt<EngineID,Payload>(EvtTopic, AggregateID, Payload)
     {
-        public static Evt New(IID aggID, Payload payload)
+        public static Evt New(EngineID aggID, Payload payload)
         {
             return new Evt(aggID, payload);
         }

@@ -11,17 +11,20 @@ public static class SerializationHelper
     {
         try
         {
-            var settings = new JsonSerializerSettings
-            {
-                ContractResolver = new PrivateSetterContractResolver()
-            };
+            var res = (IEvt)Activator.CreateInstance(Type.GetType(eventType));
+            res.SetData(data);
             
-            var des = JsonConvert.DeserializeObject(
-                Encoding.UTF8.GetString(data),
-                Type.GetType(eventType), 
-                settings)!;
-
-            return (IEvt)des;
+            // var settings = new JsonSerializerSettings
+            // {
+            //     ContractResolver = new PrivateSetterContractResolver()
+            // };
+            //
+            // var des = JsonConvert.DeserializeObject(
+            //     Encoding.UTF8.GetString(data),
+            //     Type.GetType(eventType), 
+            //     settings)!;
+            
+            return res;
 
             // // var settings = new JsonSerializerSettings {ContractResolver = new PrivateSetterContractResolver()};
             // // return (IEvent<TAggregateId>) JsonConvert.DeserializeObject(Encoding.UTF8.GetString(data),

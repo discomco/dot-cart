@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotCart\DotCart.csproj"/>
+        <ProjectReference Include="..\DotCart\DotCart.csproj" />
     </ItemGroup>
 
 </Project>
