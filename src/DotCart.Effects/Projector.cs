@@ -34,7 +34,7 @@ public class Projector : Reactor, IProjector
 
     public override Task HandleAsync(IMsg msg)
     {
-        return _mediator.PublishAsync(msg.MsgType, (IEvt)msg);
+        return _mediator.PublishAsync(msg.Topic, (IEvt)msg);
     }
 
     protected override Task StartReactingAsync(CancellationToken cancellationToken)

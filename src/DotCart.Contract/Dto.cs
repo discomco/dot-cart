@@ -24,7 +24,7 @@ public record Dto(string AggId, byte[] Data) : IDto
     }
 
     public string MsgId { get; }
-    public string MsgType { get; }
+    public string Topic { get; }
     public DateTime TimeStamp { get; private set; }
 
     public void SetTimeStamp(DateTime timeStamp)

@@ -29,7 +29,7 @@ internal sealed class MemProjector : IMemProjector
 
     public Task Project(IEvt evt)
     {
-        return _mediator.PublishAsync(evt.MsgType, evt);
+        return _mediator.PublishAsync(evt.Topic, evt);
     }
 }
 

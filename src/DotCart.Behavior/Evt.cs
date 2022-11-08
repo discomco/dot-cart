@@ -9,9 +9,9 @@ public interface IEvt : IMsg
     SimpleID AggregateID { get; }
     byte[] MetaData { get; set; }
     long Version { get; set; }
-    void SetData(byte[] data);
     void SetVersion(long version);
-    
+    void SetMetaPayload<TPayload>(TPayload payload);
+    TPayload GetMetaPayload<TPayload>();
 }
 
 public interface IEvt<out TPayload> : IEvt 
@@ -21,8 +21,8 @@ public interface IEvt<out TPayload> : IEvt
 }
 
 
-public abstract record Evt<TPayload>(string MsgType, SimpleID AggregateID, TPayload Payload)
-    : Msg<TPayload>(MsgType, Payload), IEvt
+public abstract record Evt<TPayload>(string Topic, SimpleID AggregateID, TPayload Payload)
+    : Msg<TPayload>(Topic, Payload), IEvt
     where TPayload : IPayload
 {
 
@@ -37,6 +37,17 @@ public abstract record Evt<TPayload>(string MsgType, SimpleID AggregateID, TPayl
     {
         Version = version;
     }
+
+    public void SetMetaPayload<T>(T payload)
+    {
+        MetaData = payload == null ? Array.Empty<byte>() : payload.ToBytes();
+    }
+
+    public T GetMetaPayload<T>()
+    {
+        return MetaData.FromBytes<T>();
+    }
+
     public Guid EventID => Guid.Parse(MsgId);
 }
 

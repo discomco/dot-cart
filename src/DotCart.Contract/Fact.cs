@@ -10,7 +10,7 @@ public abstract record Fact<TPayload>(string AggId, byte[] Data) : Dto(AggId, Da
     where TPayload : IPayload
 {
     public string MsgId { get; }
-    public string MsgType { get; }
+    public string Topic { get; }
     public DateTime TimeStamp { get; private set; }
 
     public void SetTimeStamp(DateTime timeStamp)

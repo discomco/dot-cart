@@ -5,20 +5,26 @@ namespace DotCart.Contract;
 public interface IMsg
 {
     string MsgId { get; }
-    string MsgType { get; }
+    string Topic { get; }
     DateTime TimeStamp { get; }
     void SetTimeStamp(DateTime timeStamp);
     TPayload GetPayload<TPayload>() where TPayload : IPayload;
     void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload;
     byte[] Data { get;  }
+    void SetData(byte[] data);
+
 }
 
-public abstract record Msg(string MsgType, byte[] Data) : IMsg
+public abstract record Msg(string Topic, byte[] Data) : IMsg
 {
     public string MsgId { get; } = GuidUtils.NewGuid;
-    public string MsgType { get; } = MsgType;
+    public string Topic { get; } = Topic;
 
     public byte[] Data { get; set; } = Data;
+    public void SetData(byte[] data)
+    {
+        Data = data;
+    }
 
     public TPayload GetPayload<TPayload>() where TPayload : IPayload
     {
@@ -42,8 +48,8 @@ public abstract record Msg(string MsgType, byte[] Data) : IMsg
     
 }
 
-public abstract record Msg<TPayload>(string MsgType, TPayload Payload) 
-    : Msg(MsgType, Payload.ToBytes())
+public abstract record Msg<TPayload>(string Topic, TPayload Payload) 
+    : Msg(Topic, Payload.ToBytes())
     where TPayload : IPayload
 {
 }

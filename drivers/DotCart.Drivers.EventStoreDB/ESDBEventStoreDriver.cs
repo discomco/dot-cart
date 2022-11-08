@@ -9,7 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-
 public static partial class Inject
 {
     public static IServiceCollection AddESDBEventStoreDriver(this IServiceCollection services)
@@ -18,15 +17,8 @@ public static partial class Inject
             .AddConfiguredESDBClients()
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
             .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
-
     }
 }
-
-
-
-
-
-
 
 public class ESDBEventStoreDriver : IEventStoreDriver
 {
@@ -50,7 +42,6 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     public void Close()
     {
-
     }
 
     public async Task LoadAsync(IAggregate aggregate)
@@ -63,7 +54,6 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         //     evt.Event.
         //     
         // }
-
     }
 
     public Task SaveAsync(IAggregate aggregate)
@@ -72,13 +62,13 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         aggregate.ClearUncommittedEvents();
         return res;
     }
-    
-    
+
 
     public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
     {
-        var ret = new List<IEvt>();
+        var ret = new List<Event>();
         var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Id(), StreamPosition.Start);
+        if (readResult==null) throw new ESDBEventStoreDriverException("ESDBClient returned no readResult.");
         var state = await readResult.ReadState.ConfigureAwait(false);
         if (state == ReadState.StreamNotFound) return ret;
         return await GetStoreEventsAsync(readResult);
@@ -89,14 +79,17 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         var res = new List<IEvt>();
         await foreach (var evt in readResult)
         {
-            var e = SerializationHelper.Deserialize(evt.Event.EventType, evt.Event.Data.ToArray());
-            e.SetVersion(evt.Event.EventNumber.ToInt64());
-            res.Add(e);
+            var eOut = new Event(
+                evt.Event.EventType,
+                evt.Event.EventNumber.ToInt64(),
+                evt.Event.Data.ToArray(),
+                evt.Event.Metadata.ToArray(),
+                evt.Event.Created);
+            res.Add(eOut);
         }
+
         return res;
-    } 
-
-
+    }
 
 
     public async Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events)
@@ -111,15 +104,13 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         return AppendResult.New(writeResult.NextExpectedStreamRevision.ToUInt64());
     }
 
-    
+
     private EventData Evt2EventData(IEvt evt)
     {
         var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
-        var typeName = evt.GetType().AssemblyQualifiedName;
+        var typeName = evt.Topic;
         ReadOnlyMemory<byte> metaData = evt.MetaData;
         ReadOnlyMemory<byte> data = evt.Data;
         return new EventData(eventId, typeName, data, metaData);
     }
-    
-    
 }
