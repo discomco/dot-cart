@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Contract.Tests.Engine;
 
-public class StartContractTests: ContractTests<SimpleEngineID,Start.Hope, Start.Fact, Start.Payload>
+public class StartContractTests: ContractTests<EngineID,Start.Hope, Start.Fact, Start.Payload>
 {
     public StartContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {

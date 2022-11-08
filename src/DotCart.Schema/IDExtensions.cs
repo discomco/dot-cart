@@ -2,7 +2,7 @@ using System.Text.RegularExpressions;
 
 namespace DotCart.Schema;
 
-public static class SimpleIDExtensions
+public static class IDExtensions
 {
     public const string DefaultPrefix = "id";
 
@@ -32,7 +32,7 @@ public static class SimpleIDExtensions
         var match = ValueRegex.IsMatch(value);
         if (!match)
         {
-            throw new Exception("${value} cannot be used as an identifier for a SimpleID. Must be UUID string");
+            throw new Exception($"{value} cannot be used as an identifier for an ID. Must be UUID string");
         }
         return value;
     }

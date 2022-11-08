@@ -16,12 +16,12 @@ public class ESDBEventStoreDriverTests : IoCTests
 {
     
     private IEventStoreDriver _eventStoreDriver;
-    private EventStreamGenerator<SimpleEngineID, Engine> _newEventStream;
-    private ScenarioGenerator<SimpleEngineID, Engine> _newScenario;
+    private EventStreamGenerator<EngineID, Engine> _newEventStream;
+    private ScenarioGenerator<EngineID, Engine> _newScenario;
     private NewState<Engine> _newEngine;
     private IAggregate _aggregate;
     private ICmdHandler _cmdHandler;
-    private NewSimpleID<SimpleEngineID> _newID;
+    private NewID<EngineID> _newID;
     private IAggregateBuilder _aggregateBuilder;
 
     [Fact]
@@ -77,7 +77,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var es = Container.GetRequiredService<EventStreamGenerator<SimpleEngineID, Engine>>();
+        var es = Container.GetRequiredService<EventStreamGenerator<EngineID, Engine>>();
         // THEN
         Assert.NotNull(es);
     }
@@ -88,7 +88,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var scGen = Container.GetRequiredService<ScenarioGenerator<SimpleEngineID, Engine>>();
+        var scGen = Container.GetRequiredService<ScenarioGenerator<EngineID, Engine>>();
         // THEN
         Assert.NotNull(scGen);
     }
@@ -237,10 +237,10 @@ public class ESDBEventStoreDriverTests : IoCTests
     protected override void Initialize()
     {
         _eventStoreDriver = Container.GetRequiredService<IEventStoreDriver>();
-        _newEventStream = Container.GetRequiredService<EventStreamGenerator<SimpleEngineID, Engine>>();
-        _newScenario = Container.GetRequiredService<ScenarioGenerator<SimpleEngineID, Engine>>();
+        _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID, Engine>>();
+        _newScenario = Container.GetRequiredService<ScenarioGenerator<EngineID, Engine>>();
         _newEngine = Container.GetRequiredService<NewState<Engine>>();
-        _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        _newID = Container.GetRequiredService<NewID<EngineID>>();
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();
         _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();

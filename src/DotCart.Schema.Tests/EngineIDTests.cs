@@ -1,0 +1,30 @@
+using DotCart.TestEnv.Engine.Schema;
+using DotCart.TestKit;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit.Abstractions;
+
+namespace DotCart.Schema.Tests;
+
+public class EngineIDTests: IDTests<EngineID>
+{
+
+    
+    public EngineIDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
+
+    protected override void Initialize()
+    {
+        _newID = Container.GetRequiredService<NewID<EngineID>>();
+    }
+
+    protected override void SetTestEnvironment()
+    {
+    }
+    
+    protected override void InjectDependencies(IServiceCollection services)
+    {
+        services
+            .AddEngineIDCtor();
+    }
+}

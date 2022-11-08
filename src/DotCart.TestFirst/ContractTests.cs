@@ -13,7 +13,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     where TPayload : IPayload
 {
 
-    protected NewSimpleID<TID> _newID;
+    protected NewID<TID> _newID;
 
     protected ContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -60,7 +60,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var ctor = Container.GetRequiredService<NewSimpleID<TID>>();
+        var ctor = Container.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -91,7 +91,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 
     protected override void Initialize()
     {
-        _newID = Container.GetRequiredService<NewSimpleID<TID>>();
+        _newID = Container.GetRequiredService<NewID<TID>>();
     }
 
 }

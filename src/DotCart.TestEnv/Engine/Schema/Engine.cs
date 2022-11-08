@@ -27,7 +27,7 @@ public record struct Engine : IState
     public Engine()
     {
         Details = Details.New("New Engine");
-        Id = SimpleEngineID.New().Id();
+        Id = EngineID.New().Id();
         Status = EngineStatus.Unknown;
     }
 

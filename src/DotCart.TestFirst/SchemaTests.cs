@@ -10,7 +10,7 @@ public abstract class SchemaTests<TID, TState>: IoCTests
   where TState : IState
 {
 
-    protected NewSimpleID<TID> NewSimpleID;
+    protected NewID<TID> NewId;
     protected NewState<TState> NewState;
 
     protected SchemaTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -24,7 +24,7 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var newID = Container.GetRequiredService<NewSimpleID<TID>>();
+        var newID = Container.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -45,10 +45,10 @@ public abstract class SchemaTests<TID, TState>: IoCTests
     {
         // GIVEN
         Assert.NotNull(Container);
-        Assert.NotNull(NewSimpleID);
+        Assert.NotNull(NewId);
         // WHEN
         
-        var ID = NewSimpleID();
+        var ID = NewId();
         // THEN
         Assert.NotNull(ID);
     }
@@ -104,7 +104,7 @@ public abstract class SchemaTests<TID, TState>: IoCTests
 
     protected override void Initialize()
     {
-        NewSimpleID = Container.GetRequiredService<NewSimpleID<TID>>();
+        NewId = Container.GetRequiredService<NewID<TID>>();
         NewState = Container.GetRequiredService<NewState<TState>>();
     }
 }

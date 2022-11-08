@@ -18,10 +18,10 @@ public static class ThrottleDown
         }
     }
 
-    public record Evt(SimpleID AggregateId, Payload Payload) 
+    public record Evt(ID AggregateId, Payload Payload) 
         : Evt<Payload>(EvtTopic, AggregateId, Payload)
     {
-        public static Evt New(SimpleEngineID aggId, Payload payload)
+        public static Evt New(EngineID aggId, Payload payload)
         {
             return new Evt(aggId, payload);
         }

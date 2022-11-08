@@ -48,7 +48,7 @@ public record Event(string EventType, long Version, byte[] Data, byte[] MetaData
         Version = version;
     }
 
-    public SimpleID AggregateID { get; }
+    public ID AggregateID { get; }
     
     public byte[] MetaData { get; set; } = MetaData;
 

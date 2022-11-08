@@ -1,84 +1,60 @@
-using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.Schema.Tests;
 
-public abstract class IDTests<TID> : IoCTests where TID: IID
+public abstract class IDTests<TID>: IoCTests where TID: ID
 {
+    protected NewID<TID> _newID;
 
-    protected NewTypedID<TID> NewTypedId; 
-    
     [Fact]
     public void ShouldResolveIDCtor()
     {
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var ID = NewTypedId();
-        // THEN 
-        Assert.NotNull(ID);
+        var newID = Container.GetRequiredService<NewID<TID>>();
+        // THEN
+        Assert.NotNull(newID);
     }
-    
-    
+
     [Fact]
     public void ShouldCreateID()
     {
         // GIVEN
-        Assert.NotNull(NewTypedId);
+        Assert.NotNull(_newID);
         // WHEN
-        var ID = NewTypedId();
+        var newID = _newID();
         // THEN
-        Assert.NotNull(ID);
+        Assert.NotNull(newID);
+        Assert.Equal(GetIDPrefix(), newID.Prefix);
+    }
+
+    private string GetIDPrefix()
+    {
+        return IDPrefix.Get<TID>();
     }
 
     [Fact]
-    public void ShouldBeAbleToCreateAnIDFromNew()
+    public void ShouldCreateFromIdString()
     {
         // GIVEN
-        Assert.NotNull(NewTypedId);
+        Assert.NotNull(_newID);
         // WHEN
-        var ID = NewTypedId();
-        // THEN
-        Assert.NotNull(ID);
+        var newID = _newID();
+        var newerID = newID.Id().IDFromIdString();
+        Assert.NotNull(newerID);
+        Assert.Equal(newID.Id(), newerID.Id());
     }
-
-
-    [Fact]
-    public void ShouldThrowAnExceptionIfNoPrefixIDPresent()
-    {
-        try
-        {
-            var guid = GuidUtils.NewGuid;
-            // WHEN
-            var ID = PrefixLessTypedId.NewComb(guid);
-            // THEN
-            Assert.NotNull(ID);
-            Assert.Equal("my", IDPrefix.Get<PrefixLessTypedId>());
-            Assert.Equal($"my-{guid}", ID.Value);
-        }
-        catch (Exception)
-        {
-            Assert.True(true);
-        }
-        // GIVEN
-    }
-
-    private record PrefixLessTypedId : TypedID<PrefixLessTypedId>
-    {
-        public PrefixLessTypedId(string value) : base(value)
-        {
-        }
-    }
-
-
-    protected IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    
+    
+    public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
 
     protected override void Initialize()
     {
-        NewTypedId = Container.GetRequiredService<NewTypedID<TID>>();
+        _newID = Container.GetRequiredService<NewID<TID>>();
     }
 
 

@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Schema.Tests;
 
-public class EngineSchemaTests : SchemaTests<SimpleEngineID, Engine>
+public class EngineSchemaTests : SchemaTests<EngineID, Engine>
 {
     public EngineSchemaTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {

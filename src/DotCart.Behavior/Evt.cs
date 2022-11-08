@@ -6,7 +6,7 @@ namespace DotCart.Behavior;
 
 public interface IEvt : IMsg
 {
-    SimpleID AggregateID { get; }
+    ID AggregateID { get; }
     byte[] MetaData { get; set; }
     long Version { get; set; }
     void SetVersion(long version);
@@ -21,12 +21,12 @@ public interface IEvt<out TPayload> : IEvt
 }
 
 
-public abstract record Evt<TPayload>(string Topic, SimpleID AggregateID, TPayload Payload)
+public abstract record Evt<TPayload>(string Topic, ID AggregateID, TPayload Payload)
     : Msg<TPayload>(Topic, Payload), IEvt
     where TPayload : IPayload
 {
 
-    public SimpleID AggregateID { get; set; } = AggregateID;
+    public ID AggregateID { get; set; } = AggregateID;
     public byte[] MetaData { get; set; }
     public long Version { get; set; } = long.MaxValue;
     public void SetData(byte[] data)

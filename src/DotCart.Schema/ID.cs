@@ -3,7 +3,7 @@ using System.Security.Cryptography.X509Certificates;
 namespace DotCart.Schema;
 
 
-public delegate TID NewSimpleID<out TID>() where TID:IID;
+public delegate TID NewID<out TID>() where TID:IID;
 
 
 public interface IID
@@ -14,7 +14,7 @@ public interface IID
 
 
 
-public record SimpleID: IID 
+public record ID: IID 
 {
     
     public string Prefix { get; set; }
@@ -22,9 +22,9 @@ public record SimpleID: IID
 
     public string Id()
     {
-        return $"{Prefix}{SimpleIDFuncs.PrefixSeparator}{Value}";
+        return $"{Prefix}{IDFuncs.PrefixSeparator}{Value}";
     }
-    public SimpleID(string prefix, string value = "")
+    public ID(string prefix, string value = "")
     {
         if (value == string.Empty) 
             value = GuidUtils.LowerCaseGuid;
@@ -32,21 +32,21 @@ public record SimpleID: IID
         Value = value.CheckValue();
     }
     
-    public static SimpleID New(string prefix) => new(prefix);
+    public static ID New(string prefix) => new(prefix);
     
 }
 
-public static class SimpleIDFuncs
+public static class IDFuncs
 {
     public const char PrefixSeparator = '.';
-    public static SimpleID IDFromIdString(this string idString)
+    public static ID IDFromIdString(this string idString)
     {
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))
         {
             throw new ArgumentException($"idString must not be null or empty and must contain '{PrefixSeparator}' ");
         }
         var parts = idString.Split(PrefixSeparator);
-            return new SimpleID(parts[0], parts[1]);
+            return new ID(parts[0], parts[1]);
     }
 }
 

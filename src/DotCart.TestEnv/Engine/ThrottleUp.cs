@@ -91,7 +91,7 @@ public static class ThrottleUp
         {
             return new[]
             {
-                Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
+                Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
             };
         }
         
@@ -133,10 +133,10 @@ public static class ThrottleUp
     
     
     [Topic(EvtTopic)]
-    public record Evt(SimpleID AggregateID, Payload Payload)
+    public record Evt(ID AggregateID, Payload Payload)
         : Evt<Payload>(EvtTopic, AggregateID, Payload)
     {
-        public static IEvt New(SimpleEngineID aggId, Payload payload)
+        public static IEvt New(EngineID aggId, Payload payload)
         {
             return new Evt(aggId, payload);
         }

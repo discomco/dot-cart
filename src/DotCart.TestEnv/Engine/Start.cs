@@ -198,7 +198,7 @@ public static class Start
         {
             return new[]
             {
-                Start.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
+                Start.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
             };
         }
 
@@ -244,10 +244,10 @@ public static class Start
     }
 
     [Topic(EvtTopic)]
-    public record Evt(SimpleID AggregateID, Payload Payload) :
+    public record Evt(ID AggregateID, Payload Payload) :
             Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
     {
-        public static Evt New(SimpleEngineID engineID, Payload payload)
+        public static Evt New(EngineID engineID, Payload payload)
         {
             return new Evt(engineID, payload);
         }

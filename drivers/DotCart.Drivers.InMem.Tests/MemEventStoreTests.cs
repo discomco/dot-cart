@@ -15,7 +15,7 @@ public class MemEventStoreTests : IoCTests
     private IAggregate _agg;
     private IMemEventStoreDriver? _aggStore;
     private IID _engineId;
-    private NewSimpleID<SimpleEngineID> _newEngineID;
+    private NewID<EngineID> _newEngineID;
     private NewState<Engine> _newEngine;
 
     public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -28,7 +28,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var newEngineID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        var newEngineID = Container.GetRequiredService<NewID<EngineID>>();
         // THEN
         Assert.NotNull(newEngineID);
     }
@@ -89,7 +89,7 @@ public class MemEventStoreTests : IoCTests
         _aggStore = Container.GetRequiredService<IMemEventStoreDriver>();
         var builder = Container.GetRequiredService<IAggregateBuilder>();
         _agg = builder.Build();
-        _newEngineID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        _newEngineID = Container.GetRequiredService<NewID<EngineID>>();
         _engineId = _newEngineID();
     }
 

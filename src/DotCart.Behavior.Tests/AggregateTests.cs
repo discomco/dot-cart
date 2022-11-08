@@ -9,12 +9,12 @@ namespace DotCart.Behavior.Tests;
 
 public class AggregateTests : IoCTests
 {
-    private IID _engineID => SimpleEngineID.New();
+    private IID _engineID => EngineID.New();
     private IAggregate? _agg;
     private IAggregateBuilder? _builder;
     private NewState<Engine>? _newState;
     private IDomainPolicy? _startPolicy;
-    private NewSimpleID<SimpleEngineID> _newID;
+    private NewID<EngineID> _newID;
 
     public AggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
@@ -27,7 +27,7 @@ public class AggregateTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var newId = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        var newId = Container.GetRequiredService<NewID<EngineID>>();
         // THEN
         Assert.NotNull(newId);
     }
@@ -62,7 +62,7 @@ public class AggregateTests : IoCTests
         // GIVEN
         Assert.NotNull(_agg);
         // AND
-        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream((SimpleEngineID)_engineID, _newState);
+        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream((EngineID)_engineID, _newState);
         _agg.SetID(_engineID);
         _agg.Load(events);
         // THEN
@@ -133,7 +133,7 @@ public class AggregateTests : IoCTests
         _builder = Container.GetService<IAggregateBuilder>();
         _newState = Container.GetService<NewState<Engine>>();
         _agg = _builder.Build();
-        _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        _newID = Container.GetRequiredService<NewID<EngineID>>();
     }
 
     protected override void SetTestEnvironment()

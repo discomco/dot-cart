@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Contract.Tests.Engine;
 
-public class InitializeContractTests: ContractTests<SimpleEngineID,Initialize.Hope, Initialize.Fact, Initialize.Payload>
+public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, Initialize.Fact, Initialize.Payload>
 {
 
     protected NewState<TestEnv.Engine.Schema.Engine> NewEngine;
