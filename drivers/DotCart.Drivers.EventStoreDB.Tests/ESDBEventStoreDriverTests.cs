@@ -9,6 +9,7 @@ using DotCart.TestKit;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Constants = DotCart.Behavior.Constants;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
@@ -25,7 +26,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     private IAggregateBuilder _aggregateBuilder;
 
     [Fact]
-    public void ShouldResolveESDBWriterClient()
+    public void ShouldResolveESDBEventSourcingClient()
     {
         // GIVEN
         Assert.NotNull(Container);
@@ -65,7 +66,8 @@ public class ESDBEventStoreDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var agg = Container.GetRequiredService<IAggregate>();
+        var aggBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        var agg = aggBuilder.Build();
         // THEN
         Assert.NotNull(agg);
     }
@@ -167,6 +169,19 @@ public class ESDBEventStoreDriverTests : IoCTests
         // THEN
         Assert.NotNull(res);
     }
+
+    // [Fact]
+    // public async Task ShouldLoadAggregate()
+    // {
+    //     // GIVEN
+    //     Assert.NotNull(_aggregate);
+    //     Assert.NotNull(_eventStoreDriver);
+    //     await _eventStoreDriver.LoadAsync(_aggregate);
+    //     Assert.False(_aggregate.Version == Constants.NewAggregateVersion);
+    // }
+    
+    
+    
     
 
     public ESDBEventStoreDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)

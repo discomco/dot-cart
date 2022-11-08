@@ -6,6 +6,14 @@ using Serilog;
 
 namespace DotCart.Behavior;
 
+
+public static class Constants
+{
+    public const long NewAggregateVersion = -1;
+}
+
+
+
 public delegate IAggregate AggCtor();
 
 public delegate IAggregate AggBuilder(AggCtor newAgg);
@@ -30,17 +38,17 @@ public interface IAggregate
     IState GetState();
 }
 
-public delegate IEnumerable<IEvt> TryCmdFunc<in TCmd>(IState state, ICmd cmd)
-    where TCmd : ICmd;
-
-public delegate IState ApplyEvtFunc<TID, in TEvt>(IState state, TEvt evt)
-    where TEvt : IEvt;
+// public delegate IEnumerable<IEvt> TryCmdFunc<in TCmd>(IState state, ICmd cmd)
+//     where TCmd : ICmd;
+//
+// public delegate IState ApplyEvtFunc<TID, in TEvt>(IState state, TEvt evt)
+//     where TEvt : IEvt;
 
 public abstract class Aggregate<TState> : IAggregate
     where TState : IState
 {
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
-    private const long _newVersion = -1;
+    
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
 
     private readonly object execMutex = new();
@@ -53,7 +61,7 @@ public abstract class Aggregate<TState> : IAggregate
         NewState<TState> newState)
     {
         _state = newState();
-        Version = _newVersion;
+        Version = Constants.NewAggregateVersion;
     }
 
     public bool KnowsApply(string evtType)
