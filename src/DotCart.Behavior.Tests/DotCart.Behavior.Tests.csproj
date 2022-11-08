@@ -24,6 +24,7 @@
     <ItemGroup>
       <ProjectReference Include="..\DotCart.Behavior\DotCart.Behavior.csproj" />
       <ProjectReference Include="..\DotCart.TestEnv\DotCart.TestEnv.csproj" />
+      <ProjectReference Include="..\DotCart.TestFirst\DotCart.TestFirst.csproj" />
       <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 

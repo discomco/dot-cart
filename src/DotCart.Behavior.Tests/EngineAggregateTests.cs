@@ -1,71 +1,23 @@
 using DotCart.Schema;
 using DotCart.TestEnv.Engine;
 using DotCart.TestEnv.Engine.Schema;
+using DotCart.TestFirst;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
+
 namespace DotCart.Behavior.Tests;
 
-public class AggregateTests : IoCTests
+public class EngineAggregateTests : AggregateTests<EngineID, Engine>
 {
-    private IID _engineID => EngineID.New();
-    private IAggregate? _agg;
-    private IAggregateBuilder? _builder;
-    private NewState<Engine>? _newState;
     private IDomainPolicy? _startPolicy;
-    private NewID<EngineID> _newID;
 
-    public AggregateTests(ITestOutputHelper output, IoCTestContainer container)
+    public EngineAggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
     {
     }
 
-    [Fact]
-    public void ShouldResolveIDCtor()
-    {
-        // GIVEN
-        Assert.NotNull(Container);
-        // WHEN
-        var newId = Container.GetRequiredService<NewID<EngineID>>();
-        // THEN
-        Assert.NotNull(newId);
-    }
-
-    [Fact]
-    public void ShouldResolveAggregateBuilder()
-    {
-        // GIVEN
-        Assert.NotNull(Container);
-        // WHEN
-        var aggBuilder = Container.GetRequiredService<IAggregateBuilder>();
-        // THEN
-        Assert.NotNull(aggBuilder);
-    }
-    
-
-    [Fact]
-    public void ShouldBeAbleToCreateEngineID()
-    {
-        // GIVEN
-        Assert.NotNull(_newID);
-        // WHEN
-        var ID = _newID();
-        // THEN
-        Assert.NotNull(ID);
-    }
-
-    [Fact]
-    public void ShouldResolveBehavior()
-    {
-        // GIVEN
-        // WHEN
-        var agg = Container.GetService<IAggregate>();
-        // THEN
-        Assert.NotNull(agg);
-        var state = agg.GetState();
-        Assert.NotNull(state);
-    }
 
     [Fact]
     public void ShouldLoadEvents()
@@ -75,8 +27,8 @@ public class AggregateTests : IoCTests
         _agg = _builder.Build();
         Assert.NotNull(_agg);
         // AND
-        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream((EngineID)_engineID, _newState);
-        _agg.SetID(_engineID);
+        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream(_ID, _newState);
+        _agg.SetID(_ID);
         _agg.Load(events);
         // THEN
         Assert.Equal(2, _agg.Version);
@@ -87,13 +39,15 @@ public class AggregateTests : IoCTests
     public async Task ShouldExecuteInitializeCmd()
     {
         // GIVEN
+        Assert.NotNull(_builder);
+        _agg = _builder.Build();
         Assert.NotNull(_agg);
-        Assert.NotNull(_engineID);
-        _agg.SetID(_engineID);
+        Assert.NotNull(_ID);
+        _agg.SetID(_ID);
         // WHEN
         var eng = _newState();
-        eng.Id = _engineID.Id();
-        var cmd = TestEnv.Engine.Initialize.Cmd.New(_engineID,
+        eng.Id = _ID.Id();
+        var cmd = TestEnv.Engine.Initialize.Cmd.New(_ID,
             TestEnv.Engine.Initialize.Payload.New(eng));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Engine>();
@@ -113,7 +67,7 @@ public class AggregateTests : IoCTests
     {
         // GIVEN
         await ShouldExecuteInitializeCmd();
-        var startCmd = Start.Cmd.New(_engineID, Start.Payload.New);
+        var startCmd = Start.Cmd.New(_ID, Start.Payload.New);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Engine>();
@@ -141,13 +95,14 @@ public class AggregateTests : IoCTests
         Assert.True(knowsIt);
     }
 
-    protected override void Initialize()
-    {
-        _builder = Container.GetService<IAggregateBuilder>();
-        _newState = Container.GetService<NewState<Engine>>();
-        _agg = _builder.Build();
-        _newID = Container.GetRequiredService<NewID<EngineID>>();
-    }
+    // protected override void Initialize()
+    // { 
+    //     base.Initialize();
+    //     // _builder = Container.GetService<IAggregateBuilder>();
+    //     // _newState = Container.GetService<NewState<Engine>>();
+    //     // _agg = _builder.Build();
+    //     // _newID = Container.GetRequiredService<NewID<EngineID>>();
+    // }
 
     protected override void SetTestEnvironment()
     {
@@ -155,7 +110,8 @@ public class AggregateTests : IoCTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        var s = services
+
+        services
             .AddEngineIDCtor()
             .AddEngineAggregate()
             .AddAggregateBuilder()
