@@ -12,45 +12,24 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine;
 
-public partial class Aggregate :
-    ITry<Start.Cmd>,
-    IApply<Schema.Engine, Start.Evt>
-{
-    public IState Apply(Schema.Engine state, Start.Evt evt)
-    {
-        state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
-        return state;
-    }
-
-    public IFeedback Verify(Start.Cmd cmd)
-    {
-        var fbk = Feedback.Empty;
-        try
-        {
-            Guard.Against.StateIsNotInitialized(_state);
-        }
-        catch (Exception e)
-        {
-            fbk.SetError(e.AsError());
-        }
-
-        return fbk;
-    }
-
-    public IEnumerable<IEvt> Raise(Start.Cmd cmd)
-    {
-        return new[]
-        {
-            Start.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
-        };
-    }
-}
 
 public static partial class Inject
 {
+
+    public static IServiceCollection AddStartBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddEngineAggregate()
+            .AddAggregateBuilder()
+            .AddTransient<ITry, Start.TryCmd>()
+            .AddTransient<IApply, Start.ApplyEvt>();
+    }
+    
+    
     public static IServiceCollection AddStartOnInitializedPolicy(this IServiceCollection services)
     {
         return services
+            .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddTransient(_ => Start.evt2Cmd)
             .AddTransient<IDomainPolicy, Start.StartOnInitializedPolicy>();
@@ -186,6 +165,46 @@ public static class Start
 
     # region Behavior
 
+
+    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    {
+        public override Schema.Engine Apply(Schema.Engine state, Evt evt)
+        {
+            state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
+            return state;
+        }
+    }
+
+
+    public class TryCmd : TryCmd<Cmd>, ITry<Cmd>
+    {
+       
+        public override IFeedback Verify(Start.Cmd cmd)
+        {
+            var fbk = Feedback.Empty;
+            try
+            {
+                Guard.Against.StateIsNotInitialized((Schema.Engine)Aggregate.GetState());
+            }
+            catch (Exception e)
+            {
+                fbk.SetError(e.AsError());
+            }
+
+            return fbk;
+        }
+
+        public override IEnumerable<IEvt> Raise(Start.Cmd cmd)
+        {
+            return new[]
+            {
+                Start.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
+            };
+        }
+
+    }
+
+
     internal static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
 
     public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
@@ -209,6 +228,7 @@ public static class Start
     {
     }
 
+    [Topic(CmdTopic)]
     public record Cmd
         (IID AggregateID, Payload Payload) :
             Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd

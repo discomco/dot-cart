@@ -7,6 +7,8 @@ public delegate bool SpecFunc<in TState, TCmd>(TState state) where TState : ISta
 
 public interface ITry
 {
+    string CmdType { get; }
+    void SetAggregate(IAggregate aggregate);
 }
 
 public interface ITry<in TCmd> : ITry
@@ -14,4 +16,10 @@ public interface ITry<in TCmd> : ITry
 {
     IFeedback Verify(TCmd cmd);
     IEnumerable<IEvt> Raise(TCmd cmd);
+}
+
+public interface ITry<in TCmd, TState> : ITry<TCmd>
+    where TCmd : ICmd
+    where TState : IState
+{
 }

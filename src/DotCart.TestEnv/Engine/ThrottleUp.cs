@@ -12,42 +12,21 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine;
 
-public partial class Aggregate :
-    ITry<ThrottleUp.Cmd>,
-    IApply<Schema.Engine, ThrottleUp.Evt>
-{
-    public IState Apply(Schema.Engine state, ThrottleUp.Evt evt)
-    {
-        state.Power += evt.Payload.Delta;
-        return state;
-    }
-
-    public IFeedback Verify(ThrottleUp.Cmd cmd)
-    {
-        var fbk = Feedback.New(cmd.AggregateID);
-        try
-        {
-            Guard.Against.EngineNotStarted(_state);
-        }
-        catch (Exception e)
-        {
-            fbk.SetError(e.AsError());
-        }
-        return fbk;
-    }
-
-    public IEnumerable<IEvt> Raise(ThrottleUp.Cmd cmd)
-    {
-        return new[]
-        {
-            ThrottleUp.Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
-        };
-    }
-}
 
 
 public static partial class Inject
 {
+
+
+    public static IServiceCollection AddThrottleUpBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddEngineAggregate()
+            .AddAggregateBuilder()
+            .AddTransient<ITry, ThrottleUp.TryCmd>()
+            .AddTransient<IApply, ThrottleUp.ApplyEvt>();
+    }
+    
     public static IServiceCollection AddThrottleUpEffects(this IServiceCollection services)
     {
         return services
@@ -105,6 +84,44 @@ public static class ThrottleUp
         
     }
 
+
+    public class TryCmd : TryCmd<Cmd>
+    {
+        public override IEnumerable<IEvt> Raise(Cmd cmd)
+        {
+            return new[]
+            {
+                Evt.New((SimpleEngineID)cmd.AggregateID, cmd.Payload)
+            };
+        }
+        
+
+        public override IFeedback Verify(ThrottleUp.Cmd cmd)
+        {
+            var fbk = Feedback.New(cmd.AggregateID);
+            try
+            {
+                Guard.Against.EngineNotStarted((Schema.Engine)Aggregate.GetState());
+            }
+            catch (Exception e)
+            {
+                fbk.SetError(e.AsError());
+            }
+            return fbk;
+        }
+    }
+
+    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    {
+        public override Schema.Engine Apply(Schema.Engine state, ThrottleUp.Evt evt)
+        {
+            state.Power += evt.Payload.Delta;
+            return state;
+        }
+    }
+
+
+    [Topic(CmdTopic)]
     public record Cmd(IID AggregateID, Payload Payload)
         : Cmd<Payload>(CmdTopic, AggregateID, Payload)
     {
@@ -115,6 +132,7 @@ public static class ThrottleUp
     }
     
     
+    [Topic(EvtTopic)]
     public record Evt(SimpleID AggregateID, Payload Payload)
         : Evt<Payload>(EvtTopic, AggregateID, Payload)
     {

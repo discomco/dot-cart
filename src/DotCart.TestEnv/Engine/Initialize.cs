@@ -12,44 +12,18 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestEnv.Engine;
 
-public partial class Aggregate
-    : ITry<Initialize.Cmd>,
-        IApply<Schema.Engine, Initialize.Evt>
-{
-    public IState Apply(Schema.Engine state, Initialize.Evt evt)
-    {
-        state.Id = evt.AggregateID.Id();
-        state.Status = EngineStatus.Initialized;
-        return state;
-    }
-
-    public IFeedback Verify(Initialize.Cmd cmd)
-    {
-        var fbk = Feedback.New(cmd.AggregateID);
-        try
-        {
-            Guard.Against.EngineInitialized(_state);
-        }
-        catch (Exception e)
-        {
-            fbk.SetError(e.AsError());
-            Console.WriteLine(e);
-        }
-
-        return fbk;
-    }
-
-    public IEnumerable<IEvt> Raise(Initialize.Cmd cmd)
-    {
-        return new[]
-        {
-            new Initialize.Evt((SimpleEngineID)cmd.AggregateID, Initialize.Payload.New(cmd.Payload.Engine))
-        };
-    }
-}
-
 public static partial class Inject
 {
+
+    public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddEngineAggregate()
+            .AddAggregateBuilder()
+            .AddTransient<ITry, Initialize.TryCmd>()
+            .AddTransient<IApply, Initialize.ApplyEvt>();
+    }
+    
     public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
     {
         return services
@@ -136,6 +110,43 @@ public static class Initialize
     #endregion
 
     #region Behavior Region =================================
+
+    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    {
+        public override Schema.Engine Apply(Schema.Engine state, Evt evt)
+        {
+            state.Id = evt.AggregateID.Id();
+            state.Status = EngineStatus.Initialized;
+            return state;
+        }
+    }
+
+    public class TryCmd : TryCmd<Cmd>
+    {
+        public override IFeedback Verify(Cmd cmd)
+        {
+            var fbk = Feedback.New(cmd.AggregateID);
+            try
+            {
+                Guard.Against.EngineInitialized((Schema.Engine)Aggregate.GetState());
+            }
+            catch (Exception e)
+            {
+                fbk.SetError(e.AsError());
+                Console.WriteLine(e);
+            }
+
+            return fbk;
+        }
+
+        public override IEnumerable<IEvt> Raise(Cmd cmd)
+        {
+            return new[]
+            {
+                new Evt((SimpleEngineID)cmd.AggregateID, Payload.New(cmd.Payload.Engine))
+            };
+        }
+    }
     public class Exception : System.Exception
     {
         public Exception()

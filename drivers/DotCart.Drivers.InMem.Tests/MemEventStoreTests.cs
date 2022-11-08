@@ -101,6 +101,9 @@ public class MemEventStoreTests : IoCTests
     {
         services
             .AddEngineAggregate()
+            .AddStartBehavior()
+            .AddInitializeBehavior()
+            .AddThrottleUpBehavior()
             .AddStartOnInitializedPolicy()
             .AddCmdHandler()
             .AddMemEventStore();

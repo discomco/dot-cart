@@ -14,6 +14,7 @@ public class AggregateTests : IoCTests
     private IAggregateBuilder? _builder;
     private NewState<Engine>? _newState;
     private IDomainPolicy? _startPolicy;
+    private NewSimpleID<SimpleEngineID> _newID;
 
     public AggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
@@ -21,11 +22,24 @@ public class AggregateTests : IoCTests
     }
 
     [Fact]
+    public void ShouldResolveIDCtor()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var newId = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
+        // THEN
+        Assert.NotNull(newId);
+    }
+    
+
+    [Fact]
     public void ShouldBeAbleToCreateEngineID()
     {
         // GIVEN
+        Assert.NotNull(_newID);
         // WHEN
-        var ID = TypedEngineID.New;
+        var ID = _newID();
         // THEN
         Assert.NotNull(ID);
     }
@@ -65,7 +79,7 @@ public class AggregateTests : IoCTests
         _agg.SetID(_engineID);
         // WHEN
         var eng = _newState();
-        eng.Id = _engineID.Value;
+        eng.Id = _engineID.Id();
         var cmd = TestEnv.Engine.Initialize.Cmd.New(_engineID,
             TestEnv.Engine.Initialize.Payload.New(eng));
         var feedback = await _agg.ExecuteAsync(cmd);
@@ -100,11 +114,26 @@ public class AggregateTests : IoCTests
         Output.WriteLine($"{state}");
     }
 
+    [Fact]
+    public void ShouldResolveStartTryCmd()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var builder = Container.GetRequiredService<IAggregateBuilder>();
+        var agg = builder.Build();
+        var topic = Topic.Get<Start.Cmd>();
+        var knowsIt = agg.KnowsTry(topic);
+        // THEN
+        Assert.True(knowsIt);
+    }
+
     protected override void Initialize()
     {
         _builder = Container.GetService<IAggregateBuilder>();
         _newState = Container.GetService<NewState<Engine>>();
         _agg = _builder.Build();
+        _newID = Container.GetRequiredService<NewSimpleID<SimpleEngineID>>();
     }
 
     protected override void SetTestEnvironment()
@@ -114,7 +143,11 @@ public class AggregateTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         var s = services
+            .AddEngineIDCtor()
             .AddEngineAggregate()
-            .AddAggregateBuilder();
+            .AddAggregateBuilder()
+            .AddStartBehavior()
+            .AddInitializeBehavior()
+            .AddThrottleUpBehavior();
     }
 }

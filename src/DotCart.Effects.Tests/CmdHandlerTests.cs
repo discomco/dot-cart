@@ -85,6 +85,7 @@ public class CmdHandlerTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddInitializeBehavior()
             .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddMemEventStore()

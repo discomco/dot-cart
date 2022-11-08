@@ -4,11 +4,13 @@ namespace DotCart.Behavior;
 
 public interface IApply
 {
+    void SetAggregate(IAggregate aggregate);
+    string EvtType { get;  }
 }
 
 public interface IApply<in TState, in TEvt> : IApply
     where TEvt : IEvt
     where TState : IState
 {
-    IState Apply(TState state, TEvt evt);
+    TState Apply<TState>(TState state, IEvt evt);
 }
