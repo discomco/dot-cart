@@ -68,6 +68,7 @@ public abstract class  AggregateTests<TID, TState> : IoCTests where TID :IID whe
     public void ShouldResolveBehavior()
     {
         // GIVEN
+        Assert.NotNull(Container);
         // WHEN
         var agg = Container.GetService<IAggregate>();
         // THEN

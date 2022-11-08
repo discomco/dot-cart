@@ -12,8 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\DotCart.Drivers\DotCart.Drivers.csproj" />
     <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
     <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
   </ItemGroup>
+
 
 </Project>

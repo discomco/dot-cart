@@ -28,4 +28,9 @@
         <ProjectReference Include="..\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <None Remove=".env" />
+      <EmbeddedResource Include=".env" />
+    </ItemGroup>
+
 </Project>

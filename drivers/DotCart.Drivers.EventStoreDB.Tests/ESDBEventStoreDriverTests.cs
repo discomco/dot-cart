@@ -24,7 +24,8 @@ public class ESDBEventStoreDriverTests : IoCTests
     private NewID<EngineID> _newID;
     private IAggregateBuilder _aggregateBuilder;
 
-    private bool _isCICD = true;
+    private static bool _isCICD => TestKit.Config.IsCiCD;
+
 
     [Fact]
     public void ShouldResolveESDBEventSourcingClient()
@@ -224,6 +225,7 @@ public class ESDBEventStoreDriverTests : IoCTests
 
     public ESDBEventStoreDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
+        
     }
 
     [Fact]
@@ -297,6 +299,7 @@ public class ESDBEventStoreDriverTests : IoCTests
 
     protected override void SetTestEnvironment()
     {
+        DotEnv.FromEmbedded();
     }
 
     protected override void InjectDependencies(IServiceCollection services)

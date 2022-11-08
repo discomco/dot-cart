@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\DotCart.Drivers\DotCart.Drivers.csproj" />
         <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
         <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
         <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj" />

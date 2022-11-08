@@ -7,7 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj"/>
+        <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
     </ItemGroup>
 
 </Project>

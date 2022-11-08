@@ -32,7 +32,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     public void Dispose()
     {
-        _client.Dispose();
+        
     }
 
     public void SetReactor(IReactor reactor)
@@ -95,7 +95,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         var storeEvents = new List<EventData>();
         storeEvents = events.Aggregate(storeEvents, (list, evt) =>
         {
-            list.Add(Evt2EventData(evt));
+            list.Add(evt.ToEventData());
             return list;
         });
         var writeResult = await _client.AppendToStreamAsync(ID.Id(), StreamState.Any, storeEvents);
@@ -103,20 +103,9 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     }
 
 
-    private EventData Evt2EventData(IEvt evt)
+    
+    public ValueTask DisposeAsync()
     {
-        try
-        {
-            var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
-            var typeName = evt.Topic;
-            ReadOnlyMemory<byte> metaData = evt.MetaData;
-            ReadOnlyMemory<byte> data = evt.Data;
-            return new EventData(eventId, typeName, data, metaData);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
+        return ValueTask.CompletedTask;
     }
 }

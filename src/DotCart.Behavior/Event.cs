@@ -5,8 +5,11 @@ namespace DotCart.Behavior;
 public record Event(ID AggregateID, string EventType, long Version, byte[] Data, byte[] MetaData, DateTime TimeStamp) : IEvt
 {
 
-
-    public static Event New<TPayload>(ID aggregateID, string eventType, TPayload payload, EventMeta meta, long version = Constants.NewAggregateVersion)
+    public static Event New<TPayload>(ID aggregateID,
+        string eventType,
+        TPayload payload,
+        EventMeta meta,
+        long version = Constants.NewAggregateVersion)
     {
         return new Event(
             aggregateID, 
@@ -17,6 +20,22 @@ public record Event(ID AggregateID, string EventType, long Version, byte[] Data,
             DateTime.UtcNow);
     }
     
+    public static Event New(ID aggregateID,
+        string eventType,
+        byte[] data,
+        byte[] meta,
+        long version,
+        DateTime timeStamp)
+    {
+        return new Event(
+            aggregateID, 
+            eventType, 
+            version, 
+            data, 
+            meta, 
+            timeStamp);
+    }
+
     
     public long Version { get; set; } = Version;
 

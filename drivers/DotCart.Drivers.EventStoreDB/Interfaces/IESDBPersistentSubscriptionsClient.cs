@@ -13,13 +13,28 @@ namespace DotCart.Drivers.EventStoreDB.Interfaces;
 /// </footer>
 public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
 {
-    public Task CreateAsync(
+    Task CreateAsync(
         string streamName,
         string groupName,
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default);
+        CancellationToken cancellationToken = default(CancellationToken));
+
+    Task CreateToAllAsync(
+        string groupName,
+        IEventFilter eventFilter,
+        PersistentSubscriptionSettings settings,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default(CancellationToken));
+
+    Task CreateToAllAsync(
+        string groupName,
+        PersistentSubscriptionSettings settings,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default(CancellationToken));
 
     Task DeleteAsync(
         string streamName,
@@ -28,8 +43,41 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default);
 
-    Task<PersistentSubscription> SubscribeAsync(
+    Task DeleteToAllAsync(
+        string groupName,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default(CancellationToken));
+
+    // Task<PersistentSubscription> SubscribeAsync(
+    //     string streamName,
+    //     string groupName,
+    //     Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
+    //     Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
+    //     UserCredentials? userCredentials = null,
+    //     int bufferSize = 10,
+    //     bool autoAck = true,
+    //     CancellationToken cancellationToken = default(CancellationToken));
+
+    // Task<PersistentSubscription> SubscribeAsync(
+    //     string streamName,
+    //     string groupName,
+    //     Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
+    //     Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
+    //     UserCredentials? userCredentials = null,
+    //     int bufferSize = 10,
+    //     CancellationToken cancellationToken = default);
+
+    Task<PersistentSubscription> SubscribeToStreamAsync(
         string streamName,
+        string groupName,
+        Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
+        System.Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
+        UserCredentials? userCredentials = null,
+        int bufferSize = 10,
+        CancellationToken cancellationToken = default);
+
+    Task<PersistentSubscription> SubscribeToAllAsync(
         string groupName,
         Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
         Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
@@ -37,8 +85,16 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         int bufferSize = 10,
         CancellationToken cancellationToken = default);
 
+   
     Task UpdateAsync(
         string streamName,
+        string groupName,
+        PersistentSubscriptionSettings settings,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default);
+
+    Task UpdateToAllAsync(
         string groupName,
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
