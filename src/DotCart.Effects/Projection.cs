@@ -7,7 +7,7 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Effects;
 
-public delegate TState Evt2State<TState, TEvt>(TState state, IEvt evt) where TState : IState where TEvt : IEvt;
+public delegate TState Evt2State<TState, TEvt>(TState state, Event evt) where TState : IState where TEvt : IEvt;
 
 public interface IProjection<TDriver, TState, in TEvt> : IReactor
     where TDriver : IProjectionDriver<TState>
@@ -55,7 +55,7 @@ public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<T
         return Run(async () =>
         {
             var state = await _projectionDriver.GetByIdAsync(evt.AggregateID.Id()).ConfigureAwait(false);
-            state = _evt2State(state, evt);
+            state = _evt2State(state, (Event)evt);
             await _projectionDriver.SetAsync(evt.AggregateID.Id(), state).ConfigureAwait(false);
         });
     }

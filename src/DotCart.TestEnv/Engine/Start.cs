@@ -85,7 +85,7 @@ public static class Start
     private const string HopeTopic = "engine.start.v1";
     private const string FactTopic = "engine.started.v1";
     private const string CmdTopic = "engine:start:v1";
-    private const string EvtTopic = "engine:started:v1";
+    public const string EvtTopic = "engine:started:v1";
 
 
     #region Schema
@@ -166,9 +166,9 @@ public static class Start
     # region Behavior
 
 
-    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    public class ApplyEvt : ApplyEvt<Schema.Engine, IEvt>
     {
-        public override Schema.Engine Apply(Schema.Engine state, Evt evt)
+        public override Schema.Engine Apply(Schema.Engine state, Event evt)
         {
             state.Status = (EngineStatus)((int)state.Status).SetFlag((int)EngineStatus.Started);
             return state;
@@ -194,20 +194,25 @@ public static class Start
             return fbk;
         }
 
-        public override IEnumerable<IEvt> Raise(Start.Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd)
         {
             return new[]
             {
-                Start.Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
+                Event.New(
+                    (EngineID)cmd.AggregateID, 
+                    EvtTopic,
+                    cmd.Payload, 
+                    Aggregate.GetMeta(),
+                    Aggregate.Version)
             };
         }
 
     }
 
 
-    internal static Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
+    internal static Evt2Cmd<Initialize.IEvt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
 
-    public class StartOnInitializedPolicy : DomainPolicy<Initialize.Evt, Cmd>
+    public class StartOnInitializedPolicy : DomainPolicy<Initialize.IEvt, Cmd>
     {
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
         // {
@@ -218,7 +223,7 @@ public static class Start
 
         public StartOnInitializedPolicy(
             ITopicMediator mediator,
-            Evt2Cmd<Initialize.Evt, Cmd> evt2Cmd)
+            Evt2Cmd<Initialize.IEvt, Cmd> evt2Cmd)
             : base(mediator, evt2Cmd)
         {
         }
@@ -239,28 +244,19 @@ public static class Start
         }
     }
 
+    [Topic(EvtTopic)]
     public interface IEvt : IEvt<Payload>
     {
-    }
-
-    [Topic(EvtTopic)]
-    public record Evt(ID AggregateID, Payload Payload) :
-            Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
-    {
-        public static Evt New(EngineID engineID, Payload payload)
-        {
-            return new Evt(engineID, payload);
-        }
     }
 
     #endregion
 
     #region Effects
 
-    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
-        evt => Fact.New(evt.AggregateID.Id(), evt.Payload);
+    internal static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
+        evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
 
-    internal static readonly Evt2State<Schema.Engine, Evt> _evt2State = (state, _) =>
+    internal static readonly Evt2State<Schema.Engine, IEvt> _evt2State = (state, _) =>
     {
         ((int)state.Status).SetFlag((int)EngineStatus.Started);
         return state;
@@ -293,11 +289,11 @@ public static class Start
     }
 
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
+    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, IEvt>
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Schema.Engine> projectionDriver,
-            Evt2State<Schema.Engine, Evt> evt2State) : base(mediator,
+            Evt2State<Schema.Engine, IEvt> evt2State) : base(mediator,
             projectionDriver,
             evt2State)
         {

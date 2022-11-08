@@ -9,7 +9,7 @@ public interface IDomainPolicy
     void SetBehavior(IAggregate aggregate);
 }
 
-public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(TEvt Evt) where TEvt : IEvt where TCmd : ICmd;
+public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(Event Evt) where TEvt : IEvt where TCmd : ICmd;
 
 public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt where TCmd : ICmd
 {
@@ -36,12 +36,12 @@ public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt
     {
         return Task.Run(async () =>
         {
-            var fbk = await Enforce((TEvt)arg);
+            var fbk = await Enforce((Event)arg);
             if (!fbk.IsSuccess) Log.Error(fbk.ErrState.ToString());
         });
     }
 
-    private Task<IFeedback> Enforce(TEvt evt)
+    private Task<IFeedback> Enforce(Event evt)
     {
         var cmd = _evt2Cmd(evt);
         return Aggregate.ExecuteAsync(cmd);

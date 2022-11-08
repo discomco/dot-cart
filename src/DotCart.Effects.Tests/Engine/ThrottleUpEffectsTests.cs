@@ -10,7 +10,7 @@ namespace DotCart.Effects.Tests.Engine;
 
 public class ThrottleUpEffectsTests: EffectsTests<
     TestEnv.Engine.Schema.Engine,
-    ThrottleUp.Evt,
+    ThrottleUp.IEvt,
     ThrottleUp.Cmd,
     ThrottleUp.Hope,
     ThrottleUp.Fact,

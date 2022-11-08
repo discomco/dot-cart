@@ -9,6 +9,7 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine.Effects;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using Constants = DotCart.Behavior.Constants;
 
 namespace DotCart.TestEnv.Engine;
 
@@ -111,9 +112,9 @@ public static class Initialize
 
     #region Behavior Region =================================
 
-    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    public class ApplyEvt : ApplyEvt<Schema.Engine, IEvt>
     {
-        public override Schema.Engine Apply(Schema.Engine state, Evt evt)
+        public override Schema.Engine Apply(Schema.Engine state, Event evt)
         {
             state.Id = evt.AggregateID.Id();
             state.Status = EngineStatus.Initialized;
@@ -139,11 +140,17 @@ public static class Initialize
             return fbk;
         }
 
-        public override IEnumerable<IEvt> Raise(Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd)
         {
             return new[]
             {
-                new Evt((EngineID)cmd.AggregateID, Payload.New(cmd.Payload.Engine))
+                Event.New(
+                    (EngineID)cmd.AggregateID,
+                    EvtTopic,
+                    cmd.Payload,
+                    Aggregate.GetMeta(),
+                    Aggregate.Version)
+                   // Evt(, Payload.New(cmd.Payload.Engine))
             };
         }
     }
@@ -170,25 +177,18 @@ public static class Initialize
             return new Exception(msg);
         }
     }
+    
+    [Topic(EvtTopic)]
     public interface IEvt : IEvt<Payload>
     {
     }
 
-    [Topic(EvtTopic)]
-    public record Evt(ID AggregateID, Payload Payload)
-        : Evt<Payload>(EvtTopic, AggregateID, Payload), IEvt
-    {
-        public static Evt New(ID engineID, Payload initPayload)
-        {
-            return new Evt(engineID, initPayload);
-        }
-    }
-
+    [Topic(CmdTopic)]
     public interface ICmd : ICmd<Payload>
     {
     }
 
-    [Topic(CmdTopic)]
+    [Topic(CmdTopic)]    
     public record Cmd(IID AggregateID, Payload Payload)
         : Cmd<Payload>(CmdTopic, AggregateID, Payload), ICmd
     {
@@ -201,8 +201,8 @@ public static class Initialize
 
     #region Effects Region ===========================================
 
-    internal static readonly Evt2Fact<Fact, Evt> _evt2Fact =
-        evt => Fact.New(evt.AggregateID.Id(), evt.Payload);
+    internal static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
+        evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
 
 
     internal static readonly Hope2Cmd<Cmd,Hope> _hope2Cmd =
@@ -220,7 +220,7 @@ public static class Initialize
             return Hope.New(aggID.Value, pl.ToBytes());
         };
 
-    public static Evt2State<Schema.Engine, Evt> _evt2State => (state, evt) =>
+    public static Evt2State<Schema.Engine, IEvt> _evt2State => (state, evt) =>
     {
         if (evt == null) return state;
         if (evt.GetPayload<Schema.Engine>() == null) return state;
@@ -253,11 +253,11 @@ public static class Initialize
     }
 
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
+    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, IEvt>
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Schema.Engine> projectionDriver,
-            Evt2State<Schema.Engine, Evt> evt2State) : base(mediator,
+            Evt2State<Schema.Engine, IEvt> evt2State) : base(mediator,
             projectionDriver,
             evt2State)
         {

@@ -67,8 +67,10 @@ public static partial class Inject
 
 public static class ThrottleUp
 {
-    public static Evt2Fact<Fact, Evt> _evt2Fact => 
-        evt => Fact.New(evt.AggregateID.Id(), Payload.New(evt.Payload.Delta));
+    public static Evt2Fact<Fact, IEvt> _evt2Fact =>
+        evt => Fact.New(
+            evt.AggregateID.Id(),
+            evt.GetPayload<Payload>());
     public static Hope2Cmd<Cmd, Hope> _hope2Cmd => 
         hope => Cmd.New(TypedEngineID.FromIdString(hope.AggId), hope.GetPayload<Payload>());
 
@@ -87,11 +89,15 @@ public static class ThrottleUp
 
     public class TryCmd : TryCmd<Cmd>
     {
-        public override IEnumerable<IEvt> Raise(Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd)
         {
             return new[]
             {
-                Evt.New((EngineID)cmd.AggregateID, cmd.Payload)
+                Event.New((EngineID)cmd.AggregateID,
+                    EvtTopic,
+                    cmd.Payload,
+                    Aggregate.GetMeta(),
+                    Aggregate.Version)
             };
         }
         
@@ -111,11 +117,11 @@ public static class ThrottleUp
         }
     }
 
-    public class ApplyEvt : ApplyEvt<Schema.Engine, Evt>
+    public class ApplyEvt : ApplyEvt<Schema.Engine, IEvt>
     {
-        public override Schema.Engine Apply(Schema.Engine state, ThrottleUp.Evt evt)
+        public override Schema.Engine Apply(Schema.Engine state, Event evt)
         {
-            state.Power += evt.Payload.Delta;
+            state.Power += evt.GetPayload<Payload>().Delta;
             return state;
         }
     }
@@ -130,18 +136,13 @@ public static class ThrottleUp
             return new Cmd(aggID, payload);
         }
     }
-    
-    
-    [Topic(EvtTopic)]
-    public record Evt(ID AggregateID, Payload Payload)
-        : Evt<Payload>(EvtTopic, AggregateID, Payload)
-    {
-        public static IEvt New(EngineID aggId, Payload payload)
-        {
-            return new Evt(aggId, payload);
-        }
-    }
 
+    [Topic(EvtTopic)]
+    public interface IEvt: IEvt<Payload>
+    {
+        
+    }
+    
 
     public static GenerateHope<Hope> _generateHope => () =>
     {
@@ -196,17 +197,17 @@ public static class ThrottleUp
         }
     }
 
-    internal static Evt2State<Schema.Engine, Evt> _evt2State = (state, evt) =>
+    internal static Evt2State<Schema.Engine, IEvt> _evt2State = (state, evt) =>
     {
         state.Power += evt.GetPayload<Payload>().Delta;
         return state;
     };
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, Evt>
+    public class ToMemDocProjection : Projection<EngineProjectionDriver, Schema.Engine, IEvt>
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Schema.Engine> projectionDriver,
-            Evt2State<Schema.Engine, Evt> evt2State) : base(mediator,
+            Evt2State<Schema.Engine, IEvt> evt2State) : base(mediator,
             projectionDriver,
             evt2State)
         {

@@ -8,7 +8,7 @@ public abstract class ApplyEvt<TState, TEvt> : IApply
     where TState: IState
 {
     protected IAggregate Aggregate;
-    public abstract TState Apply(TState state, TEvt evt);
+    public abstract TState Apply(TState state, Event evt);
     public void SetAggregate(IAggregate aggregate)
     {
         Aggregate = aggregate;

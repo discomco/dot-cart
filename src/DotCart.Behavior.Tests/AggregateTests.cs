@@ -31,6 +31,17 @@ public class AggregateTests : IoCTests
         // THEN
         Assert.NotNull(newId);
     }
+
+    [Fact]
+    public void ShouldResolveAggregateBuilder()
+    {
+        // GIVEN
+        Assert.NotNull(Container);
+        // WHEN
+        var aggBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        // THEN
+        Assert.NotNull(aggBuilder);
+    }
     
 
     [Fact]
@@ -60,6 +71,8 @@ public class AggregateTests : IoCTests
     public void ShouldLoadEvents()
     {
         // GIVEN
+        Assert.NotNull(_builder);
+        _agg = _builder.Build();
         Assert.NotNull(_agg);
         // AND
         var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream((EngineID)_engineID, _newState);

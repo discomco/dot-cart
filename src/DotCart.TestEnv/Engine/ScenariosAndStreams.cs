@@ -32,16 +32,19 @@ public static partial class Inject
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(EngineID id, NewState<Schema.Engine> newEngine)
+    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(EngineID ID, NewState<Schema.Engine> newEngine)
     {
         var initPayload = Initialize.Payload.New(newEngine());
-        var initEvt = Initialize.Evt.New(id, initPayload);
+        var initEvt = Event.New(ID, Initialize.EvtTopic, initPayload, EventMeta.New("", ID.Id()));
+        initEvt.Version = 0;
         // AND
         var startPayload = Start.Payload.New;
-        var startEvt = Start.Evt.New(id, startPayload);
+        var startEvt = Event.New(ID, Start.EvtTopic, startPayload, EventMeta.New("", ID.Id()));
+        startEvt.Version = 1;
         // AND
         var throttleUpPayload = ThrottleUp.Payload.New(5);
-        var throttleUpEvt = ThrottleUp.Evt.New(id, throttleUpPayload);
+        var throttleUpEvt = Event.New(ID, ThrottleUp.EvtTopic, throttleUpPayload, EventMeta.New("", ID.Id()));
+        throttleUpEvt.Version = 2;
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
         return new[] { initEvt, startEvt, throttleUpEvt };

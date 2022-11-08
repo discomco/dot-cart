@@ -36,6 +36,7 @@ public interface IAggregate
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
     IState GetState();
+    EventMeta GetMeta();
 }
 
 // public delegate IEnumerable<IEvt> TryCmdFunc<in TCmd>(IState state, ICmd cmd)
@@ -116,6 +117,11 @@ public abstract class Aggregate<TState> : IAggregate
         return _state;
     }
 
+    public EventMeta GetMeta()
+    {
+        return EventMeta.New(GetName(), GetID().Id());
+    }
+
 
     public IAggregate SetID(IID ID)
     {
@@ -128,7 +134,7 @@ public abstract class Aggregate<TState> : IAggregate
         try
         {
             Guard.Against.BehaviorIDNotSet(this);
-            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, ++Version));
+            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, evt.Version));
         }
         catch (Exception e)
         {
@@ -176,9 +182,12 @@ public abstract class Aggregate<TState> : IAggregate
 
     private async Task RaiseEvent(IEvt evt)
     {
-        if (Version >= evt.Version) return;
+        evt.Version = Version + 1;
+        // if (Version >= evt.Version) 
+        //     return;
         evt.SetTimeStamp(DateTime.UtcNow);
-        _state = ApplyEvent(_state, evt, ++Version);
+        _state = ApplyEvent(_state, evt, evt.Version );
+//        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
         //await _mediator.PublishAsync(evt.Topic, evt);
     }
@@ -188,10 +197,13 @@ public abstract class Aggregate<TState> : IAggregate
     {
         if (_uncommittedEvents.Any(x => Equals(x.MsgId, evt.MsgId)))
             return _state;
-        Version = version;
-        evt.Version = Version;
-        _appliedEvents.Add(evt);
+        Version = evt.Version;
+//        evt.Version = version;
+//        Version = evt.Version;
+        // evt.Version = Version;
         var applyFunc = _applyFuncs[evt.Topic];
-        return ((dynamic)applyFunc).Apply(state, (dynamic)evt);
+        var newState =  ((dynamic)applyFunc).Apply(state, (dynamic)evt);
+        _appliedEvents.Add(evt);
+        return newState;
     }
 }

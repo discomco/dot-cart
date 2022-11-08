@@ -9,7 +9,7 @@ namespace DotCart.Effects.Tests.Engine;
 
 public class StartEffectsTests : EffectsTests<
     TestEnv.Engine.Schema.Engine,
-    Start.Evt,
+    Start.IEvt,
     Start.Cmd,
     Start.Hope,
     Start.Fact,

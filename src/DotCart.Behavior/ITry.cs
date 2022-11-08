@@ -15,7 +15,7 @@ public interface ITry<in TCmd> : ITry
     where TCmd : ICmd
 {
     IFeedback Verify(TCmd cmd);
-    IEnumerable<IEvt> Raise(TCmd cmd);
+    IEnumerable<Event> Raise(TCmd cmd);
 }
 
 public interface ITry<in TCmd, TState> : ITry<TCmd>

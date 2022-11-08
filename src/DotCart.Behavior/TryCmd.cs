@@ -15,6 +15,6 @@ public abstract class TryCmd<TCmd> : ITry<TCmd>
         Aggregate = aggregate;
     }
     public abstract IFeedback Verify(TCmd cmd);
-    public abstract IEnumerable<IEvt> Raise(TCmd cmd);
+    public abstract IEnumerable<Event> Raise(TCmd cmd);
 }
 

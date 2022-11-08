@@ -1,6 +1,6 @@
 namespace DotCart;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class|AttributeTargets.Interface )]
 public class TopicAttribute : Attribute
 {
     public TopicAttribute(string id)

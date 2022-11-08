@@ -46,14 +46,8 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     public async Task LoadAsync(IAggregate aggregate)
     {
-        // var streamId = aggregate.ID.Value;
-        // var events = _client.ReadStreamAsync(Direction.Forwards, streamId, StreamPosition.Start);
-        // if (await events.ReadState == ReadState.StreamNotFound) return;
-        // await foreach (var evt in events)
-        // {
-        //     evt.Event.
-        //     
-        // }
+        var events = await ReadEventsAsync(aggregate.ID);
+        aggregate.Load(events);
     }
 
     public Task SaveAsync(IAggregate aggregate)
@@ -68,9 +62,11 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     {
         var ret = new List<Event>();
         var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Id(), StreamPosition.Start);
-        if (readResult==null) throw new ESDBEventStoreDriverException("ESDBClient returned no readResult.");
-        var state = await readResult.ReadState.ConfigureAwait(false);
-        if (state == ReadState.StreamNotFound) return ret;
+        if (readResult==null) 
+            throw new ESDBEventStoreDriverException("ESDBClient returned no readResult.");
+       var state = await readResult.ReadState.ConfigureAwait(false);
+       if (state == ReadState.StreamNotFound) 
+           return ret;
         return await GetStoreEventsAsync(readResult);
     }
 
@@ -80,11 +76,13 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         await foreach (var evt in readResult)
         {
             var eOut = new Event(
+                evt.Event.EventStreamId.IDFromIdString(),
                 evt.Event.EventType,
                 evt.Event.EventNumber.ToInt64(),
                 evt.Event.Data.ToArray(),
                 evt.Event.Metadata.ToArray(),
                 evt.Event.Created);
+            eOut.EventId = evt.Event.EventId.ToString();
             res.Add(eOut);
         }
 
@@ -107,10 +105,18 @@ public class ESDBEventStoreDriver : IEventStoreDriver
 
     private EventData Evt2EventData(IEvt evt)
     {
-        var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
-        var typeName = evt.Topic;
-        ReadOnlyMemory<byte> metaData = evt.MetaData;
-        ReadOnlyMemory<byte> data = evt.Data;
-        return new EventData(eventId, typeName, data, metaData);
+        try
+        {
+            var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
+            var typeName = evt.Topic;
+            ReadOnlyMemory<byte> metaData = evt.MetaData;
+            ReadOnlyMemory<byte> data = evt.Data;
+            return new EventData(eventId, typeName, data, metaData);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
     }
 }
