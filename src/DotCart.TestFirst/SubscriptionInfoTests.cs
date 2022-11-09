@@ -1,9 +1,10 @@
+using DotCart.Drivers;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.Drivers.EventStoreDB.Tests;
+namespace DotCart.TestFirst;
 
 public abstract class SubscriptionInfoTests<TInfo>: IoCTests where TInfo : ISubscriptionInfo
 {
