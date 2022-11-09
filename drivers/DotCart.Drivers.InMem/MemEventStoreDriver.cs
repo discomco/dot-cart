@@ -19,6 +19,7 @@ public static partial class Inject
         return services
             .AddTopicMediator()
             .AddMemProjector()
+            .AddSingleton<IEventStoreDriver, MemEventStoreDriver>()
             .AddSingleton<IMemEventStoreDriver, MemEventStoreDriver>()
             .AddSingleton<IAggregateStoreDriver, MemEventStoreDriver>();
     }

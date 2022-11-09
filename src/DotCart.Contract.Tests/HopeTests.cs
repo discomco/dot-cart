@@ -38,6 +38,6 @@ public class HopeTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStateCtor();
+            .AddEngineCtor();
     }
 }

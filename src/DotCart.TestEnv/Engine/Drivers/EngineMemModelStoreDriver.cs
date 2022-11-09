@@ -1,9 +1,8 @@
 using DotCart.Drivers.InMem;
-using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestEnv.Engine.Effects;
+namespace DotCart.TestEnv.Engine.Drivers;
 
 public static partial class Inject
 {

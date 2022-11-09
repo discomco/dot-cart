@@ -7,7 +7,7 @@ namespace DotCart.TestEnv.Engine.Schema;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddStateCtor(this IServiceCollection services)
+    public static IServiceCollection AddEngineCtor(this IServiceCollection services)
     {
         return services
 //            .AddTypedEngineIDCtor()

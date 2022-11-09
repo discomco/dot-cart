@@ -14,7 +14,6 @@ public static partial class Inject
     public static IServiceCollection AddESDBEventStoreDriver(this IServiceCollection services)
     {
         return services
-            .AddConfiguredESDBClients()
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
             .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
     }

@@ -24,5 +24,9 @@
       <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Engine" />
+    </ItemGroup>
+
 
 </Project>

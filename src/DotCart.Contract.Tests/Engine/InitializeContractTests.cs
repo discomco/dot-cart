@@ -33,7 +33,7 @@ public class InitializeContractTests: ContractTests<EngineID,Initialize.Hope, In
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStateCtor();
+            .AddEngineCtor();
     }
 
 

@@ -11,7 +11,7 @@ using Serilog;
 namespace DotCart.TestEnv.Engine.Drivers;
 
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddEngineESDBProjectorDriver(this IServiceCollection services)
     {

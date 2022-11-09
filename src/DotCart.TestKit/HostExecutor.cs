@@ -1,7 +1,18 @@
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace DotCart.TestKit;
+
+public static partial class Inject
+{
+    public static IServiceCollection AddHostExecutor(this IServiceCollection services)
+    {
+        return services?
+            .AddTransient<IHostExecutor, HostExecutor>();
+    }
+}
+
 
 public interface IHostExecutor
 {
@@ -29,6 +40,7 @@ public class HostExecutor : IHostExecutor
         catch (Exception ex)
         {
             _logger?.Error("An error occurred starting the application", ex);
+            throw;
         }
 
         return Task.CompletedTask;

@@ -19,6 +19,6 @@ public class EngineSchemaTests : SchemaTests<EngineID, Engine>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStateCtor();
+            .AddEngineCtor();
     }
 }

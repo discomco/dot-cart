@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
-public abstract class SubscriptionInfoTests<TSubscriptionInfo>: IoCTests where TSubscriptionInfo : ISubscriptionInfo
+public abstract class SubscriptionInfoTests<TInfo>: IoCTests where TInfo : ISubscriptionInfo
 {
 
     [Fact]
@@ -14,7 +14,7 @@ public abstract class SubscriptionInfoTests<TSubscriptionInfo>: IoCTests where T
         // GIVEN
         var groupName = string.Empty;
         // WHEN
-        groupName = GroupName.Get<TSubscriptionInfo>();
+        groupName = GroupName.Get<TInfo>();
         // THEN
         Assert.NotEmpty(groupName);
     }
@@ -25,7 +25,7 @@ public abstract class SubscriptionInfoTests<TSubscriptionInfo>: IoCTests where T
         // GIVEN
         var prefix = string.Empty;
         // WHEN
-        prefix = IDPrefix.Get<TSubscriptionInfo>();
+        prefix = IDPrefix.Get<TInfo>();
         // THEN
         Assert.NotEmpty(prefix);
     }

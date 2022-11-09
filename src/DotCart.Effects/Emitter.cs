@@ -31,10 +31,6 @@ public abstract class Emitter<TDriver, TEvt, TFact> : Reactor, IEmitter
         _emitterDriver = emitterDriver;
     }
 
-    public void SetSpoke(ISpoke spoke)
-    {
-        spoke.Inject(this);
-    }
 
     public override Task HandleAsync(IMsg msg)
     {
