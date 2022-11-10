@@ -69,6 +69,11 @@ public abstract class MemModelStoreDriver<TState> : IModelStoreDriver<TState> wh
         });
     }
 
+    public async Task<bool> HasData()
+    {
+        return InnerStore.Count > 0;
+    }
+
     public void Close()
     {
         

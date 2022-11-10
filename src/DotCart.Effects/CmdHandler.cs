@@ -10,7 +10,7 @@ namespace DotCart.Effects;
 
 public interface ICmdHandler
 {
-    Task<IFeedback> Handle(ICmd cmd);
+    Task<IFeedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default);
 }
 public static partial class Inject
 {
@@ -35,7 +35,7 @@ internal class CmdHandler : ICmdHandler
         _aggregateStoreDriver = aggregateStoreDriver;
     }
 
-    public async Task<IFeedback> Handle(ICmd cmd)
+    public async Task<IFeedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try
@@ -46,7 +46,7 @@ internal class CmdHandler : ICmdHandler
             _aggregate.SetID(aggId);
             
             await _aggregateStoreDriver
-                .LoadAsync(_aggregate)
+                .LoadAsync(_aggregate, cancellationToken)
                 .ConfigureAwait(false);
             
             fbk = await _aggregate
@@ -54,7 +54,7 @@ internal class CmdHandler : ICmdHandler
                 .ConfigureAwait(false);
             
             await _aggregateStoreDriver
-                .SaveAsync(_aggregate)
+                .SaveAsync(_aggregate, cancellationToken)
                 .ConfigureAwait(false);
         }
         catch (Exception e)
@@ -65,8 +65,8 @@ internal class CmdHandler : ICmdHandler
         return fbk;
     }
 
-    public void Dispose()
-    {
-        _aggregateStoreDriver.Dispose();
-    }
+    // public void Dispose()
+    // {
+    //     _aggregateStoreDriver.Dispose();
+    // }
 }

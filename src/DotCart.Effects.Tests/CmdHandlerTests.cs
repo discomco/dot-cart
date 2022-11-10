@@ -60,7 +60,7 @@ public class CmdHandlerTests : IoCTests
         var payload = TestEnv.Engine.Initialize.Payload.New(engine);
         var initCmd = TestEnv.Engine.Initialize.Cmd.New(engineID, payload);
         // WHEN
-        var fbk = await _cmdHandler.Handle(initCmd);
+        var fbk = await _cmdHandler.HandleAsync(initCmd);
         // THEN
         if (!fbk.IsSuccess)
         {

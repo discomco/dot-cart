@@ -27,7 +27,7 @@ internal sealed class MemProjector : IMemProjector
         _mediator = mediator;
     }
 
-    public Task Project(IEvt evt)
+    public Task Project(IEvt evt, CancellationToken cancellationToken)
     {
         return _mediator.PublishAsync(evt.Topic, evt);
     }
@@ -35,5 +35,5 @@ internal sealed class MemProjector : IMemProjector
 
 public interface IMemProjector
 {
-    Task Project(IEvt evt);
+    Task Project(IEvt evt, CancellationToken cancellationToken = default);
 }

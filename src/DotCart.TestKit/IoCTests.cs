@@ -7,6 +7,7 @@ namespace DotCart.TestKit;
 
 public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
 {
+    
     protected IoCTests(ITestOutputHelper output, IoCTestContainer container) : base(output)
     {
         Container = container;

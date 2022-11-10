@@ -32,14 +32,14 @@ public abstract class Emitter<TDriver, TEvt, TFact> : Reactor, IEmitter
     }
 
 
-    public override Task HandleAsync(IMsg msg)
+    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
     {
         return CompletedTask;
     }
 
     protected override Task StartReactingAsync(CancellationToken cancellationToken)
     {
-        return Run(() => { _mediator.Subscribe(Topic.Get<TEvt>(), Handler); }, cancellationToken);
+        return Run(() => { _mediator.SubscribeAsync(Topic.Get<TEvt>(), Handler); }, cancellationToken);
     }
 
     private Task Handler(IEvt evt)

@@ -10,7 +10,6 @@ public static partial class Inject
     public static IServiceCollection AddEngineCtor(this IServiceCollection services)
     {
         return services
-//            .AddTypedEngineIDCtor()
             .AddEngineIDCtor()
             .AddSingleton(Engine.Ctor);
     }
@@ -18,7 +17,7 @@ public static partial class Inject
 
 
 
-public record struct Engine : IState
+public record Engine : IState
 {
     public static readonly NewState<Engine> Ctor = () => new Engine();
     
@@ -27,7 +26,6 @@ public record struct Engine : IState
     public Engine()
     {
         Details = Details.New("New Engine");
-        Id = EngineID.New().Id();
         Status = EngineStatus.Unknown;
     }
 
@@ -47,6 +45,7 @@ public record struct Engine : IState
         Details = Details.New("New Engine");
     }
 
+    [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
     public string Id { get; set; }
     public EngineStatus Status { get; set; }
     public int Power { get; set; } = 0;

@@ -31,7 +31,7 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
             {
                 Thread.Sleep(500);
                 var hope = _generateHope();
-                await _reactor.HandleAsync(hope);
+                await _reactor.HandleAsync(hope, cancellationToken);
             }
         }, cancellationToken);
     }

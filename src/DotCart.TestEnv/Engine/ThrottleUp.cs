@@ -9,6 +9,7 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine.Drivers;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DotCart.TestEnv.Engine;
 
@@ -30,15 +31,15 @@ public static partial class Inject
     public static IServiceCollection AddThrottleUpEffects(this IServiceCollection services)
     {
         return services
-            .AddThrottleUpProjections()
+            .AddThrottledUpProjections()
             .AddThrottleUpEmitter()
             .AddThrottleUpResponder();
     }
 
-    public static IServiceCollection AddThrottleUpProjections(this IServiceCollection services)
+    public static IServiceCollection AddThrottledUpProjections(this IServiceCollection services)
     {
         return services
-            .AddMediator()
+            .AddTopicMediator()
             .AddSingleton<IProjectionDriver<Schema.Engine>, EngineProjectionDriver>()
             .AddEngineMemStore()
             .AddTransient(_ => ThrottleUp._evt2State)
@@ -55,7 +56,6 @@ public static partial class Inject
     {
         return services
             .AddTransient(_ => ThrottleUp._hope2Cmd)
-            .AddMemEventStore()
             .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddCmdHandler()
@@ -151,11 +151,13 @@ public static class ThrottleUp
         return Hope.New(engineID.Value, pl);
     };
 
+    [Topic(HopeTopic)]
     public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
     {
         public static Hope New(string aggId, Payload payload) => new(aggId, payload.ToBytes());
     }
 
+    [Topic(FactTopic)]
     public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
     {
         public static Fact New(string aggId, byte[] data) => new Fact(aggId, data);
@@ -188,16 +190,18 @@ public static class ThrottleUp
     
     public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
     {
-        public Responder(IResponderDriver<Hope> responderDriver,
+        public Responder(
+            IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd,Hope> hope2Cmd) : base(responderDriver,
+            Hope2Cmd<Cmd,Hope> hope2Cmd) : base(
+            responderDriver,
             cmdHandler,
             hope2Cmd)
         {
         }
     }
 
-    internal static Evt2State<Schema.Engine, IEvt> _evt2State = (state, evt) =>
+    internal static readonly Evt2State<Schema.Engine, IEvt> _evt2State = (state, evt) =>
     {
         state.Power += evt.GetPayload<Payload>().Delta;
         return state;

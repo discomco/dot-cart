@@ -30,6 +30,11 @@ public abstract class ProjectionDriver<TReadModel> : IProjectionDriver<TReadMode
         return _modelStoreDriver.GetByIdAsync(id);
     }
 
+    public Task<bool> HasData()
+    {
+        return _modelStoreDriver.HasData();
+    }
+
     public Task<TReadModel> SetAsync(string id, TReadModel state)
     {
         return _modelStoreDriver.SetAsync(id, state);

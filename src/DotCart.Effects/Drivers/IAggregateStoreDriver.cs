@@ -5,8 +5,8 @@ namespace DotCart.Effects.Drivers;
 
 public interface IAggregateStoreDriver : IDriver, IClose
 {
-    Task LoadAsync(IAggregate aggregate);
-    Task SaveAsync(IAggregate aggregate);
+    Task LoadAsync(IAggregate aggregate, CancellationToken cancellationToken = default);
+    Task SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default);
 }
 
 public interface IClose
@@ -16,7 +16,7 @@ public interface IClose
 
 public interface IEventStoreDriver : IAggregateStoreDriver
 {
-    Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID);
-    Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events);
+    Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default);
+    Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events, CancellationToken cancellationToken = default);
     
 }

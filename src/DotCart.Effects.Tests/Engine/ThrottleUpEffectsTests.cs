@@ -29,6 +29,7 @@ public class ThrottleUpEffectsTests: EffectsTests<
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddMemEventStore()
             .AddThrottleUpEffects();
     }
 }

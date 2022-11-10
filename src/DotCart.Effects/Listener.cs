@@ -31,11 +31,11 @@ public abstract class Listener<TDriver, TFact, TCmd> : Reactor, IListener
         _fact2Cmd = fact2Cmd;
     }
 
-    public override Task HandleAsync(IMsg msg)
+    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
     {
         var fact = (TFact)msg;
         var cmd = _fact2Cmd(fact);
-        return _cmdHandler.Handle(cmd);
+        return _cmdHandler.HandleAsync(cmd);
     }
 
 

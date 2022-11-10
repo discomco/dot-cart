@@ -8,7 +8,7 @@ public abstract class Reactor : BackgroundService, IReactor
     
     public bool IsRunning { get; private set; }
     
-    public abstract Task HandleAsync(IMsg msg);
+    public abstract Task HandleAsync(IMsg msg, CancellationToken cancellationToken);
     protected abstract Task StartReactingAsync(CancellationToken cancellationToken);
     protected abstract Task StopReactingAsync(CancellationToken cancellationToken);
     

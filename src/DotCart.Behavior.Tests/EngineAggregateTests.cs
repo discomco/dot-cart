@@ -11,7 +11,7 @@ namespace DotCart.Behavior.Tests;
 
 public class EngineAggregateTests : AggregateTests<EngineID, Engine>
 {
-    private IDomainPolicy? _startPolicy;
+    private IAggregatePolicy? _startPolicy;
 
     public EngineAggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)

@@ -9,6 +9,7 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine.Drivers;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace DotCart.TestEnv.Engine;
 
@@ -32,13 +33,13 @@ public static partial class Inject
             .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddTransient(_ => Start.evt2Cmd)
-            .AddTransient<IDomainPolicy, Start.StartOnInitializedPolicy>();
+            .AddTransient<IAggregatePolicy, Start.StartOnInitializedPolicy>();
     }
 
     public static IServiceCollection AddStartEffects(this IServiceCollection services)
     {
         return services
-            .AddStartedToMemDocProjection()
+            .AddStartedProjections()
             .AddStartEmitter()
             .AddStartResponder();
     }
@@ -49,9 +50,10 @@ public static partial class Inject
             .AddTransient(_ => Start._evt2Fact);
     }
 
-    public static IServiceCollection AddStartedToMemDocProjection(this IServiceCollection services)
+    public static IServiceCollection AddStartedProjections(this IServiceCollection services)
     {
         return services
+            .AddTopicMediator()
             .AddSingleton(_ => Start._evt2State)
             .AddEngineMemStore()
             .AddSingleton<IProjectionDriver<Schema.Engine>, EngineProjectionDriver>()
@@ -61,7 +63,6 @@ public static partial class Inject
     public static IServiceCollection AddStartResponder(this IServiceCollection services)
     {
         return services
-            .AddMemEventStore()
             .AddAggregateBuilder()
             .AddEngineAggregate()
             .AddStartOnInitializedPolicy()
@@ -212,7 +213,7 @@ public static class Start
 
     internal static Evt2Cmd<Initialize.IEvt, Cmd> evt2Cmd => evt => Cmd.New(evt.AggregateID, Payload.New);
 
-    public class StartOnInitializedPolicy : DomainPolicy<Initialize.IEvt, Cmd>
+    public class StartOnInitializedPolicy : AggregatePolicy<Initialize.IEvt, Cmd>
     {
         // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
         // {
@@ -279,9 +280,11 @@ public static class Start
 
     public class Responder : Responder<ResponderDriver, Hope, Cmd>
     {
-        public Responder(IResponderDriver<Hope> responderDriver,
+        public Responder(
+            IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(responderDriver,
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(
+            responderDriver,
             cmdHandler,
             hope2Cmd)
         {

@@ -6,7 +6,7 @@ namespace DotCart.Behavior;
 public interface ITopicPubSub<TMsg> where TMsg : IMsg
 {
     void Subscribe(string topic, Action<TMsg> handler);
-    void Subscribe(string topic, Func<TMsg, Task> handler);
+    void SubscribeAsync(string topic, Func<TMsg, Task> handler);
     Task PublishAsync(string topic, TMsg msg);
     Task UnsubscribeAsync(string topic, Func<IEvt, Task> handler);
 }
@@ -24,7 +24,7 @@ public abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
         GetHandlersOf(topic).Add(handler);
     }
 
-    public void Subscribe(string topic, Func<TMsg, Task> handler)
+    public void SubscribeAsync(string topic, Func<TMsg, Task> handler)
     {
         GetHandlersOf(topic).Add(handler);
     }

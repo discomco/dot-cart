@@ -38,9 +38,13 @@ public class MemStoreTests : IoCTests
         Assert.NotNull(_engModelStoreDriver);
         Assert.NotNull(_newEngine);
         var eng1 = _newEngine();
+        eng1.Id = EngineID.New().Id();
         eng1.Details = Details.New("Engine1", "The First Engine");
+        
         var eng2 = _newEngine();
+        eng2.Id = EngineID.New().Id();
         eng2.Details = Details.New("Engine2", "The Second Engine");
+        
         // WHEN
         Task.WaitAll(
             _engModelStoreDriver.SetAsync(eng1.Id, eng1),

@@ -31,7 +31,7 @@ public interface IAggregate
     long Version { get; }
     string Id();
     string GetName();
-    void InjectPolicies(IEnumerable<IDomainPolicy> policies);
+    void InjectPolicies(IEnumerable<IAggregatePolicy> policies);
     IEnumerable<IEvt> UncommittedEvents { get; }
     void Load(IEnumerable<IEvt>? events);
     void ClearUncommittedEvents();
@@ -95,7 +95,7 @@ public abstract class Aggregate<TState> : IAggregate
         return _tryFuncs.ContainsKey(cmdType);
     }
 
-    public void InjectPolicies(IEnumerable<IDomainPolicy> aggregatePolicies)
+    public void InjectPolicies(IEnumerable<IAggregatePolicy> aggregatePolicies)
     {
         foreach (var policy in aggregatePolicies) policy.SetBehavior(this);
     }

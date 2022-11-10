@@ -2,13 +2,9 @@
 
 namespace DotCart.Effects.Drivers;
 
-public interface IModelStoreDriver<TState> :
-    IClose,
-    IDisposable 
+
+
+public interface IModelStoreDriver<TState> : IProjectionDriver<TState>
     where TState : IState
 {
-    Task<TState> SetAsync(string id, TState doc);
-    Task<bool> DeleteAsync(string id);
-    Task<bool> Exists(string id);
-    Task<TState?> GetByIdAsync(string id);
 }

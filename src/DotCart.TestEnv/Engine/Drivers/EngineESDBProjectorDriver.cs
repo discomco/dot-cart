@@ -1,6 +1,7 @@
 using DotCart.Drivers;
 using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using DotCart.TestEnv.Engine.Schema;
@@ -16,9 +17,11 @@ public static partial class Inject
     public static IServiceCollection AddEngineESDBProjectorDriver(this IServiceCollection services)
     {
         return services
+            .AddProjector()
             .AddTransient(_ => 
                 new SubscriptionFilterOptions(
-                    StreamFilter.Prefix(IDPrefix.Get<IEngineSubscriptionInfo>())))
+                    StreamFilter.Prefix($"{IDPrefix.Get<IEngineSubscriptionInfo>()}{IDFuncs.PrefixSeparator}")))
+            .AddTransient<IProjectorDriver, EngineESDBProjectorDriver>()
             .AddTransient<IProjectorDriver<IEngineSubscriptionInfo>,EngineESDBProjectorDriver>();
 
     }
@@ -30,7 +33,6 @@ public static partial class Inject
 public interface IEngineSubscriptionInfo: ISubscriptionInfo {}
 
 public class EngineESDBProjectorDriver: ESDBProjectorDriver<IEngineSubscriptionInfo>
-    , IProjectorDriver<IEngineSubscriptionInfo>
 {
     public EngineESDBProjectorDriver(
         ILogger logger,

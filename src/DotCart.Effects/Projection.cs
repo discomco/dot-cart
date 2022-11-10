@@ -45,7 +45,7 @@ public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<T
         _evt2State = evt2State;
     }
 
-    public override Task HandleAsync(IMsg msg)
+    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
     {
         return CompletedTask;
     }
@@ -66,7 +66,7 @@ public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<T
         {
             try
             {
-                _mediator.Subscribe(Topic.Get<TEvt>(), Handler);
+                _mediator.SubscribeAsync(Topic.Get<TEvt>(), Handler);
             }
             catch (Exception e)
             {

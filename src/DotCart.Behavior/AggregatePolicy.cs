@@ -4,26 +4,26 @@ using Serilog;
 namespace DotCart.Behavior;
 
 
-public interface IDomainPolicy
+public interface IAggregatePolicy
 {
     void SetBehavior(IAggregate aggregate);
 }
 
 public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(Event Evt) where TEvt : IEvt where TCmd : ICmd;
 
-public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt where TCmd : ICmd
+public abstract class AggregatePolicy<TEvt, TCmd> : IAggregatePolicy where TEvt : IEvt where TCmd : ICmd
 {
     private readonly Evt2Cmd<TEvt, TCmd> _evt2Cmd;
     protected IAggregate? Aggregate;
 
-    protected DomainPolicy
+    protected AggregatePolicy
     (
         ITopicMediator mediator,
         Evt2Cmd<TEvt, TCmd> evt2Cmd
     )
     {
         _evt2Cmd = evt2Cmd;
-        mediator.Subscribe(Topic.Get<TEvt>(), HandleEvt);
+        mediator.SubscribeAsync(Topic.Get<TEvt>(), HandleEvtAsync);
     }
 
 
@@ -32,16 +32,16 @@ public abstract class DomainPolicy<TEvt, TCmd> : IDomainPolicy where TEvt : IEvt
         Aggregate = aggregate;
     }
 
-    private Task HandleEvt(IEvt arg)
+    private Task HandleEvtAsync(IEvt arg)
     {
         return Task.Run(async () =>
         {
-            var fbk = await Enforce((Event)arg);
+            var fbk = await EnforceAsync((Event)arg);
             if (!fbk.IsSuccess) Log.Error(fbk.ErrState.ToString());
         });
     }
 
-    private Task<IFeedback> Enforce(Event evt)
+    private Task<IFeedback> EnforceAsync(Event evt)
     {
         var cmd = _evt2Cmd(evt);
         return Aggregate.ExecuteAsync(cmd);

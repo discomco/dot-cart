@@ -20,13 +20,13 @@ public static partial class Inject
 internal class AggregateBuilder : IAggregateBuilder
 {
     private readonly IAggregate _aggregate;
-    private readonly IEnumerable<IDomainPolicy> _policies;
+    private readonly IEnumerable<IAggregatePolicy> _policies;
     private readonly IEnumerable<ITry> _tries;
     private readonly IEnumerable<IApply> _applies;
 
     public AggregateBuilder(
         IAggregate aggregate,
-        IEnumerable<IDomainPolicy> policies,
+        IEnumerable<IAggregatePolicy> policies,
         IEnumerable<ITry> tries,
         IEnumerable<IApply> applies)
     {

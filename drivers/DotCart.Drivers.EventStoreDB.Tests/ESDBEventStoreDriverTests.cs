@@ -24,7 +24,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     private NewID<EngineID> _newID;
     private IAggregateBuilder _aggregateBuilder;
 
-    private static bool _isCICD => TestKit.Config.IsCiCD;
+
 
 
     [Fact]
@@ -114,7 +114,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     [Fact]
     public async Task ShouldExecuteInitializeEngineScenario()
     {
-        if (_isCICD)
+        if (TestKit.Config.IsPipeline)
         {
             Assert.True(true);
             return;
@@ -128,7 +128,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         var res = true;
         foreach (var cmd in cmds)
         {
-            var fbk = await _cmdHandler.Handle(cmd);
+            var fbk = await _cmdHandler.HandleAsync(cmd);
             res = res && fbk.IsSuccess;
             Assert.NotNull(fbk);
             if (fbk.IsSuccess) continue;
@@ -183,12 +183,11 @@ public class ESDBEventStoreDriverTests : IoCTests
     [Fact]
     public async Task ShouldLoadAggregate()
     {
-        if (_isCICD)
+        if (TestKit.Config.IsPipeline)
         {
             Assert.True(true);
             return;
         }
-
         // GIVEN
         Assert.NotNull(_aggregate);
         Assert.NotNull(_eventStoreDriver);
@@ -198,7 +197,7 @@ public class ESDBEventStoreDriverTests : IoCTests
         var res = true;
         foreach (var cmd in scenario)
         {
-            var fbk = await _cmdHandler.Handle(cmd);
+            var fbk = await _cmdHandler.HandleAsync(cmd);
             if (!fbk.IsSuccess)
             {
                 Output.WriteLine($"{fbk.ErrState}");
@@ -316,7 +315,7 @@ public class ESDBEventStoreDriverTests : IoCTests
             .AddThrottleUpBehavior()
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()
             .AddSingleton<IEventStoreDriver, ESDBEventStoreDriver>();
-        if (_isCICD)
+        if (TestKit.Config.IsPipeline)
         {
             services.AddSingleton(_ => A.Fake<IESDBEventSourcingClient>());
         }

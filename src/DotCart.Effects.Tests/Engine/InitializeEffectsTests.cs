@@ -1,3 +1,4 @@
+using DotCart.Drivers.InMem;
 using DotCart.Effects.Drivers;
 using DotCart.TestEnv.Engine;
 using DotCart.TestFirst;
@@ -29,6 +30,7 @@ public class InitializeEffectsTests : EffectsTests<
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddMemEventStore()
             .AddInitializeEffects();
     }
 }

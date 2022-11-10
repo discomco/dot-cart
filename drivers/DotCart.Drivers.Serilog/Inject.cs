@@ -24,8 +24,9 @@ public static class Inject
     }
 
 
-    private static ILogger CreateSeriLogConsoleLogger(bool enableSelfLog = false)
+    public static ILogger CreateSeriLogConsoleLogger(bool enableSelfLog = false)
     {
+        var level = DotEnv.Get(EnVars.LOG_LEVEL_MIN);
         if (enableSelfLog)
         {
             SelfLog.Enable(msg => Debug.WriteLine(msg));
@@ -33,13 +34,14 @@ public static class Inject
         }
 
         Log.Logger = new LoggerConfiguration()
-            .MinimumLevel.Debug()
-            .MinimumLevel.Override("Microsoft", LogEventLevel.Information)
+//            .MinimumLevel.Verbose()
+            .MinimumLevel.Verbose()
+            .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .WriteTo.Console(LogEventLevel.Verbose,
-                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} [{Properties}]{NewLine}{Exception}")
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {NewLine}[{Properties}]{NewLine}{Exception}")
             .CreateLogger();
         return Log.Logger;
     }

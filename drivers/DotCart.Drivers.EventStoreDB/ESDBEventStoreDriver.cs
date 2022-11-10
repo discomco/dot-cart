@@ -43,13 +43,13 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     {
     }
 
-    public async Task LoadAsync(IAggregate aggregate)
+    public async Task LoadAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        var events = await ReadEventsAsync(aggregate.ID);
+        var events = await ReadEventsAsync(aggregate.ID, cancellationToken);
         aggregate.Load(events);
     }
 
-    public Task SaveAsync(IAggregate aggregate)
+    public Task SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
         var res = AppendEventsAsync(aggregate.ID, aggregate.UncommittedEvents);
         aggregate.ClearUncommittedEvents();
@@ -57,10 +57,17 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     }
 
 
-    public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
+    public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
     {
         var ret = new List<Event>();
-        var readResult = _client.ReadStreamAsync(Direction.Forwards, ID.Id(), StreamPosition.Start);
+        var readResult = _client.ReadStreamAsync(Direction.Forwards,
+            ID.Id(),
+            StreamPosition.Start,
+            long.MaxValue,
+            false,
+            null,
+            null,
+            cancellationToken);
         if (readResult==null) 
             throw new ESDBEventStoreDriverException("ESDBClient returned no readResult.");
        var state = await readResult.ReadState.ConfigureAwait(false);
@@ -69,7 +76,9 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         return await GetStoreEventsAsync(readResult);
     }
 
-    private static async Task<IEnumerable<IEvt>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult)
+
+    private static async Task<IEnumerable<IEvt>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult,
+        CancellationToken cancellationToken = default)
     {
         var res = new List<IEvt>();
         await foreach (var evt in readResult)
@@ -80,8 +89,10 @@ public class ESDBEventStoreDriver : IEventStoreDriver
                 evt.Event.EventNumber.ToInt64(),
                 evt.Event.Data.ToArray(),
                 evt.Event.Metadata.ToArray(),
-                evt.Event.Created);
-            eOut.EventId = evt.Event.EventId.ToString();
+                evt.Event.Created)
+            {
+                EventId = evt.Event.EventId.ToString()
+            };
             res.Add(eOut);
         }
 
@@ -89,7 +100,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     }
 
 
-    public async Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events)
+    public async Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events, CancellationToken cancellationToken = default)
     {
         var storeEvents = new List<EventData>();
         storeEvents = events.Aggregate(storeEvents, (list, evt) =>

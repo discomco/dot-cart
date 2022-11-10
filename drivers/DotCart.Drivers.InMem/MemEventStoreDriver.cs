@@ -4,6 +4,7 @@ using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.InMem;
 
@@ -54,9 +55,9 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
         IsClosed = true;
     }
 
-    public Task LoadAsync(IAggregate aggregate)
+    public Task LoadAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        return Task.Run(() =>
+        return Run(() =>
         {
             lock (loadMutex)
             {
@@ -64,15 +65,16 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
                 if (Streams.TryGetValue(aggregate.Id(), out evts))
                     aggregate.Load(evts);
             }
-        });
+        }, cancellationToken);
     }
 
-    public async Task SaveAsync(IAggregate aggregate)
+
+    public async Task SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
-        aggregate.ClearUncommittedEvents();
-        foreach (var evt in GetStream(aggregate.ID))
-            await _projector.Project(evt);
+            Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
+            aggregate.ClearUncommittedEvents();
+            foreach (var evt in GetStream(aggregate.ID))
+                await _projector.Project(evt, cancellationToken);
     }
 
     public IEnumerable<IEvt> GetStream(IID engineId)
@@ -90,12 +92,13 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
         _reactor = reactor;
     }
 
-    public Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID)
+
+    public Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events)
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

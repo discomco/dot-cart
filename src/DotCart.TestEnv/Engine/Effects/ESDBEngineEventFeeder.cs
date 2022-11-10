@@ -1,5 +1,4 @@
 using DotCart.Contract;
-using DotCart.Drivers.EventStoreDB;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
 using DotCart.Schema;
@@ -42,26 +41,27 @@ public class ESDBEngineEventFeeder : Reactor, IESDBEngineEventFeeder
     }
 
 
-    public override Task HandleAsync(IMsg msg)
+    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
     protected override async Task StartReactingAsync(CancellationToken cancellationToken)
     {
-        _logger.Debug("Starting EventFeeder");
+        _logger.Information("Starting EventFeeder");
         while (!cancellationToken.IsCancellationRequested)
         {
             var ID = _newId();
             var events = _newStream(ID, _newState);
-            Thread.Sleep(1000);
-            await _eventStore.AppendEventsAsync(ID, events);
+            Thread.Sleep(10_000);
+            _logger.Information($"Feeding Events");
+            await _eventStore.AppendEventsAsync(ID, events, cancellationToken);
         }
     }
 
     protected override Task StopReactingAsync(CancellationToken cancellationToken)
     {
-        _logger.Debug("Stopping EventFeeder");
+        _logger.Information("Stopping EventFeeder");
         return Task.CompletedTask;
     }
 }

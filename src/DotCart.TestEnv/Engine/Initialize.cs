@@ -9,7 +9,8 @@ using DotCart.Schema;
 using DotCart.TestEnv.Engine.Drivers;
 using DotCart.TestEnv.Engine.Schema;
 using Microsoft.Extensions.DependencyInjection;
-using Constants = DotCart.Behavior.Constants;
+using Serilog;
+
 
 namespace DotCart.TestEnv.Engine;
 
@@ -30,7 +31,7 @@ public static partial class Inject
         return services
             .AddInitializeResponder()
             .AddInitializedEmitter()
-            .AddInitializedToMemDocProjection();
+            .AddInitializedProjections();
     }
 
     public static IServiceCollection AddInitializedEmitter(this IServiceCollection services)
@@ -41,7 +42,7 @@ public static partial class Inject
     }
 
 
-    public static IServiceCollection AddInitializedToMemDocProjection(this IServiceCollection services)
+    public static IServiceCollection AddInitializedProjections(this IServiceCollection services)
     {
         return services
             .AddTopicMediator()
@@ -55,7 +56,6 @@ public static partial class Inject
     public static IServiceCollection AddInitializeResponder(this IServiceCollection services)
     {
         return services
-            .AddMemEventStore()
             .AddAggregateBuilder()
             .AddEngineAggregate()
             .AddCmdHandler()
