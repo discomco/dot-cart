@@ -14,7 +14,7 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
 
     public void Dispose()
     {
-        _clt?
+        _clt
             .Dispose();
     }
 

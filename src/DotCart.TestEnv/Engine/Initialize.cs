@@ -68,10 +68,10 @@ public static partial class Inject
 
 public static class Initialize
 {
-    public const string FactTopic = "test.engine.initialized.v1";
-    public const string HopeTopic = "test.engine.initialize.v1";
-    public const string CmdTopic = "test:engine:initialize:v1";
-    public const string EvtTopic = "test:engine:initialized:v1";
+    public const string FactTopic = "engine.initialized.v1";
+    public const string HopeTopic = "engine.initialize.v1";
+    public const string CmdTopic = "engine:initialize:v1";
+    public const string EvtTopic = "engine:initialized:v1";
 
     #region Contract Region =====================================
     public record Payload : IPayload

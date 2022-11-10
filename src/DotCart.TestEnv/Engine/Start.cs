@@ -215,17 +215,11 @@ public static class Start
 
     public class StartOnInitializedPolicy : AggregatePolicy<Initialize.IEvt, Cmd>
     {
-        // protected override async Task Enforce(DotCart.Behavior.IEvt evt)
-        // {
-        //     var cmd = Cmd.New(evt.AggregateID, Payload.New);
-        //     var fbk = await Aggregate.ExecuteAsync(cmd);
-        //     Console.WriteLine(fbk.GetPayload<Schema.Engine>());
-        // }
-
         public StartOnInitializedPolicy(
+            ILogger logger,
             ITopicMediator mediator,
             Evt2Cmd<Initialize.IEvt, Cmd> evt2Cmd)
-            : base(mediator, evt2Cmd)
+            : base(logger, mediator, evt2Cmd)
         {
         }
     }

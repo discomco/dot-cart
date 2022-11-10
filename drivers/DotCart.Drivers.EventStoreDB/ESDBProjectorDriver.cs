@@ -1,3 +1,4 @@
+using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Effects;
 using DotCart.Effects.Drivers;
@@ -11,10 +12,10 @@ using Serilog;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: ISubscriptionInfo
+public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : ISubscriptionInfo
 {
     private readonly IESDBPersistentSubscriptionsClient _client;
-    
+
     private readonly SubscriptionFilterOptions _filterOptions;
     private readonly AsyncRetryPolicy _retryPolicy;
 
@@ -32,7 +33,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: I
         _logger = logger;
         _client = client;
         _filterOptions = filterOptions;
-        _retryPolicy = retryPolicy 
+        _retryPolicy = retryPolicy
                        ?? retryPolicy
                        ?? Policy
                            .Handle<Exception>()
@@ -59,8 +60,10 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: I
             {
                 await _client.CreateToAllAsync(
                     GroupName.Get<TInfo>(),
-                    EventTypeFilter.Prefix(IDPrefix.Get<TInfo>()),
-                    new PersistentSubscriptionSettings(), null, null, cancellationToken);
+                    EventTypeFilter.Prefix($"{IDPrefix.Get<TInfo>()}"),
+                    new PersistentSubscriptionSettings(),
+                    null,
+                    null, cancellationToken);
             }
             catch (RpcException e)
             {
@@ -73,7 +76,6 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: I
             {
                 _logger.Error(e.InnerAndOuter());
             }
-            
         });
     }
 
@@ -101,15 +103,15 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: I
         });
     }
 
-    private void SubscriptionDropped(PersistentSubscription subscription, SubscriptionDroppedReason reason, Exception? exception)
+    private void SubscriptionDropped(PersistentSubscription subscription, SubscriptionDroppedReason reason,
+        Exception? exception)
     {
-        
     }
 
     private Task EventAppeared(
-        PersistentSubscription subscription, 
-        ResolvedEvent resolvedEvent, 
-        int? someInt, 
+        PersistentSubscription subscription,
+        ResolvedEvent resolvedEvent,
+        int? someInt,
         CancellationToken cancellationToken)
     {
         var evt = resolvedEvent.Event.ToEvent();
@@ -123,6 +125,4 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo: I
         _logger?.Information("EventStore: Stopped Listening");
         return Task.CompletedTask;
     }
-
-
 }

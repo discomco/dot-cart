@@ -99,7 +99,8 @@ public abstract class Aggregate<TState> : IAggregate
 
     public void InjectPolicies(IEnumerable<IAggregatePolicy> aggregatePolicies)
     {
-        foreach (var policy in aggregatePolicies) policy.SetBehavior(this);
+        foreach (var policy in aggregatePolicies) 
+            policy.SetBehavior(this);
     }
 
     public string GetName()
