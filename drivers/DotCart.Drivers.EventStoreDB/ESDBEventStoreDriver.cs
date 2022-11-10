@@ -5,6 +5,8 @@ using DotCart.Effects.Drivers;
 using DotCart.Schema;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Polly;
+using Polly.Retry;
 
 
 namespace DotCart.Drivers.EventStoreDB;
@@ -22,16 +24,25 @@ public static partial class Inject
 public class ESDBEventStoreDriver : IEventStoreDriver
 {
     private readonly IESDBEventSourcingClient _client;
+    private readonly AsyncRetryPolicy _retryPolicy;
     private IReactor _reactor;
+    private readonly int _maxRetries = Polly.Config.MaxRetries;
 
-    public ESDBEventStoreDriver(IESDBEventSourcingClient client)
+    public ESDBEventStoreDriver(
+        IESDBEventSourcingClient client,
+        AsyncRetryPolicy? retryPolicy = null
+    )
     {
         _client = client;
+        _retryPolicy = retryPolicy
+                       ?? Policy
+                           .Handle<Exception>()
+                           .WaitAndRetryAsync(_maxRetries,
+                               times => TimeSpan.FromMilliseconds(times * 100));
     }
 
     public void Dispose()
     {
-        
     }
 
     public void SetReactor(IReactor reactor)
@@ -49,10 +60,10 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         aggregate.Load(events);
     }
 
-    public Task SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
+    public async Task<AppendResult> SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        var res = AppendEventsAsync(aggregate.ID, aggregate.UncommittedEvents);
-        aggregate.ClearUncommittedEvents();
+        var res = await AppendEventsAsync(aggregate.ID, aggregate.UncommittedEvents, cancellationToken);
+        aggregate.ClearUncommittedEvents(res.NextExpectedVersion);
         return res;
     }
 
@@ -68,12 +79,9 @@ public class ESDBEventStoreDriver : IEventStoreDriver
             null,
             null,
             cancellationToken);
-        if (readResult==null) 
+        if (readResult == null)
             throw new ESDBEventStoreDriverException("ESDBClient returned no readResult.");
-       var state = await readResult.ReadState.ConfigureAwait(false);
-       if (state == ReadState.StreamNotFound) 
-           return ret;
-        return await GetStoreEventsAsync(readResult);
+        return await GetStoreEventsAsync(readResult, cancellationToken);
     }
 
 
@@ -81,41 +89,53 @@ public class ESDBEventStoreDriver : IEventStoreDriver
         CancellationToken cancellationToken = default)
     {
         var res = new List<IEvt>();
+        var state = await readResult.ReadState.ConfigureAwait(false);
+        if (state == ReadState.StreamNotFound) 
+            return res;
         await foreach (var evt in readResult)
         {
-            var eOut = new Event(
-                evt.Event.EventStreamId.IDFromIdString(),
-                evt.Event.EventType,
-                evt.Event.EventNumber.ToInt64(),
-                evt.Event.Data.ToArray(),
-                evt.Event.Metadata.ToArray(),
-                evt.Event.Created)
-            {
-                EventId = evt.Event.EventId.ToString()
-            };
-            res.Add(eOut);
+            res.Add(ToEvent(evt));
         }
-
+      
         return res;
     }
 
-
-    public async Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events, CancellationToken cancellationToken = default)
+    private static Event ToEvent(ResolvedEvent evt)
     {
-        var storeEvents = new List<EventData>();
-        storeEvents = events.Aggregate(storeEvents, (list, evt) =>
+        return new Event(
+            evt.Event.EventStreamId.IDFromIdString(),
+            evt.Event.EventType,
+            evt.Event.EventNumber.ToInt64(),
+            evt.Event.Data.ToArray(),
+            evt.Event.Metadata.ToArray(),
+            evt.Event.Created)
         {
-            list.Add(evt.ToEventData());
-            return list;
-        });
-        var writeResult = await _client.AppendToStreamAsync(ID.Id(), StreamState.Any, storeEvents);
-        return AppendResult.New(writeResult.NextExpectedStreamRevision.ToUInt64());
+            EventId = evt.Event.EventId.ToString()
+        };
     }
 
 
-    
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events,
+        CancellationToken cancellationToken = default)
+    {
+        return _retryPolicy.ExecuteAsync(async () =>
+        {
+            var storeEvents = new List<EventData>();
+            storeEvents = events.Aggregate(storeEvents, (list, evt) =>
+            {
+                list.Add(evt.ToEventData());
+                return list;
+            });
+            var writeResult = await _client.AppendToStreamAsync(ID.Id(),
+                StreamState.Any,
+                storeEvents,
+                cancellationToken: cancellationToken);
+            return AppendResult.New(writeResult.NextExpectedStreamRevision.ToUInt64());
+        });
+    }
+
     public ValueTask DisposeAsync()
     {
-        return ValueTask.CompletedTask;
+        return _client.DisposeAsync();
     }
 }

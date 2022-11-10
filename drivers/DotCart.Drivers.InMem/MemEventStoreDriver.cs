@@ -69,12 +69,14 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
     }
 
 
-    public async Task SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
+    public async Task<AppendResult> SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
             Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
             aggregate.ClearUncommittedEvents();
-            foreach (var evt in GetStream(aggregate.ID))
+            var evts = GetStream(aggregate.ID).ToArray();
+            foreach (var evt in evts)
                 await _projector.Project(evt, cancellationToken);
+            return AppendResult.New((ulong)(evts.Length+1));
     }
 
     public IEnumerable<IEvt> GetStream(IID engineId)

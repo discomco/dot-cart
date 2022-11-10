@@ -82,7 +82,7 @@ public class ESDBProjectorDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(_feeder);
         // WHEN
-        var source = new CancellationTokenSource(2_000);
+        var source = new CancellationTokenSource(1_000);
         
         var token = source.Token;
 

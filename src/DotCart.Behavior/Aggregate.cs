@@ -37,6 +37,7 @@ public interface IAggregate
     void ClearUncommittedEvents();
     IState GetState();
     EventMeta GetMeta();
+    void ClearUncommittedEvents(ulong resNextExpectedVersion);
 }
 
 // public delegate IEnumerable<IEvt> TryCmdFunc<in TCmd>(IState state, ICmd cmd)
@@ -57,6 +58,7 @@ public abstract class Aggregate<TState> : IAggregate
     protected TState _state;
     private bool _withAppliedEvents = false;
     private IImmutableDictionary<string,IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
+    private ulong _nextVersion;
 
     protected Aggregate(
         NewState<TState> newState)
@@ -120,6 +122,12 @@ public abstract class Aggregate<TState> : IAggregate
     public EventMeta GetMeta()
     {
         return EventMeta.New(GetName(), GetID().Id());
+    }
+
+    public void ClearUncommittedEvents(ulong resNextExpectedVersion)
+    {
+        ClearUncommittedEvents();
+        _nextVersion = resNextExpectedVersion;
     }
 
 
