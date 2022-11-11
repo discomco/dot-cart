@@ -1,10 +1,13 @@
-using System.ComponentModel;
-using DotCart.Behavior;
-using DotCart.Effects;
-using DotCart.Schema;
-using DotCart.TestEnv.Engine;
-using DotCart.TestEnv.Engine.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Context.Behaviors;
+using DotCart.Context.Effects;
+using DotCart.Context.Schemas;
 using DotCart.TestKit;
+using Engine.Client.Schema;
+using Engine.Context.ChangeRpm;
+using Engine.Context.Common;
+using Engine.Context.Initialize;
+using Engine.Context.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -15,8 +18,8 @@ public class MemEventStoreTests : IoCTests
     private IAggregate _agg;
     private IMemEventStoreDriver? _aggStore;
     private IID _engineId;
+    private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
     private NewID<EngineID> _newEngineID;
-    private NewState<Engine> _newEngine;
 
     public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
@@ -33,8 +36,6 @@ public class MemEventStoreTests : IoCTests
         Assert.NotNull(newEngineID);
     }
 
-    
-    
 
     [Fact]
     public void ShouldResolveMemEventStore()
@@ -57,7 +58,7 @@ public class MemEventStoreTests : IoCTests
         Assert.NotNull(_engineId);
         Assert.NotNull(_newEngine);
         // AND
-        var cmds = ScenariosAndStreams.InitializeScenario(_engineId, _newEngine);
+        var cmds = ScenariosAndStreams.InitializeScenario(_engineId);
         Assert.NotEmpty(cmds);
         _agg.SetID(_engineId);
         var fbks = await ScenariosAndStreams.RunScenario(_agg, cmds);
@@ -84,8 +85,7 @@ public class MemEventStoreTests : IoCTests
 
     protected override void Initialize()
     {
-
-        _newEngine = Container.GetRequiredService<NewState<Engine>>();
+        _newEngine = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
         _aggStore = Container.GetRequiredService<IMemEventStoreDriver>();
         var builder = Container.GetRequiredService<IAggregateBuilder>();
         _agg = builder.Build();
@@ -103,7 +103,7 @@ public class MemEventStoreTests : IoCTests
             .AddEngineAggregate()
             .AddStartBehavior()
             .AddInitializeBehavior()
-            .AddThrottleUpBehavior()
+            .AddChangeRpmBehavior()
             .AddStartOnInitializedPolicy()
             .AddCmdHandler()
             .AddMemEventStore();

@@ -1,5 +1,5 @@
 using System.Text;
-using DotCart.Behavior;
+using DotCart.Context.Behaviors;
 using EventStore.Client;
 using Newtonsoft.Json;
 
@@ -13,7 +13,7 @@ public static class SerializationHelper
         {
             var res = (IEvt)Activator.CreateInstance(Type.GetType(eventType));
             res.SetData(data);
-            
+
             // var settings = new JsonSerializerSettings
             // {
             //     ContractResolver = new PrivateSetterContractResolver()
@@ -23,7 +23,7 @@ public static class SerializationHelper
             //     Encoding.UTF8.GetString(data),
             //     Type.GetType(eventType), 
             //     settings)!;
-            
+
             return res;
 
             // // var settings = new JsonSerializerSettings {ContractResolver = new PrivateSetterContractResolver()};

@@ -13,7 +13,6 @@ public static partial class Inject
     }
 }
 
-
 public interface IHostExecutor
 {
     Task StartAsync(CancellationToken token = default);

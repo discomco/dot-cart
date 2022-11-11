@@ -1,21 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-    <IsPackable>true</IsPackable>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-  </PropertyGroup>
-  
-  <ItemGroup>
-    <PackageReference Include="xunit.assert" Version="2.4.2" />
-  </ItemGroup>
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\DotCart.Drivers\DotCart.Drivers.csproj" />
-    <ProjectReference Include="..\DotCart.Effects\DotCart.Effects.csproj" />
-    <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="xunit.assert" Version="2.4.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\DotCart.Client\DotCart.Client.csproj"/>
+        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj"/>
+    </ItemGroup>
 
 
 </Project>

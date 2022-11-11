@@ -86,5 +86,4 @@ internal class TestHelper : ITestHelper
         var dirPath = Path.GetDirectoryName(codeBasePath);
         return dirPath ?? string.Empty;
     }
-    
 }

@@ -1,3 +1,5 @@
+using DotCart.Core;
+
 namespace DotCart.Drivers.Polly;
 
 public static class Config

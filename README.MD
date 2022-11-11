@@ -5,10 +5,10 @@
 ## TABLE OF CONTENTS
 
 - [The DOT-CART Ecosystem](#the-dot-cart-ecosystem)
-  - [TABLE OF CONTENTS](#table-of-contents)
-  - [DESCRIPTION](#description)
-  - [MOTIVATIONS](#motivations)
-  - [DOCUMENTATION](#documentation)
+    - [TABLE OF CONTENTS](#table-of-contents)
+    - [DESCRIPTION](#description)
+    - [MOTIVATIONS](#motivations)
+    - [DOCUMENTATION](#documentation)
 
 ## DESCRIPTION
 

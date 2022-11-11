@@ -9,6 +9,6 @@ public static class AttributeExtensions
     {
         Guard.Against.Null(attributes, nameof(attributes));
         if (attributes.Length == 0)
-            throw new  Exception($"Attribute [{attributeName}] is not defined on type {className}");
+            throw new Exception($"Attribute [{attributeName}] is not defined on type {className}");
     }
 }

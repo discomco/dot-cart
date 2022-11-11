@@ -1,26 +1,28 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        
+
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="EventStore.Client.Grpc" Version="22.0.0" />
-        <PackageReference Include="EventStore.Client.Grpc.Operations" Version="22.0.0" />
-        <PackageReference Include="EventStore.Client.Grpc.UserManagement" Version="22.0.0" />
-        <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="22.0.0" />
-        <PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="22.0.0" />
-        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc" Version="22.0.0"/>
+        <PackageReference Include="EventStore.Client.Grpc.Operations" Version="22.0.0"/>
+        <PackageReference Include="EventStore.Client.Grpc.UserManagement" Version="22.0.0"/>
+        <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="22.0.0"/>
+        <PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="22.0.0"/>
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0"/>
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Drivers\DotCart.Drivers.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Client\DotCart.Client.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
     </ItemGroup>
 
 

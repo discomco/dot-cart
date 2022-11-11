@@ -1,13 +1,16 @@
-using DotCart.Drivers;
-using DotCart.Effects.Drivers;
-using DotCart.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Context.Drivers;
+using DotCart.Context.Effects.Drivers;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class SubscriptionInfoTests<TInfo>: IoCTests where TInfo : ISubscriptionInfo
+public abstract class SubscriptionInfoTests<TInfo> : IoCTests where TInfo : ISubscriptionInfo
 {
+    protected SubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldHaveGroupName()
@@ -29,10 +32,5 @@ public abstract class SubscriptionInfoTests<TInfo>: IoCTests where TInfo : ISubs
         prefix = IDPrefix.Get<TInfo>();
         // THEN
         Assert.NotEmpty(prefix);
-    }
-
-
-    protected SubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
     }
 }

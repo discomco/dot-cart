@@ -1,3 +1,5 @@
+using DotCart.Core;
+
 namespace DotCart.TestKit;
 
 public static class TestConstants

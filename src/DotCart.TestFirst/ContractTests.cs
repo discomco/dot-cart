@@ -1,6 +1,6 @@
-using Castle.Core.Internal;
-using DotCart.Contract;
-using DotCart.Schema;
+using DotCart.Client.Contracts;
+using DotCart.Client.Schemas;
+using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
@@ -12,7 +12,6 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     where TFact : IFact
     where TPayload : IPayload
 {
-
     protected NewID<TID> _newID;
 
     protected ContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -26,7 +25,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // WHEN
         var topic = Topic.Get<THope>();
         // THEN
-        Assert.False(topic.IsNullOrEmpty());
+        Assert.False(string.IsNullOrEmpty(topic));
     }
 
     [Fact]
@@ -36,7 +35,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // WHEN
         var topic = Topic.Get<TFact>();
         // THEN
-        Assert.False(topic.IsNullOrEmpty());
+        Assert.False(string.IsNullOrEmpty(topic));
     }
 
     [Fact]
@@ -86,12 +85,10 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // THEN
         Assert.IsType<TID>(ID);
     }
-    
-    
+
 
     protected override void Initialize()
     {
         _newID = Container.GetRequiredService<NewID<TID>>();
     }
-
 }

@@ -1,4 +1,4 @@
-﻿using DotCart.Behavior;
+﻿using DotCart.Context.Behaviors;
 
 namespace DotCart.Drivers.EventStoreDB;
 

@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using DotCart.Behavior;
-using DotCart.Effects;
-using DotCart.Effects.Drivers;
-using DotCart.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Context.Behaviors;
+using DotCart.Context.Effects;
+using DotCart.Context.Effects.Drivers;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 
@@ -71,22 +71,21 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
 
     public async Task<AppendResult> SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-            Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
-            aggregate.ClearUncommittedEvents();
-            var evts = GetStream(aggregate.ID).ToArray();
-            foreach (var evt in evts)
-                await _projector.Project(evt, cancellationToken);
-            return AppendResult.New((ulong)(evts.Length+1));
+        Streams = Streams.SetItem(aggregate.Id(), aggregate.UncommittedEvents.ToList());
+        aggregate.ClearUncommittedEvents();
+        var evts = GetStream(aggregate.ID).ToArray();
+        foreach (var evt in evts)
+            await _projector.Project(evt, cancellationToken);
+        return AppendResult.New((ulong)(evts.Length + 1));
     }
 
     public IEnumerable<IEvt> GetStream(IID engineId)
     {
-        return Streams[engineId.Value];
+        return Streams[engineId.Id()];
     }
 
     public void Dispose()
     {
-        
     }
 
     public void SetReactor(IReactor reactor)
@@ -100,7 +99,8 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
         throw new NotImplementedException();
     }
 
-    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events, CancellationToken cancellationToken = default)
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events,
+        CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
-using DotCart.Effects.Drivers;
-using DotCart.Schema;
+using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Schemas;
 
 namespace DotCart.Drivers.InMem;
 
@@ -76,6 +76,5 @@ public abstract class MemModelStoreDriver<TState> : IModelStoreDriver<TState> wh
 
     public void Close()
     {
-        
     }
 }

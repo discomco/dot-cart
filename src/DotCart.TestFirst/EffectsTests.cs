@@ -1,8 +1,8 @@
-using DotCart.Behavior;
-using DotCart.Contract;
-using DotCart.Effects;
-using DotCart.Effects.Drivers;
-using DotCart.Schema;
+using DotCart.Client.Contracts;
+using DotCart.Context.Behaviors;
+using DotCart.Context.Effects;
+using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
@@ -27,9 +27,9 @@ public abstract class EffectsTests<
 {
     protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
-    protected IAggregateStoreDriver AggregateStoreDriver;
-    protected TResponder _responder;
     private ICmdHandler _cmdHandler;
+    protected TResponder _responder;
+    protected IAggregateStoreDriver AggregateStoreDriver;
 
 
     protected EffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
@@ -65,6 +65,7 @@ public abstract class EffectsTests<
         }
         // GIVEN
     }
+
     [Fact]
     public void ShouldResolveReadModelStore()
     {
@@ -75,6 +76,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(rms);
     }
+
     [Fact]
     public void ShouldResolveCmdHandler()
     {
@@ -85,6 +87,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(cmdHandler);
     }
+
     [Fact]
     public void ShouldResolveToDocProjection()
     {
@@ -95,6 +98,7 @@ public abstract class EffectsTests<
         // THEN 
         Assert.NotNull(toDoc);
     }
+
     [Fact]
     public void ShouldResolveAggregateStore()
     {
@@ -105,6 +109,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(aggStore);
     }
+
     [Fact]
     public void ShouldResolveHope2Cmd()
     {
@@ -115,6 +120,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(h2c);
     }
+
     [Fact]
     public void ShouldResolveEvt2Fact()
     {
@@ -124,8 +130,8 @@ public abstract class EffectsTests<
         var e2f = Container.GetRequiredService<Evt2Fact<TFact, TEvt>>();
         // THEN
         Assert.NotNull(e2f);
-
     }
+
     [Fact]
     public void ShouldResolveAggregateBuilder()
     {
@@ -136,6 +142,7 @@ public abstract class EffectsTests<
         // THEN 
         Assert.NotNull(aggBuilder);
     }
+
     [Fact]
     public void ShouldResolveResponder()
     {
@@ -146,6 +153,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(ir);
     }
+
     [Fact]
     public void ShouldResolveEvt2State()
     {
@@ -156,6 +164,7 @@ public abstract class EffectsTests<
         // THEN
         Assert.NotNull(evt2State);
     }
+
     protected override void Initialize()
     {
         _responder = Container.GetHostedService<TResponder>();

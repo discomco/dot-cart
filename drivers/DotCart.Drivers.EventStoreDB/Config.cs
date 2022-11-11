@@ -1,3 +1,5 @@
+using DotCart.Core;
+
 namespace DotCart.Drivers.EventStoreDB;
 
 public static class Config
@@ -6,10 +8,10 @@ public static class Config
         => DotEnv.Get(EnVars.EVENTSTORE_URI) ?? Defaults.Uri;
 
     public static string UserName
-        => Environment.GetEnvironmentVariable(EnVars.EVENTSTORE_USER) ?? Defaults.UserName;
+        => DotEnv.Get(EnVars.EVENTSTORE_USER) ?? Defaults.UserName;
 
     public static string Password
-        => Environment.GetEnvironmentVariable(EnVars.EVENTSTORE_PWD) ?? Defaults.Password;
+        => DotEnv.Get(EnVars.EVENTSTORE_PWD) ?? Defaults.Password;
 
     /// <summary>
     ///     If true, make sure you have GRPC_DEFAULT_SSL_ROOTS_FILE_PATH environment variable set

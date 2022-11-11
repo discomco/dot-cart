@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Serilog.Debugging;

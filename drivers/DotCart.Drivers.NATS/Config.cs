@@ -1,3 +1,5 @@
+using DotCart.Core;
+
 namespace DotCart.Drivers.NATS;
 
 public static class Config

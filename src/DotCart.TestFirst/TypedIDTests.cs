@@ -1,14 +1,19 @@
-using DotCart.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class TypedIDTests<TID> : IoCTests where TID: IID
+public abstract class TypedIDTests<TID> : IoCTests where TID : IID
 {
+    protected NewTypedID<TID> NewTypedId;
 
-    protected NewTypedID<TID> NewTypedId; 
-    
+
+    protected TypedIDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
+
     [Fact]
     public void ShouldResolveIDCtor()
     {
@@ -19,8 +24,8 @@ public abstract class TypedIDTests<TID> : IoCTests where TID: IID
         // THEN 
         Assert.NotNull(ID);
     }
-    
-    
+
+
     [Fact]
     public void ShouldCreateID()
     {
@@ -64,22 +69,15 @@ public abstract class TypedIDTests<TID> : IoCTests where TID: IID
         // GIVEN
     }
 
+    protected override void Initialize()
+    {
+        NewTypedId = Container.GetRequiredService<NewTypedID<TID>>();
+    }
+
     private record PrefixLessTypedId : TypedID<PrefixLessTypedId>
     {
         public PrefixLessTypedId(string value) : base(value)
         {
         }
     }
-
-
-    protected TypedIDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
-    }
-
-    protected override void Initialize()
-    {
-        NewTypedId = Container.GetRequiredService<NewTypedID<TID>>();
-    }
-
-
 }

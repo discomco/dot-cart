@@ -1,3 +1,4 @@
+using DotCart.Core;
 using Serilog.Core;
 using Serilog.Events;
 

@@ -1,14 +1,16 @@
 using System.Text.Json;
-using DotCart.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Context.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class SchemaTests<TID, TState>: IoCTests
-  where TID : IID
-  where TState : IState
+public abstract class SchemaTests<TID, TState> : IoCTests
+    where TID : IID
+    where TState : IState
 {
+    private static string serializedState;
 
     protected NewID<TID> NewId;
     protected NewState<TState> NewState;
@@ -47,14 +49,13 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         Assert.NotNull(Container);
         Assert.NotNull(NewId);
         // WHEN
-        
+
         var ID = NewId();
         // THEN
         Assert.NotNull(ID);
     }
-    
-    
-    
+
+
     [Fact]
     public void ShouldCreateState()
     {
@@ -65,6 +66,7 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         // THEN
         Assert.NotNull(state);
     }
+
     [Fact]
     public void ShouldCreateDifferentStates()
     {
@@ -76,6 +78,7 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         // THEN
         Assert.NotSame(state1, state2);
     }
+
     [Fact]
     public void ShouldBeSerializable()
     {
@@ -88,10 +91,8 @@ public abstract class SchemaTests<TID, TState>: IoCTests
         Assert.NotEmpty(serializedState);
     }
 
-    private static string serializedState;
-    
     [Fact]
-    public  void ShouldStateBeDeserializable()
+    public void ShouldStateBeDeserializable()
     {
         // GIVEN
         ShouldBeSerializable();

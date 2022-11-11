@@ -74,7 +74,7 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
         UserCredentials? userCredentials = null, int bufferSize = 10, CancellationToken cancellationToken = default)
     {
-        return _clt.SubscribeToStreamAsync(streamName, 
+        return _clt.SubscribeToStreamAsync(streamName,
             groupName, eventAppeared, subscriptionDropped, userCredentials, bufferSize,
             cancellationToken);
     }
@@ -83,17 +83,38 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         string groupName,
         Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
         Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
-        UserCredentials? userCredentials = null, 
-        int bufferSize = 10, 
+        UserCredentials? userCredentials = null,
+        int bufferSize = 10,
         CancellationToken cancellationToken = default)
     {
         return _clt.SubscribeToAllAsync(
-            groupName, 
-            eventAppeared, 
-            subscriptionDropped, 
-            userCredentials, 
+            groupName,
+            eventAppeared,
+            subscriptionDropped,
+            userCredentials,
             bufferSize,
             cancellationToken);
+    }
+
+    public Task UpdateAsync(
+        string streamName,
+        string groupName,
+        PersistentSubscriptionSettings settings,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default)
+    {
+        return _clt.UpdateAsync(streamName, groupName, settings, deadline, userCredentials, cancellationToken);
+    }
+
+    public Task UpdateToAllAsync(
+        string groupName,
+        PersistentSubscriptionSettings settings,
+        TimeSpan? deadline = null,
+        UserCredentials? userCredentials = null,
+        CancellationToken cancellationToken = default)
+    {
+        return _clt.UpdateToAllAsync(groupName, settings, deadline, userCredentials, cancellationToken);
     }
 
     public Task<PersistentSubscription> SubscribeAsync(
@@ -113,26 +134,5 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
             userCredentials,
             bufferSize,
             cancellationToken);
-    }
-
-    public Task UpdateAsync(
-        string streamName, 
-        string groupName,
-        PersistentSubscriptionSettings settings,
-        TimeSpan? deadline = null,
-        UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default)
-    {
-        return _clt.UpdateAsync(streamName, groupName, settings, deadline, userCredentials, cancellationToken);
-    }
-
-    public Task UpdateToAllAsync(
-        string groupName, 
-        PersistentSubscriptionSettings settings, 
-        TimeSpan? deadline = null,
-        UserCredentials? userCredentials = null, 
-        CancellationToken cancellationToken = default)
-    {
-        return _clt.UpdateToAllAsync(groupName, settings, deadline, userCredentials, cancellationToken);
     }
 }

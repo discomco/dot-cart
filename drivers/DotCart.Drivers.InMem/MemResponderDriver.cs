@@ -1,13 +1,11 @@
-using DotCart.Contract;
-using DotCart.Effects;
-using DotCart.Effects.Drivers;
+using DotCart.Client;
+using DotCart.Client.Contracts;
+using DotCart.Context.Effects;
+using DotCart.Context.Effects.Drivers;
 using static System.Threading.Tasks.Task;
 
 
 namespace DotCart.Drivers.InMem;
-
-public delegate THope GenerateHope<out THope>()
-    where THope : IHope;
 
 /// <summary>
 ///     MemResponderDriver is an in-memory responder driver mimicker.
@@ -47,10 +45,11 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
         _reactor = reactor;
     }
 
-    protected abstract void Dispose(bool disposing);
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
     }
+
+    protected abstract void Dispose(bool disposing);
 }

@@ -11,6 +11,4 @@ public static partial class Inject
             .AddHostExecutor()
             .AddSingleton<ITestHelper, TestHelper>();
     }
-
-
 }

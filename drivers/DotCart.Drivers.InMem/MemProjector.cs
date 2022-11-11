@@ -1,4 +1,4 @@
-using DotCart.Behavior;
+using DotCart.Context.Behaviors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.InMem;

@@ -1,12 +1,17 @@
-using DotCart.Schema;
+using DotCart.Client.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class IDTests<TID>: IoCTests where TID: ID
+public abstract class IDTests<TID> : IoCTests where TID : ID
 {
     protected NewID<TID> _newID;
+
+
+    public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    {
+    }
 
     [Fact]
     public void ShouldResolveIDCtor()
@@ -47,16 +52,9 @@ public abstract class IDTests<TID>: IoCTests where TID: ID
         Assert.NotNull(newerID);
         Assert.Equal(newID.Id(), newerID.Id());
     }
-    
-    
-    public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
-    {
-    }
 
     protected override void Initialize()
     {
         _newID = Container.GetRequiredService<NewID<TID>>();
     }
-
-
 }

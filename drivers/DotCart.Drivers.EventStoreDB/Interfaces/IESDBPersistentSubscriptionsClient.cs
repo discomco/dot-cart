@@ -19,7 +19,7 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default(CancellationToken));
+        CancellationToken cancellationToken = default);
 
     Task CreateToAllAsync(
         string groupName,
@@ -27,14 +27,14 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default(CancellationToken));
+        CancellationToken cancellationToken = default);
 
     Task CreateToAllAsync(
         string groupName,
         PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default(CancellationToken));
+        CancellationToken cancellationToken = default);
 
     Task DeleteAsync(
         string streamName,
@@ -47,7 +47,7 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         string groupName,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
-        CancellationToken cancellationToken = default(CancellationToken));
+        CancellationToken cancellationToken = default);
 
     // Task<PersistentSubscription> SubscribeAsync(
     //     string streamName,
@@ -72,7 +72,7 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         string streamName,
         string groupName,
         Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared,
-        System.Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
+        Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
         UserCredentials? userCredentials = null,
         int bufferSize = 10,
         CancellationToken cancellationToken = default);
@@ -85,7 +85,7 @@ public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
         int bufferSize = 10,
         CancellationToken cancellationToken = default);
 
-   
+
     Task UpdateAsync(
         string streamName,
         string groupName,

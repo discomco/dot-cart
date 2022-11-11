@@ -1,17 +1,18 @@
-using DotCart.Behavior;
-using DotCart.Schema;
+using DotCart.Client.Schemas;
+using DotCart.Context.Behaviors;
+using DotCart.Context.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class  AggregateTests<TID, TState> : IoCTests where TID :IID where TState :IState
+public abstract class AggregateTests<TID, TState> : IoCTests where TID : IID where TState : IState
 {
-    protected TID _ID;
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
-    protected NewState<TState>? _newState;
+    protected TID _ID;
     protected NewID<TID> _newID;
+    protected NewState<TState>? _newState;
 
     protected AggregateTests(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
@@ -51,7 +52,7 @@ public abstract class  AggregateTests<TID, TState> : IoCTests where TID :IID whe
         // THEN
         Assert.NotNull(aggBuilder);
     }
-    
+
 
     [Fact]
     public void ShouldCreateID()
@@ -86,5 +87,4 @@ public abstract class  AggregateTests<TID, TState> : IoCTests where TID :IID whe
         _newID = Container.GetRequiredService<NewID<TID>>();
         _ID = _newID();
     }
-
 }
