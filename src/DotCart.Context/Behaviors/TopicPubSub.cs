@@ -1,4 +1,4 @@
-using DotCart.Client.Contracts;
+using DotCart.Contract.Dtos;
 using Serilog;
 
 namespace DotCart.Context.Behaviors;

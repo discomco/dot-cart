@@ -1,6 +1,6 @@
-﻿using DotCart.Client.Schemas;
-using DotCart.Context.Behaviors;
+﻿using DotCart.Context.Behaviors;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract.Schemas;
 
 namespace DotCart.Drivers.EventStoreDB;
 

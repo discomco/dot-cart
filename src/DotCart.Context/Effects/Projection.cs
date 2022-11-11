@@ -1,7 +1,7 @@
-using DotCart.Client.Contracts;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Schemas;
+using DotCart.Contract.Dtos;
 using DotCart.Core;
 using Serilog;
 using static System.Threading.Tasks.Task;

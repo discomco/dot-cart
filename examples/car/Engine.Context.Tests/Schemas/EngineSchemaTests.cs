@@ -1,7 +1,7 @@
 using DotCart.TestFirst;
 using DotCart.TestKit;
-using Engine.Client.Schema;
 using Engine.Context.Common.Schema;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 

@@ -1,4 +1,4 @@
-using DotCart.Client.Contracts;
+using DotCart.Contract.Dtos;
 
 namespace DotCart.Context.Effects;
 

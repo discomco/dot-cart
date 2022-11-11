@@ -1,5 +1,5 @@
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
@@ -29,11 +29,6 @@ public abstract record Evt<TPayload>(string Topic, ID AggregateID, TPayload Payl
     public byte[] MetaData { get; set; }
     public long Version { get; set; } = long.MaxValue;
 
-    public void SetData(byte[] data)
-    {
-        Data = data;
-    }
-
     public void SetVersion(long version)
     {
         Version = version;
@@ -47,5 +42,10 @@ public abstract record Evt<TPayload>(string Topic, ID AggregateID, TPayload Payl
     public T GetMetaPayload<T>()
     {
         return MetaData.FromBytes<T>();
+    }
+
+    public void SetData(byte[] data)
+    {
+        Data = data;
     }
 }

@@ -1,6 +1,6 @@
-using DotCart.Client.Schemas;
 using DotCart.Context.Drivers;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 

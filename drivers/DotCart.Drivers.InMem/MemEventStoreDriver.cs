@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract.Schemas;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 

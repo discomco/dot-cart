@@ -1,5 +1,5 @@
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 
 namespace DotCart.Context.Behaviors;
 

@@ -1,4 +1,4 @@
-using DotCart.Client.Contracts;
+using DotCart.Contract.Dtos;
 
 namespace DotCart.Context.Behaviors;
 
@@ -10,5 +10,5 @@ public interface IExecResult
 
 public record ExecResult(IFeedback Feedback, IEnumerable<IEvt> Events) : IExecResult
 {
-    public static ExecResult Empty => new(Client.Contracts.Feedback.Empty, Array.Empty<IEvt>());
+    public static ExecResult Empty => new(Contract.Dtos.Feedback.Empty, Array.Empty<IEvt>());
 }

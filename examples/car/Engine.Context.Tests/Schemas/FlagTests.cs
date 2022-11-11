@@ -1,6 +1,6 @@
 using DotCart.Context.Schemas;
 using DotCart.TestKit;
-using Engine.Client.Schema;
+using Engine.Contract.Schema;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Schemas;

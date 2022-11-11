@@ -24,6 +24,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\examples\car\Engine.Client\Engine.Client.csproj"/>
         <ProjectReference Include="..\..\examples\car\Engine.Context\Engine.Context.csproj"/>
+        <ProjectReference Include="..\..\examples\car\Engine.Contract\Engine.Contract.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestEnv\DotCart.TestEnv.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>

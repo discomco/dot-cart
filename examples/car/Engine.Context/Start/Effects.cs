@@ -1,13 +1,13 @@
-using DotCart.Client;
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Schemas;
+using DotCart.Contract;
+using DotCart.Contract.Schemas;
 using DotCart.Drivers.InMem;
-using Engine.Client.Schema;
-using Engine.Client.Start;
 using Engine.Context.Common.Drivers;
+using Engine.Contract.Schema;
+using Engine.Contract.Start;
 
 namespace Engine.Context.Start;
 

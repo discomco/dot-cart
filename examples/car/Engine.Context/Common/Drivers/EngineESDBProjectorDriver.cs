@@ -1,10 +1,10 @@
-using DotCart.Client.Schemas;
 using DotCart.Context.Drivers;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract.Schemas;
 using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.EventStoreDB.Interfaces;
-using Engine.Client.Schema;
+using Engine.Contract.Schema;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 

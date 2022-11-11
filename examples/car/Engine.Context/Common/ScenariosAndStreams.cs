@@ -1,9 +1,9 @@
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
-using Engine.Client.Initialize;
-using Engine.Client.Schema;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using Engine.Context.Initialize;
+using Engine.Contract.Initialize;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using IEvt = DotCart.Context.Behaviors.IEvt;
 using Topics = Engine.Context.Initialize.Topics;
@@ -20,15 +20,13 @@ public static partial class Inject
 {
     public static IServiceCollection AddInitializeEngineWithThrottleUpStream(this IServiceCollection services)
     {
-        return services
-            .AddTransient<EventStreamGenerator<EngineID>>(_ =>
-                ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream);
+        return services.AddTransient<EventStreamGenerator<EngineID>>(_ =>
+            ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
     {
-        return services
-            .AddTransient<ScenarioGenerator<EngineID>>(_ => ScenariosAndStreams.InitializeScenario);
+        return services.AddTransient<ScenarioGenerator<EngineID>>(_ => ScenariosAndStreams.InitializeScenario);
     }
 }
 
@@ -40,11 +38,11 @@ public static class ScenariosAndStreams
         var initEvt = Event.New(ID, Topics.EvtTopic, initPayload, EventMeta.New("", ID.Id()));
         initEvt.Version = 0;
         // AND
-        var startPayload = Client.Start.Payload.New;
+        var startPayload = Contract.Start.Payload.New;
         var startEvt = Event.New(ID, Start.Topics.EvtTopic, startPayload, EventMeta.New("", ID.Id()));
         startEvt.Version = 1;
         // AND
-        var throttleUpPayload = Client.ChangeRpm.Payload.New(5);
+        var throttleUpPayload = Contract.ChangeRpm.Payload.New(5);
         var throttleUpEvt = Event.New(ID, ChangeRpm.Topics.EvtTopic, throttleUpPayload, EventMeta.New("", ID.Id()));
         throttleUpEvt.Version = 2;
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);

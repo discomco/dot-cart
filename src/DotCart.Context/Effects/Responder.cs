@@ -1,6 +1,6 @@
-using DotCart.Client.Contracts;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract.Dtos;
 using DotCart.Core;
 using Serilog;
 

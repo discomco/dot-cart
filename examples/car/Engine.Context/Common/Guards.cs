@@ -1,6 +1,6 @@
 using Ardalis.GuardClauses;
 using DotCart.Context.Schemas;
-using Engine.Client.Schema;
+using Engine.Contract.Schema;
 using Exception = Engine.Context.Initialize.Exception;
 
 namespace Engine.Context.Common;

@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
 using Ardalis.GuardClauses;
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
 using DotCart.Context.Schemas;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using Serilog;
 
 namespace DotCart.Context.Behaviors;

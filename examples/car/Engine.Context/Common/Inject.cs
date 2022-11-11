@@ -1,5 +1,5 @@
 using DotCart.Context.Behaviors;
-using Engine.Client.Schema;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Common;

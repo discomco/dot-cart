@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 using DotCart.Context.Schemas;
-using Engine.Client.Schema;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Common.Schema;

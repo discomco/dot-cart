@@ -1,4 +1,4 @@
-using DotCart.Client.Contracts;
+using DotCart.Contract.Dtos;
 using Microsoft.Extensions.Hosting;
 
 namespace DotCart.Context.Effects;

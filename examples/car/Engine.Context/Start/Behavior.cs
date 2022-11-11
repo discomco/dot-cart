@@ -1,13 +1,13 @@
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Schemas;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using DotCart.Core;
-using Engine.Client.Schema;
-using Engine.Client.Start;
 using Engine.Context.Common;
+using Engine.Contract.Schema;
+using Engine.Contract.Start;
 
 namespace Engine.Context.Start;
 
@@ -90,7 +90,7 @@ public record Cmd(IID AggregateID, Payload Payload) : Cmd<Payload>(Topics.CmdTop
 {
     public static Cmd New(IID aggregateID, Payload payload)
     {
-        return new(aggregateID, payload);
+        return new Cmd(aggregateID, payload);
     }
 }
 

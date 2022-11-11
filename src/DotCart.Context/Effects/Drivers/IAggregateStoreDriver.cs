@@ -1,5 +1,5 @@
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
+using DotCart.Contract.Schemas;
 
 namespace DotCart.Context.Effects.Drivers;
 

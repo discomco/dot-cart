@@ -1,7 +1,7 @@
-using DotCart.Client;
-using DotCart.Client.Contracts;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Contract;
+using DotCart.Contract.Dtos;
 using static System.Threading.Tasks.Task;
 
 

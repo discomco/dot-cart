@@ -1,10 +1,10 @@
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Schemas;
-using Engine.Client.Schema;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using Engine.Context.Common.Schema;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 

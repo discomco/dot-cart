@@ -1,5 +1,5 @@
-using DotCart.Client.Contracts;
-using DotCart.Client.Schemas;
+using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
@@ -14,37 +14,16 @@ public record Event(ID AggregateID, string EventType, long Version, byte[] Data,
 
     public string AggregateId { get; set; }
 
-
-    public long Version { get; set; } = Version;
-
     public string MsgId => EventId;
 
     public string Topic => EventType;
 
     public DateTime TimeStamp { get; private set; } = TimeStamp;
 
-    public void SetTimeStamp(DateTime timeStamp)
-    {
-        TimeStamp = timeStamp;
-    }
-
-    public TPayload GetPayload<TPayload>() where TPayload : IPayload
-    {
-        return Data.FromBytes<TPayload>();
-    }
-
-    public void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload
-    {
-        Data = payload.ToBytes();
-    }
-
     public byte[] Data { get; set; } = Data;
 
 
-    public void SetData(byte[] data)
-    {
-        Data = data;
-    }
+    public long Version { get; set; } = Version;
 
     public void SetVersion(long version)
     {
@@ -67,6 +46,27 @@ public record Event(ID AggregateID, string EventType, long Version, byte[] Data,
         return MetaData == null
             ? default
             : MetaData.FromBytes<TPayload>();
+    }
+
+    public void SetTimeStamp(DateTime timeStamp)
+    {
+        TimeStamp = timeStamp;
+    }
+
+    public TPayload GetPayload<TPayload>() where TPayload : IPayload
+    {
+        return Data.FromBytes<TPayload>();
+    }
+
+    public void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload
+    {
+        Data = payload.ToBytes();
+    }
+
+
+    public void SetData(byte[] data)
+    {
+        Data = data;
     }
 
     public static Event New<TPayload>(ID aggregateID,

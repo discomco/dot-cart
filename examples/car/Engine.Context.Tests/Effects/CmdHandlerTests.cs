@@ -1,16 +1,16 @@
-using DotCart.Client.Schemas;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Schemas;
+using DotCart.Contract.Schemas;
 using DotCart.Drivers.InMem;
 using DotCart.TestKit;
-using Engine.Client.Schema;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
+using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Payload = Engine.Client.Initialize.Payload;
+using Payload = Engine.Contract.Initialize.Payload;
 
 namespace Engine.Context.Tests.Effects;
 

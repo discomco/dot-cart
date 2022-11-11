@@ -1,6 +1,6 @@
-using DotCart.Client.Schemas;
 using DotCart.Context.Effects;
-using Engine.Client.ChangeRpm;
+using DotCart.Contract.Schemas;
+using Engine.Contract.ChangeRpm;
 
 namespace Engine.Context.ChangeRpm;
 

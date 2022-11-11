@@ -1,4 +1,4 @@
-using DotCart.Client.Contracts;
+using DotCart.Contract.Dtos;
 using DotCart.Core;
 
 namespace Throttle.Client.Decrease;
