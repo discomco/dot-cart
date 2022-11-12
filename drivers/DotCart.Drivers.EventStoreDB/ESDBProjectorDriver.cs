@@ -40,10 +40,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
 
     public void Dispose()
     {
-        if (_subscription!=null)
-        {
-            _subscription.Dispose();    
-        }
+        if (_subscription != null) _subscription.Dispose();
     }
 
     public void SetReactor(IReactor reactor)
@@ -87,23 +84,23 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     {
         // await _retryPolicy.ExecuteAsync(async () =>
         // {
-            try
-            {
-                await _client.CreateToAllAsync(
-                    GroupName.Get<TInfo>(),
-                    EventTypeFilter.Prefix($"{IDPrefix.Get<TInfo>()}"),
-                    new PersistentSubscriptionSettings(),
-                    null,
-                    null, cancellationToken);
-            }
-            catch (RpcException e)
-            {
-                if (e.StatusCode != StatusCode.AlreadyExists) throw;
-            }
-            catch (Exception e)
-            {
-                Log.Error(e.InnerAndOuter());
-            }
+        try
+        {
+            await _client.CreateToAllAsync(
+                GroupName.Get<TInfo>(),
+                EventTypeFilter.Prefix($"{IDPrefix.Get<TInfo>()}"),
+                new PersistentSubscriptionSettings(),
+                null,
+                null, cancellationToken);
+        }
+        catch (RpcException e)
+        {
+            if (e.StatusCode != StatusCode.AlreadyExists) throw;
+        }
+        catch (Exception e)
+        {
+            Log.Error(e.InnerAndOuter());
+        }
         // });
     }
 
@@ -119,7 +116,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
         CancellationToken cancellationToken)
     {
         var evt = resolvedEvent.Event.ToEvent();
-        Log.Information($"{subscription.SubscriptionId} => {evt.AggregateID.Id()} ~> {evt.Topic}");
+        Log.Information($"\u001b[33m {subscription.SubscriptionId}\u001b[0m=> {evt.AggregateID.Id()} ~> {evt.Topic}");
         await _reactor.HandleAsync(evt, cancellationToken).ConfigureAwait(false);
         await subscription.Ack(resolvedEvent);
     }

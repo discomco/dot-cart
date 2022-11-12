@@ -23,7 +23,6 @@ public static class IDExtensions
     public static string CheckValue(this string value)
     {
         if (string.IsNullOrEmpty(value)) return GuidUtils.NewGuid;
-
         var match = ValueRegex.IsMatch(value);
         if (!match) throw new Exception($"{value} cannot be used as an identifier for an ID. Must be UUID string");
         return value;

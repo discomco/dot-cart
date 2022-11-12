@@ -14,6 +14,11 @@ public interface IClose
     void Close();
 }
 
+public interface ICloseAsync
+{
+    Task CloseAsync(bool allowCommandsToComplete);
+}
+
 public interface IEventStoreDriver : IAggregateStoreDriver
 {
     Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default);

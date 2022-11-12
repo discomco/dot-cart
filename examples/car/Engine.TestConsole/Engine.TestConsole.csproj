@@ -7,15 +7,15 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
-        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj" />
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-      <None Remove=".env" />
-      <EmbeddedResource Include=".env" />
+        <None Remove=".env"/>
+        <EmbeddedResource Include=".env"/>
     </ItemGroup>
 
 

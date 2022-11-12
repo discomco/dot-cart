@@ -1,6 +1,7 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Drivers.InMem;
 using Engine.Context.Common;
 using Engine.Context.Common.Drivers;
 using Engine.Contract.ChangeRpm;
@@ -32,8 +33,7 @@ public static class Inject
     {
         return services
             .AddTopicMediator()
-            .AddTransient<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
-            .AddEngineMemStore()
+            .AddTransient<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient(_ => Mappers._evt2State)
             .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
             .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();

@@ -1,6 +1,7 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Drivers.InMem;
 using Engine.Context.Common;
 using Engine.Context.Common.Drivers;
 using Engine.Contract.Start;
@@ -48,8 +49,7 @@ public static class Inject
         return services
             .AddTopicMediator()
             .AddTransient(_ => Effects._evt2State)
-            .AddEngineMemStore()
-            .AddSingleton<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
+            .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
             .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
     }
@@ -65,7 +65,7 @@ public static class Inject
             .AddTransient(_ => Effects._hope2Cmd)
             .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
             .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IReactor<Spoke>,Effects.Responder>();
+            .AddTransient<IReactor<Spoke>, Effects.Responder>();
     }
 
 

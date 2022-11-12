@@ -15,7 +15,7 @@ public interface IEmitter : IReactor
 {
 }
 
-public abstract class Emitter<TSpoke,TDriver, TEvt, TFact> : Reactor<TSpoke>, IEmitter
+public abstract class Emitter<TSpoke, TDriver, TEvt, TFact> : Reactor<TSpoke>, IEmitter
     where TDriver : IEmitterDriver
     where TEvt : IEvt
     where TFact : IFact

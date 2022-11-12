@@ -16,7 +16,7 @@ public class ChangeRpmEffectsTests : EffectsTests<
     Hope,
     Fact,
     ChangeRpm.Effects.IResponder,
-    IModelStoreDriver<Common.Schema.Engine>,
+    IModelStore<Common.Schema.Engine>,
     ChangeRpm.Effects.IToMemDocProjection>
 {
     public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)

@@ -13,6 +13,6 @@ public static class Inject
             .AddEngineCtor()
             .AddInitializeEngineWithThrottleUpStream()
             .AddTransient<IReactor<Spoke>, ESDBEngineEventFeeder>()
-            .AddTransient<IESDBEngineEventFeeder,ESDBEngineEventFeeder>();
+            .AddTransient<IESDBEngineEventFeeder, ESDBEngineEventFeeder>();
     }
 }

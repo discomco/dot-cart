@@ -1,6 +1,5 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Engine.Context.ChangeRpm;

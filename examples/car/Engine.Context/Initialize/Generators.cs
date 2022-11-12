@@ -15,5 +15,4 @@ public static class Generators
             var pl = Payload.New(details);
             return Hope.New(aggID.Id(), pl.ToBytes());
         };
-    
 }

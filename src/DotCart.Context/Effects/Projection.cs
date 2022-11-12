@@ -1,7 +1,7 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects.Drivers;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Dtos;
+using DotCart.Contract.Schemas;
 using DotCart.Core;
 using Serilog;
 using static System.Threading.Tasks.Task;
@@ -11,7 +11,7 @@ namespace DotCart.Context.Effects;
 public delegate TState Evt2State<TState, TEvt>(TState state, Event evt) where TState : IState where TEvt : IEvt;
 
 public interface IProjection<TDriver, TState, in TEvt> : IReactor
-    where TDriver : IProjectionDriver<TState>
+    where TDriver : IModelStore<TState>
     where TState : IState
     where TEvt : IEvt
 {
@@ -28,22 +28,22 @@ public interface IProjection<TDriver, TState, in TEvt> : IReactor
 /// <typeparam name="TState">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
 public abstract class Projection<TSpoke, TDriver, TState, TEvt> : Reactor<TSpoke>, IProjection<TDriver, TState, TEvt>
-    where TDriver : IProjectionDriver<TState>
+    where TDriver : IModelStore<TState>
     where TState : IState
     where TEvt : IEvt
     where TSpoke : ISpoke<TSpoke>
 {
     private readonly Evt2State<TState, TEvt> _evt2State;
     private readonly ITopicMediator _mediator;
-    private readonly IProjectionDriver<TState> _projectionDriver;
+    private readonly IModelStore<TState> _modelStore;
 
     protected Projection(
         ITopicMediator mediator,
-        IProjectionDriver<TState> projectionDriver,
+        IModelStore<TState> modelStore,
         Evt2State<TState, TEvt> evt2State)
     {
         _mediator = mediator;
-        _projectionDriver = projectionDriver;
+        _modelStore = modelStore;
         _evt2State = evt2State;
     }
 
@@ -56,9 +56,10 @@ public abstract class Projection<TSpoke, TDriver, TState, TEvt> : Reactor<TSpoke
     {
         return Run(async () =>
         {
-            var state = await _projectionDriver.GetByIdAsync(evt.AggregateID.Id()).ConfigureAwait(false);
+            Log.Information($"[{GetType().Name}] ~> [{_modelStore.GetType().Name}] ");
+            var state = await _modelStore.GetByIdAsync(evt.AggregateID.Id()).ConfigureAwait(false);
             state = _evt2State(state, (Event)evt);
-            await _projectionDriver.SetAsync(evt.AggregateID.Id(), state).ConfigureAwait(false);
+            await _modelStore.SetAsync(evt.AggregateID.Id(), state).ConfigureAwait(false);
         });
     }
 

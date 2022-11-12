@@ -1,6 +1,5 @@
 using System.Collections.Immutable;
 using Ardalis.GuardClauses;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
 using Serilog;
@@ -13,7 +12,6 @@ public static class Constants
 }
 
 public delegate IAggregate AggCtor();
-
 public delegate IAggregate AggBuilder(AggCtor newAgg);
 
 public interface IAggregate
@@ -38,11 +36,7 @@ public interface IAggregate
     void ClearUncommittedEvents(ulong resNextExpectedVersion);
 }
 
-// public delegate IEnumerable<IEvt> TryCmdFunc<in TCmd>(IState state, ICmd cmd)
-//     where TCmd : ICmd;
-//
-// public delegate IState ApplyEvtFunc<TID, in TEvt>(IState state, TEvt evt)
-//     where TEvt : IEvt;
+
 
 public abstract class Aggregate<TState> : IAggregate
     where TState : IState

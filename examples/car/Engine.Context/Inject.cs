@@ -7,13 +7,12 @@ namespace Engine.Context;
 
 public static class Inject
 {
-
-    public static IServiceCollection AddESDBInfra<TSpoke>(this IServiceCollection services) where TSpoke : ISpoke<TSpoke>
+    public static IServiceCollection AddESDBInfra<TSpoke>(this IServiceCollection services)
+        where TSpoke : ISpoke<TSpoke>
     {
         return services
             .AddConfiguredESDBClients()
             .AddESDBEventStoreDriver()
             .AddEngineESDBProjectorDriver<TSpoke>();
     }
-    
 }

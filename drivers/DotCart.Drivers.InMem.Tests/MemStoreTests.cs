@@ -1,6 +1,6 @@
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
-using DotCart.Context.Schemas;
+using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Engine.Context.Common;
 using Engine.Context.Common.Drivers;
@@ -12,7 +12,7 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemStoreTests : IoCTests
 {
-    private IModelStoreDriver<Engine.Context.Common.Schema.Engine> _engModelStoreDriver;
+    private IModelStore<Engine.Context.Common.Schema.Engine> _engModelStore;
     private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
 
 
@@ -26,7 +26,7 @@ public class MemStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var engStore = Container.GetRequiredService<IEngineModelStoreDriver>();
+        var engStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
         // THEN
         Assert.NotNull(engStore);
     }
@@ -35,7 +35,7 @@ public class MemStoreTests : IoCTests
     public void ShouldAddEnginesToStore()
     {
         // GIVEN
-        Assert.NotNull(_engModelStoreDriver);
+        Assert.NotNull(_engModelStore);
         Assert.NotNull(_newEngine);
         var eng1 = _newEngine();
         eng1.Id = EngineID.New().Id();
@@ -47,17 +47,17 @@ public class MemStoreTests : IoCTests
 
         // WHEN
         Task.WaitAll(
-            _engModelStoreDriver.SetAsync(eng1.Id, eng1),
-            _engModelStoreDriver.SetAsync(eng2.Id, eng2)
+            _engModelStore.SetAsync(eng1.Id, eng1),
+            _engModelStore.SetAsync(eng2.Id, eng2)
         );
         //  THEN
-        Assert.True(_engModelStoreDriver.Exists(eng1.Id).Result);
-        Assert.True(_engModelStoreDriver.Exists(eng2.Id).Result);
+        Assert.True(_engModelStore.Exists(eng1.Id).Result);
+        Assert.True(_engModelStore.Exists(eng2.Id).Result);
     }
 
     protected override void Initialize()
     {
-        _engModelStoreDriver = Container.GetRequiredService<IEngineModelStoreDriver>();
+        _engModelStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
         _newEngine = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
     }
 
@@ -70,6 +70,7 @@ public class MemStoreTests : IoCTests
         services
             .AddEngineAggregate()
             .AddCmdHandler()
-            .AddEngineMemStore();
+            .AddSingleton<IModelStore<Engine.Context.Common.Schema.Engine>,
+                MemStore<Engine.Context.Common.Schema.Engine>>();
     }
 }

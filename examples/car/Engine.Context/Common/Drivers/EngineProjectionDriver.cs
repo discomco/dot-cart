@@ -1,17 +1,15 @@
-using DotCart.Context.Drivers;
 using DotCart.Context.Effects.Drivers;
-using Microsoft.Extensions.DependencyInjection;
+using DotCart.Drivers.InMem;
 
 namespace Engine.Context.Common.Drivers;
 
-
-public class EngineProjectionDriver : ProjectionDriver<Schema.Engine>, IEngineMemProjectionDriver
-{
-    public EngineProjectionDriver(IModelStoreDriver<Schema.Engine> modelStoreDriver) : base(modelStoreDriver)
-    {
-    }
-}
-
-public interface IEngineMemProjectionDriver : IProjectionDriver<Schema.Engine>
-{
-}
+// public class ToMemDocStore : MemStore<Schema.Engine>, IToMemDocStore
+// {
+//     public ToMemDocStore() 
+//     {
+//     }
+// }
+//
+// public interface IToMemDocStore : IModelStore<Schema.Engine>
+// {
+// }

@@ -7,7 +7,7 @@ using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Effects;
+namespace Engine.Context.Tests.Initialize.Effects;
 
 public class InitializeEffectsTests : EffectsTests<
     Common.Schema.Engine,
@@ -15,9 +15,9 @@ public class InitializeEffectsTests : EffectsTests<
     Cmd,
     Hope,
     Fact,
-    Initialize.Effects.IResponder,
-    IModelStoreDriver<Common.Schema.Engine>,
-    Initialize.Effects.IMemDocProjection
+    Context.Initialize.Effects.IResponder,
+    IModelStore<Common.Schema.Engine>,
+    Context.Initialize.Effects.IMemDocProjection
 >
 {
     public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)

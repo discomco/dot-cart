@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
     </ItemGroup>
 
 </Project>

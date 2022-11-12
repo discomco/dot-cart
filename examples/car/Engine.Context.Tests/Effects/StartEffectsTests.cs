@@ -16,7 +16,7 @@ public class StartEffectsTests : EffectsTests<
     Hope,
     Fact,
     Start.Effects.IResponder,
-    IModelStoreDriver<Common.Schema.Engine>,
+    IModelStore<Common.Schema.Engine>,
     Start.Effects.IToMemDocProjection
 >
 {

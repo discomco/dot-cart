@@ -5,7 +5,6 @@ using DotCart.TestKit;
 using Engine.Context.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Spoke = Engine.Context.Initialize.Spoke;
 
 namespace Engine.Context.Tests.Spokes;
 
@@ -17,8 +16,7 @@ public class InitializeSpokeTests : IoCTests
     public InitializeSpokeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {
     }
-    
-    
+
 
     [Fact]
     public void ShouldResolveSpoke()

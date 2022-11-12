@@ -3,17 +3,19 @@ using DotCart.Context.Schemas;
 using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
+using Engine.Context.ChangeRpm;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
 using Engine.Context.Start;
-using Engine.Context.ChangeRpm;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Cmd = Engine.Context.Initialize.Cmd;
+using Payload = Engine.Contract.Initialize.Payload;
 
 namespace Engine.Context.Tests.Behaviors;
 
-public class EngineAggregateTests : AggregateTests<EngineID, Common.Schema.Engine>
+public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engine>
 {
     private IAggregatePolicy? _startPolicy;
 
@@ -50,7 +52,7 @@ public class EngineAggregateTests : AggregateTests<EngineID, Common.Schema.Engin
         _agg.SetID(_ID);
         // WHEN
         var details = Details.New("New Engine");
-        var cmd = Context.Initialize.Cmd.New(_ID, Contract.Initialize.Payload.New(details));
+        var cmd = Cmd.New(_ID, Payload.New(details));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Common.Schema.Engine>();
         // THEN
@@ -113,12 +115,12 @@ public class EngineAggregateTests : AggregateTests<EngineID, Common.Schema.Engin
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-                .AddEngineIDCtor()
-                .AddEngineAggregate()
-                .AddAggregateBuilder()
-                .AddInitializeBehavior()
-                .AddStartBehavior()
-                .AddInitializeBehavior()
-                .AddChangeRpmBehavior();
+            .AddEngineIDCtor()
+            .AddEngineAggregate()
+            .AddAggregateBuilder()
+            .AddInitializeBehavior()
+            .AddStartBehavior()
+            .AddInitializeBehavior()
+            .AddChangeRpmBehavior();
     }
 }

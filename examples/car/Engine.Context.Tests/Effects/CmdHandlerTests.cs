@@ -1,7 +1,6 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Schemas;
 using DotCart.Drivers.InMem;
 using DotCart.TestKit;

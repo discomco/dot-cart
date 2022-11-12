@@ -8,7 +8,8 @@ namespace DotCart.Context.Effects;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddProjector<TSpoke>(this IServiceCollection services) where TSpoke : ISpoke<TSpoke>
+    public static IServiceCollection AddProjector<TSpoke>(this IServiceCollection services)
+        where TSpoke : ISpoke<TSpoke>
     {
         return services
             .AddTransient<IProjector<TSpoke>, Projector<TSpoke>>();
@@ -19,7 +20,7 @@ public interface IProjector<in TSpoke> : IReactor<TSpoke> where TSpoke : ISpoke<
 {
 }
 
-public class Projector<TSpoke> : Reactor<TSpoke>, IProjector<TSpoke> 
+public class Projector<TSpoke> : Reactor<TSpoke>, IProjector<TSpoke>
     where TSpoke : ISpoke<TSpoke>
 {
     private readonly ITopicMediator _mediator;
@@ -36,7 +37,11 @@ public class Projector<TSpoke> : Reactor<TSpoke>, IProjector<TSpoke>
 
     public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
     {
-        Log.Information($"Projector :: Publishing Message: {msg.Topic}");
+        var evt = msg as IEvt;
+        Log.Information(evt != null
+            ? $"[{Name}] ~> {evt.Topic} @ {evt.AggregateID.Id()}"
+            : $"[{Name}] ~> {msg.Topic}");
+
         return _mediator.PublishAsync(msg.Topic, (IEvt)msg);
     }
 

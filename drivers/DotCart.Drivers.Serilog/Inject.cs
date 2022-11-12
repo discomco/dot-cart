@@ -44,11 +44,16 @@ public static class Inject
             .Enrich.WithThreadId()
             // .WriteTo.Console(LogEventLevel.Verbose,
             //     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {NewLine}[{Properties}]{NewLine}{Exception}")
-            .WriteTo.Console(LogEventLevel.Verbose,
-                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [T:{ThreadId:d3}][{Level:u3}] {Message:lj}  {NewLine}{Exception}",
+            .WriteTo.Console(
+                LogEventLevel.Verbose,
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
                 theme: AnsiConsoleTheme.Code
-                )
-            
+            )
+            // .WriteTo.FastConsole(
+            //     new FastConsoleSinkOptions {UseJson = true},
+            //     outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
+            //     new MessageTemplateTextFormatter("{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
+            //     )
             .CreateLogger();
         return Log.Logger;
     }

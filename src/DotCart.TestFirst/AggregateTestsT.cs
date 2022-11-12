@@ -1,12 +1,11 @@
 using DotCart.Context.Behaviors;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class AggregateTests<TID, TState> : IoCTests where TID : IID where TState : IState
+public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID where TState : IState
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
@@ -14,7 +13,7 @@ public abstract class AggregateTests<TID, TState> : IoCTests where TID : IID whe
     protected NewID<TID> _newID;
     protected NewState<TState>? _newState;
 
-    protected AggregateTests(ITestOutputHelper output, IoCTestContainer container)
+    protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer container)
         : base(output, container)
     {
     }

@@ -9,13 +9,14 @@
     <ItemGroup>
         <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
         <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj" />
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
         <ProjectReference Include="..\..\..\src\DotCart.Context\DotCart.Context.csproj" />
         <ProjectReference Include="..\Engine.Client\Engine.Client.csproj" />
         <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="Stop" />
+        <Folder Include="Stop" />
     </ItemGroup>
 
 

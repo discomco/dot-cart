@@ -1,4 +1,4 @@
-using DotCart.Context.Schemas;
+using DotCart.Contract.Schemas;
 
 namespace DotCart.Context.Behaviors;
 

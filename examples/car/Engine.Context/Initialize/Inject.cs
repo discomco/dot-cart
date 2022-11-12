@@ -2,14 +2,15 @@ using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Spokes;
+using DotCart.Drivers.InMem;
+using DotCart.Drivers.Redis;
 using Engine.Context.Common;
-using Engine.Context.Common.Drivers;
 using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Initialize;
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
@@ -31,7 +32,6 @@ public static class Inject
                 return spokeBuilder.Build();
             })
             .AddInitializeEffects();
-
     }
 
     public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
@@ -39,7 +39,19 @@ public static class Inject
         return services
             .AddInitializeResponder()
             .AddInitializedEmitter()
-            .AddInitializedProjections();
+            .AddInitializedMemProjections()
+            .AddInitializedRedisProjections();
+    }
+
+    public static IServiceCollection AddInitializedRedisProjections(this IServiceCollection services)
+    {
+        return services
+            .AddTopicMediator()
+            .AddTransient(_ => Mappers._evt2State)
+            .AddTransient<IReactor<Spoke>, Projector<Spoke>>()
+            .AddTransient<Effects.IToRedisDoc, Effects.ToRedisDoc>()
+            .AddTransient<IReactor<Spoke>, Effects.ToRedisDoc>()
+            .AddTransientRedisDb<Common.Schema.Engine>();
     }
 
     public static IServiceCollection AddInitializedEmitter(this IServiceCollection services)
@@ -49,14 +61,13 @@ public static class Inject
     }
 
 
-    public static IServiceCollection AddInitializedProjections(this IServiceCollection services)
+    public static IServiceCollection AddInitializedMemProjections(this IServiceCollection services)
     {
         return services
             .AddTopicMediator()
-            .AddEngineMemStore()
             .AddTransient(_ => Mappers._evt2State)
             .AddTransient<IReactor<Spoke>, Projector<Spoke>>()
-            .AddTransient<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
+            .AddTransient<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient<Effects.IMemDocProjection, Effects.ToMemDocProjection>()
             .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
     }

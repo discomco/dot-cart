@@ -22,4 +22,18 @@ public static class JsonUtils
             ? Array.Empty<byte>()
             : JsonSerializer.SerializeToUtf8Bytes(obj);
     }
+
+    public static string ToJson<T>(this T obj)
+    {
+        return obj == null
+            ? string.Empty
+            : JsonSerializer.Serialize(obj);
+    }
+
+    public static T FromJson<T>(this string json)
+    {
+        return string.IsNullOrWhiteSpace(json)
+            ? default(T)
+            : JsonSerializer.Deserialize<T>(json);
+    }
 }

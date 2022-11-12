@@ -8,10 +8,6 @@ using Serilog;
 
 namespace DotCart.Context.Effects;
 
-public interface ICmdHandler
-{
-    Task<IFeedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default);
-}
 
 public static partial class Inject
 {

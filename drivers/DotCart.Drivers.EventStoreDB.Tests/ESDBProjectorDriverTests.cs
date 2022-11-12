@@ -30,7 +30,7 @@ public class ESDBProjectorDriverTests : IoCTests
     private IESDBEngineEventFeeder _feeder;
     private ILogger _logger;
     private ITopicMediator _mediator;
-    private IModelStoreDriver<Engine.Context.Common.Schema.Engine> _memStore;
+    private IModelStore<Engine.Context.Common.Schema.Engine> _memStore;
     private EventStreamGenerator<EngineID> _newEventStream;
     private SubscriptionFilterOptions _subOptions;
 
@@ -203,7 +203,7 @@ public class ESDBProjectorDriverTests : IoCTests
         _executor = Container.GetRequiredService<IHostExecutor>();
         _feeder = Container.GetRequiredService<IESDBEngineEventFeeder>();
         _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
-        _memStore = Container.GetRequiredService<IModelStoreDriver<Engine.Context.Common.Schema.Engine>>();
+        _memStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()
@@ -217,7 +217,7 @@ public class ESDBProjectorDriverTests : IoCTests
             .AddInitializeEngineWithThrottleUpStream()
             .AddESDBEngineEventFeeder()
             .AddEngineESDBProjectorDriver<Spoke>()
-            .AddInitializedProjections()
+            .AddInitializedMemProjections()
             .AddStartedProjections()
             .AddChangeRpmProjections()
             .AddConsoleLogger();

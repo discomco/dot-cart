@@ -21,8 +21,15 @@ public static class IDPrefix
         var prefixAttributes =
             (IDPrefixAttribute[])typeof(TID).GetCustomAttributes(typeof(IDPrefixAttribute), true);
         Guard.Against.AttributeNotDefined("IDPrefix", prefixAttributes, $"{typeof(TID)}");
-        // if (prefixAttributes.Length <= 0)
-        //     throw new IDPrefixNotSetException($"[IDPrefix] attribute is not set for {typeof(TID)} ");
+        var att = prefixAttributes[0];
+        return att.Prefix;
+    }
+
+    public static string Get(IID id)
+    {
+        var prefixAttributes =
+            (IDPrefixAttribute[])id.GetType().GetCustomAttributes(typeof(IDPrefixAttribute), true);
+        Guard.Against.AttributeNotDefined("IDPrefix", prefixAttributes, $"{id.GetType()}");
         var att = prefixAttributes[0];
         return att.Prefix;
     }

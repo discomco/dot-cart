@@ -23,7 +23,7 @@ public static class NameAtt
         Guard.Against.AttributeNotDefined("Name", atts, typeof(T).FullName);
         return atts[0].Name;
     }
-    
+
     public static string Get(object obj)
     {
         var atts = (NameAttribute[])obj.GetType().GetCustomAttributes(typeof(NameAttribute),
@@ -31,5 +31,4 @@ public static class NameAtt
         Guard.Against.AttributeNotDefined("Name", atts, obj.GetType().FullName);
         return atts[0].Name;
     }
-    
 }

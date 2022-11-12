@@ -6,8 +6,8 @@ namespace DotCart.Context.Spokes;
 
 public abstract class Spoke<TSpoke> : BackgroundService, ISpoke<TSpoke> where TSpoke : ISpoke<TSpoke>
 {
-    
-    protected IImmutableDictionary<string, IReactor<TSpoke>> _reactors =ImmutableDictionary<string, IReactor<TSpoke>>.Empty;
+    protected IImmutableDictionary<string, IReactor<TSpoke>> _reactors =
+        ImmutableDictionary<string, IReactor<TSpoke>>.Empty;
 
     public void Inject(params IReactor<TSpoke>[] reactors)
     {
@@ -24,10 +24,7 @@ public abstract class Spoke<TSpoke> : BackgroundService, ISpoke<TSpoke> where TS
     {
         return Task.Run(() =>
         {
-            foreach (var reactor in _reactors)
-            {
-                reactor.Value.Activate(cancellationToken);
-            }
+            foreach (var reactor in _reactors) reactor.Value.Activate(cancellationToken);
         }, cancellationToken);
     }
 
@@ -41,7 +38,4 @@ public abstract class Spoke<TSpoke> : BackgroundService, ISpoke<TSpoke> where TS
             }
         }, stoppingToken).ConfigureAwait(false);
     }
-
-    
-    
 }

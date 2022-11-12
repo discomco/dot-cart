@@ -43,3 +43,57 @@ jobs:
 #        env:
 #          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
 #          NUGET_URL: https://api.nuget.org/v3/index.json
+
+  test:
+
+    runs-on: ubuntu-latest
+    environment: Production
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+
+
+    services:
+      eventstore:
+        env:
+          EVENTSTORE_CLUSTER_SIZE: "1"
+          EVENTSTORE_RUN_PROJECTIONS: "All"
+          EVENTSTORE_START_STANDARD_PROJECTIONS: "true"
+          EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP: "true"
+          EVENTSTORE_INSECURE: "true"
+        image: eventstore/eventstore:21.10.6-buster-slim
+        ports:
+          - 2113:2113
+        options: >-
+          --health-cmd "curl -X GET -u admin:changeit http://localhost:2113/info" 
+          --health-interval 10s 
+          --health-timeout 5s 
+          --health-retries 5
+
+      nats:
+        env:
+          NATS_CLUSTER: "default"
+          NATS_CLIENT: "default"
+        image: nats:2.8.4-scratch
+        ports:
+          - 4222:4222
+          - 6222:6222
+          - 8222:8222
+      
+      redis:
+        image: redis:7.0.4-alpine
+        ports:
+          - 6379:6379
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Make Scripts Executable
+        run: chmod +x ./cid
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Test Packages
+        run: dotnet test --no-restore --verbosity minimal
