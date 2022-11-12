@@ -5,10 +5,11 @@
 ## TABLE OF CONTENTS
 
 - [The DOT-CART Ecosystem](#the-dot-cart-ecosystem)
-    - [TABLE OF CONTENTS](#table-of-contents)
-    - [DESCRIPTION](#description)
-    - [MOTIVATIONS](#motivations)
-    - [DOCUMENTATION](#documentation)
+  - [TABLE OF CONTENTS](#table-of-contents)
+  - [DESCRIPTION](#description)
+  - [MOTIVATIONS](#motivations)
+  - [DOCUMENTATION](#documentation)
+  - [DEVELOPMENT](#development)
 
 ## DESCRIPTION
 
@@ -40,3 +41,18 @@ a more lightweight SDK with better test coverage.
 This SDK is built according to the findings and definitions found in this document.
 
 - [Modular Architecture](https://docs.google.com/document/d/1io3HsGItmu02Nx4hHru9wVLnF6lTiQDVecko-ga6Pg0/edit?usp=sharing)
+
+
+## DEVELOPMENT
+
+For Development we can recommend this stack:
+
+- [Raf's Compose Dev Stack](https://github.com/rgfaber/compose-dev-stack)
+
+Usage:
+
+```bash
+git clone https://github.com/rgfaber/compose-dev-stack
+cd compose-dev-stack
+./run-minimal.sh -d
+```
