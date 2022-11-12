@@ -7,7 +7,7 @@ using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Effects.Engine;
+namespace Engine.Context.Tests.Effects;
 
 public class ChangeRpmEffectsTests : EffectsTests<
     Common.Schema.Engine,
@@ -15,9 +15,9 @@ public class ChangeRpmEffectsTests : EffectsTests<
     Cmd,
     Hope,
     Fact,
-    ChangeRpm.Effects.Responder,
+    ChangeRpm.Effects.IResponder,
     IModelStoreDriver<Common.Schema.Engine>,
-    ChangeRpm.Effects.ToMemDocProjection>
+    ChangeRpm.Effects.IToMemDocProjection>
 {
     public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
     {

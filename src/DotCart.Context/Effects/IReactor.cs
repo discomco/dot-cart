@@ -1,3 +1,4 @@
+using DotCart.Context.Spokes;
 using DotCart.Contract.Dtos;
 
 namespace DotCart.Context.Effects;
@@ -5,7 +6,14 @@ namespace DotCart.Context.Effects;
 public interface IReactor
 {
     bool IsRunning { get; }
-    Task StartAsync(CancellationToken cancellationToken);
+    Task Activate(CancellationToken cancellationToken);
     Task HandleAsync(IMsg msg, CancellationToken cancellationToken);
-    void SetSpoke(ISpoke spoke);
+//    void SetSpoke(ISpoke spoke);
+}
+
+public interface IReactor<in TSpoke>: IReactor 
+    where TSpoke : ISpoke<TSpoke>
+{
+    void SetSpoke(TSpoke spoke);
+    string Name { get; }
 }

@@ -14,7 +14,7 @@ public static partial class Inject
             {
                 s.ConnectivitySettings.Insecure = Config.Insecure;
                 s.ConnectivitySettings.Address = new Uri(Config.Uri);
-                s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
+              //  s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
                 if (Config.UseTls) s.ChannelCredentials = new SslCredentials();
             })
             .AddSingleton<IESDBPersistentSubscriptionsClient, ESDBPersistentSubscriptionsClient>()

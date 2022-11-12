@@ -2,26 +2,30 @@ using DotCart.Context.Effects;
 
 namespace DotCart.Context.Spokes;
 
-public class SpokeBuilder : ISpokeBuilder
+public abstract class SpokeBuilder<TSpoke> : ISpokeBuilder<TSpoke> 
+    where TSpoke:ISpoke<TSpoke>
 {
-    private readonly IEnumerable<IReactor> _effects;
-    private readonly ISpoke _spoke;
+    private readonly TSpoke _spoke;
+    private readonly IEnumerable<IReactor<TSpoke>> _reactors;
 
-    public SpokeBuilder(
-        ISpoke spoke,
-        IEnumerable<IReactor> effects)
+    protected SpokeBuilder(
+        TSpoke spoke,
+        IEnumerable<IReactor<TSpoke>> reactors) 
+        
     {
         _spoke = spoke;
-        _spoke.Inject(effects.ToArray());
+        _reactors = reactors;
     }
 
-    public ISpoke Build()
+    public TSpoke Build()
     {
+        _spoke.Inject(_reactors.ToArray());
         return _spoke;
     }
+    
 }
 
-public interface ISpokeBuilder
+public interface ISpokeBuilder<out TSpoke> where TSpoke:ISpoke<TSpoke>
 {
-    ISpoke Build();
+    TSpoke Build();
 }

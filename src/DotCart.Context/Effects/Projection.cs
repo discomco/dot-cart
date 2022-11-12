@@ -27,10 +27,11 @@ public interface IProjection<TDriver, TState, in TEvt> : IReactor
 /// </typeparam>
 /// <typeparam name="TState">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public abstract class Projection<TDriver, TState, TEvt> : Reactor, IProjection<TDriver, TState, TEvt>
+public abstract class Projection<TSpoke, TDriver, TState, TEvt> : Reactor<TSpoke>, IProjection<TDriver, TState, TEvt>
     where TDriver : IProjectionDriver<TState>
     where TState : IState
     where TEvt : IEvt
+    where TSpoke : ISpoke<TSpoke>
 {
     private readonly Evt2State<TState, TEvt> _evt2State;
     private readonly ITopicMediator _mediator;

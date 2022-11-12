@@ -47,10 +47,11 @@ public static class Inject
     {
         return services
             .AddTopicMediator()
-            .AddSingleton(_ => Effects._evt2State)
+            .AddTransient(_ => Effects._evt2State)
             .AddEngineMemStore()
             .AddSingleton<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
-            .AddHostedService<Effects.ToMemDocProjection>();
+            .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
+            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
     }
 
     public static IServiceCollection AddStartResponder(this IServiceCollection services)
@@ -63,7 +64,8 @@ public static class Inject
             .AddStartHopeGenerator()
             .AddTransient(_ => Effects._hope2Cmd)
             .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
-            .AddHostedService<Effects.Responder>();
+            .AddTransient<Effects.IResponder, Effects.Responder>()
+            .AddTransient<IReactor<Spoke>,Effects.Responder>();
     }
 
 

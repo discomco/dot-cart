@@ -6,12 +6,7 @@ namespace Engine.Context.Common.Drivers;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddEngineMemStore(this IServiceCollection services)
-    {
-        return services
-            .AddSingleton<IModelStoreDriver<Schema.Engine>, EngineMemModelStoreDriver>()
-            .AddSingleton<IEngineModelStoreDriver, EngineMemModelStoreDriver>();
-    }
+
 }
 
 public interface IEngineModelStoreDriver : IModelStoreDriver<Schema.Engine>

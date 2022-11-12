@@ -15,10 +15,11 @@ public interface IEmitter : IReactor
 {
 }
 
-public abstract class Emitter<TDriver, TEvt, TFact> : Reactor, IEmitter
+public abstract class Emitter<TSpoke,TDriver, TEvt, TFact> : Reactor<TSpoke>, IEmitter
     where TDriver : IEmitterDriver
     where TEvt : IEvt
     where TFact : IFact
+    where TSpoke : ISpoke<TSpoke>
 {
     private readonly IEmitterDriver _emitterDriver;
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;

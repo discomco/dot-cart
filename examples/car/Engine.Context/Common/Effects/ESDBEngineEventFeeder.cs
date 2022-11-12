@@ -3,24 +3,13 @@ using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Schemas;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
-using Engine.Context.Common.Schema;
+using Engine.Context.Initialize;
 using Engine.Contract.Schema;
-using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace Engine.Context.Common.Effects;
 
-public static class Inject
-{
-    public static IServiceCollection AddESDBEngineEventFeeder(this IServiceCollection services)
-    {
-        return services
-            .AddEngineCtor()
-            .AddHostedService<ESDBEngineEventFeeder>();
-    }
-}
-
-public class ESDBEngineEventFeeder : Reactor, IESDBEngineEventFeeder
+public class ESDBEngineEventFeeder : Reactor<Spoke>, IESDBEngineEventFeeder
 {
     private readonly IEventStoreDriver _eventStore;
     private readonly NewID<EngineID> _newId;
@@ -65,6 +54,6 @@ public class ESDBEngineEventFeeder : Reactor, IESDBEngineEventFeeder
     }
 }
 
-public interface IESDBEngineEventFeeder : IReactor
+public interface IESDBEngineEventFeeder : IReactor<Spoke>
 {
 }

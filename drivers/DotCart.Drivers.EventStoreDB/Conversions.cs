@@ -25,7 +25,7 @@ public static class Conversions
         }
     }
 
-    public static IMsg ToEvent(this EventRecord rEvt)
+    public static Event ToEvent(this EventRecord rEvt)
     {
         if (rEvt == null) return null;
         var res = Event.New(

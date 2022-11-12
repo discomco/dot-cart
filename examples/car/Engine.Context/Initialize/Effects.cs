@@ -1,7 +1,6 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
-using DotCart.Contract;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using DotCart.Drivers.InMem;
@@ -11,23 +10,14 @@ using Engine.Contract.Schema;
 
 namespace Engine.Context.Initialize;
 
-public static class Effects
+public static class Mappers
 {
-    internal static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
+    public static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
         evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
 
-    internal static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
+    public static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
         hope => Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Payload>());
-
-    internal static readonly GenerateHope<Hope> _genHope =
-        () =>
-        {
-            var details = Details.New("NewEngine");
-            var aggID = EngineID.New();
-            var pl = Payload.New(details);
-            return Hope.New(aggID.Id(), pl.ToBytes());
-        };
-
+    
     public static Evt2State<Common.Schema.Engine, IEvt> _evt2State => (state, evt) =>
     {
         if (evt == null) return state;
@@ -38,18 +28,17 @@ public static class Effects
         return state;
     };
 
-    public class ResponderDriver : MemResponderDriver<Hope>
+   
+}
+
+public static class Effects
+{
+    public interface IResponder: IReactor<Spoke>
     {
-        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-        }
+        
     }
-
-    public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
+    [Name("Engine.Initialize.Responder")]
+    public class Responder : Responder<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
     {
         public Responder(
             IResponderDriver<Hope> responderDriver,
@@ -57,9 +46,16 @@ public static class Effects
             Hope2Cmd<Cmd, Hope> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
         {
         }
+
     }
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Common.Schema.Engine, IEvt>
+    public interface IMemDocProjection
+    {
+        
+    }
+    
+    [Name("Engine.Initialize.ToMemDocProjection")]
+    public class ToMemDocProjection : Projection<Spoke,EngineProjectionDriver, Common.Schema.Engine, IEvt>, IMemDocProjection
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Common.Schema.Engine> projectionDriver,

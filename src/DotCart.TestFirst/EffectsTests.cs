@@ -49,7 +49,7 @@ public abstract class EffectsTests<
             // WHEN
             await Task.Run(async () =>
             {
-                await _responder.StartAsync(cancellationToken);
+                await _responder.Activate(cancellationToken);
                 while (!cancellationToken.IsCancellationRequested)
                 {
                     Thread.SpinWait(5);
@@ -94,7 +94,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var toDoc = Container.GetHostedService<TToDocProjection>();
+        var toDoc = Container.GetRequiredService<TToDocProjection>();
         // THEN 
         Assert.NotNull(toDoc);
     }
@@ -149,7 +149,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        var ir = Container.GetHostedService<TResponder>();
+        var ir = Container.GetRequiredService<TResponder>();
         // THEN
         Assert.NotNull(ir);
     }
@@ -167,7 +167,7 @@ public abstract class EffectsTests<
 
     protected override void Initialize()
     {
-        _responder = Container.GetHostedService<TResponder>();
+        _responder = Container.GetRequiredService<TResponder>();
         AggregateStoreDriver = Container.GetRequiredService<IAggregateStoreDriver>();
         _aggregate = Container.GetRequiredService<IAggregate>();
         _cmdHandler = Container.GetRequiredService<ICmdHandler>();

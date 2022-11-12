@@ -12,10 +12,11 @@ public interface IListener : IReactor
 {
 }
 
-public abstract class Listener<TDriver, TFact, TCmd> : Reactor, IListener
+public abstract class Listener<TSpoke,TDriver, TFact, TCmd> : Reactor<TSpoke>, IListener
     where TDriver : IListenerDriver
     where TFact : IFact
     where TCmd : ICmd
+    where TSpoke : ISpoke<TSpoke>
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly TDriver _driver;

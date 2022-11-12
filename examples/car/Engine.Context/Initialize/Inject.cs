@@ -1,6 +1,7 @@
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Spokes;
 using Engine.Context.Common;
 using Engine.Context.Common.Drivers;
 using Engine.Contract.Initialize;
@@ -19,6 +20,20 @@ public static class Inject
             .AddTransient<IApply, ApplyEvt>();
     }
 
+    public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<Spoke>()
+            .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            .AddHostedService(provider =>
+            {
+                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+                return spokeBuilder.Build();
+            })
+            .AddInitializeEffects();
+
+    }
+
     public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
     {
         return services
@@ -30,7 +45,7 @@ public static class Inject
     public static IServiceCollection AddInitializedEmitter(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => Effects._evt2Fact);
+            .AddTransient(_ => Mappers._evt2Fact);
     }
 
 
@@ -39,9 +54,11 @@ public static class Inject
         return services
             .AddTopicMediator()
             .AddEngineMemStore()
-            .AddSingleton(_ => Effects._evt2State)
-            .AddSingleton<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
-            .AddHostedService<Effects.ToMemDocProjection>();
+            .AddTransient(_ => Mappers._evt2State)
+            .AddTransient<IReactor<Spoke>, Projector<Spoke>>()
+            .AddTransient<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
+            .AddTransient<Effects.IMemDocProjection, Effects.ToMemDocProjection>()
+            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
     }
 
 
@@ -51,9 +68,10 @@ public static class Inject
             .AddAggregateBuilder()
             .AddEngineAggregate()
             .AddCmdHandler()
-            .AddTransient(_ => Effects._genHope)
-            .AddTransient(_ => Effects._hope2Cmd)
-            .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
-            .AddHostedService<Effects.Responder>();
+            .AddTransient(_ => Generators._genHope)
+            .AddTransient(_ => Mappers._hope2Cmd)
+            .AddSingleton<IResponderDriver<Hope>, Drivers.ResponderDriver>()
+            .AddTransient<Effects.IResponder, Effects.Responder>()
+            .AddTransient<IReactor<Spoke>, Effects.Responder>();
     }
 }

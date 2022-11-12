@@ -32,10 +32,11 @@ public static class Inject
     {
         return services
             .AddTopicMediator()
-            .AddSingleton<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
+            .AddTransient<IProjectionDriver<Common.Schema.Engine>, EngineProjectionDriver>()
             .AddEngineMemStore()
             .AddTransient(_ => Mappers._evt2State)
-            .AddHostedService<Effects.ToMemDocProjection>();
+            .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
+            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
     }
 
     public static IServiceCollection AddChangeRpmEmitter(this IServiceCollection services)
@@ -52,6 +53,7 @@ public static class Inject
             .AddCmdHandler()
             .AddTransient(_ => Generators._generateHope)
             .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
-            .AddHostedService<Effects.Responder>();
+            .AddTransient<Effects.IResponder, Effects.Responder>()
+            .AddTransient<IReactor<Spoke>, Effects.Responder>();
     }
 }

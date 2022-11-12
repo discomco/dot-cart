@@ -4,7 +4,7 @@ using Engine.Context.Common.Drivers;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Effects.Engine;
+namespace Engine.Context.Tests.Effects;
 
 public class EngineSubscriptionInfoTests : SubscriptionInfoTests<IEngineSubscriptionInfo>
 {

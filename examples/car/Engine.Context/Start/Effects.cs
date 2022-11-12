@@ -36,8 +36,15 @@ public static class Effects
         {
         }
     }
+    
+    public interface IResponder : IResponder<ResponderDriver, Hope,Cmd>
+    {
+        
+    }
 
-    public class Responder : Responder<ResponderDriver, Hope, Cmd>
+    
+
+    public class Responder : Responder<Spoke,ResponderDriver, Hope, Cmd>, IResponder
     {
         public Responder(
             IResponderDriver<Hope> responderDriver,
@@ -51,7 +58,11 @@ public static class Effects
     }
 
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Common.Schema.Engine, IEvt>
+    public interface IToMemDocProjection
+    {
+        
+    }
+    public class ToMemDocProjection : Projection<Spoke, EngineProjectionDriver, Common.Schema.Engine, IEvt>, IToMemDocProjection
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Common.Schema.Engine> projectionDriver,

@@ -10,7 +10,11 @@ namespace Engine.Context.ChangeRpm;
 
 public static class Effects
 {
-    public class Responder : Responder<MemResponderDriver<Hope>, Hope, Cmd>
+    public interface IResponder: IResponder<MemResponderDriver<Hope>, Hope,Cmd>
+    {}
+    
+    
+    public class Responder : Responder<Spoke,MemResponderDriver<Hope>, Hope, Cmd>, IResponder
     {
         public Responder(
             IResponderDriver<Hope> responderDriver,
@@ -22,8 +26,15 @@ public static class Effects
         {
         }
     }
+    
+    
+    public interface IToMemDocProjection : IProjection<EngineProjectionDriver, Common.Schema.Engine, IEvt>
+    {
+        
+    }
 
-    public class ToMemDocProjection : Projection<EngineProjectionDriver, Common.Schema.Engine, IEvt>
+    public class ToMemDocProjection : Projection<Spoke, EngineProjectionDriver, Common.Schema.Engine, IEvt>, IToMemDocProjection
+        
     {
         public ToMemDocProjection(ITopicMediator mediator,
             IProjectionDriver<Common.Schema.Engine> projectionDriver,

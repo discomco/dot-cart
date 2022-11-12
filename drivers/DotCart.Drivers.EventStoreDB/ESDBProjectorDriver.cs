@@ -40,7 +40,10 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
 
     public void Dispose()
     {
-        _subscription.Dispose();
+        if (_subscription!=null)
+        {
+            _subscription.Dispose();    
+        }
     }
 
     public void SetReactor(IReactor reactor)
@@ -82,8 +85,8 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
 
     private async Task CreateSubscription(CancellationToken cancellationToken)
     {
-        await _retryPolicy.ExecuteAsync(async () =>
-        {
+        // await _retryPolicy.ExecuteAsync(async () =>
+        // {
             try
             {
                 await _client.CreateToAllAsync(
@@ -101,7 +104,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
             {
                 Log.Error(e.InnerAndOuter());
             }
-        });
+        // });
     }
 
     private void SubscriptionDropped(PersistentSubscription subscription, SubscriptionDroppedReason reason,
@@ -109,14 +112,15 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     {
     }
 
-    private Task EventAppeared(
+    private async Task EventAppeared(
         PersistentSubscription subscription,
         ResolvedEvent resolvedEvent,
         int? someInt,
         CancellationToken cancellationToken)
     {
         var evt = resolvedEvent.Event.ToEvent();
-        Log.Information($"::RESOLVED => {evt.MsgId}");
-        return _reactor.HandleAsync(evt, cancellationToken);
+        Log.Information($"{subscription.SubscriptionId} => {evt.AggregateID.Id()} ~> {evt.Topic}");
+        await _reactor.HandleAsync(evt, cancellationToken).ConfigureAwait(false);
+        await subscription.Ack(resolvedEvent);
     }
 }

@@ -17,10 +17,11 @@ public interface IResponder<TDriver, THope, TCmd> : IReactor
 {
 }
 
-public abstract class Responder<TDriver, THope, TCmd> : Reactor, IResponder<TDriver, THope, TCmd>
+public abstract class Responder<TSpoke, TDriver, THope, TCmd> : Reactor<TSpoke>, IResponder<TDriver, THope, TCmd>
     where TDriver : IResponderDriver<THope>
     where THope : IHope
     where TCmd : ICmd
+    where TSpoke : ISpoke<TSpoke>
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;

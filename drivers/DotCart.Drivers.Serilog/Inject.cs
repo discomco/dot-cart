@@ -5,6 +5,7 @@ using Serilog;
 using Serilog.Debugging;
 using Serilog.Events;
 using Serilog.Sinks.Elasticsearch;
+using Serilog.Sinks.SystemConsole.Themes;
 
 namespace DotCart.Drivers.Serilog;
 
@@ -41,8 +42,13 @@ public static class Inject
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
+            // .WriteTo.Console(LogEventLevel.Verbose,
+            //     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {NewLine}[{Properties}]{NewLine}{Exception}")
             .WriteTo.Console(LogEventLevel.Verbose,
-                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {NewLine}[{Properties}]{NewLine}{Exception}")
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [T:{ThreadId:d3}][{Level:u3}] {Message:lj}  {NewLine}{Exception}",
+                theme: AnsiConsoleTheme.Code
+                )
+            
             .CreateLogger();
         return Log.Logger;
     }

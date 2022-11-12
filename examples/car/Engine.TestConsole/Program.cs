@@ -1,9 +1,12 @@
-﻿using DotCart.Drivers.Serilog;
+﻿using DotCart.Core;
+using DotCart.Drivers.Serilog;
 using Engine.TestConsole;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Serilog;
 using Inject = DotCart.Drivers.Serilog.Inject;
+
+DotEnv.FromEmbedded();
 
 var ts = new CancellationTokenSource();
 
@@ -21,3 +24,5 @@ var host = hostBuilder.ConfigureLogging(logging => logging
 
 await host
     .RunAsync(ts.Token);
+
+//host.Run();

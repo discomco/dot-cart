@@ -17,6 +17,7 @@ using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Xunit.Abstractions;
+using Spoke = Engine.Context.Initialize.Spoke;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
@@ -26,7 +27,7 @@ public class ESDBProjectorDriverTests : IoCTests
     private IProjectorDriver _driver;
     private IEventStoreDriver _eventStore;
     private IHostExecutor _executor;
-    private ESDBEngineEventFeeder _feeder;
+    private IESDBEngineEventFeeder _feeder;
     private ILogger _logger;
     private ITopicMediator _mediator;
     private IModelStoreDriver<Engine.Context.Common.Schema.Engine> _memStore;
@@ -180,7 +181,7 @@ public class ESDBProjectorDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(Container);
         // WHEN
-        _feeder = Container.GetHostedService<ESDBEngineEventFeeder>();
+        _feeder = Container.GetRequiredService<IESDBEngineEventFeeder>();
         // THEN 
         Assert.NotNull(_feeder);
     }
@@ -200,7 +201,7 @@ public class ESDBProjectorDriverTests : IoCTests
     protected override void Initialize()
     {
         _executor = Container.GetRequiredService<IHostExecutor>();
-        _feeder = Container.GetHostedService<ESDBEngineEventFeeder>();
+        _feeder = Container.GetRequiredService<IESDBEngineEventFeeder>();
         _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
         _memStore = Container.GetRequiredService<IModelStoreDriver<Engine.Context.Common.Schema.Engine>>();
     }
@@ -215,7 +216,7 @@ public class ESDBProjectorDriverTests : IoCTests
         services
             .AddInitializeEngineWithThrottleUpStream()
             .AddESDBEngineEventFeeder()
-            .AddEngineESDBProjectorDriver()
+            .AddEngineESDBProjectorDriver<Spoke>()
             .AddInitializedProjections()
             .AddStartedProjections()
             .AddChangeRpmProjections()
