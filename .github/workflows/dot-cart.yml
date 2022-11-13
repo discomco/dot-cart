@@ -4,7 +4,12 @@ on:
   push:
     branches:
       - master
-
+env:
+  REDIS_CONFIG: "localhost:6379"
+  EVENTSTORE_URI: "esdb+discover://127.0.0.1:2113?tls=false"
+  EVENTSTORE_USER: "admin"
+  EVENTSTORE_PWD: "changeit"
+  
 jobs:
   
   build:
@@ -27,8 +32,8 @@ jobs:
         run: dotnet restore
       - name: Build Packages
         run: dotnet build --configuration Release --no-restore
-      - name: Test Packages
-        run: dotnet test --no-restore --verbosity minimal
+#      - name: Test Packages
+#        run: dotnet test --no-restore --verbosity minimal
 #      - name: Build Packages
 #        run: ./cid/build.sh DotCart.root.sln
 #      - name: Test Packages
