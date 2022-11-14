@@ -1,8 +1,10 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.Mediator;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Engine.Contract.Initialize;
@@ -39,18 +41,18 @@ public static partial class Inject
         return services
             .AddInitializeResponder()
             .AddInitializedEmitter()
-            .AddInitializedMemProjections()
+//            .AddInitializedMemProjections()
             .AddInitializedRedisProjections();
     }
 
     public static IServiceCollection AddInitializedRedisProjections(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddTransient(_ => Mappers._evt2State)
-            .AddTransient<IReactor<Spoke>, Projector<Spoke>>()
+            .AddTransient<IProjector, Projector>()
             .AddTransient<Effects.IToRedisDoc, Effects.ToRedisDoc>()
-            .AddTransient<IReactor<Spoke>, Effects.ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, Effects.ToRedisDoc>()
             .AddTransientRedisDb<Common.Schema.Engine>();
     }
 
@@ -60,22 +62,20 @@ public static partial class Inject
             .AddTransient(_ => Mappers._evt2Fact);
     }
 
-
-    public static IServiceCollection AddInitializedMemProjections(this IServiceCollection services)
+    public static IServiceCollection AddInitializedProjections(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddTransient(_ => Mappers._evt2State)
-            .AddTransient<IReactor<Spoke>, Projector<Spoke>>()
-            .AddTransient<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
-            .AddTransient<Effects.IMemDocProjection, Effects.ToMemDocProjection>()
-            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
+            .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
+            .AddTransient<Effects.IToMemDoc, Effects.ToMemDoc>()
+            .AddTransient<IActor<Spoke>, Effects.ToMemDoc>();
     }
-
 
     public static IServiceCollection AddInitializeResponder(this IServiceCollection services)
     {
         return services
+            .AddExchange()
             .AddAggregateBuilder()
             .AddEngineAggregate()
             .AddCmdHandler()
@@ -83,6 +83,6 @@ public static partial class Inject
             .AddTransient(_ => Mappers._hope2Cmd)
             .AddSingleton<IResponderDriver<Hope>, Drivers.ResponderDriver>()
             .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IReactor<Spoke>, Effects.Responder>();
+            .AddTransient<IActor<Spoke>, Effects.Responder>();
     }
 }

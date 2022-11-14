@@ -1,4 +1,4 @@
-﻿using DotCart.Context.Effects.Drivers;
+﻿using DotCart.Context.Abstractions.Drivers;
 using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
@@ -165,11 +165,6 @@ public class RedisDb : IRedisDb
         _trackedObjects.Clear();
     }
 
-    public void Close()
-    {
-        _connection.Close();
-    }
-
     public void Dispose()
     {
         _connection.Close();
@@ -178,6 +173,11 @@ public class RedisDb : IRedisDb
     public ValueTask DisposeAsync()
     {
         return _connection.DisposeAsync();
+    }
+
+    public void Close()
+    {
+        _connection.Close();
     }
 
     public Task CloseAsync(bool allowCommandsToComplete)

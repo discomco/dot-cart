@@ -1,4 +1,4 @@
-﻿using DotCart.Context.Effects.Drivers;
+﻿using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +8,8 @@ namespace DotCart.Drivers.Redis;
 
 public static class Inject
 {
-    public static IServiceCollection AddRedis<TModel>(this IServiceCollection services) 
-        where TModel: IState
+    public static IServiceCollection AddRedis<TModel>(this IServiceCollection services)
+        where TModel : IState
     {
         return services?
             .AddTransient(p =>
@@ -19,13 +19,14 @@ public static class Inject
                 opts.Password = Config.Password;
                 opts.User = Config.User;
                 opts.AllowAdmin = Config.AllowAdmin;
-                opts.DefaultDatabase = Convert.ToInt32(DbNameAtt.Get<TModel>()); 
+                opts.DefaultDatabase = Convert.ToInt32(DbNameAtt.Get<TModel>());
                 return opts;
             })
             .AddTransient<IRedisConnectionFactory, RedisConnectionFactory>();
     }
 
-    public static IServiceCollection AddSingletonRedisConnection<TModel>(this IServiceCollection services) where TModel : IState
+    public static IServiceCollection AddSingletonRedisConnection<TModel>(this IServiceCollection services)
+        where TModel : IState
     {
         return services?
             .AddRedis<TModel>()
@@ -36,7 +37,8 @@ public static class Inject
             });
     }
 
-    public static IServiceCollection AddTransientRedisConnection<TModel>(this IServiceCollection services) where TModel : IState
+    public static IServiceCollection AddTransientRedisConnection<TModel>(this IServiceCollection services)
+        where TModel : IState
     {
         return services?
             .AddRedis<TModel>()
@@ -59,7 +61,12 @@ public static class Inject
     {
         return services?
             .AddTransientRedisConnection<TModel>()
+            .AddTransient<IRedisStore<TModel>, RedisStore<TModel>>()
             .AddTransient<IModelStore<TModel>, RedisStore<TModel>>()
             .AddTransient<IRedisDb, RedisDb>();
     }
+}
+
+public interface IRedisStore<TModel> : IModelStore<TModel> where TModel : IState
+{
 }

@@ -1,3 +1,4 @@
+using DotCart.Context.Abstractions;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 
@@ -14,6 +15,6 @@ public abstract class ApplyEvt<TState, TEvt> : IApply
         Aggregate = aggregate;
     }
 
-    public string EvtType => Topic.Get<TEvt>();
+    public string EvtType => TopicAtt.Get<TEvt>();
     public abstract TState Apply(TState state, Event evt);
 }

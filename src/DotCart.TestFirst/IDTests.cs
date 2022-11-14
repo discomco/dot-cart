@@ -9,7 +9,7 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
     protected NewID<TID> _newID;
 
 
-    public IDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public IDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -17,9 +17,9 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
     public void ShouldResolveIDCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var newID = Container.GetRequiredService<NewID<TID>>();
+        var newID = TestEnv.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -55,6 +55,6 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
 
     protected override void Initialize()
     {
-        _newID = Container.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.GetRequiredService<NewID<TID>>();
     }
 }

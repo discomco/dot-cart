@@ -1,5 +1,5 @@
-using DotCart.Context.Behaviors;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Dtos;
 using DotCart.Core;
 using static System.Threading.Tasks.Task;
@@ -11,52 +11,51 @@ public delegate TFact Evt2Fact<out TFact, in TEvt>(Event evt)
     where TFact : IFact
     where TEvt : IEvt;
 
-public interface IEmitter : IReactor
+public interface IEmitter : IActor
 {
 }
 
-public abstract class Emitter<TSpoke, TDriver, TEvt, TFact> : Reactor<TSpoke>, IEmitter
+public abstract class Emitter<TSpoke, TDriver, TEvt, TFact> : ActorT<TSpoke>, IEmitter
     where TDriver : IEmitterDriver
     where TEvt : IEvt
     where TFact : IFact
-    where TSpoke : ISpoke<TSpoke>
+    where TSpoke : ISpokeT<TSpoke>
 {
     private readonly IEmitterDriver _emitterDriver;
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
-    private readonly ITopicMediator _mediator;
+
 
     protected Emitter(
+        IExchange exchange,
         IEmitterDriver emitterDriver,
-        ITopicMediator mediator,
-        Evt2Fact<TFact, TEvt> evt2Fact)
+        Evt2Fact<TFact, TEvt> evt2Fact) : base(exchange)
     {
-        _mediator = mediator;
         _evt2Fact = evt2Fact;
         _emitterDriver = emitterDriver;
     }
 
 
-    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        return CompletedTask;
+        return Handler((IEvt)msg, cancellationToken);
     }
 
-    protected override Task StartReactingAsync(CancellationToken cancellationToken)
-    {
-        return Run(() => { _mediator.SubscribeAsync(Topic.Get<TEvt>(), Handler); }, cancellationToken);
-    }
 
-    private Task Handler(IEvt evt)
+    private Task Handler(IEvt evt, CancellationToken cancellationToken)
     {
         return Run(() =>
         {
             var fact = _evt2Fact((Event)evt);
-            _emitterDriver.EmitFact(fact);
-        });
+            return _emitterDriver.EmitFactAsync(fact);
+        }, cancellationToken);
     }
 
-    protected override Task StopReactingAsync(CancellationToken cancellationToken)
+    protected override Task StopActingAsync(CancellationToken cancellationToken)
     {
-        return Run(() => { _mediator.UnsubscribeAsync(Topic.Get<TEvt>(), Handler); }, cancellationToken);
+        return Run(() =>
+        {
+            _exchange.Unsubscribe(TopicAtt.Get<TEvt>(), this);
+            return CompletedTask;
+        }, cancellationToken);
     }
 }

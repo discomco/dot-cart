@@ -12,6 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
         <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj" />
         <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj" />
         <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj" />

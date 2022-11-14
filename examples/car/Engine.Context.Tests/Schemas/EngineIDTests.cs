@@ -9,13 +9,13 @@ namespace Engine.Context.Tests.Schemas;
 
 public class EngineIDTests : IDTests<EngineID>
 {
-    public EngineIDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public EngineIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
     protected override void Initialize()
     {
-        _newID = Container.GetRequiredService<NewID<EngineID>>();
+        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
     }
 
     protected override void SetTestEnvironment()

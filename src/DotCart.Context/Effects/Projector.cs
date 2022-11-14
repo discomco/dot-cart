@@ -1,5 +1,5 @@
-using DotCart.Context.Behaviors;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Dtos;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -8,53 +8,58 @@ namespace DotCart.Context.Effects;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddProjector<TSpoke>(this IServiceCollection services)
-        where TSpoke : ISpoke<TSpoke>
+    public static IServiceCollection AddProjector(this IServiceCollection services)
     {
         return services
-            .AddTransient<IProjector<TSpoke>, Projector<TSpoke>>();
+            .AddTransient<IActor, Projector>();
     }
 }
 
-public interface IProjector<in TSpoke> : IReactor<TSpoke> where TSpoke : ISpoke<TSpoke>
+public class Projector : Actor, IProjector, IProducer
 {
-}
-
-public class Projector<TSpoke> : Reactor<TSpoke>, IProjector<TSpoke>
-    where TSpoke : ISpoke<TSpoke>
-{
-    private readonly ITopicMediator _mediator;
     private readonly IProjectorDriver _projectorDriver;
 
     public Projector(
-        IProjectorDriver projectorDriver,
-        ITopicMediator mediator
-    )
+        IExchange exchange,
+        IProjectorDriver projectorDriver) : base(exchange)
     {
-        _mediator = mediator;
         _projectorDriver = projectorDriver;
     }
 
-    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
+    public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        var evt = msg as IEvt;
-        Log.Information(evt != null
+        Log.Information(msg is IEvt evt
             ? $"[{Name}] ~> {evt.Topic} @ {evt.AggregateID.Id()}"
             : $"[{Name}] ~> {msg.Topic}");
-
-        return _mediator.PublishAsync(msg.Topic, (IEvt)msg);
+        await _exchange.Publish(msg.Topic, (IEvt)msg, cancellationToken);
     }
 
-    protected override Task StartReactingAsync(CancellationToken cancellationToken)
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
     {
-        _projectorDriver.SetReactor(this);
-        Log.Information("Projector :: has Started.");
-        return _projectorDriver.StartStreamingAsync(cancellationToken);
+        return (Task<IMsg>?)Task.CompletedTask;
     }
 
-    protected override Task StopReactingAsync(CancellationToken cancellationToken)
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
-        Log.Information("Projector :: is Stopping.");
-        return _projectorDriver.StopStreamingAsync(cancellationToken);
+        return Task.CompletedTask;
+    }
+
+    protected override Task StartActingAsync(CancellationToken cancellationToken)
+    {
+        return Task.Run(() =>
+        {
+            _projectorDriver.SetActor(this);
+            Log.Information("Projector :: has Started.");
+            return _projectorDriver.StartStreamingAsync(cancellationToken);
+        }, cancellationToken);
+    }
+
+    protected override Task StopActingAsync(CancellationToken cancellationToken)
+    {
+        return Task.Run(() =>
+        {
+            Log.Information("Projector :: is Stopping.");
+            return _projectorDriver.StopStreamingAsync(cancellationToken);
+        }, cancellationToken);
     }
 }

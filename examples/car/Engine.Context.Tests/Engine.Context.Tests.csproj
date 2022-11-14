@@ -25,6 +25,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
         <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
         <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
         <ProjectReference Include="..\Engine.Context\Engine.Context.csproj" />

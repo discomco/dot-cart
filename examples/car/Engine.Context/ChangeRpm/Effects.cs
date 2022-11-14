@@ -1,9 +1,8 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract;
 using DotCart.Drivers.InMem;
-using Engine.Context.Common.Drivers;
 using Engine.Contract.ChangeRpm;
 
 namespace Engine.Context.ChangeRpm;
@@ -15,12 +14,22 @@ public static class Effects
     }
 
 
-    public class Responder : Responder<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
+    public class Responder : ResponderT<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
     {
-        public Responder(
+        // public Responder(
+        //     IExchange exchange,
+        //     IResponderDriver<Hope> responderDriver,
+        //     ICmdHandler cmdHandler,
+        //     Hope2Cmd<Cmd, Hope> hope2Cmd) : base(
+        //     responderDriver,
+        //     cmdHandler,
+        //     hope2Cmd) : base()
+        // {
+        // }
+        public Responder(IExchange exchange,
             IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
             responderDriver,
             cmdHandler,
             hope2Cmd)
@@ -33,13 +42,13 @@ public static class Effects
     {
     }
 
-    public class ToMemDocProjection : Projection<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
+    public class ToMemDocProjection : ProjectionT<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
         IToMemDocProjection
 
     {
-        public ToMemDocProjection(ITopicMediator mediator,
+        public ToMemDocProjection(IExchange exchange,
             IModelStore<Common.Schema.Engine> modelStore,
-            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(mediator,
+            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)
         {

@@ -9,7 +9,7 @@ namespace Engine.Context.Tests.Schemas;
 
 public class EngineSchemaTests : SchemaTests<EngineID, Common.Schema.Engine>
 {
-    public EngineSchemaTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public EngineSchemaTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

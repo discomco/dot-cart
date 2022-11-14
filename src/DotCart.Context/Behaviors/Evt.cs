@@ -1,18 +1,9 @@
+using DotCart.Context.Abstractions;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
-
-public interface IEvt : IMsg
-{
-    ID AggregateID { get; }
-    byte[] MetaData { get; set; }
-    long Version { get; set; }
-    void SetVersion(long version);
-    void SetMetaPayload<TPayload>(TPayload payload);
-    TPayload GetMetaPayload<TPayload>();
-}
 
 public interface IEvt<out TPayload> : IEvt
     where TPayload : IPayload

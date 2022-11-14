@@ -1,9 +1,10 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.Redis;
 using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 
@@ -30,58 +31,54 @@ public static class Mappers
 
 public static class Effects
 {
-    public interface IResponder : IReactor<Spoke>
+    public interface IResponder : IActor<Spoke>
     {
     }
 
     [Name("Engine.Initialize.Responder")]
-    public class Responder : Responder<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
+    public class Responder : ResponderT<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
     {
-        public Responder(
+        public Responder(IExchange exchange,
             IResponderDriver<Hope> responderDriver,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(responderDriver, cmdHandler, hope2Cmd)
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
+            responderDriver,
+            cmdHandler,
+            hope2Cmd)
         {
         }
     }
 
-    public interface IMemDocProjection
+    public interface IToMemDoc
     {
     }
 
     [Name("Engine.Initialize.ToMemDocProjection")]
-    public class ToMemDocProjection : Projection<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
-        IMemDocProjection
+    public class ToMemDoc : ProjectionT<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
+        IToMemDoc
     {
-        public ToMemDocProjection(ITopicMediator mediator,
+        public ToMemDoc(IExchange exchange,
             IModelStore<Common.Schema.Engine> modelStore,
-            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(mediator,
-            modelStore,
-            evt2State)
-        {
-        }
-    }
-    public interface IToRedisDocStore: IModelStore<Common.Schema.Engine>
-    {
-        
-    }
-    public interface IToRedisDoc : IProjection<IToRedisDocStore, Common.Schema.Engine, IEvt>
-    {
-    }
-    
-    public class ToRedisDoc: Projection<Spoke, Drivers.ToRedisDocStore, Common.Schema.Engine, IEvt>, IToRedisDoc
-    {
-        public ToRedisDoc(ITopicMediator mediator,
-            IModelStore<Common.Schema.Engine> modelStore,
-            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(mediator,
+            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)
         {
         }
     }
 
+    public interface IToRedisDoc : IProjection<RedisStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>, IConsumer
+    {
+    }
 
-
-
-
+    public class ToRedisDoc : ProjectionT<Spoke, RedisStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
+        IToRedisDoc
+    {
+        public ToRedisDoc(IExchange exchange,
+            IModelStore<Common.Schema.Engine> modelStore,
+            Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(exchange,
+            modelStore,
+            evt2State)
+        {
+        }
+    }
 }

@@ -1,3 +1,4 @@
+using DotCart.Context.Abstractions;
 using DotCart.Contract.Dtos;
 using DotCart.Core;
 
@@ -8,7 +9,7 @@ public abstract class TryCmd<TCmd> : ITry<TCmd>
 {
     protected IAggregate Aggregate;
 
-    public string CmdType => Topic.Get<TCmd>();
+    public string CmdType => TopicAtt.Get<TCmd>();
 
     public void SetAggregate(IAggregate aggregate)
     {

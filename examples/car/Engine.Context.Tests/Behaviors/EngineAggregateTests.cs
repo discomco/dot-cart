@@ -1,3 +1,4 @@
+using DotCart.Context.Abstractions;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Schemas;
 using DotCart.Core;
@@ -7,11 +8,11 @@ using Engine.Context.ChangeRpm;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
 using Engine.Context.Start;
+using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 using Cmd = Engine.Context.Initialize.Cmd;
-using Payload = Engine.Contract.Initialize.Payload;
 
 namespace Engine.Context.Tests.Behaviors;
 
@@ -19,8 +20,8 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
 {
     private IAggregatePolicy? _startPolicy;
 
-    public EngineAggregateTests(ITestOutputHelper output, IoCTestContainer container)
-        : base(output, container)
+    public EngineAggregateTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 
@@ -89,11 +90,11 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
     public void ShouldResolveStartTryCmd()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var builder = Container.GetRequiredService<IAggregateBuilder>();
+        var builder = TestEnv.GetRequiredService<IAggregateBuilder>();
         var agg = builder.Build();
-        var topic = Topic.Get<Start.Cmd>();
+        var topic = TopicAtt.Get<Start.Cmd>();
         var knowsIt = agg.KnowsTry(topic);
         // THEN
         Assert.True(knowsIt);

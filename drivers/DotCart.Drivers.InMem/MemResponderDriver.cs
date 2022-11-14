@@ -1,5 +1,5 @@
-using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract;
 using DotCart.Contract.Dtos;
 using static System.Threading.Tasks.Task;
@@ -14,7 +14,7 @@ namespace DotCart.Drivers.InMem;
 public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where THope : IHope
 {
     private readonly GenerateHope<THope> _generateHope;
-    private IReactor _reactor;
+    private IActor _actor;
 
     protected MemResponderDriver(GenerateHope<THope> generateHope)
     {
@@ -29,7 +29,7 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
             {
                 Thread.Sleep(500);
                 var hope = _generateHope();
-                await _reactor.HandleAsync(hope, cancellationToken);
+                await _actor.HandleCast(hope, cancellationToken);
             }
         }, cancellationToken);
     }
@@ -39,16 +39,15 @@ public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where 
         return CompletedTask;
     }
 
-
-    public void SetReactor(IReactor reactor)
-    {
-        _reactor = reactor;
-    }
-
     public void Dispose()
     {
         Dispose(true);
         GC.SuppressFinalize(this);
+    }
+
+    public void SetActor(IActor actor)
+    {
+        _actor = actor;
     }
 
     protected abstract void Dispose(bool disposing);

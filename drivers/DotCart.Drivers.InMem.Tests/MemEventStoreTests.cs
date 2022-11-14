@@ -1,3 +1,5 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Contract.Schemas;
@@ -19,18 +21,30 @@ public class MemEventStoreTests : IoCTests
     private IID _engineId;
     private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
     private NewID<EngineID> _newEngineID;
+    private IProjectorDriver _projectorDriver;
 
-    public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
+
+    // [Fact]
+    // public void ShoudResolveProjectorDriver()
+    // {
+    //     // GIVEN
+    //     Assert.NotNull(TestEnv);
+    //     // WHEN
+    //     _projectorDriver = TestEnv.GetRequiredService<IProjectorDriver>();
+    //     // THEN
+    //     Assert.NotNull(_projectorDriver);
+    // }
 
     [Fact]
     public void ShouldResolveIDCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var newEngineID = Container.GetRequiredService<NewID<EngineID>>();
+        var newEngineID = TestEnv.GetRequiredService<NewID<EngineID>>();
         // THEN
         Assert.NotNull(newEngineID);
     }
@@ -40,9 +54,9 @@ public class MemEventStoreTests : IoCTests
     public void ShouldResolveMemEventStore()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var me = Container.GetService<IMemEventStoreDriver>();
+        var me = TestEnv.GetService<IMemEventStoreDriver>();
         // THEN
         Assert.NotNull(me);
     }
@@ -84,13 +98,14 @@ public class MemEventStoreTests : IoCTests
 
     protected override void Initialize()
     {
-        _newEngine = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
-        _aggStore = Container.GetRequiredService<IMemEventStoreDriver>();
-        var builder = Container.GetRequiredService<IAggregateBuilder>();
+        _newEngine = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
+        _aggStore = TestEnv.GetRequiredService<IMemEventStoreDriver>();
+        var builder = TestEnv.GetRequiredService<IAggregateBuilder>();
         _agg = builder.Build();
-        _newEngineID = Container.GetRequiredService<NewID<EngineID>>();
+        _newEngineID = TestEnv.GetRequiredService<NewID<EngineID>>();
         _engineId = _newEngineID();
     }
+
 
     protected override void SetTestEnvironment()
     {

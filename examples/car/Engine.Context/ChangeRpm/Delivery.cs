@@ -1,7 +1,11 @@
+using DotCart.Context.Abstractions;
 using DotCart.Context.Spokes;
 
 namespace Engine.Context.ChangeRpm;
 
-public class Spoke : Spoke<Spoke>
+public class Spoke : SpokeT<Spoke>
 {
+    public Spoke(IExchange exchange) : base(exchange)
+    {
+    }
 }

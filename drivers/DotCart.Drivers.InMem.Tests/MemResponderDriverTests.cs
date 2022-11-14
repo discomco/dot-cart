@@ -6,7 +6,7 @@ namespace DotCart.Drivers.InMem.Tests;
 
 public class MemResponderDriverTests : IoCTests
 {
-    public MemResponderDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public MemResponderDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

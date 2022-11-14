@@ -1,11 +1,11 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
 using Engine.Context.Initialize;
 using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
-using IEvt = DotCart.Context.Behaviors.IEvt;
+using IEvt = DotCart.Context.Abstractions.IEvt;
 using Topics = Engine.Context.Initialize.Topics;
 
 namespace Engine.Context.Common;

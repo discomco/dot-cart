@@ -1,4 +1,6 @@
-﻿namespace DotCart.Context.Behaviors.Specifications.Provided;
+﻿using DotCart.Context.Abstractions;
+
+namespace DotCart.Context.Behaviors.Specifications.Provided;
 
 public class AggregateIsNewSpecification : Specification<IAggregate>
 {

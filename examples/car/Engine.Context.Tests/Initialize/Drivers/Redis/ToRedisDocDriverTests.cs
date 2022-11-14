@@ -9,9 +9,9 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize.Drivers.Redis;
 
-public class ToRedisDocDriverTests : RedisStoreDriverTestsT<EngineID, Engine.Context.Common.Schema.Engine>
+public class ToRedisDocDriverTests : RedisStoreDriverTestsT<EngineID, Common.Schema.Engine>
 {
-    public ToRedisDocDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ToRedisDocDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -28,9 +28,5 @@ public class ToRedisDocDriverTests : RedisStoreDriverTestsT<EngineID, Engine.Con
             .AddEngineIDCtor()
             .AddEngineCtor()
             .AddToDocRedisStoreDriver();
-
     }
-    
-    
-    
 }

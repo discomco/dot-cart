@@ -1,11 +1,10 @@
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public class RedisStore<TState> : IModelStore<TState> where TState : IState
+public class RedisStore<TState> : IRedisStore<TState> where TState : IState
 {
     private readonly object _delMutex = new();
     private readonly IRedisDb _redisDb;

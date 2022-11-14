@@ -1,4 +1,4 @@
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -19,7 +19,7 @@ public class ChangeRpmEffectsTests : EffectsTests<
     IModelStore<Common.Schema.Engine>,
     ChangeRpm.Effects.IToMemDocProjection>
 {
-    public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

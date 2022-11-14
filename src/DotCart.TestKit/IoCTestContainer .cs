@@ -7,7 +7,7 @@ public class IoCTestContainer : IDisposable
 {
     public IoCTestContainer()
     {
-        Services.AddTestHelpers();
+        Services.AddBaseTestEnv();
     }
 
     public IServiceCollection Services { get; } = new ServiceCollection();

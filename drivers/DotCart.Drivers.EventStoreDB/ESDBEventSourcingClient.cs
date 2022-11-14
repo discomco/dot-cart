@@ -49,27 +49,13 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        try
-        {
-            return _client.AppendToStreamAsync(streamName,
+        return _retryPolicy.ExecuteAsync(()
+            => _client.AppendToStreamAsync(streamName,
                 expectedState,
                 eventData,
                 configureOperationOptions,
                 deadline,
-                userCredentials,
-                cancellationToken);
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            return _retryPolicy.ExecuteAsync(()
-                => _client.AppendToStreamAsync(streamName,
-                    expectedState,
-                    eventData,
-                    configureOperationOptions,
-                    deadline,
-                    userCredentials, cancellationToken));
-        }
+                userCredentials, cancellationToken));
     }
 
     // public Task<DeleteResult> SoftDeleteAsync(string streamName, StreamRevision expectedRevision,

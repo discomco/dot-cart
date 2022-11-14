@@ -1,5 +1,5 @@
 using System.Text;
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
 using EventStore.Client;
 using Newtonsoft.Json;
 

@@ -5,7 +5,6 @@ using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Payload = Engine.Contract.Initialize.Payload;
 
 namespace Engine.Contract.Tests;
 
@@ -13,7 +12,7 @@ public class HopeTests : IoCTests
 {
     private NewID<EngineID> _newID;
 
-    public HopeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public HopeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -32,7 +31,7 @@ public class HopeTests : IoCTests
 
     protected override void Initialize()
     {
-        _newID = Container.GetRequiredService<NewID<EngineID>>();
+        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
     }
 
     protected override void SetTestEnvironment()

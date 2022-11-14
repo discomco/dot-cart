@@ -14,7 +14,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 {
     protected NewID<TID> _newID;
 
-    protected ContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    protected ContractTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -23,7 +23,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     {
         // GIVEN
         // WHEN
-        var topic = Topic.Get<THope>();
+        var topic = TopicAtt.Get<THope>();
         // THEN
         Assert.False(string.IsNullOrEmpty(topic));
     }
@@ -33,7 +33,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     {
         // GIVEN
         // WHEN
-        var topic = Topic.Get<TFact>();
+        var topic = TopicAtt.Get<TFact>();
         // THEN
         Assert.False(string.IsNullOrEmpty(topic));
     }
@@ -57,9 +57,9 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     public void ShouldResolveIDCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = Container.GetRequiredService<NewID<TID>>();
+        var ctor = TestEnv.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -89,6 +89,6 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 
     protected override void Initialize()
     {
-        _newID = Container.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.GetRequiredService<NewID<TID>>();
     }
 }

@@ -1,3 +1,4 @@
+using DotCart.Context.Abstractions;
 using DotCart.Context.Behaviors;
 using DotCart.Contract.Schemas;
 using DotCart.TestKit;
@@ -13,8 +14,8 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     protected NewID<TID> _newID;
     protected NewState<TState>? _newState;
 
-    protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer container)
-        : base(output, container)
+    protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 
@@ -22,9 +23,9 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     public void ShouldResolveIDCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _newID = Container.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.GetRequiredService<NewID<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -34,9 +35,9 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     public void ShouldResolveStateCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _newState = Container.GetRequiredService<NewState<TState>>();
+        _newState = TestEnv.GetRequiredService<NewState<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -45,9 +46,9 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     public void ShouldResolveAggregateBuilder()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var aggBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        var aggBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
         // THEN
         Assert.NotNull(aggBuilder);
     }
@@ -68,9 +69,9 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     public void ShouldResolveBehavior()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var agg = Container.GetService<IAggregate>();
+        var agg = TestEnv.GetService<IAggregate>();
         // THEN
         Assert.NotNull(agg);
         var state = agg.GetState();
@@ -80,10 +81,10 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
 
     protected override void Initialize()
     {
-        _builder = Container.GetService<IAggregateBuilder>();
-        _newState = Container.GetService<NewState<TState>>();
+        _builder = TestEnv.GetService<IAggregateBuilder>();
+        _newState = TestEnv.GetService<NewState<TState>>();
         _agg = _builder.Build();
-        _newID = Container.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.GetRequiredService<NewID<TID>>();
         _ID = _newID();
     }
 }

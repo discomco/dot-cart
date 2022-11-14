@@ -1,4 +1,4 @@
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -17,10 +17,10 @@ public class InitializeEffectsTests : EffectsTests<
     Fact,
     Context.Initialize.Effects.IResponder,
     IModelStore<Common.Schema.Engine>,
-    Context.Initialize.Effects.IMemDocProjection
+    Context.Initialize.Effects.IToRedisDoc
 >
 {
-    public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

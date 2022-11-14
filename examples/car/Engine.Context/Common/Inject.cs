@@ -1,4 +1,5 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
+using DotCart.Drivers.Mediator;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -9,7 +10,7 @@ public static partial class Inject
     public static IServiceCollection AddEngineAggregate(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddSingleton(Schema.Engine.Ctor)
             .AddSingleton(EngineID.Ctor)
             .AddTransient<IAggregate, Aggregate>();

@@ -1,15 +1,27 @@
-using DotCart.Context.Effects;
+using DotCart.Context.Abstractions;
 using DotCart.Context.Spokes;
 
 namespace Engine.Context.Initialize;
 
-public class SpokeBuilder : SpokeBuilder<Spoke>
+public class SpokeBuilder : SpokeBuilderT<Spoke>
 {
-    public SpokeBuilder(Spoke spoke, IEnumerable<IReactor<Spoke>> reactors) : base(spoke, reactors)
+    public SpokeBuilder(IExchange exchange,
+        IProjector projector,
+        Spoke spoke,
+        IEnumerable<IActor<Spoke>> actors) : base(exchange,
+        projector,
+        spoke,
+        actors)
     {
     }
 }
 
-public class Spoke : Spoke<Spoke>
+
+public interface ISpoke: ISpokeT<Spoke> {}
+
+public class Spoke : SpokeT<Spoke>, ISpoke
 {
+    public Spoke(IExchange exchange) : base(exchange)
+    {
+    }
 }

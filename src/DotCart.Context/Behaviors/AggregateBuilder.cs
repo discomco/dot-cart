@@ -1,3 +1,4 @@
+using DotCart.Context.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Behaviors;
@@ -7,12 +8,11 @@ public interface IAggregateBuilder
     IAggregate Build();
 }
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddAggregateBuilder(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
             .AddTransient<IAggregateBuilder, AggregateBuilder>();
     }
 }

@@ -6,7 +6,7 @@ namespace Engine.Context.Tests.Drivers;
 
 public class ProjectionDriverTests : IoCTests
 {
-    public ProjectionDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ProjectionDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

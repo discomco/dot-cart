@@ -1,4 +1,4 @@
-using DotCart.Context.Effects;
+using DotCart.Context.Abstractions;
 using Engine.Context.Common.Schema;
 using Engine.Context.Initialize;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +12,7 @@ public static class Inject
         return services
             .AddEngineCtor()
             .AddInitializeEngineWithThrottleUpStream()
-            .AddTransient<IReactor<Spoke>, ESDBEngineEventFeeder>()
+            .AddTransient<IActor<Spoke>, ESDBEngineEventFeeder>()
             .AddTransient<IESDBEngineEventFeeder, ESDBEngineEventFeeder>();
     }
 }

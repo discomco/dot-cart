@@ -7,13 +7,11 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
 
-    <ItemGroup>
-        <PackageReference Include="xunit.assert" Version="2.4.2" />
-    </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
         <ProjectReference Include="..\DotCart.Client\DotCart.Client.csproj" />
+        <ProjectReference Include="..\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
         <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj" />
         <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
         <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />

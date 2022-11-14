@@ -1,6 +1,7 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
@@ -12,7 +13,6 @@ using Engine.Contract.Schema;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Constants = DotCart.Context.Behaviors.Constants;
 using Exception = System.Exception;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
@@ -29,7 +29,7 @@ public class ESDBEventStoreDriverTests : IoCTests
     private ScenarioGenerator<EngineID> _newScenario;
 
 
-    public ESDBEventStoreDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ESDBEventStoreDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -38,9 +38,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveESDBEventSourcingClient()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var esClient = Container.GetRequiredService<IESDBEventSourcingClient>();
+        var esClient = TestEnv.GetRequiredService<IESDBEventSourcingClient>();
         // THEN
         Assert.NotNull(esClient);
     }
@@ -50,9 +50,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveESDBDriver()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var driver = Container.GetRequiredService<IEventStoreDriver>();
+        var driver = TestEnv.GetRequiredService<IEventStoreDriver>();
         // THEN
         Assert.NotNull(driver);
         Assert.IsType<ESDBEventStoreDriver>(driver);
@@ -62,9 +62,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveAggregateBuilder()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var ab = Container.GetRequiredService<IAggregateBuilder>();
+        var ab = TestEnv.GetRequiredService<IAggregateBuilder>();
         // THEN
         Assert.NotNull(ab);
     }
@@ -73,9 +73,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveAggregate()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var aggBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        var aggBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
         var agg = aggBuilder.Build();
         // THEN
         Assert.NotNull(agg);
@@ -86,9 +86,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveInitializeEngineWithThrottleUpEventStream()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var es = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
+        var es = TestEnv.GetRequiredService<EventStreamGenerator<EngineID>>();
         // THEN
         Assert.NotNull(es);
     }
@@ -97,9 +97,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveInitializeEngineScenarioGenerator()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var scGen = Container.GetRequiredService<ScenarioGenerator<EngineID>>();
+        var scGen = TestEnv.GetRequiredService<ScenarioGenerator<EngineID>>();
         // THEN
         Assert.NotNull(scGen);
     }
@@ -153,9 +153,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveCmdHandler()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var ch = Container.GetRequiredService<ICmdHandler>();
+        var ch = TestEnv.GetRequiredService<ICmdHandler>();
         // THEN
         Assert.NotNull(ch);
     }
@@ -165,9 +165,9 @@ public class ESDBEventStoreDriverTests : IoCTests
     public void ShouldResolveEngineCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
+        var ctor = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -220,7 +220,7 @@ public class ESDBEventStoreDriverTests : IoCTests
             // WHEN
             await _eventStoreDriver.LoadAsync(agg);
             // THEN
-            Assert.False(agg.Version == Constants.NewAggregateVersion);
+            Assert.False(agg.Version == Context.Abstractions.Constants.NewAggregateVersion);
         }
         else
         {
@@ -293,13 +293,13 @@ public class ESDBEventStoreDriverTests : IoCTests
 
     protected override void Initialize()
     {
-        _eventStoreDriver = Container.GetRequiredService<IEventStoreDriver>();
-        _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
-        _newScenario = Container.GetRequiredService<ScenarioGenerator<EngineID>>();
-        _newEngine = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
-        _newID = Container.GetRequiredService<NewID<EngineID>>();
-        _cmdHandler = Container.GetRequiredService<ICmdHandler>();
-        _aggregateBuilder = Container.GetRequiredService<IAggregateBuilder>();
+        _eventStoreDriver = TestEnv.GetRequiredService<IEventStoreDriver>();
+        _newEventStream = TestEnv.GetRequiredService<EventStreamGenerator<EngineID>>();
+        _newScenario = TestEnv.GetRequiredService<ScenarioGenerator<EngineID>>();
+        _newEngine = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
+        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        _cmdHandler = TestEnv.GetRequiredService<ICmdHandler>();
+        _aggregateBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();
     }
 

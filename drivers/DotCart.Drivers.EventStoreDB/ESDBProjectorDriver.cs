@@ -1,6 +1,6 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Drivers;
-using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
@@ -19,8 +19,8 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     private readonly SubscriptionFilterOptions _filterOptions;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
+    private IActor _actor;
 
-    private IReactor _reactor;
     private PersistentSubscription _subscription;
 
     public ESDBProjectorDriver(
@@ -43,11 +43,6 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
         if (_subscription != null) _subscription.Dispose();
     }
 
-    public void SetReactor(IReactor reactor)
-    {
-        _reactor = reactor;
-    }
-
     public async Task StartStreamingAsync(CancellationToken cancellationToken)
     {
         await _retryPolicy.ExecuteAsync(async () =>
@@ -55,7 +50,6 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
             try
             {
                 await CreateSubscription(cancellationToken);
-
                 _subscription = await _client.SubscribeToAllAsync(
                     GroupName.Get<TInfo>(),
                     EventAppeared,
@@ -77,6 +71,11 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     {
         Log.Information("EventStore: Stopped Listening");
         return Task.CompletedTask;
+    }
+
+    public void SetActor(IActor actor)
+    {
+        _actor = actor;
     }
 
 
@@ -117,7 +116,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     {
         var evt = resolvedEvent.Event.ToEvent();
         Log.Information($"\u001b[33m {subscription.SubscriptionId}\u001b[0m=> {evt.AggregateID.Id()} ~> {evt.Topic}");
-        await _reactor.HandleAsync(evt, cancellationToken).ConfigureAwait(false);
+        await _actor.HandleCast(evt, cancellationToken).ConfigureAwait(false);
         await subscription.Ack(resolvedEvent);
     }
 }

@@ -1,8 +1,8 @@
 using System.Collections.Immutable;
-using DotCart.Context.Behaviors;
-using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Schemas;
+using DotCart.Drivers.Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 
@@ -18,7 +18,7 @@ public static partial class Inject
     public static IServiceCollection AddMemEventStore(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddMemProjector()
             .AddSingleton<IEventStoreDriver, MemEventStoreDriver>()
             .AddSingleton<IMemEventStoreDriver, MemEventStoreDriver>()
@@ -35,7 +35,7 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
 
     private readonly object saveMutex = new();
 
-    private IReactor _reactor;
+    private IActor _actor;
 
 
     private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams =
@@ -49,10 +49,19 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
 
     public bool IsClosed { get; private set; }
 
+    public IEnumerable<IEvt> GetStream(IID engineId)
+    {
+        return Streams[engineId.Id()];
+    }
+
 
     public void Close()
     {
         IsClosed = true;
+    }
+
+    public void Dispose()
+    {
     }
 
     public Task LoadAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
@@ -75,22 +84,13 @@ internal class MemEventStoreDriver : IMemEventStoreDriver
         aggregate.ClearUncommittedEvents();
         var evts = GetStream(aggregate.ID).ToArray();
         foreach (var evt in evts)
-            await _projector.Project(evt, cancellationToken);
+            await _projector.HandleCast(evt, cancellationToken);
         return AppendResult.New((ulong)(evts.Length + 1));
     }
 
-    public IEnumerable<IEvt> GetStream(IID engineId)
+    public void SetActor(IActor actor)
     {
-        return Streams[engineId.Id()];
-    }
-
-    public void Dispose()
-    {
-    }
-
-    public void SetReactor(IReactor reactor)
-    {
-        _reactor = reactor;
+        _actor = actor;
     }
 
 

@@ -1,5 +1,10 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Effects;
+using DotCart.Contract.Dtos;
+using DotCart.Core;
+using DotCart.Drivers.Mediator;
 using Microsoft.Extensions.DependencyInjection;
+using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.InMem;
 
@@ -8,7 +13,8 @@ public static partial class Inject
     public static IServiceCollection AddMemProjector(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
+            .AddSingleton<IProjector, MemProjector>()
             .AddSingleton<IMemProjector, MemProjector>();
     }
 }
@@ -18,22 +24,43 @@ public static partial class Inject
 ///     that is meant to be injected into an AggregateStore
 ///     It offers a straightforward interface to project events onto the TopicMediator
 /// </summary>
-internal sealed class MemProjector : IMemProjector
+[Topic("memory")]
+internal sealed class MemProjector : Actor, IMemProjector
 {
-    private readonly ITopicMediator _mediator;
-
-    public MemProjector(ITopicMediator mediator)
+    public MemProjector(IExchange exchange) : base(exchange)
     {
-        _mediator = mediator;
     }
 
-    public Task Project(IEvt evt, CancellationToken cancellationToken)
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        return _mediator.PublishAsync(evt.Topic, evt);
+        return Run(() =>
+        {
+            _exchange.Publish(msg.Topic, msg, cancellationToken);
+            return CompletedTask;
+        }, cancellationToken);
+    }
+
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)CompletedTask;
+    }
+
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
+    {
+        return CompletedTask;
+    }
+
+    protected override Task StartActingAsync(CancellationToken cancellationToken = default)
+    {
+        return CompletedTask;
+    }
+
+    protected override Task StopActingAsync(CancellationToken cancellationToken = default)
+    {
+        return CompletedTask;
     }
 }
 
-public interface IMemProjector
+public interface IMemProjector : IProjector
 {
-    Task Project(IEvt evt, CancellationToken cancellationToken = default);
 }

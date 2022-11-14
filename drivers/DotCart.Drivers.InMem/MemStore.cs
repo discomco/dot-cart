@@ -1,5 +1,5 @@
 using System.Collections.Immutable;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Schemas;
 using Microsoft.Extensions.DependencyInjection;
 using static System.GC;
@@ -10,16 +10,13 @@ namespace DotCart.Drivers.InMem;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddMemStore<TState>(this IServiceCollection services) 
+    public static IServiceCollection AddMemStore<TState>(this IServiceCollection services)
         where TState : IState
     {
         return services
             .AddSingleton<IModelStore<TState>, MemStore<TState>>();
     }
 }
-
-
-
 
 public class MemStore<TState> : IModelStore<TState> where TState : IState
 {

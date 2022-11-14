@@ -13,7 +13,7 @@ public class InitializeSpokeTests : IoCTests
     private ISpokeBuilder<Spoke> _builder;
     private Spoke _spoke;
 
-    public InitializeSpokeTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public InitializeSpokeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -22,9 +22,9 @@ public class InitializeSpokeTests : IoCTests
     public void ShouldResolveSpoke()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _spoke = Container.GetHostedService<Spoke>();
+        _spoke = TestEnv.GetHostedService<Spoke>();
         // THEN
         Assert.NotNull(_spoke);
     }
@@ -33,9 +33,9 @@ public class InitializeSpokeTests : IoCTests
     public void ShouldResolveSpokeBuilder()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _builder = Container.GetRequiredService<ISpokeBuilder<Spoke>>();
+        _builder = TestEnv.GetRequiredService<ISpokeBuilder<Spoke>>();
         // THEN
         Assert.NotNull(_builder);
     }

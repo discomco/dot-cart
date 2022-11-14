@@ -10,7 +10,7 @@ public abstract class TypedIDTests<TID> : IoCTests where TID : IID
     protected NewTypedID<TID> NewTypedId;
 
 
-    protected TypedIDTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    protected TypedIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -18,7 +18,7 @@ public abstract class TypedIDTests<TID> : IoCTests where TID : IID
     public void ShouldResolveIDCtor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
         var ID = NewTypedId();
         // THEN 
@@ -71,7 +71,7 @@ public abstract class TypedIDTests<TID> : IoCTests where TID : IID
 
     protected override void Initialize()
     {
-        NewTypedId = Container.GetRequiredService<NewTypedID<TID>>();
+        NewTypedId = TestEnv.GetRequiredService<NewTypedID<TID>>();
     }
 
     private record PrefixLessTypedId : TypedID<PrefixLessTypedId>

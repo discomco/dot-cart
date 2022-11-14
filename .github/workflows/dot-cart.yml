@@ -5,11 +5,11 @@ on:
     branches:
       - master
 env:
-  REDIS_CONFIG: "redis:6379"
+  REDIS_CONFIG: "redis://redis:6379"
   EVENTSTORE_URI: "esdb+discover://eventstore:2113?tls=false"
   EVENTSTORE_USER: "admin"
   EVENTSTORE_PWD: "changeit"
-  
+
 jobs:
   
   build:
@@ -32,22 +32,22 @@ jobs:
         run: dotnet restore
       - name: Build Packages
         run: dotnet build --configuration Release --no-restore
-#      - name: Test Packages
-#        run: dotnet test --no-restore --verbosity minimal
-#      - name: Build Packages
-#        run: ./cid/build.sh DotCart.root.sln
-#      - name: Test Packages
-#        run: ./cid/run_unit_tests.sh DotCart.root.sln
-#      - name: Publish Packages
-#        run: ./cid/pub_pkg.sh
-#        env:
-#          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-#          NUGET_URL: https://api.nuget.org/v3/index.json
-#      - name: Test Published Packages
-#        run: ./cid/testpub.sh
-#        env:
-#          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-#          NUGET_URL: https://api.nuget.org/v3/index.json
+  #      - name: Test Packages
+  #        run: dotnet test --no-restore --verbosity minimal
+  #      - name: Build Packages
+  #        run: ./cid/build.sh DotCart.root.sln
+  #      - name: Test Packages
+  #        run: ./cid/run_unit_tests.sh DotCart.root.sln
+  #      - name: Publish Packages
+  #        run: ./cid/pub_pkg.sh
+  #        env:
+  #          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+  #          NUGET_URL: https://api.nuget.org/v3/index.json
+  #      - name: Test Published Packages
+  #        run: ./cid/testpub.sh
+  #        env:
+  #          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+  #          NUGET_URL: https://api.nuget.org/v3/index.json
 
   test:
 

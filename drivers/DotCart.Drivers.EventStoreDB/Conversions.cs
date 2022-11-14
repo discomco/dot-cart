@@ -1,4 +1,4 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Abstractions;
 using DotCart.Contract.Schemas;
 using EventStore.Client;
 

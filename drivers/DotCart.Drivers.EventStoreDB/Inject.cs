@@ -1,4 +1,5 @@
 ﻿using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Drivers.Polly;
 using EventStore.Client;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +11,7 @@ public static partial class Inject
     public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
     {
         return services?
+            .AddPolly()
             .AddEventStore(s =>
             {
                 s.ConnectivitySettings.Insecure = Config.Insecure;

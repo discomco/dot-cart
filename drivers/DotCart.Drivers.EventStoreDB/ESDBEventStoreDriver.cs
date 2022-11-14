@@ -1,6 +1,5 @@
-using DotCart.Context.Behaviors;
-using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using EventStore.Client;
@@ -25,7 +24,7 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     private readonly IESDBEventSourcingClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
-    private IReactor _reactor;
+    private IActor _actor;
 
     public ESDBEventStoreDriver(
         IESDBEventSourcingClient client,
@@ -44,9 +43,10 @@ public class ESDBEventStoreDriver : IEventStoreDriver
     {
     }
 
-    public void SetReactor(IReactor reactor)
+
+    public void SetActor(IActor actor)
     {
-        _reactor = reactor;
+        _actor = actor;
     }
 
     public void Close()

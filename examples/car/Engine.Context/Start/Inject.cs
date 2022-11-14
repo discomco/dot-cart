@@ -1,9 +1,10 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.Mediator;
 using Engine.Context.Common;
-using Engine.Context.Common.Drivers;
 using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -47,12 +48,13 @@ public static class Inject
     public static IServiceCollection AddStartedProjections(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddTransient(_ => Effects._evt2State)
             .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
-            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
+            .AddTransient<IActor<Spoke>, Effects.ToMemDocProjection>();
     }
+
 
     public static IServiceCollection AddStartResponder(this IServiceCollection services)
     {
@@ -65,7 +67,7 @@ public static class Inject
             .AddTransient(_ => Effects._hope2Cmd)
             .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
             .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IReactor<Spoke>, Effects.Responder>();
+            .AddTransient<IActor<Spoke>, Effects.Responder>();
     }
 
 

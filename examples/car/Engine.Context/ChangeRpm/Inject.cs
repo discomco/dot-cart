@@ -1,9 +1,10 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.Mediator;
 using Engine.Context.Common;
-using Engine.Context.Common.Drivers;
 using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -32,11 +33,11 @@ public static class Inject
     public static IServiceCollection AddChangeRpmProjections(this IServiceCollection services)
     {
         return services
-            .AddTopicMediator()
+            .AddExchange()
             .AddTransient<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient(_ => Mappers._evt2State)
             .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
-            .AddTransient<IReactor<Spoke>, Effects.ToMemDocProjection>();
+            .AddTransient<IActor<Spoke>, Effects.ToMemDocProjection>();
     }
 
     public static IServiceCollection AddChangeRpmEmitter(this IServiceCollection services)
@@ -54,6 +55,6 @@ public static class Inject
             .AddTransient(_ => Generators._generateHope)
             .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
             .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IReactor<Spoke>, Effects.Responder>();
+            .AddTransient<IActor<Spoke>, Effects.Responder>();
     }
 }

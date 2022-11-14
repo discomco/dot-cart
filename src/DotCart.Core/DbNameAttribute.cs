@@ -14,7 +14,6 @@ public class DbNameAttribute : Attribute
     public string DbName { get; set; }
 }
 
-
 public static class DbNameAtt
 {
     public static string Get<T>()

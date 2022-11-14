@@ -5,13 +5,12 @@ using Engine.Contract.Schema;
 using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Payload = Engine.Contract.Start.Payload;
 
 namespace Engine.Contract.Tests;
 
 public class StartContractTests : ContractTests<EngineID, IHope, IFact, Payload>
 {
-    public StartContractTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public StartContractTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

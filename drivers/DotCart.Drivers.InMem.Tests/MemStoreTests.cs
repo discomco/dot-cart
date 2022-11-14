@@ -1,9 +1,8 @@
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Engine.Context.Common;
-using Engine.Context.Common.Drivers;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -16,7 +15,7 @@ public class MemStoreTests : IoCTests
     private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
 
 
-    public MemStoreTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public MemStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -24,9 +23,9 @@ public class MemStoreTests : IoCTests
     public void ShouldResolveMemStore()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        var engStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
+        var engStore = TestEnv.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
         // THEN
         Assert.NotNull(engStore);
     }
@@ -57,8 +56,8 @@ public class MemStoreTests : IoCTests
 
     protected override void Initialize()
     {
-        _engModelStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
-        _newEngine = Container.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
+        _engModelStore = TestEnv.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
+        _newEngine = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()

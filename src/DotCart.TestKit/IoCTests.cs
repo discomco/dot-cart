@@ -7,26 +7,31 @@ namespace DotCart.TestKit;
 
 public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
 {
-    protected IoCTests(ITestOutputHelper output, IoCTestContainer container) : base(output)
+    protected IoCTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output)
     {
-        Container = container;
-        TestHelper = Container.GetRequiredService<ITestHelper>();
+        TestEnv = testEnv;
+        TestHelper = TestEnv.GetRequiredService<ITestHelper>();
         SetTestEnvironment();
-        InjectDependencies(container.Services);
+        InjectDependencies(testEnv.Services);
         Initialize();
     }
 
 
-    protected IoCTestContainer Container { get; }
+    protected IoCTestContainer TestEnv { get; }
     protected ITestHelper TestHelper { get; }
 
     public override void Dispose()
     {
-        Container?.Dispose();
+        TestEnv?.Dispose();
         base.Dispose();
     }
 
     protected abstract void Initialize();
     protected abstract void SetTestEnvironment();
-    protected abstract void InjectDependencies(IServiceCollection services);
+
+    protected virtual void InjectDependencies(IServiceCollection services)
+    {
+        services
+            .AddBaseTestEnv();
+    }
 }

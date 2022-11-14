@@ -8,7 +8,7 @@ namespace Engine.Context.Tests.Effects;
 
 public class EngineSubscriptionInfoTests : SubscriptionInfoTests<IEngineSubscriptionInfo>
 {
-    public EngineSubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public EngineSubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

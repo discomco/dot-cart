@@ -1,5 +1,6 @@
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
+using DotCart.Context.Abstractions;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Schemas;
 using DotCart.Contract.Dtos;
@@ -78,9 +79,9 @@ public class TryCmd : TryCmd<Cmd>
 public class StartOnInitializedPolicy : AggregatePolicy<Initialize.IEvt, Cmd>
 {
     public StartOnInitializedPolicy(
-        ITopicMediator mediator,
+        IExchange exchange,
         Evt2Cmd<Initialize.IEvt, Cmd> evt2Cmd)
-        : base(mediator, evt2Cmd)
+        : base(exchange, evt2Cmd)
     {
     }
 }

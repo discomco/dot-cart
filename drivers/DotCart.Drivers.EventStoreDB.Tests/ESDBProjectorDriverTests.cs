@@ -1,5 +1,5 @@
-using DotCart.Context.Behaviors;
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.InMem;
@@ -9,7 +9,6 @@ using Engine.Context.ChangeRpm;
 using Engine.Context.Common;
 using Engine.Context.Common.Drivers;
 using Engine.Context.Common.Effects;
-using Engine.Context.Initialize;
 using Engine.Context.Start;
 using Engine.Contract.Schema;
 using EventStore.Client;
@@ -26,15 +25,15 @@ public class ESDBProjectorDriverTests : IoCTests
     private IESDBPersistentSubscriptionsClient _client;
     private IProjectorDriver _driver;
     private IEventStoreDriver _eventStore;
+    private IExchange _exchange;
     private IHostExecutor _executor;
     private IESDBEngineEventFeeder _feeder;
     private ILogger _logger;
-    private ITopicMediator _mediator;
     private IModelStore<Engine.Context.Common.Schema.Engine> _memStore;
     private EventStreamGenerator<EngineID> _newEventStream;
     private SubscriptionFilterOptions _subOptions;
 
-    public ESDBProjectorDriverTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    public ESDBProjectorDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -43,9 +42,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public Task ShouldResolveProjectorDriver()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _driver = Container.GetRequiredService<IProjectorDriver<IEngineSubscriptionInfo>>();
+        _driver = TestEnv.GetRequiredService<IProjectorDriver<IEngineSubscriptionInfo>>();
         // THEN
         Assert.NotNull(_driver);
         return Task.CompletedTask;
@@ -55,9 +54,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public Task ShouldResolveSubscriptionFilterOptions()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _subOptions = Container.GetRequiredService<SubscriptionFilterOptions>();
+        _subOptions = TestEnv.GetRequiredService<SubscriptionFilterOptions>();
         // THEN
         Assert.NotNull(_subOptions);
         return Task.CompletedTask;
@@ -68,9 +67,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public Task ShouldResolveHostExecutor()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _executor = Container.GetRequiredService<IHostExecutor>();
+        _executor = TestEnv.GetRequiredService<IHostExecutor>();
         // THEN
         Assert.NotNull(_executor);
         return Task.CompletedTask;
@@ -103,21 +102,14 @@ public class ESDBProjectorDriverTests : IoCTests
 
 
     [Fact]
-    public void ShouldResolveTopicMediator()
+    public void ShouldResolveExchange()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _mediator = Container.GetRequiredService<ITopicMediator>();
+        _exchange = TestEnv.GetRequiredService<IExchange>();
         // THEN
-        Assert.NotNull(_mediator);
-    }
-
-    [Fact]
-    public async Task ShouldResolveMemProjection()
-    {
-        // GIVEN
-        // 
+        Assert.NotNull(_exchange);
     }
 
 
@@ -144,9 +136,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public void ShouldResolveEventStoreDriver()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _eventStore = Container.GetRequiredService<IEventStoreDriver>();
+        _eventStore = TestEnv.GetRequiredService<IEventStoreDriver>();
         // THEN
         Assert.NotNull(_eventStore);
     }
@@ -155,9 +147,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public Task ShouldResolveLogger()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _logger = Container.GetRequiredService<ILogger>();
+        _logger = TestEnv.GetRequiredService<ILogger>();
         // THEN
         Assert.NotNull(_logger);
         return Task.CompletedTask;
@@ -168,9 +160,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public void ShouldResolveESDBPersistentSubscriptionsClient()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _client = Container.GetRequiredService<IESDBPersistentSubscriptionsClient>();
+        _client = TestEnv.GetRequiredService<IESDBPersistentSubscriptionsClient>();
         // THEN
         Assert.NotNull(_client);
     }
@@ -179,9 +171,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public void ShouldResolveESDBEngineEventFeeder()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _feeder = Container.GetRequiredService<IESDBEngineEventFeeder>();
+        _feeder = TestEnv.GetRequiredService<IESDBEngineEventFeeder>();
         // THEN 
         Assert.NotNull(_feeder);
     }
@@ -190,9 +182,9 @@ public class ESDBProjectorDriverTests : IoCTests
     public void ShouldResolveEngineEventStreamGenerator()
     {
         // GIVEN
-        Assert.NotNull(Container);
+        Assert.NotNull(TestEnv);
         // WHEN
-        _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
+        _newEventStream = TestEnv.GetRequiredService<EventStreamGenerator<EngineID>>();
         // THEN
         Assert.NotNull(_newEventStream);
     }
@@ -200,10 +192,10 @@ public class ESDBProjectorDriverTests : IoCTests
 
     protected override void Initialize()
     {
-        _executor = Container.GetRequiredService<IHostExecutor>();
-        _feeder = Container.GetRequiredService<IESDBEngineEventFeeder>();
-        _newEventStream = Container.GetRequiredService<EventStreamGenerator<EngineID>>();
-        _memStore = Container.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
+        _executor = TestEnv.GetRequiredService<IHostExecutor>();
+        _feeder = TestEnv.GetRequiredService<IESDBEngineEventFeeder>();
+        _newEventStream = TestEnv.GetRequiredService<EventStreamGenerator<EngineID>>();
+        _memStore = TestEnv.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()
@@ -217,7 +209,6 @@ public class ESDBProjectorDriverTests : IoCTests
             .AddInitializeEngineWithThrottleUpStream()
             .AddESDBEngineEventFeeder()
             .AddEngineESDBProjectorDriver<Spoke>()
-            .AddInitializedMemProjections()
             .AddStartedProjections()
             .AddChangeRpmProjections()
             .AddConsoleLogger();

@@ -1,3 +1,4 @@
+using DotCart.Drivers.Mediator;
 using Engine.Context;
 using Engine.Context.Common.Effects;
 using Engine.Context.Initialize;
@@ -10,11 +11,9 @@ public static class Inject
     public static IServiceCollection BuildTestApp(this IServiceCollection services)
     {
         return services
-            // .AddConfiguredESDBClients()
-            // .AddESDBEventStoreDriver()
+            .AddExchange()
             .AddESDBEngineEventFeeder()
             .AddESDBInfra<Spoke>()
             .AddInitializeSpoke();
-        ;
     }
 }

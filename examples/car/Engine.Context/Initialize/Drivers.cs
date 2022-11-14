@@ -1,4 +1,4 @@
-using DotCart.Context.Effects.Drivers;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Contract;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Redis;
@@ -7,18 +7,15 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Initialize;
 
-
 public static partial class Inject
 {
     public static IServiceCollection AddToDocRedisStoreDriver(this IServiceCollection services)
     {
         return services
             .AddTransient<Effects.IToRedisDoc, Effects.ToRedisDoc>()
-            .AddTransient<Effects.IToRedisDocStore, Drivers.ToRedisDocStore>()
-            .AddTransient<IModelStore<Common.Schema.Engine>, Drivers.ToRedisDocStore>();
+            .AddTransient<IModelStore<Common.Schema.Engine>, RedisStore<Common.Schema.Engine>>();
     }
 }
-
 
 public static class Drivers
 {
@@ -29,14 +26,6 @@ public static class Drivers
         }
 
         protected override void Dispose(bool disposing)
-        {
-        }
-    }
-
-
-    public class ToRedisDocStore : RedisStore<Common.Schema.Engine>, Effects.IToRedisDocStore
-    {
-        public ToRedisDocStore(IRedisDb redisDb) : base(redisDb)
         {
         }
     }

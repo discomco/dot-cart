@@ -1,5 +1,5 @@
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Drivers;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
@@ -8,7 +8,7 @@ namespace DotCart.TestFirst;
 
 public abstract class SubscriptionInfoTests<TInfo> : IoCTests where TInfo : ISubscriptionInfo
 {
-    protected SubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer container) : base(output, container)
+    protected SubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

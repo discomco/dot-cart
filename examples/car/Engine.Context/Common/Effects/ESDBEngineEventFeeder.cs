@@ -1,5 +1,6 @@
+using DotCart.Context.Abstractions;
+using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Effects;
-using DotCart.Context.Effects.Drivers;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
 using Engine.Context.Initialize;
@@ -8,7 +9,7 @@ using Serilog;
 
 namespace Engine.Context.Common.Effects;
 
-public class ESDBEngineEventFeeder : Reactor<Spoke>, IESDBEngineEventFeeder
+public class ESDBEngineEventFeeder : ActorT<Spoke>, IESDBEngineEventFeeder, IProducer
 {
     private readonly IEventStoreDriver _eventStore;
     private readonly NewID<EngineID> _newId;
@@ -16,10 +17,11 @@ public class ESDBEngineEventFeeder : Reactor<Spoke>, IESDBEngineEventFeeder
     private readonly EventStreamGenerator<EngineID> _newStream;
 
     public ESDBEngineEventFeeder(
+        IExchange exchange,
         IEventStoreDriver eventStore,
         EventStreamGenerator<EngineID> newStream,
         NewID<EngineID> newID,
-        NewState<Schema.Engine> newState)
+        NewState<Schema.Engine> newState) : base(exchange)
     {
         _eventStore = eventStore;
         _newStream = newStream;
@@ -28,12 +30,22 @@ public class ESDBEngineEventFeeder : Reactor<Spoke>, IESDBEngineEventFeeder
     }
 
 
-    public override Task HandleAsync(IMsg msg, CancellationToken cancellationToken)
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
         throw new NotImplementedException();
     }
 
-    protected override async Task StartReactingAsync(CancellationToken cancellationToken)
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)Task.CompletedTask;
+    }
+
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
+
+    protected override async Task StartActingAsync(CancellationToken cancellationToken)
     {
         Log.Information("Starting EventFeeder");
         while (!cancellationToken.IsCancellationRequested)
@@ -46,13 +58,13 @@ public class ESDBEngineEventFeeder : Reactor<Spoke>, IESDBEngineEventFeeder
         }
     }
 
-    protected override Task StopReactingAsync(CancellationToken cancellationToken)
+    protected override Task StopActingAsync(CancellationToken cancellationToken)
     {
         Log.Information("Stopping EventFeeder");
         return Task.CompletedTask;
     }
 }
 
-public interface IESDBEngineEventFeeder : IReactor<Spoke>
+public interface IESDBEngineEventFeeder : IActor<Spoke>
 {
 }
