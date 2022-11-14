@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj"/>
     </ItemGroup>
 
 

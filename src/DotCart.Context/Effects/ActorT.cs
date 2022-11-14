@@ -34,13 +34,13 @@ public abstract class Actor : ActiveComponent, IActor
 
 public abstract class ActorT<TSpoke> : Actor, IActor<TSpoke> where TSpoke : ISpokeT<TSpoke>
 {
-    private ISpoke _spoke;
+    private ISpokeB _spoke;
 
     protected ActorT(IExchange exchange) : base(exchange)
     {
     }
 
-    public void SetSpoke(ISpoke spoke)
+    public void SetSpoke(ISpokeB spoke)
     {
         _spoke = spoke;
     }

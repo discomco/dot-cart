@@ -1,11 +1,11 @@
 namespace DotCart.Context.Abstractions;
 
-public interface ISpoke
+public interface ISpokeB
 {
 }
 
-public interface ISpokeT<out TSpoke> : ISpoke
+public interface ISpokeT<out TSpoke> : ISpokeB
     where TSpoke : ISpokeT<TSpoke>
 {
-    void Inject(params IActor<TSpoke>[] reactors);
+    void InjectActors(params IActor<TSpoke>[] actors);
 }

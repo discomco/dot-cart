@@ -5,23 +5,22 @@ namespace Engine.Context.Initialize;
 
 public class SpokeBuilder : SpokeBuilderT<Spoke>
 {
-    public SpokeBuilder(IExchange exchange,
-        IProjector projector,
+    public SpokeBuilder(
         Spoke spoke,
-        IEnumerable<IActor<Spoke>> actors) : base(exchange,
-        projector,
+        IEnumerable<IActor<Spoke>> actors) : base(
         spoke,
         actors)
     {
     }
 }
 
-
-public interface ISpoke: ISpokeT<Spoke> {}
+public interface ISpoke : ISpokeT<Spoke>
+{
+}
 
 public class Spoke : SpokeT<Spoke>, ISpoke
 {
-    public Spoke(IExchange exchange) : base(exchange)
+    public Spoke(IExchange exchange, IProjector projector) : base(exchange, projector)
     {
     }
 }

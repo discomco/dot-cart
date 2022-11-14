@@ -5,7 +5,7 @@ namespace Engine.Context.ChangeRpm;
 
 public class Spoke : SpokeT<Spoke>
 {
-    public Spoke(IExchange exchange) : base(exchange)
+    public Spoke(IExchange exchange, IProjector projector) : base(exchange, projector)
     {
     }
 }

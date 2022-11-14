@@ -13,6 +13,7 @@ using Engine.Contract.Schema;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Constants = DotCart.Context.Abstractions.Constants;
 using Exception = System.Exception;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
@@ -220,7 +221,7 @@ public class ESDBEventStoreDriverTests : IoCTests
             // WHEN
             await _eventStoreDriver.LoadAsync(agg);
             // THEN
-            Assert.False(agg.Version == Context.Abstractions.Constants.NewAggregateVersion);
+            Assert.False(agg.Version == Constants.NewAggregateVersion);
         }
         else
         {

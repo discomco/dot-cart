@@ -14,5 +14,4 @@ public static partial class Inject
 
 internal sealed class TopicMediator : TopicPubSub<IEvt>, ITopicMediator
 {
-
 }

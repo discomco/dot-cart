@@ -1,4 +1,5 @@
 using DotCart.Context.Abstractions;
+using DotCart.Context.Effects;
 using DotCart.Drivers.EventStoreDB;
 using Engine.Context.Common.Drivers;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ public static class Inject
         where TSpoke : ISpokeT<TSpoke>
     {
         return services
+            .AddProjector()
             .AddConfiguredESDBClients()
             .AddESDBEventStoreDriver()
             .AddEngineESDBProjectorDriver<TSpoke>();

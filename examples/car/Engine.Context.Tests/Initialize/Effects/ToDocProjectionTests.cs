@@ -8,8 +8,8 @@ namespace Engine.Context.Tests.Initialize.Effects;
 
 public class ToDocProjectionTests : IoCTests
 {
-    private Context.Initialize.Effects.IToRedisDoc _toRedisDoc;
     private IExchange _exchange;
+    private Context.Initialize.Effects.IToRedisDoc _toRedisDoc;
 
     public ToDocProjectionTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -25,7 +25,7 @@ public class ToDocProjectionTests : IoCTests
         // THEN
         Assert.NotNull(_exchange);
     }
-    
+
 
     [Fact]
     public void ShouldResolveToRedisDocProjection()

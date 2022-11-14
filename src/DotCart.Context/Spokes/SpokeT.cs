@@ -1,6 +1,7 @@
 ﻿using System.Collections.Immutable;
 using DotCart.Context.Abstractions;
 using Microsoft.Extensions.Hosting;
+using Serilog;
 
 namespace DotCart.Context.Spokes;
 
@@ -8,16 +9,19 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 {
     private readonly IExchange _exchange;
 
-    protected IImmutableDictionary<string, IActor<TSpoke>> _reactors =
+    private readonly IProjector _projector;
+
+    private IImmutableDictionary<string, IActor<TSpoke>> _reactors =
         ImmutableDictionary<string, IActor<TSpoke>>.Empty;
 
-    public SpokeT(IExchange exchange)
+    protected SpokeT(IExchange exchange, IProjector projector)
     {
         _exchange = exchange;
+        _projector = projector;
     }
 
 
-    public void Inject(params IActor<TSpoke>[] reactors)
+    public void InjectActors(params IActor<TSpoke>[] reactors)
     {
         foreach (var actor in reactors)
         {
@@ -32,16 +36,25 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     {
         return Task.Run(async () =>
         {
-            if (!_exchange.IsRunning)
+            Log.Information($"Spoke:[{GetType()}] ~> Starting");
+            while (!_exchange.IsRunning)
             {
-                _exchange.Activate(cancellationToken);
-                Task.Delay(100);
+                _exchange.Activate(cancellationToken).ConfigureAwait(false);
+                if(!_exchange.IsRunning)
+                    await Task.Delay(100, cancellationToken).ConfigureAwait(false);
             }
 
             foreach (var reactor in _reactors)
             {
-                Task.Delay(20, cancellationToken);
-                await reactor.Value.Activate(cancellationToken);
+                await Task.Delay(20, cancellationToken).ConfigureAwait(false);
+                reactor.Value.Activate(cancellationToken).ConfigureAwait(false);
+            }
+
+            while (!_projector.IsRunning)
+            {
+                _projector.Activate(cancellationToken).ConfigureAwait(false);
+                if(!_projector.IsRunning)
+                    await Task.Delay(100, cancellationToken).ConfigureAwait(false);
             }
         }, cancellationToken);
     }

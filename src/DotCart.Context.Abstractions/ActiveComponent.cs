@@ -9,26 +9,28 @@ public abstract class ActiveComponent : IActiveComponent
 
     public string Name => GetType().Name;
 
-    public Task Activate(CancellationToken stoppingToken = default)
+    public Task<bool> Activate(CancellationToken stoppingToken = default)
     {
-        return Task.Run(async () =>
+        return Task<bool>.Run<bool>(async () =>
         {
-            await PrepareAsync(stoppingToken);
+            await PrepareAsync(stoppingToken).ConfigureAwait(false);
             try
             {
-                await StartAsync(stoppingToken).ConfigureAwait(false);
+                IsRunning = await StartAsync(stoppingToken).ConfigureAwait(false);
                 while (!stoppingToken.IsCancellationRequested)
                 {
                 }
 
-                await CleanupAsync(stoppingToken);
-                return StopAsync(stoppingToken);
+                await CleanupAsync(stoppingToken).ConfigureAwait(false);
+                await StopAsync(stoppingToken).ConfigureAwait(false);
+                return true;
             }
             catch (Exception e)
             {
                 Log.Fatal(e.InnerAndOuter());
-                throw;
+                IsRunning = false;
             }
+            return IsRunning;
         }, stoppingToken);
     }
 
@@ -37,13 +39,21 @@ public abstract class ActiveComponent : IActiveComponent
     protected abstract Task StartActingAsync(CancellationToken cancellationToken = default);
     protected abstract Task StopActingAsync(CancellationToken cancellationToken = default);
 
-    private Task StartAsync(CancellationToken cancellationToken)
+    private Task<bool> StartAsync(CancellationToken cancellationToken)
     {
-        return Task.Run(() =>
+        return Task.Run(async () =>
         {
-            Log.Information($"Actor::{Name} ~> ACTIVATED");
-            IsRunning = true;
-            return StartActingAsync(cancellationToken);
+            try
+            {
+                Log.Information($"Actor::{Name} ~> ACTIVATED");
+                await StartActingAsync(cancellationToken).ConfigureAwait(false);
+                return true;
+            }
+            catch (Exception e)
+            {
+                Log.Fatal(e.InnerAndOuter());
+                return false;
+            }
         }, cancellationToken);
     }
 

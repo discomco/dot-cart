@@ -9,8 +9,6 @@ public abstract class SpokeBuilderT<TSpoke> : ISpokeBuilder<TSpoke>
     private readonly TSpoke _spoke;
 
     protected SpokeBuilderT(
-        IExchange exchange,
-        IProjector projector,
         TSpoke spoke,
         IEnumerable<IActor<TSpoke>> actors)
 
@@ -21,7 +19,7 @@ public abstract class SpokeBuilderT<TSpoke> : ISpokeBuilder<TSpoke>
 
     public TSpoke Build()
     {
-        _spoke.Inject(_actors.ToArray());
+        _spoke.InjectActors(_actors.ToArray());
         return _spoke;
     }
 }

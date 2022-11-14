@@ -4,7 +4,7 @@ namespace DotCart.Context.Abstractions;
 
 public interface IActor<in TSpoke> : IActor
 {
-    void SetSpoke(ISpoke spoke);
+    void SetSpoke(ISpokeB spoke);
 }
 
 public interface IActor<in TSpoke, TActor> : IActor<TSpoke>
@@ -23,5 +23,5 @@ public interface IActiveComponent
 {
     string Name { get; }
     bool IsRunning { get; }
-    Task Activate(CancellationToken cancellationToken = default);
+    Task<bool> Activate(CancellationToken cancellationToken = default);
 }
