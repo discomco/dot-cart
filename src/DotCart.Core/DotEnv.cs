@@ -5,7 +5,7 @@ namespace DotCart.Core;
 public static class DotEnv
 {
     public static bool IsDevelopemnt =>
-        !string.IsNullOrEmpty(Get(EnVars.ASPNETCORE_ENVIRONMENT)) &&
+        string.IsNullOrEmpty(Get(EnVars.ASPNETCORE_ENVIRONMENT)) &&
         Get("ASPNETCORE_ENVIRONMENT")
             .Equals("Development");
 
@@ -36,12 +36,12 @@ public static class DotEnv
 
     public static string GetVersion(this Assembly assembly)
     {
-        return assembly.GetName().Version.ToString();
+        return assembly.GetName().Version?.ToString();
     }
 
     public static string ShortName(this Assembly assembly)
     {
-        return assembly.FullName.Split(',')[0];
+        return assembly.FullName?.Split(',')[0];
     }
 
 
@@ -81,7 +81,7 @@ public static class DotEnv
         FromEmbedded(assy, fileName);
     }
 
-    public static string Get(string name)
+    public static string? Get(string name)
     {
         var s = Environment.GetEnvironmentVariable(name);
         if (string.IsNullOrWhiteSpace(s)) return s;
@@ -90,7 +90,7 @@ public static class DotEnv
         return s;
     }
 
-    public static string Set(string name, object value)
+    public static string? Set(string name, object value)
     {
         Environment.SetEnvironmentVariable(name, Convert.ToString(value));
         return Get(name);

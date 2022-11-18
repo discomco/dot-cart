@@ -33,26 +33,24 @@ public static partial class Inject
                 var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
                 return spokeBuilder.Build();
             })
-            .AddInitializeEffects();
+            .AddInitializeActors();
     }
 
-    public static IServiceCollection AddInitializeEffects(this IServiceCollection services)
+    public static IServiceCollection AddInitializeActors(this IServiceCollection services)
     {
         return services
             .AddInitializeResponder()
             .AddInitializedEmitter()
-//            .AddInitializedMemProjections()
             .AddInitializedRedisProjections();
     }
 
     public static IServiceCollection AddInitializedRedisProjections(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddTransient(_ => Mappers._evt2State)
-            .AddTransient<IProjector, Projector>()
-            .AddTransient<Effects.IToRedisDoc, Effects.ToRedisDoc>()
-            .AddTransient<IActor<Spoke>, Effects.ToRedisDoc>()
+            .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, Actors.ToRedisDoc>()
             .AddTransientRedisDb<Common.Schema.Engine>();
     }
 
@@ -65,24 +63,24 @@ public static partial class Inject
     public static IServiceCollection AddInitializedProjections(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddTransient(_ => Mappers._evt2State)
             .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
-            .AddTransient<Effects.IToMemDoc, Effects.ToMemDoc>()
-            .AddTransient<IActor<Spoke>, Effects.ToMemDoc>();
+            .AddTransient<Actors.IToMemDoc, Actors.ToMemDoc>()
+            .AddTransient<IActor<Spoke>, Actors.ToMemDoc>();
     }
 
     public static IServiceCollection AddInitializeResponder(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddAggregateBuilder()
             .AddEngineAggregate()
             .AddCmdHandler()
             .AddTransient(_ => Generators._genHope)
             .AddTransient(_ => Mappers._hope2Cmd)
-            .AddSingleton<IResponderDriver<Hope>, Drivers.ResponderDriver>()
-            .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IActor<Spoke>, Effects.Responder>();
+            .AddSingleton<IResponderDriverT<Hope>, Drivers.ResponderDriver>()
+            .AddTransient<Actors.IResponder, Actors.Responder>()
+            .AddTransient<IActor<Spoke>, Actors.Responder>();
     }
 }

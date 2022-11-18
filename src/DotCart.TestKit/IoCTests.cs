@@ -10,7 +10,7 @@ public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
     protected IoCTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output)
     {
         TestEnv = testEnv;
-        TestHelper = TestEnv.GetRequiredService<ITestHelper>();
+        TestHelper = TestEnv.ResolveRequired<ITestHelper>();
         SetTestEnvironment();
         InjectDependencies(testEnv.Services);
         Initialize();

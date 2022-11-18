@@ -13,7 +13,7 @@ public static partial class Inject
     public static IServiceCollection AddMemProjector(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddSingleton<IProjector, MemProjector>()
             .AddSingleton<IMemProjector, MemProjector>();
     }

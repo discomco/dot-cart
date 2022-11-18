@@ -1,36 +1,52 @@
 using DotCart.Core;
 using Serilog;
+using static System.Threading.Tasks.Task;
 
 namespace DotCart.Context.Abstractions;
 
 public abstract class ActiveComponent : IActiveComponent
 {
-    public bool IsRunning { get; private set; }
-
+    private CancellationTokenSource _cts;
     public string Name => GetType().Name;
+    public ComponentStatus Status { get; private set; }
 
-    public Task<bool> Activate(CancellationToken stoppingToken = default)
+    public Task Activate(CancellationToken stoppingToken = default)
     {
-        return Task<bool>.Run<bool>(async () =>
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+        return Run(async () =>
         {
             await PrepareAsync(stoppingToken).ConfigureAwait(false);
             try
             {
-                IsRunning = await StartAsync(stoppingToken).ConfigureAwait(false);
-                while (!stoppingToken.IsCancellationRequested)
-                {
-                }
-
-                await CleanupAsync(stoppingToken).ConfigureAwait(false);
-                await StopAsync(stoppingToken).ConfigureAwait(false);
-                return true;
+                await StartAsync(stoppingToken).ConfigureAwait(false);
+                if (Status == ComponentStatus.Active) LoopAsync(stoppingToken);
             }
             catch (Exception e)
             {
                 Log.Fatal(e.InnerAndOuter());
-                IsRunning = false;
+                Status = ComponentStatus.Inactive;
             }
-            return IsRunning;
+        }, stoppingToken);
+    }
+
+    public Task Deactivate(CancellationToken cancellationToken = default)
+    {
+        if (!cancellationToken.IsCancellationRequested) _cts.Cancel();
+
+        return CompletedTask;
+    }
+
+    private Task LoopAsync(CancellationToken stoppingToken)
+    {
+        return Run(async () =>
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+            }
+
+            await CleanupAsync(stoppingToken).ConfigureAwait(false);
+            await StopAsync(stoppingToken).ConfigureAwait(false);
+            return CompletedTask;
         }, stoppingToken);
     }
 
@@ -39,30 +55,30 @@ public abstract class ActiveComponent : IActiveComponent
     protected abstract Task StartActingAsync(CancellationToken cancellationToken = default);
     protected abstract Task StopActingAsync(CancellationToken cancellationToken = default);
 
-    private Task<bool> StartAsync(CancellationToken cancellationToken)
+    private Task StartAsync(CancellationToken cancellationToken)
     {
-        return Task.Run(async () =>
+        return Run(async () =>
         {
             try
             {
                 Log.Information($"Actor::{Name} ~> ACTIVATED");
+                Status = ComponentStatus.Active;
                 await StartActingAsync(cancellationToken).ConfigureAwait(false);
-                return true;
             }
             catch (Exception e)
             {
                 Log.Fatal(e.InnerAndOuter());
-                return false;
+                Status = ComponentStatus.Inactive;
             }
         }, cancellationToken);
     }
 
     private Task StopAsync(CancellationToken cancellationToken = default)
     {
-        return Task.Run(() =>
+        return Run(() =>
         {
-            if (!cancellationToken.IsCancellationRequested) return Task.CompletedTask;
-            IsRunning = false;
+            if (!cancellationToken.IsCancellationRequested) return CompletedTask;
+            Status = ComponentStatus.Inactive;
             Log.Information($"Actor::{Name}  ~> DEACTIVATED");
             return StopActingAsync(cancellationToken);
         }, cancellationToken);

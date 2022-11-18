@@ -40,34 +40,46 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.CreateAsync(streamName,
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.CreateAsync(streamName,
             groupName,
             settings,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+//            );
     }
 
     public Task CreateToAllAsync(string groupName, IEventFilter eventFilter, PersistentSubscriptionSettings settings,
         TimeSpan? deadline = null, UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.CreateToAllAsync(groupName,
+//        return _retryPolicy.ExecuteAsync(() =>
+
+        return _clt.CreateToAllAsync(groupName,
             eventFilter,
             settings,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+        //);
     }
 
     public Task CreateToAllAsync(string groupName, PersistentSubscriptionSettings settings, TimeSpan? deadline = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.CreateToAllAsync(groupName,
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.CreateToAllAsync(groupName,
             settings,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+        //);
     }
 
     public Task DeleteAsync(string streamName, string groupName,
@@ -75,20 +87,24 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.DeleteAsync(streamName,
+//        return _retryPolicy.ExecuteAsync(() => 
+        return _clt.DeleteAsync(streamName,
             groupName,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+//            );
     }
 
     public Task DeleteToAllAsync(string groupName, TimeSpan? deadline = null, UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.DeleteToAllAsync(groupName,
+//        return _retryPolicy.ExecuteAsync(() =>
+        return _clt.DeleteToAllAsync(groupName,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+        //              );
     }
 
     // public Task<PersistentSubscription> SubscribeAsync(string streamName, string groupName, Func<PersistentSubscription, ResolvedEvent, int?, CancellationToken, Task> eventAppeared, Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
@@ -105,14 +121,17 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         Action<PersistentSubscription, SubscriptionDroppedReason, Exception?>? subscriptionDropped = null,
         UserCredentials? userCredentials = null, int bufferSize = 10, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.SubscribeToStreamAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.SubscribeToStreamAsync(
             streamName,
             groupName,
             eventAppeared,
             subscriptionDropped,
             userCredentials,
             bufferSize,
-            cancellationToken));
+            cancellationToken);
+//                );
     }
 
     public Task<PersistentSubscription> SubscribeToAllAsync(
@@ -123,13 +142,17 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         int bufferSize = 10,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.SubscribeToAllAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.SubscribeToAllAsync(
             groupName,
             eventAppeared,
             subscriptionDropped,
             userCredentials,
             bufferSize,
-            cancellationToken));
+            cancellationToken);
+
+//            );
     }
 
     public Task UpdateAsync(
@@ -140,12 +163,16 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.UpdateAsync(streamName,
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.UpdateAsync(streamName,
             groupName,
             settings,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+        //);
     }
 
     public Task UpdateToAllAsync(
@@ -155,12 +182,17 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.UpdateToAllAsync(
+        //return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.UpdateToAllAsync(
             groupName,
             settings,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+
+        //);
     }
 
     public Task<PersistentSubscription> SubscribeAsync(
@@ -172,13 +204,17 @@ internal class ESDBPersistentSubscriptionsClient : IESDBPersistentSubscriptionsC
         int bufferSize = 10,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _clt.SubscribeToStreamAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _clt.SubscribeToStreamAsync(
             streamName,
             groupName,
             eventAppeared,
             subscriptionDropped,
             userCredentials,
             bufferSize,
-            cancellationToken));
+            cancellationToken);
+
+//            );
     }
 }

@@ -21,7 +21,7 @@ public abstract class Actor : ActiveComponent, IActor
     {
         return Run(async () =>
         {
-            while (!_exchange.IsRunning)
+            while (_exchange.Status != ComponentStatus.Active)
             {
                 _exchange.Activate(cancellationToken);
                 await Delay(10, cancellationToken);

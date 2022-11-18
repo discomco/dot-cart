@@ -4,8 +4,8 @@ namespace DotCart.Drivers.Redis;
 
 public static class Config
 {
-    public static string Password => DotEnv.Get(EnVars.REDIS_PWD);
-    public static string User => DotEnv.Get(EnVars.REDIS_USER);
+    public static string? Password => DotEnv.Get(EnVars.REDIS_PWD);
+    public static string? User => DotEnv.Get(EnVars.REDIS_USER);
     public static bool UseSsl => Convert.ToBoolean(DotEnv.Get(EnVars.REDIS_USE_SSL));
 
     public static string ConfigString

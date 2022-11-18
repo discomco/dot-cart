@@ -1,6 +1,6 @@
 using DotCart.Core;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Schema;
 
 public static class TestConstants
 {
@@ -9,4 +9,5 @@ public static class TestConstants
     public const string TEST_HOPE_TOPIC = "Test.DoIt";
     public const string GroupName = "TEST_GROUP";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
+    public const string TheIDPrefix = "the";
 }

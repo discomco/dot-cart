@@ -8,18 +8,25 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NATS.Client.Extensions.DependencyInjection" Version="1.0.0"/>
+        <PackageReference Include="NATS.Client" Version="1.0.2" />
+        <PackageReference Include="NATS.Client.Extensions.DependencyInjection" Version="1.0.0" />
+        <PackageReference Include="Serilog" Version="2.12.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Effects\DotCart.Effects.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="ResponderDriver.cs"/>
-        <Compile Remove="STANRequester.cs"/>
+        <Compile Remove="ResponderDriver.cs" />
+        <Compile Remove="STANRequester.cs" />
+        <Compile Remove="NATSResponder.cs" />
+        <Compile Remove="NATSListener.cs" />
+        <Compile Remove="NATSEmitter.cs" />
     </ItemGroup>
 
 </Project>

@@ -25,7 +25,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newID = TestEnv.GetRequiredService<NewID<TID>>();
+        var newID = TestEnv.ResolveRequired<NewID<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -36,7 +36,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.GetRequiredService<NewState<TState>>();
+        var ctor = TestEnv.ResolveRequired<NewState<TState>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -59,7 +59,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
     public void ShouldCreateState()
     {
         // GIVEN
-        var newState = TestEnv.GetService<NewState<TState>>();
+        var newState = TestEnv.Resolve<NewState<TState>>();
         // WHEN
         var state = newState();
         // THEN
@@ -70,7 +70,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
     public void ShouldCreateDifferentStates()
     {
         // GIVEN
-        var newState = TestEnv.GetService<NewState<TState>>();
+        var newState = TestEnv.Resolve<NewState<TState>>();
         // WHEN
         var state1 = newState();
         var state2 = newState();
@@ -104,7 +104,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
 
     protected override void Initialize()
     {
-        NewId = TestEnv.GetRequiredService<NewID<TID>>();
-        NewState = TestEnv.GetRequiredService<NewState<TState>>();
+        NewId = TestEnv.ResolveRequired<NewID<TID>>();
+        NewState = TestEnv.ResolveRequired<NewState<TState>>();
     }
 }

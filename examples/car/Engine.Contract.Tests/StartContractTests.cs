@@ -72,6 +72,6 @@ public class StartContractTests : ContractTests<EngineID, IHope, IFact, Payload>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineIDCtor();
+            .AddModelIDCtor();
     }
 }

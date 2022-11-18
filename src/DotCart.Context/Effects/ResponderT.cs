@@ -11,25 +11,26 @@ public delegate TCmd Hope2Cmd<out TCmd, in THope>(THope hope)
     where TCmd : ICmd;
 
 public interface IResponder<TDriver, THope, TCmd> : IActor
-    where TDriver : IResponderDriver<THope>
+    where TDriver : IResponderDriverT<THope>
     where THope : IHope
     where TCmd : ICmd
 {
 }
 
-public abstract class ResponderT<TSpoke, TDriver, THope, TCmd> : ActorT<TSpoke>, IResponder<TDriver, THope, TCmd>
-    where TDriver : IResponderDriver<THope>
+public abstract class ResponderT<TSpoke, TResponderDriver, THope, TCmd> : ActorT<TSpoke>,
+    IResponder<TResponderDriver, THope, TCmd>
+    where TResponderDriver : IResponderDriverT<THope>
     where THope : IHope
     where TCmd : ICmd
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
-    private readonly IResponderDriver<THope> _responderDriver;
+    private readonly TResponderDriver _responderDriver;
 
     protected ResponderT(
         IExchange exchange,
-        IResponderDriver<THope> responderDriver,
+        TResponderDriver responderDriver,
         ICmdHandler cmdHandler,
         Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange)
     {

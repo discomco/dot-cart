@@ -2,7 +2,6 @@ using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Context.Abstractions;
 using DotCart.Context.Behaviors;
-using DotCart.Context.Schemas;
 using DotCart.Contract.Dtos;
 using DotCart.Contract.Schemas;
 using DotCart.Core;

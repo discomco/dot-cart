@@ -10,7 +10,7 @@ public static class Inject
     public static IServiceCollection AddESDBEngineEventFeeder(this IServiceCollection services)
     {
         return services
-            .AddEngineCtor()
+            .AddModelCtor()
             .AddInitializeEngineWithThrottleUpStream()
             .AddTransient<IActor<Spoke>, ESDBEngineEventFeeder>()
             .AddTransient<IESDBEngineEventFeeder, ESDBEngineEventFeeder>();

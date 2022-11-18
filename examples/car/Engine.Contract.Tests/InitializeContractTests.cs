@@ -19,7 +19,7 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     protected override void Initialize()
     {
         base.Initialize();
-        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        _newID = TestEnv.ResolveRequired<NewID<EngineID>>();
     }
 
 
@@ -30,7 +30,7 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineIDCtor();
+            .AddModelIDCtor();
     }
 
 

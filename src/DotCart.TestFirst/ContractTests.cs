@@ -59,7 +59,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.GetRequiredService<NewID<TID>>();
+        var ctor = TestEnv.ResolveRequired<NewID<TID>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -89,6 +89,6 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 
     protected override void Initialize()
     {
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
     }
 }

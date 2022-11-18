@@ -81,7 +81,7 @@ internal class TestHelper : ITestHelper
 
     private static string GetDirPath()
     {
-        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase ?? string.Empty);
+        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location ?? string.Empty);
         var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
         var dirPath = Path.GetDirectoryName(codeBasePath);
         return dirPath ?? string.Empty;

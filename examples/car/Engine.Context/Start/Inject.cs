@@ -2,8 +2,9 @@ using DotCart.Context.Abstractions;
 using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Drivers.InMem;
+using DotCart.Context.Spokes;
 using DotCart.Drivers.Mediator;
+using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,28 +32,29 @@ public static class Inject
             .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>();
     }
 
-    public static IServiceCollection AddStartEffects(this IServiceCollection services)
+    public static IServiceCollection AddStartActors(this IServiceCollection services)
     {
         return services
-            .AddStartedProjections()
-            .AddStartEmitter()
-            .AddStartResponder();
+            .AddStartedToRedisProjections();
+        // .AddStartEmitter()
+        // .AddStartResponder();
     }
 
     public static IServiceCollection AddStartEmitter(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => Effects._evt2Fact);
+            .AddTransient(_ => Mappers._evt2Fact);
     }
 
-    public static IServiceCollection AddStartedProjections(this IServiceCollection services)
+    public static IServiceCollection AddStartedToRedisProjections(this IServiceCollection services)
     {
         return services
-            .AddExchange()
-            .AddTransient(_ => Effects._evt2State)
-            .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
-            .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
-            .AddTransient<IActor<Spoke>, Effects.ToMemDocProjection>();
+            .AddSingletonExchange()
+            .AddTransient(_ => Mappers._evt2State)
+            .AddTransientRedisDb<Common.Schema.Engine>()
+            .AddSingleton<IRedisStore<Common.Schema.Engine>, RedisStore<Common.Schema.Engine>>()
+            .AddTransient<IActor<Spoke>, Actors.ToRedisDoc>()
+            .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>();
     }
 
 
@@ -64,10 +66,10 @@ public static class Inject
             .AddStartOnInitializedPolicy()
             .AddCmdHandler()
             .AddStartHopeGenerator()
-            .AddTransient(_ => Effects._hope2Cmd)
-            .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
-            .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IActor<Spoke>, Effects.Responder>();
+            .AddTransient(_ => Mappers._hope2Cmd)
+            .AddSingleton<IResponderDriverT<Hope>, Actors.ResponderDriver>()
+            .AddTransient<Actors.IResponder, Actors.Responder>()
+            .AddTransient<IActor<Spoke>, Actors.Responder>();
     }
 
 
@@ -75,5 +77,19 @@ public static class Inject
     {
         return services
             .AddTransient(_ => Generators._generateHope);
+    }
+
+
+    public static IServiceCollection AddStartSpoke(this IServiceCollection services)
+    {
+        return services
+            .AddStartActors()
+            .AddTransient<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            .AddTransient<Spoke>()
+            .AddHostedService(provider =>
+            {
+                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+                return spokeBuilder.Build();
+            });
     }
 }

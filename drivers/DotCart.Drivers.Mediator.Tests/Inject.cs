@@ -10,7 +10,7 @@ public static class Inject
     public static IServiceCollection AddTestEnv(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddMemProjector()
             .AddTransient<ISpokeT<Spoke>, Spoke>()
             .AddTransient<ISpokeBuilder<ISpokeT<Spoke>>, SpokeBuilder>()

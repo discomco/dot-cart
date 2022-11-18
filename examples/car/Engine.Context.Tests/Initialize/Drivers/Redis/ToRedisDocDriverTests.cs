@@ -25,8 +25,8 @@ public class ToRedisDocDriverTests : RedisStoreDriverTestsT<EngineID, Common.Sch
     {
         base.InjectDependencies(services);
         services
-            .AddEngineIDCtor()
-            .AddEngineCtor()
+            .AddModelIDCtor()
+            .AddModelCtor()
             .AddToDocRedisStoreDriver();
     }
 }

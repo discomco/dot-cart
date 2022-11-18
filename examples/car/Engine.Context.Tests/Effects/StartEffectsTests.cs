@@ -15,9 +15,9 @@ public class StartEffectsTests : EffectsTests<
     Cmd,
     Hope,
     Fact,
-    Start.Effects.IResponder,
+    Actors.IResponder,
     IModelStore<Common.Schema.Engine>,
-    Start.Effects.IToMemDocProjection
+    Actors.IToRedisDoc
 >
 {
     public StartEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -32,6 +32,6 @@ public class StartEffectsTests : EffectsTests<
     {
         services
             .AddMemEventStore()
-            .AddStartEffects();
+            .AddStartActors();
     }
 }

@@ -1,12 +1,12 @@
 using System.Text.Json.Serialization;
 using DotCart.Contract.Dtos;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Schema;
 
-public record TestPayload : IPayload
+public record ThePayload : IPayload
 {
     [JsonConstructor]
-    public TestPayload(string material, decimal weight, DateTime arrival, string id)
+    public ThePayload(string material, decimal weight, DateTime arrival, string id)
     {
         Material = material;
         Weight = weight;

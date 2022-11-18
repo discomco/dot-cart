@@ -25,7 +25,7 @@ public class MemStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var engStore = TestEnv.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
+        var engStore = TestEnv.ResolveRequired<IModelStore<Engine.Context.Common.Schema.Engine>>();
         // THEN
         Assert.NotNull(engStore);
     }
@@ -56,8 +56,8 @@ public class MemStoreTests : IoCTests
 
     protected override void Initialize()
     {
-        _engModelStore = TestEnv.GetRequiredService<IModelStore<Engine.Context.Common.Schema.Engine>>();
-        _newEngine = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
+        _engModelStore = TestEnv.ResolveRequired<IModelStore<Engine.Context.Common.Schema.Engine>>();
+        _newEngine = TestEnv.ResolveRequired<NewState<Engine.Context.Common.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()

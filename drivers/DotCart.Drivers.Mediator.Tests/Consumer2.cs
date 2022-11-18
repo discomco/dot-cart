@@ -3,6 +3,7 @@ using DotCart.Context.Effects;
 using DotCart.Contract.Dtos;
 using DotCart.Core;
 using DotCart.TestKit;
+using DotCart.TestKit.Schema;
 using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;

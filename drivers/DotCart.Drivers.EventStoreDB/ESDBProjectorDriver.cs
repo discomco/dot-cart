@@ -21,7 +21,10 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     private readonly AsyncRetryPolicy _retryPolicy;
     private IActor _actor;
 
+    private CancellationTokenSource _cts;
+
     private PersistentSubscription _subscription;
+    private bool _subscriptionExists;
 
     public ESDBProjectorDriver(
         IESDBPersistentSubscriptionsClient client,
@@ -40,36 +43,36 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
 
     public void Dispose()
     {
-        if (_subscription != null) _subscription.Dispose();
+        if (_subscription != null)
+            _subscription.Dispose();
     }
 
     public async Task StartStreamingAsync(CancellationToken cancellationToken)
     {
-        await _retryPolicy.ExecuteAsync(async () =>
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        try
         {
-            try
-            {
-                await CreateSubscription(cancellationToken);
-                _subscription = await _client.SubscribeToAllAsync(
-                    GroupName.Get<TInfo>(),
-                    EventAppeared,
-                    SubscriptionDropped,
-                    null,
-                    10,
-                    cancellationToken);
-            }
-            catch (Exception e)
-            {
-                Log.Error($"::EXCEPTION {e.Message})");
-                throw;
-            }
-        });
+            await CreateSubscription(_cts.Token);
+            _subscription = await _client.SubscribeToAllAsync(
+                GroupName.Get<TInfo>(),
+                EventAppeared,
+                SubscriptionDropped,
+                null,
+                10,
+                cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"::EXCEPTION {e.Message})");
+            throw;
+        }
     }
 
 
     public Task StopStreamingAsync(CancellationToken cancellationToken)
     {
         Log.Information("EventStore: Stopped Listening");
+        _cts.Cancel();
         return Task.CompletedTask;
     }
 
@@ -83,6 +86,7 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     {
         // await _retryPolicy.ExecuteAsync(async () =>
         // {
+        if (_subscriptionExists) return;
         try
         {
             await _client.CreateToAllAsync(
@@ -94,7 +98,10 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
         }
         catch (RpcException e)
         {
-            if (e.StatusCode != StatusCode.AlreadyExists) throw;
+            if (e.StatusCode == StatusCode.AlreadyExists)
+                _subscriptionExists = true;
+            else
+                throw;
         }
         catch (Exception e)
         {
@@ -106,6 +113,8 @@ public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : 
     private void SubscriptionDropped(PersistentSubscription subscription, SubscriptionDroppedReason reason,
         Exception? exception)
     {
+        _subscriptionExists = false;
+        StartStreamingAsync(_cts.Token);
     }
 
     private async Task EventAppeared(

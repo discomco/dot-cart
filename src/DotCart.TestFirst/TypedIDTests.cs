@@ -71,7 +71,7 @@ public abstract class TypedIDTests<TID> : IoCTests where TID : IID
 
     protected override void Initialize()
     {
-        NewTypedId = TestEnv.GetRequiredService<NewTypedID<TID>>();
+        NewTypedId = TestEnv.ResolveRequired<NewTypedID<TID>>();
     }
 
     private record PrefixLessTypedId : TypedID<PrefixLessTypedId>

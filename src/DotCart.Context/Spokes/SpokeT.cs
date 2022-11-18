@@ -11,6 +11,8 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     private readonly IProjector _projector;
 
+    private bool _allActorsUp;
+
     private IImmutableDictionary<string, IActor<TSpoke>> _reactors =
         ImmutableDictionary<string, IActor<TSpoke>>.Empty;
 
@@ -18,7 +20,10 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     {
         _exchange = exchange;
         _projector = projector;
+        Status = ComponentStatus.Inactive;
     }
+
+    public ComponentStatus Status { get; set; }
 
 
     public void InjectActors(params IActor<TSpoke>[] reactors)
@@ -27,36 +32,79 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
         {
             string actualKey;
             var exists = _reactors.TryGetKey(actor.Name, out actualKey);
-            if (!exists)
-                _reactors = _reactors.Add(actor.Name, actor);
+            if (exists) continue;
+            _reactors = _reactors.Add(actor.Name, actor);
+            actor.SetSpoke(this);
         }
     }
 
-    public override Task StartAsync(CancellationToken cancellationToken)
+    public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        return Task.Run(async () =>
-        {
-            Log.Information($"Spoke:[{GetType()}] ~> Starting");
-            while (!_exchange.IsRunning)
-            {
-                _exchange.Activate(cancellationToken).ConfigureAwait(false);
-                if(!_exchange.IsRunning)
-                    await Task.Delay(100, cancellationToken).ConfigureAwait(false);
-            }
+        Log.Information($"Spoke:[{GetType()}] ~> Starting");
+        await ActivateExchangeAsync(cancellationToken).ConfigureAwait(false);
+        await ActivateActors(cancellationToken).ConfigureAwait(false);
+        StartProjectorAsync(cancellationToken).ConfigureAwait(false);
+    }
 
+
+    private async Task ActivateActors(CancellationToken cancellationToken)
+    {
+        while (!_allActorsUp)
             foreach (var reactor in _reactors)
             {
-                await Task.Delay(20, cancellationToken).ConfigureAwait(false);
-                reactor.Value.Activate(cancellationToken).ConfigureAwait(false);
-            }
+                while (reactor.Value.Status != ComponentStatus.Active)
+                {
+                    Log.Information($"Attempting to start Actor [{reactor.Value.GetType().Name}]");
+                    reactor.Value.Activate(cancellationToken).ConfigureAwait(false);
+                    await Task.Delay(20, cancellationToken).ConfigureAwait(false);
+                }
 
-            while (!_projector.IsRunning)
-            {
-                _projector.Activate(cancellationToken).ConfigureAwait(false);
-                if(!_projector.IsRunning)
-                    await Task.Delay(100, cancellationToken).ConfigureAwait(false);
+                _allActorsUp = ScanActors();
             }
-        }, cancellationToken);
+    }
+
+    private bool ScanActors()
+    {
+        return _reactors.All(actor => actor.Value.Status == ComponentStatus.Active);
+    }
+
+    private async Task ActivateExchangeAsync(CancellationToken cancellationToken)
+    {
+        while (_exchange.Status != ComponentStatus.Active)
+        {
+            Log.Information("Attempting to start exchange");
+            _exchange.Activate(cancellationToken).ConfigureAwait(false);
+            if (_exchange.Status != ComponentStatus.Active)
+            {
+                Log.Information("Exchange is not running, waiting 1 sec.");
+                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                Log.Information("Attempt to start Exchange succeeded");
+            }
+        }
+    }
+
+
+    private async Task StartProjectorAsync(CancellationToken cancellationToken)
+    {
+        if (_projector == null)
+            return;
+        while (_projector.Status != ComponentStatus.Active)
+        {
+            Log.Information("Attempting to start projector");
+            await _projector.Activate(cancellationToken).ConfigureAwait(false);
+            if (_projector.Status != ComponentStatus.Active)
+            {
+                Log.Information("Projector is not running, waiting 1 second");
+                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                Log.Information("Projector is running");
+            }
+        }
     }
 
 

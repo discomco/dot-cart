@@ -2,8 +2,10 @@ using DotCart.Context.Abstractions;
 using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
+using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Mediator;
+using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,24 +23,51 @@ public static class Inject
             .AddTransient<IApply, ApplyEvt>();
     }
 
-    public static IServiceCollection AddChangeRpmEffects(this IServiceCollection services)
+    public static IServiceCollection AddChangeRpmActors(this IServiceCollection services)
     {
         return services
-            .AddChangeRpmBehavior()
-            .AddChangeRpmProjections()
-            .AddChangeRpmEmitter()
-            .AddChangeRpmResponder();
+            .AddChangeRpmRedisProjections();
+            // .AddChangeRpmBehavior()
+            // .AddChangeRpmMemProjections()
+            // .AddChangeRpmEmitter()
+            // .AddChangeRpmResponder();
     }
 
-    public static IServiceCollection AddChangeRpmProjections(this IServiceCollection services)
+    public static IServiceCollection AddChangeRpmMemProjections(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddTransient<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
             .AddTransient(_ => Mappers._evt2State)
-            .AddTransient<Effects.IToMemDocProjection, Effects.ToMemDocProjection>()
-            .AddTransient<IActor<Spoke>, Effects.ToMemDocProjection>();
+            .AddTransient<Actors.IToMemDoc, Actors.ToMemDoc>()
+            .AddTransient<IActor<Spoke>, Actors.ToMemDoc>();
     }
+
+    public static IServiceCollection AddChangeRpmRedisProjections(this IServiceCollection services)
+    {
+        return services
+            .AddSingletonExchange()
+            .AddTransientRedisDb<Common.Schema.Engine>()
+            .AddTransient(_ => Mappers._evt2State)
+            .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, Actors.ToRedisDoc>();
+            
+    }
+
+    public static IServiceCollection AddChangeRpmSpoke(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<Spoke>()
+            .AddTransient<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            .AddHostedService(provider =>
+            {
+                var builder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+                return builder.Build();
+            })
+            .AddChangeRpmActors();
+    }
+    
+    
 
     public static IServiceCollection AddChangeRpmEmitter(this IServiceCollection services)
     {
@@ -53,8 +82,8 @@ public static class Inject
             .AddAggregateBuilder()
             .AddCmdHandler()
             .AddTransient(_ => Generators._generateHope)
-            .AddSingleton<IResponderDriver<Hope>, Effects.ResponderDriver>()
-            .AddTransient<Effects.IResponder, Effects.Responder>()
-            .AddTransient<IActor<Spoke>, Effects.Responder>();
+            .AddSingleton<IResponderDriverT<Hope>, Actors.ResponderDriver>()
+            .AddTransient<Actors.IResponder, Actors.Responder>()
+            .AddTransient<IActor<Spoke>, Actors.Responder>();
     }
 }

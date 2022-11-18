@@ -31,13 +31,15 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.AppendToStreamAsync(
+        //      return _retryPolicy.ExecuteAsync(() =>
+        return _client.AppendToStreamAsync(
             streamName,
             expectedRevision,
             eventData,
             configureOperationOptions,
             deadline,
-            userCredentials, cancellationToken));
+            userCredentials, cancellationToken);
+//            );
     }
 
     public Task<IWriteResult> AppendToStreamAsync(
@@ -49,47 +51,28 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(()
-            => _client.AppendToStreamAsync(streamName,
-                expectedState,
-                eventData,
-                configureOperationOptions,
-                deadline,
-                userCredentials, cancellationToken));
+//        return _retryPolicy.ExecuteAsync(() => 
+        return _client.AppendToStreamAsync(streamName,
+            expectedState,
+            eventData,
+            configureOperationOptions,
+            deadline,
+            userCredentials, cancellationToken);
+//            );
     }
-
-    // public Task<DeleteResult> SoftDeleteAsync(string streamName, StreamRevision expectedRevision,
-    //     Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
-    //     UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
-    // {
-    //     return _retryPolicy.ExecuteAsync(() => _client.SoftDeleteAsync(streamName,
-    //         expectedRevision,
-    //         configureOperationOptions,
-    //         userCredentials,
-    //         cancellationToken));
-    // }
-    //
-    // public Task<DeleteResult> SoftDeleteAsync(string streamName, StreamState expectedState,
-    //     Action<EventStoreClientOperationOptions>? configureOperationOptions = null,
-    //     UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
-    // {
-    //     return _retryPolicy.ExecuteAsync(() => _client.SoftDeleteAsync(streamName,
-    //         expectedState,
-    //         configureOperationOptions,
-    //         userCredentials,
-    //         cancellationToken));
-    // }
 
     public Task<StreamMetadataResult> GetStreamMetadataAsync(string streamName,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.GetStreamMetadataAsync(
+//        return _retryPolicy.ExecuteAsync(() =>
+        return _client.GetStreamMetadataAsync(
             streamName,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+        //          );
     }
 
     public Task<IWriteResult> SetStreamMetadataAsync(
@@ -101,14 +84,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.SetStreamMetadataAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+        return _client.SetStreamMetadataAsync(
             streamName,
             expectedState,
             metadata,
             configureOperationOptions,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+//                );
     }
 
     public Task<IWriteResult> SetStreamMetadataAsync(
@@ -120,13 +105,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.SetStreamMetadataAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _client.SetStreamMetadataAsync(
             streamName,
             expectedRevision,
             metadata,
             configureOperationOptions,
             deadline,
-            userCredentials, cancellationToken));
+            userCredentials, cancellationToken);
+        //          );
     }
 
     public IAsyncEnumerable<ResolvedEvent> ReadAllAsync(
@@ -168,13 +156,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         SubscriptionFilterOptions? filterOptions = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.SubscribeToAllAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _client.SubscribeToAllAsync(
             startFrom,
             eventAppeared,
             resolveLinkTos,
             subscriptionDropped,
             filterOptions,
-            userCredentials, cancellationToken));
+            userCredentials, cancellationToken);
+//                );
     }
 
     // public Task<StreamSubscription> SubscribeToAllAsync(Position start,
@@ -217,14 +208,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.SubscribeToStreamAsync(
+        //return _retryPolicy.ExecuteAsync(() => 
+        return _client.SubscribeToStreamAsync(
             streamName,
             start,
             eventAppeared,
             resolveLinkTos,
             subscriptionDropped,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+//              );
     }
 
     public Task<DeleteResult> TombstoneAsync(string streamName,
@@ -232,12 +225,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.TombstoneAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _client.TombstoneAsync(
             streamName,
             expectedRevision,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+        //          );
     }
 
     public Task<DeleteResult> TombstoneAsync(
@@ -246,12 +243,16 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
         TimeSpan? deadline,
         UserCredentials? userCredentials = null, CancellationToken cancellationToken = default)
     {
-        return _retryPolicy.ExecuteAsync(() => _client.TombstoneAsync(
+//        return _retryPolicy.ExecuteAsync(() => 
+
+        return _client.TombstoneAsync(
             streamName,
             expectedState,
             deadline,
             userCredentials,
-            cancellationToken));
+            cancellationToken);
+
+//               );
     }
 
     public void Dispose()

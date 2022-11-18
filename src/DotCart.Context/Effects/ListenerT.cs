@@ -12,20 +12,20 @@ public interface IListener : IActor
 {
 }
 
-public abstract class Listener<TSpoke, TDriver, TFact, TCmd> : ActorT<TSpoke>, IListener
-    where TDriver : IListenerDriver
+public abstract class ListenerT<TSpoke, TListenerDriver, TFact, TCmd> : ActorT<TSpoke>, IListener
+    where TListenerDriver : IListenerDriver
     where TFact : IFact
     where TCmd : ICmd
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly TDriver _driver;
+    private readonly TListenerDriver _driver;
     private readonly Fact2Cmd<TFact, TCmd> _fact2Cmd;
 
-    protected Listener(
+    protected ListenerT(
         IExchange exchange,
         ICmdHandler cmdHandler,
-        TDriver driver,
+        TListenerDriver driver,
         Fact2Cmd<TFact, TCmd> fact2Cmd) : base(exchange)
     {
         _cmdHandler = cmdHandler;

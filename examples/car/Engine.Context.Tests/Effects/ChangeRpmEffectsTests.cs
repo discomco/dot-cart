@@ -15,9 +15,9 @@ public class ChangeRpmEffectsTests : EffectsTests<
     Cmd,
     Hope,
     Fact,
-    ChangeRpm.Effects.IResponder,
+    ChangeRpm.Actors.IResponder,
     IModelStore<Common.Schema.Engine>,
-    ChangeRpm.Effects.IToMemDocProjection>
+    ChangeRpm.Actors.IToMemDoc>
 {
     public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -31,6 +31,6 @@ public class ChangeRpmEffectsTests : EffectsTests<
     {
         services
             .AddMemEventStore()
-            .AddChangeRpmEffects();
+            .AddChangeRpmActors();
     }
 }

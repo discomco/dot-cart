@@ -28,7 +28,7 @@ public class CmdHandlerTests : IoCTests
     [Fact]
     public void ShouldResolveCmdHandler()
     {
-        var ch = TestEnv.GetService<ICmdHandler>();
+        var ch = TestEnv.Resolve<ICmdHandler>();
         Assert.NotNull(ch);
     }
 
@@ -38,7 +38,7 @@ public class CmdHandlerTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var es = TestEnv.GetRequiredService<IAggregateStoreDriver>();
+        var es = TestEnv.ResolveRequired<IAggregateStoreDriver>();
         // THEN
         Assert.NotNull(es);
     }
@@ -47,9 +47,9 @@ public class CmdHandlerTests : IoCTests
     public void ShouldResolveDifferentHandlers()
     {
         // GIVEN
-        var ch1 = TestEnv.GetService<ICmdHandler>();
+        var ch1 = TestEnv.Resolve<ICmdHandler>();
         // WHEN
-        var ch2 = TestEnv.GetService<ICmdHandler>();
+        var ch2 = TestEnv.Resolve<ICmdHandler>();
         // THEN
         Assert.NotSame(ch1, ch2);
     }
@@ -71,10 +71,10 @@ public class CmdHandlerTests : IoCTests
 
     protected override void Initialize()
     {
-        _cmdHandler = TestEnv.GetRequiredService<ICmdHandler>();
-        _newEngine = TestEnv.GetRequiredService<NewState<Common.Schema.Engine>>();
-        _aggStoreDriver = TestEnv.GetRequiredService<IAggregateStoreDriver>();
-        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
+        _newEngine = TestEnv.ResolveRequired<NewState<Common.Schema.Engine>>();
+        _aggStoreDriver = TestEnv.ResolveRequired<IAggregateStoreDriver>();
+        _newID = TestEnv.ResolveRequired<NewID<EngineID>>();
     }
 
     protected override void SetTestEnvironment()

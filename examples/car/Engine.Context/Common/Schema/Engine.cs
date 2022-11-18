@@ -8,10 +8,10 @@ namespace Engine.Context.Common.Schema;
 
 public static class Inject
 {
-    public static IServiceCollection AddEngineCtor(this IServiceCollection services)
+    public static IServiceCollection AddModelCtor(this IServiceCollection services)
     {
         return services
-            .AddEngineIDCtor()
+            .AddModelIDCtor()
             .AddSingleton(Engine.Ctor);
     }
 }

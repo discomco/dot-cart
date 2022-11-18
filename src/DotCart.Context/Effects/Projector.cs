@@ -8,20 +8,22 @@ namespace DotCart.Context.Effects;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddProjector(this IServiceCollection services)
+    public static IServiceCollection AddProjector<TInfo>(this IServiceCollection services)
+        where TInfo : ISubscriptionInfo
     {
         return services
-            .AddTransient<IActor, Projector>();
+            .AddSingleton<IProjector, Projector<TInfo>>();
+            
     }
 }
 
-public class Projector : Actor, IProjector, IProducer
+public class Projector<TInfo> : Actor, IProjector, IProducer where TInfo : ISubscriptionInfo
 {
-    private readonly IProjectorDriver _projectorDriver;
+    private readonly IProjectorDriver<TInfo> _projectorDriver;
 
     public Projector(
         IExchange exchange,
-        IProjectorDriver projectorDriver) : base(exchange)
+        IProjectorDriver<TInfo> projectorDriver) : base(exchange)
     {
         _projectorDriver = projectorDriver;
     }

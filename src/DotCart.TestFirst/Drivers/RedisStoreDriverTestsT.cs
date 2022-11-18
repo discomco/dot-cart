@@ -28,7 +28,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -39,7 +39,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newState = TestEnv.GetRequiredService<NewState<TState>>();
+        _newState = TestEnv.ResolveRequired<NewState<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -51,7 +51,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _redisDB = TestEnv.GetRequiredService<IRedisDb>();
+        _redisDB = TestEnv.ResolveRequired<IRedisDb>();
         // THEN
         Assert.NotNull(_redisDB);
     }
@@ -62,7 +62,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _connection = TestEnv.GetRequiredService<IConnectionMultiplexer>();
+        _connection = TestEnv.ResolveRequired<IConnectionMultiplexer>();
         // THEN
         Assert.NotNull(_connection);
     }
@@ -73,7 +73,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         // THEN
         Assert.NotNull(_redisStore);
     }
@@ -84,7 +84,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         Assert.NotNull(_redisStore);
         // WHEN
         var ID = _newID();
@@ -99,7 +99,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
     public async Task ShouldDeleteDocFromRedisStore()
     {
         Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         Assert.NotNull(_redisStore);
         // WHEN
         var ID = _newID();
@@ -117,7 +117,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
     public async Task ShouldCheckIfDocExists()
     {
         Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         Assert.NotNull(_redisStore);
         // WHEN
         var ID = _newID();
@@ -134,7 +134,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
     public async Task ShouldGetDocFromRedisStore()
     {
         Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         Assert.NotNull(_redisStore);
         // WHEN
         var ID = _newID();
@@ -157,10 +157,10 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
 
     protected override void Initialize()
     {
-        _redisStore = TestEnv.GetRequiredService<IModelStore<TState>>();
-        _connection = TestEnv.GetRequiredService<IConnectionMultiplexer>();
-        _redisDB = TestEnv.GetRequiredService<IRedisDb>();
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
-        _newState = TestEnv.GetRequiredService<NewState<TState>>();
+        _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
+        _connection = TestEnv.ResolveRequired<IConnectionMultiplexer>();
+        _redisDB = TestEnv.ResolveRequired<IRedisDb>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newState = TestEnv.ResolveRequired<NewState<TState>>();
     }
 }

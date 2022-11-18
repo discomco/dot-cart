@@ -12,7 +12,7 @@ public static partial class Inject
     public static IServiceCollection AddToDocRedisStoreDriver(this IServiceCollection services)
     {
         return services
-            .AddTransient<Effects.IToRedisDoc, Effects.ToRedisDoc>()
+            .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
             .AddTransient<IModelStore<Common.Schema.Engine>, RedisStore<Common.Schema.Engine>>();
     }
 }

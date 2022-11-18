@@ -1,4 +1,4 @@
-namespace DotCart.Context.Schemas;
+namespace DotCart.Context.Abstractions;
 
 public static class FlagExtensions
 {

@@ -10,7 +10,7 @@ public static partial class Inject
     public static IServiceCollection AddEngineAggregate(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddSingleton(Schema.Engine.Ctor)
             .AddSingleton(EngineID.Ctor)
             .AddTransient<IAggregate, Aggregate>();

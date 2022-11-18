@@ -25,7 +25,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -37,7 +37,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newState = TestEnv.GetRequiredService<NewState<TState>>();
+        _newState = TestEnv.ResolveRequired<NewState<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -48,7 +48,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var aggBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
+        var aggBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         // THEN
         Assert.NotNull(aggBuilder);
     }
@@ -71,7 +71,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var agg = TestEnv.GetService<IAggregate>();
+        var agg = TestEnv.Resolve<IAggregate>();
         // THEN
         Assert.NotNull(agg);
         var state = agg.GetState();
@@ -81,10 +81,10 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
 
     protected override void Initialize()
     {
-        _builder = TestEnv.GetService<IAggregateBuilder>();
-        _newState = TestEnv.GetService<NewState<TState>>();
+        _builder = TestEnv.Resolve<IAggregateBuilder>();
+        _newState = TestEnv.Resolve<NewState<TState>>();
         _agg = _builder.Build();
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
         _ID = _newID();
     }
 }

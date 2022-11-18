@@ -9,7 +9,7 @@ namespace Engine.Context.Tests.Initialize.Effects;
 public class ToDocProjectionTests : IoCTests
 {
     private IExchange _exchange;
-    private Context.Initialize.Effects.IToRedisDoc _toRedisDoc;
+    private Actors.IToRedisDoc _toRedisDoc;
 
     public ToDocProjectionTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,7 +21,7 @@ public class ToDocProjectionTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _exchange = TestEnv.GetRequiredService<IExchange>();
+        _exchange = TestEnv.ResolveRequired<IExchange>();
         // THEN
         Assert.NotNull(_exchange);
     }
@@ -33,14 +33,14 @@ public class ToDocProjectionTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _toRedisDoc = TestEnv.GetRequiredService<Context.Initialize.Effects.IToRedisDoc>();
+        _toRedisDoc = TestEnv.ResolveRequired<Actors.IToRedisDoc>();
         // THEN
         Assert.NotNull(_toRedisDoc);
     }
 
     protected override void Initialize()
     {
-        _exchange = TestEnv.GetRequiredService<IExchange>();
+        _exchange = TestEnv.ResolveRequired<IExchange>();
     }
 
     protected override void SetTestEnvironment()

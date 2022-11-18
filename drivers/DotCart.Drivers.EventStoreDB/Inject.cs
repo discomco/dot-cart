@@ -1,4 +1,7 @@
-﻿using DotCart.Drivers.EventStoreDB.Interfaces;
+﻿using DotCart.Context.Abstractions.Drivers;
+using DotCart.Context.Effects;
+using DotCart.Contract.Schemas;
+using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Polly;
 using EventStore.Client;
 using Grpc.Core;
@@ -8,6 +11,14 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
+    public static IServiceCollection AddESDBInfra(this IServiceCollection services)
+    {
+        return services
+            .AddConfiguredESDBClients()
+            .AddESDBDrivers();
+    }
+
+
     public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
     {
         return services?
@@ -21,6 +32,18 @@ public static partial class Inject
             })
             .AddSingleton<IESDBPersistentSubscriptionsClient, ESDBPersistentSubscriptionsClient>()
             .AddSingleton<IESDBEventSourcingClient, ESDBEventSourcingClient>();
+    }
+
+
+    public static IServiceCollection AddSingletonESDBProjector<TInfo>(this IServiceCollection services)
+        where TInfo : ISubscriptionInfo
+    {
+        return services
+            .AddSingleton(_ =>
+                new SubscriptionFilterOptions(
+                    StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+            .AddSingleton<IProjectorDriver<TInfo>, ESDBProjectorDriver<TInfo>>()
+            .AddProjector<TInfo>();
     }
 
 

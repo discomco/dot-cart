@@ -1,5 +1,5 @@
 using Ardalis.GuardClauses;
-using DotCart.Context.Schemas;
+using DotCart.Context.Abstractions;
 using Engine.Contract.Schema;
 using Exception = Engine.Context.Initialize.Exception;
 

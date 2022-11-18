@@ -19,7 +19,7 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newID = TestEnv.GetRequiredService<NewID<TID>>();
+        var newID = TestEnv.ResolveRequired<NewID<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -55,6 +55,6 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
 
     protected override void Initialize()
     {
-        _newID = TestEnv.GetRequiredService<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<NewID<TID>>();
     }
 }

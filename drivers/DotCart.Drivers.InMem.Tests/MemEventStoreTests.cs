@@ -44,7 +44,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newEngineID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        var newEngineID = TestEnv.ResolveRequired<NewID<EngineID>>();
         // THEN
         Assert.NotNull(newEngineID);
     }
@@ -56,7 +56,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var me = TestEnv.GetService<IMemEventStoreDriver>();
+        var me = TestEnv.Resolve<IMemEventStoreDriver>();
         // THEN
         Assert.NotNull(me);
     }
@@ -98,11 +98,11 @@ public class MemEventStoreTests : IoCTests
 
     protected override void Initialize()
     {
-        _newEngine = TestEnv.GetRequiredService<NewState<Engine.Context.Common.Schema.Engine>>();
-        _aggStore = TestEnv.GetRequiredService<IMemEventStoreDriver>();
-        var builder = TestEnv.GetRequiredService<IAggregateBuilder>();
+        _newEngine = TestEnv.ResolveRequired<NewState<Engine.Context.Common.Schema.Engine>>();
+        _aggStore = TestEnv.ResolveRequired<IMemEventStoreDriver>();
+        var builder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _agg = builder.Build();
-        _newEngineID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        _newEngineID = TestEnv.ResolveRequired<NewID<EngineID>>();
         _engineId = _newEngineID();
     }
 

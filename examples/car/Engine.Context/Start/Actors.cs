@@ -1,30 +1,14 @@
 using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
 using DotCart.Context.Effects;
-using DotCart.Context.Schemas;
 using DotCart.Contract;
-using DotCart.Contract.Schemas;
 using DotCart.Drivers.InMem;
-using Engine.Contract.Schema;
+using DotCart.Drivers.Redis;
 using Engine.Contract.Start;
 
 namespace Engine.Context.Start;
 
-public static class Effects
+public static class Actors
 {
-    internal static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
-        evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
-
-    internal static readonly Evt2State<Common.Schema.Engine, IEvt> _evt2State = (state, _) =>
-    {
-        ((int)state.Status).SetFlag((int)EngineStatus.Started);
-        return state;
-    };
-
-    internal static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
-        hope =>
-            Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Payload>());
-
     public class ResponderDriver : MemResponderDriver<Hope>
     {
         public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
@@ -40,11 +24,10 @@ public static class Effects
     {
     }
 
-
     public class Responder : ResponderT<Spoke, ResponderDriver, Hope, Cmd>, IResponder
     {
         public Responder(IExchange exchange,
-            IResponderDriver<Hope> responderDriver,
+            ResponderDriver responderDriver,
             ICmdHandler cmdHandler,
             Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
             responderDriver,
@@ -54,16 +37,17 @@ public static class Effects
         }
     }
 
-
-    public interface IToMemDocProjection
+    public interface IToRedisDoc
     {
     }
 
-    public class ToMemDocProjection : ProjectionT<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
-        IToMemDocProjection
+    public class ToRedisDoc : ProjectionT<Spoke,
+            IRedisStore<Common.Schema.Engine>,
+            Common.Schema.Engine, IEvt>,
+        IToRedisDoc
     {
-        public ToMemDocProjection(IExchange exchange,
-            IModelStore<Common.Schema.Engine> modelStore,
+        public ToRedisDoc(IExchange exchange,
+            IRedisStore<Common.Schema.Engine> modelStore,
             Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)

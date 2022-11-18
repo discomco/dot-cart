@@ -1,6 +1,5 @@
 using DotCart.Context.Abstractions;
 using DotCart.Context.Behaviors;
-using DotCart.Context.Schemas;
 using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -92,7 +91,7 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.GetRequiredService<IAggregateBuilder>();
+        var builder = TestEnv.ResolveRequired<IAggregateBuilder>();
         var agg = builder.Build();
         var topic = TopicAtt.Get<Start.Cmd>();
         var knowsIt = agg.KnowsTry(topic);
@@ -116,7 +115,7 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineIDCtor()
+            .AddModelIDCtor()
             .AddEngineAggregate()
             .AddAggregateBuilder()
             .AddInitializeBehavior()

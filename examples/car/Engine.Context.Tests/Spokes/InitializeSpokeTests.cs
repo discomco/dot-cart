@@ -1,5 +1,6 @@
 using DotCart.Context.Spokes;
 using DotCart.Core;
+using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.Serilog;
 using DotCart.TestKit;
 using Engine.Context.Initialize;
@@ -24,7 +25,7 @@ public class InitializeSpokeTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _spoke = TestEnv.GetHostedService<Spoke>();
+        _spoke = TestEnv.ResolveHosted<Spoke>();
         // THEN
         Assert.NotNull(_spoke);
     }
@@ -35,7 +36,7 @@ public class InitializeSpokeTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _builder = TestEnv.GetRequiredService<ISpokeBuilder<Spoke>>();
+        _builder = TestEnv.ResolveRequired<ISpokeBuilder<Spoke>>();
         // THEN
         Assert.NotNull(_builder);
     }
@@ -53,7 +54,7 @@ public class InitializeSpokeTests : IoCTests
     {
         services
             .AddConsoleLogger()
-            .AddESDBInfra<Spoke>()
+            .AddESDBInfra()
             .AddInitializeSpoke();
     }
 }

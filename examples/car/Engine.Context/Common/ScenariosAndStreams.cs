@@ -42,12 +42,28 @@ public static class ScenariosAndStreams
         var startEvt = Event.New(ID, Start.Topics.EvtTopic, startPayload, EventMeta.New("", ID.Id()));
         startEvt.Version = 1;
         // AND
-        var throttleUpPayload = Contract.ChangeRpm.Payload.New(5);
-        var throttleUpEvt = Event.New(ID, ChangeRpm.Topics.EvtTopic, throttleUpPayload, EventMeta.New("", ID.Id()));
-        throttleUpEvt.Version = 2;
+        var revs = RandomRevs(ID);
+        var res = new List<IEvt>() {initEvt,startEvt};
+        res.AddRange(revs);
+        
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
-        return new[] { initEvt, startEvt, throttleUpEvt };
+        return res;
+    }
+
+    private static List<IEvt> RandomRevs(EngineID ID)
+    {
+        var res = new List<IEvt>();
+        var counter = Random.Shared.Next(4, 15);
+        for (var i = 0; i < counter; i++)
+        {
+            var delta = Random.Shared.Next(-10, 10);
+            var changeRpmPld = Contract.ChangeRpm.Payload.New(delta);
+            var changeRpmEvt = Event.New(ID, ChangeRpm.Topics.EvtTopic, changeRpmPld, EventMeta.New("", ID.Id()));
+            changeRpmEvt.Version = i + 2;
+            res.Add(changeRpmEvt);
+        }
+        return res;
     }
 
     public static IEnumerable<ICmd> InitializeScenario(IID ID)

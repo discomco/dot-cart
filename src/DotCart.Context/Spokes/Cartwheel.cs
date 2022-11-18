@@ -1,0 +1,94 @@
+using DotCart.Context.Abstractions;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Serilog;
+
+namespace DotCart.Context.Spokes;
+
+public static class Inject
+{
+    public static IServiceCollection AddCartwheel(this IServiceCollection services)
+    {
+        return services
+            .AddHostedService<Cartwheel>();
+    }
+}
+
+public class Cartwheel : BackgroundService
+{
+    private readonly IExchange _exchange;
+    private readonly IProjector _projector;
+
+    private CancellationTokenSource _cts;
+    // private readonly IEnumerable<ISpokeB> _spokes;
+
+    public Cartwheel(
+        IExchange exchange
+        , IProjector projector
+        // , IEnumerable<ISpokeB> spokes
+    )
+    {
+        _exchange = exchange;
+        _projector = projector;
+        // _spokes = spokes;
+    }
+
+    public override async Task StartAsync(CancellationToken cancellationToken)
+    {
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+        await StartExchangeAsync(_cts.Token);
+        await StartProjectorAsync(_cts.Token);
+        base.StartAsync(_cts.Token);
+    }
+
+
+    private async Task StartProjectorAsync(CancellationToken cancellationToken)
+    {
+        while (_projector.Status != ComponentStatus.Active || _exchange.Status != ComponentStatus.Active)
+        {
+            Log.Information("Attempting to start projector");
+            _projector.Activate(cancellationToken).ConfigureAwait(false);
+            if (_projector.Status != ComponentStatus.Active)
+            {
+                Log.Information("Projector is not running, waiting 1 second");
+                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+            }
+            else
+            {
+                Log.Information($"Projector [{_projector.GetType()}] is running");
+            }
+        }
+    }
+
+
+    private async Task StartExchangeAsync(CancellationToken cancellationToken)
+    {
+        while (_exchange.Status != ComponentStatus.Active)
+        {
+            Log.Information("Attempting to start exchange");
+            _exchange.Activate(cancellationToken).ConfigureAwait(false);
+            if (_exchange.Status == ComponentStatus.Active) continue;
+            Log.Information("Exchange is not running, waiting 1 sec.");
+            await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+        }
+
+        Log.Information("Attempt to start Exchange succeeded");
+    }
+
+
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        return Task.Run(() =>
+        {
+            while (!stoppingToken.IsCancellationRequested)
+            {
+            }
+        }, stoppingToken);
+    }
+
+    public override void Dispose()
+    {
+        _cts.Dispose();
+        base.Dispose();
+    }
+}

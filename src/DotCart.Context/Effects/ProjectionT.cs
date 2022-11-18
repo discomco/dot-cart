@@ -34,7 +34,7 @@ public abstract class ProjectionT<TSpoke, TDriver, TState, TEvt> : ActorT<TSpoke
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly Evt2State<TState, TEvt> _evt2State;
-    private readonly IModelStore<TState> _modelStore;
+    private readonly TDriver _modelStore;
 
     private readonly object _subMutex = new();
 
@@ -42,7 +42,7 @@ public abstract class ProjectionT<TSpoke, TDriver, TState, TEvt> : ActorT<TSpoke
 
     protected ProjectionT(
         IExchange exchange,
-        IModelStore<TState> modelStore,
+        TDriver modelStore,
         Evt2State<TState, TEvt> evt2State) : base(exchange)
     {
         _modelStore = modelStore;
@@ -61,7 +61,7 @@ public abstract class ProjectionT<TSpoke, TDriver, TState, TEvt> : ActorT<TSpoke
 
     private async Task Handler(IEvt evt, CancellationToken cancellationToken = default)
     {
-        Log.Information($"[{GetType().Name}] ~> [{_modelStore.GetType().Name}] ");
+        Log.Information($"PROJECTION::[{GetType().Name}] ~> [{evt.Topic}] => [{evt.AggregateID.Id()}] ");
         var state = await _modelStore.GetByIdAsync(evt.AggregateID.Id(), cancellationToken).ConfigureAwait(false);
         state = _evt2State(state, (Event)evt);
         await _modelStore.SetAsync(evt.AggregateID.Id(), state, cancellationToken).ConfigureAwait(false);

@@ -31,7 +31,7 @@ public class HopeTests : IoCTests
 
     protected override void Initialize()
     {
-        _newID = TestEnv.GetRequiredService<NewID<EngineID>>();
+        _newID = TestEnv.ResolveRequired<NewID<EngineID>>();
     }
 
     protected override void SetTestEnvironment()
@@ -41,6 +41,6 @@ public class HopeTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineIDCtor();
+            .AddModelIDCtor();
     }
 }

@@ -19,17 +19,17 @@ public class IoCTestContainer : IDisposable
     }
 
 
-    public T GetService<T>()
+    public T Resolve<T>()
     {
         return Provider.GetService<T>();
     }
 
-    public T GetRequiredService<T>()
+    public T ResolveRequired<T>()
     {
         return Provider.GetRequiredService<T>();
     }
 
-    public T GetHostedService<T>()
+    public T ResolveHosted<T>()
     {
         var candidates = Provider.GetServices<IHostedService>();
         foreach (var candidate in candidates)
@@ -38,7 +38,7 @@ public class IoCTestContainer : IDisposable
         return default;
     }
 
-    public IEnumerable<T> GetServices<T>()
+    public IEnumerable<T> ResolveAll<T>()
     {
         return Provider.GetServices<T>();
     }

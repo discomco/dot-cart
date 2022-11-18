@@ -5,7 +5,7 @@ namespace Engine.Contract.Schema;
 
 public static class Inject
 {
-    public static IServiceCollection AddEngineIDCtor(this IServiceCollection services)
+    public static IServiceCollection AddModelIDCtor(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => EngineID.Ctor);

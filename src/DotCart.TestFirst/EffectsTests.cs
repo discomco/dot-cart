@@ -58,7 +58,7 @@ public abstract class EffectsTests<
                     Output.WriteLine("Waiting");
                 }
             }, cancellationToken);
-            var aStore = TestEnv.GetRequiredService<IAggregateStoreDriver>();
+            var aStore = TestEnv.ResolveRequired<IAggregateStoreDriver>();
             var t = aStore.GetType();
         }
         catch (TaskCanceledException e)
@@ -74,7 +74,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var rms = TestEnv.GetRequiredService<TReadModelStore>();
+        var rms = TestEnv.ResolveRequired<TReadModelStore>();
         // THEN
         Assert.NotNull(rms);
     }
@@ -85,7 +85,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var cmdHandler = TestEnv.GetRequiredService<ICmdHandler>();
+        var cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         // THEN
         Assert.NotNull(cmdHandler);
     }
@@ -96,7 +96,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var toDoc = TestEnv.GetRequiredService<TToDocProjection>();
+        var toDoc = TestEnv.ResolveRequired<TToDocProjection>();
         // THEN 
         Assert.NotNull(toDoc);
     }
@@ -107,7 +107,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var aggStore = TestEnv.GetRequiredService<IAggregateStoreDriver>();
+        var aggStore = TestEnv.ResolveRequired<IAggregateStoreDriver>();
         // THEN
         Assert.NotNull(aggStore);
     }
@@ -118,7 +118,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var h2c = TestEnv.GetRequiredService<Hope2Cmd<TCmd, THope>>();
+        var h2c = TestEnv.ResolveRequired<Hope2Cmd<TCmd, THope>>();
         // THEN
         Assert.NotNull(h2c);
     }
@@ -129,7 +129,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var e2f = TestEnv.GetRequiredService<Evt2Fact<TFact, TEvt>>();
+        var e2f = TestEnv.ResolveRequired<Evt2Fact<TFact, TEvt>>();
         // THEN
         Assert.NotNull(e2f);
     }
@@ -140,7 +140,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var aggBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
+        var aggBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         // THEN 
         Assert.NotNull(aggBuilder);
     }
@@ -151,7 +151,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ir = TestEnv.GetRequiredService<TResponder>();
+        var ir = TestEnv.ResolveRequired<TResponder>();
         // THEN
         Assert.NotNull(ir);
     }
@@ -162,7 +162,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var evt2State = TestEnv.GetRequiredService<Evt2State<TState, TEvt>>();
+        var evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
         // THEN
         Assert.NotNull(evt2State);
     }
@@ -173,18 +173,18 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _exchange = TestEnv.GetRequiredService<IExchange>();
+        _exchange = TestEnv.ResolveRequired<IExchange>();
         // THEN
         Assert.NotNull(_exchange);
     }
 
     protected override void Initialize()
     {
-        _responder = TestEnv.GetRequiredService<TResponder>();
-        AggregateStoreDriver = TestEnv.GetRequiredService<IAggregateStoreDriver>();
-        _aggregate = TestEnv.GetRequiredService<IAggregate>();
-        _cmdHandler = TestEnv.GetRequiredService<ICmdHandler>();
-        _aggregateBuilder = TestEnv.GetRequiredService<IAggregateBuilder>();
-        _exchange = TestEnv.GetRequiredService<IExchange>();
+        _responder = TestEnv.ResolveRequired<TResponder>();
+        AggregateStoreDriver = TestEnv.ResolveRequired<IAggregateStoreDriver>();
+        _aggregate = TestEnv.ResolveRequired<IAggregate>();
+        _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
+        _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
+        _exchange = TestEnv.ResolveRequired<IExchange>();
     }
 }

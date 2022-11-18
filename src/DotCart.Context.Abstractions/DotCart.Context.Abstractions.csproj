@@ -7,9 +7,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
-        <ProjectReference Include="..\DotCart.Contract\DotCart.Contract.csproj"/>
-        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
+        <ProjectReference Include="..\DotCart.Contract\DotCart.Contract.csproj" />
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
     </ItemGroup>
 
 

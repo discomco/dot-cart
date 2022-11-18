@@ -18,7 +18,7 @@ public static partial class Inject
     public static IServiceCollection AddMemEventStore(this IServiceCollection services)
     {
         return services
-            .AddExchange()
+            .AddSingletonExchange()
             .AddMemProjector()
             .AddSingleton<IEventStoreDriver, MemEventStoreDriver>()
             .AddSingleton<IMemEventStoreDriver, MemEventStoreDriver>()

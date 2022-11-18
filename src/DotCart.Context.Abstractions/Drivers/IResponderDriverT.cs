@@ -2,7 +2,7 @@ using DotCart.Contract.Dtos;
 
 namespace DotCart.Context.Abstractions.Drivers;
 
-public interface IResponderDriver<THope> : IDriver
+public interface IResponderDriverT<THope> : IDriver
     where THope : IHope
 {
     Task StartRespondingAsync(CancellationToken cancellationToken);

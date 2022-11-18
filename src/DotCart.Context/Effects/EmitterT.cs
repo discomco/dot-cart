@@ -15,19 +15,19 @@ public interface IEmitter : IActor
 {
 }
 
-public abstract class Emitter<TSpoke, TDriver, TEvt, TFact> : ActorT<TSpoke>, IEmitter
-    where TDriver : IEmitterDriver
+public abstract class EmitterT<TSpoke, TEmitterDriver, TEvt, TFact> : ActorT<TSpoke>, IEmitter
+    where TEmitterDriver : IEmitterDriver
     where TEvt : IEvt
     where TFact : IFact
     where TSpoke : ISpokeT<TSpoke>
 {
-    private readonly IEmitterDriver _emitterDriver;
+    private readonly TEmitterDriver _emitterDriver;
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
 
 
-    protected Emitter(
+    protected EmitterT(
         IExchange exchange,
-        IEmitterDriver emitterDriver,
+        TEmitterDriver emitterDriver,
         Evt2Fact<TFact, TEvt> evt2Fact) : base(exchange)
     {
         _evt2Fact = evt2Fact;

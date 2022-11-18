@@ -1,6 +1,7 @@
 using DotCart.Context.Abstractions.Drivers;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
+using DotCart.TestKit.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -20,12 +21,12 @@ internal static class Inject
     {
         return services
             .AddTransient(_ => TheDoc.Rand)
-            .AddTransient(_ => MyID.Ctor)
+            .AddTransient(_ => TheID.Ctor)
             .AddTransient<IModelStore<TheDoc>, MyRedisStore>();
     }
 }
 
-public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<MyID, TheDoc>
+public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<TheID, TheDoc>
 {
     public MyRedisStoreDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

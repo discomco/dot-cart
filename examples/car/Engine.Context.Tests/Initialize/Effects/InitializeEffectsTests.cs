@@ -15,9 +15,9 @@ public class InitializeEffectsTests : EffectsTests<
     Cmd,
     Hope,
     Fact,
-    Context.Initialize.Effects.IResponder,
+    Actors.IResponder,
     IModelStore<Common.Schema.Engine>,
-    Context.Initialize.Effects.IToRedisDoc
+    Actors.IToRedisDoc
 >
 {
     public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -32,6 +32,6 @@ public class InitializeEffectsTests : EffectsTests<
     {
         services
             .AddMemEventStore()
-            .AddInitializeEffects();
+            .AddInitializeActors();
     }
 }

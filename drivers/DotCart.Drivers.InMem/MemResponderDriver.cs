@@ -11,7 +11,7 @@ namespace DotCart.Drivers.InMem;
 ///     MemResponderDriver is an in-memory responder driver mimicker.
 /// </summary>
 /// <typeparam name="THope"></typeparam>
-public abstract class MemResponderDriver<THope> : IResponderDriver<THope> where THope : IHope
+public abstract class MemResponderDriver<THope> : IResponderDriverT<THope> where THope : IHope
 {
     private readonly GenerateHope<THope> _generateHope;
     private IActor _actor;

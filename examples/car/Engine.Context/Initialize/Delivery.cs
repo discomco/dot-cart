@@ -20,7 +20,9 @@ public interface ISpoke : ISpokeT<Spoke>
 
 public class Spoke : SpokeT<Spoke>, ISpoke
 {
-    public Spoke(IExchange exchange, IProjector projector) : base(exchange, projector)
+    public Spoke(
+        IExchange exchange,
+        IProjector projector) : base(exchange, projector)
     {
     }
 }

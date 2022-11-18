@@ -8,39 +8,34 @@ namespace DotCart.Drivers.Mediator;
 
 internal class Exchange : ActiveComponent, IExchange
 {
-    private ImmutableDictionary<string, List<IActor>> _inbox = ImmutableDictionary<string, List<IActor>>.Empty;
+    private ImmutableDictionary<string, List<IActor>> _readers = ImmutableDictionary<string, List<IActor>>.Empty;
 
     public void Subscribe(string topic, IActor consumer)
     {
-        if (!_inbox.ContainsKey(topic))
-            _inbox = _inbox.Add(topic, new List<IActor>());
-        var lst = _inbox[topic];
+        if (!_readers.ContainsKey(topic))
+            _readers = _readers.Add(topic, new List<IActor>());
+        var lst = _readers[topic];
         lst.Add(consumer);
-        _inbox = _inbox.SetItem(topic, lst);
+        _readers = _readers.SetItem(topic, lst);
     }
 
     public void Unsubscribe(string topic, IActor consumer)
     {
-        if (!_inbox.ContainsKey(topic)) return;
-        _inbox[topic].Remove(consumer);
+        if (!_readers.ContainsKey(topic))
+            return;
+        _readers[topic].Remove(consumer);
     }
 
-    public Task Publish(string topic, IMsg msg, CancellationToken cancellationToken = default)
+    public async Task Publish(string topic, IMsg msg, CancellationToken cancellationToken = default)
     {
-        return Run(() =>
-        {
-            var consumers = _inbox
+            var consumers = _readers
                 .Where(slot => slot.Key == topic)
-                .SelectMany(slot => slot.Value)
-                .AsParallel();
-            if (!consumers.Any()) return CompletedTask;
-            Parallel.ForEachAsync(consumers, cancellationToken, (actor, token) =>
+                .SelectMany(slot => slot.Value);
+            if (!consumers.Any()) return;
+            foreach (var consumer in consumers)
             {
-                actor.HandleCast(msg, token);
-                return default;
-            });
-            return CompletedTask;
-        }, cancellationToken);
+                await consumer.HandleCast(msg, cancellationToken);
+            }
     }
 
     public Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
@@ -77,7 +72,7 @@ internal class Exchange : ActiveComponent, IExchange
 
     public void Dispose()
     {
-        _inbox.Clear();
+        _readers.Clear();
         Log.Information($"[{GetType().Name}] ~> Stopped.");
     }
 }
