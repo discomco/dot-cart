@@ -14,32 +14,26 @@ public interface IResponder : IActor
 {
 }
 
-public interface IResponderT3<TDriver, THope, TCmd> : IResponder
-    where TDriver : IResponderDriverT<THope>
+public interface IResponderT<THope, TCmd> : IResponder
     where THope : IHope
     where TCmd : ICmd
 {
 }
 
-public class ResponderT<TResponderDriver, THope, TCmd> : ActorB,
-    IResponderT3<TResponderDriver, THope, TCmd>
-    where TResponderDriver : IResponderDriverT<THope>
+public abstract class ResponderT<THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     where THope : IHope
     where TCmd : ICmd
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
-    private readonly TResponderDriver _responderDriver;
 
     protected ResponderT(
         IExchange exchange,
-        TResponderDriver responderDriver,
         ICmdHandler cmdHandler,
         Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
-        _responderDriver = responderDriver;
     }
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
@@ -60,15 +54,4 @@ public class ResponderT<TResponderDriver, THope, TCmd> : ActorB,
         return Task.CompletedTask;
     }
 
-    protected override Task StartActingAsync(CancellationToken cancellationToken)
-    {
-        Log.Logger.Debug($"[Responder({TopicAtt.Get<THope>()})] has started.");
-        _responderDriver.SetActor(this);
-        return _responderDriver.StartRespondingAsync(cancellationToken);
-    }
-
-    protected override Task StopActingAsync(CancellationToken cancellationToken)
-    {
-        return _responderDriver.StopRespondingAsync(cancellationToken);
-    }
 }

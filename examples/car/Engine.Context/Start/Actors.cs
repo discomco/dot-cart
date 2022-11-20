@@ -2,36 +2,28 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Contract.Start;
+using NATS.Client;
 
 namespace Engine.Context.Start;
 
 public static class Actors
 {
-    public class ResponderDriver : MemResponderDriver<Hope>
-    {
-        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
-        {
-        }
-    }
 
     public interface IResponder : IActor<Spoke>
     {
     }
 
 
-    public class Responder : ResponderT<ResponderDriver, Hope, Cmd>, IResponder
+    public class Responder : NATSResponderT<Hope, Cmd>, IResponder
     {
-        public Responder(IExchange exchange,
-            ResponderDriver responderDriver,
+        public Responder(IEncodedConnection bus,
+            IExchange exchange,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
-            responderDriver,
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(bus,
+            exchange,
             cmdHandler,
             hope2Cmd)
         {

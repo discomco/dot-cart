@@ -17,7 +17,7 @@ public static class Inject
 //            .AddCartwheel()
             .AddSingletonExchange()
             .AddESDBInfra()
-            .AddSingletonESDBProjector<IEngineSubscriptionInfo>()
+            .AddSingletonESDBProjectorDriver<IEngineSubscriptionInfo>()
             .AddESDBEngineEventFeeder()
             .AddInitializeSpoke()
             .AddStartSpoke()

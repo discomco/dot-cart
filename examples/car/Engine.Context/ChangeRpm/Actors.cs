@@ -2,8 +2,10 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.InMem;
+using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Contract.ChangeRpm;
+using NATS.Client;
 
 namespace Engine.Context.ChangeRpm;
 
@@ -13,14 +15,14 @@ public static class Actors
     {
     }
 
-
-    public class Responder : ResponderT<Drivers.IMemResponderDriver, Hope, Cmd>, IResponder
+    public class Responder : NATSResponderT<Hope,Cmd>, IResponder
     {
-        protected Responder(IExchange exchange,
-            Drivers.IMemResponderDriver responderDriver,
+        public Responder(
+            IEncodedConnection bus,
+            IExchange exchange,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
-            responderDriver,
+            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(bus,
+            exchange,
             cmdHandler,
             hope2Cmd)
         {
@@ -41,18 +43,6 @@ public static class Actors
             Evt2State<Common.Schema.Engine, IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)
-        {
-        }
-    }
-
-
-    public class ResponderDriver : MemResponderDriver<Hope>
-    {
-        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
-        {
-        }
-
-        protected override void Dispose(bool disposing)
         {
         }
     }

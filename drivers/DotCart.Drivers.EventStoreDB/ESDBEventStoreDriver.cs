@@ -12,7 +12,7 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddESDBDrivers(this IServiceCollection services)
+    public static IServiceCollection AddESDBStoreDrivers(this IServiceCollection services)
     {
         return services
             .AddSingleton<IAggregateStoreDriver, ESDBEventStoreDriver>()

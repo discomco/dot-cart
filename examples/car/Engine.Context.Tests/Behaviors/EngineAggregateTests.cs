@@ -117,7 +117,7 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
     {
         services
             .AddModelIDCtor()
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddAggregateBuilder()
             .AddInitializeBehavior()
             .AddStartBehavior()

@@ -1,4 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
+using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 
 namespace DotCart.Drivers.NATS;
@@ -26,7 +30,7 @@ public static partial class Inject
                 {
                     Config.Uri
                 };
-            }, ServiceLifetime.Singleton);
+            });
         return services;
     }
 
@@ -38,4 +42,26 @@ public static partial class Inject
         return services
             .AddNatsClient(options, lifetime);
     }
+
+    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services) 
+        where TSpoke : ISpokeB 
+        where TCmd : ICmd 
+        where THope : IHope
+    {
+        return services
+            .AddCoreNATS()
+            .AddTransient<IActor<TSpoke>, NATSResponderT<TSpoke, THope, TCmd>>()
+            .AddTransient<IResponderT<THope,TCmd>, NATSResponderT<THope, TCmd>>();
+       
+    }
+
+    public static IServiceCollection AddNATSResponder<THope,TCmd>(this IServiceCollection services) 
+        where THope : IHope 
+        where TCmd : ICmd
+    {
+        return services
+            .AddCoreNATS()
+            .AddTransient<IResponderT<THope,TCmd>, NATSResponderT<THope, TCmd>>();
+    }
+    
 }

@@ -30,7 +30,7 @@ public class StartEffectsTests : EffectsTests<
         services
             .AddMemEventStore()
             .AddCmdHandler()
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddStartActors();
     }
 }

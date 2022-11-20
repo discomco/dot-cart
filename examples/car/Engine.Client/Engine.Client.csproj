@@ -6,16 +6,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
-        <ProjectReference Include="..\..\..\src\DotCart.Core\DotCart.Core.csproj"/>
-        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="ChangeRpm"/>
-        <Folder Include="Start"/>
-        <Folder Include="Stop"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
+        <ProjectReference Include="..\..\..\src\DotCart.Core\DotCart.Core.csproj" />
+        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
     </ItemGroup>
 
 

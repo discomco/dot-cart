@@ -85,7 +85,7 @@ public class CmdHandlerTests : IoCTests
     {
         services
             .AddInitializeBehavior()
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddAggregateBuilder()
             .AddMemEventStore()
             .AddCmdHandler();

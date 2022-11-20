@@ -208,7 +208,7 @@ public class ESDBProjectorDriverTests : IoCTests
         services
             .AddInitializeEngineWithThrottleUpStream()
             .AddESDBEngineEventFeeder()
-            .AddSingletonESDBProjector<IEngineSubscriptionInfo>()
+            .AddSingletonESDBProjectorDriver<IEngineSubscriptionInfo>()
             .AddStartedToRedisProjections()
             .AddChangeRpmMemProjections()
             .AddConsoleLogger();
@@ -220,6 +220,6 @@ public class ESDBProjectorDriverTests : IoCTests
         else
             services
                 .AddConfiguredESDBClients()
-                .AddESDBDrivers();
+                .AddESDBStoreDrivers();
     }
 }

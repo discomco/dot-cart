@@ -316,7 +316,7 @@ public class ESDBEventStoreDriverTests : IoCTests
             .AddStartOnInitializedPolicy()
             .AddInitializeEngineScenario()
             .AddInitializeEngineWithThrottleUpStream()
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddAggregateBuilder()
             .AddStartBehavior()
             .AddChangeRpmBehavior()

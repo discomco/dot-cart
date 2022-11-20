@@ -114,7 +114,7 @@ public class MemEventStoreTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddStartBehavior()
             .AddInitializeBehavior()
             .AddChangeRpmBehavior()

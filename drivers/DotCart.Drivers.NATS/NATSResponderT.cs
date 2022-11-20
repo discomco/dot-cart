@@ -3,90 +3,39 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
 
-public static partial class Inject
+public class NATSResponderT<TSpoke,THope,TCmd> : NATSResponderT<THope,TCmd>, IActor<TSpoke>
+    where TSpoke: ISpokeB
+    where THope : IHope 
+    where TCmd : ICmd
 {
-    public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services) 
-        where THope : IHope
-        where TCmd : ICmd
-    {
-        return services
-            .AddCoreNATS()
-            .AddTransient<INATSResponderDriver<THope>, NATSResponderDriverT<THope>>()
-            .AddTransient<INATSResponder<THope, TCmd>, NATSResponder<THope, TCmd>>();
-    }
-    
-    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services) 
-        where THope : IHope
-        where TCmd : ICmd
-    {
-        return services
-            .AddCoreNATS()
-            .AddTransient<INATSResponderDriver<THope>, NATSResponderDriverT<THope>>()
-            .AddTransient<IActor<TSpoke>, NATSResponder<TSpoke,THope, TCmd>>();
-    }
-    
-}
-
-public interface INATSResponder<THope, TCmd> : IResponderT3<INATSResponderDriver<THope>, THope, TCmd>
-    where THope : IHope where TCmd : ICmd {}
-
-
-public class NATSResponder<TSpoke, THope, TCmd> : NATSResponder<THope, TCmd>, IActor<TSpoke> 
-    where THope : IHope where TCmd : ICmd
-{
-    protected NATSResponder(IExchange exchange,
-        INATSResponderDriver<THope> responderDriver,
+    public NATSResponderT(IEncodedConnection bus,
+        IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange,
-        responderDriver,
+        Hope2Cmd<TCmd, THope> hope2Cmd) : base(bus,
+        exchange,
         cmdHandler,
         hope2Cmd)
     {
     }
 }
 
-public class NATSResponder<THope, TCmd> : 
-    ResponderT<INATSResponderDriver<THope>, THope, TCmd>, 
-    INATSResponder<THope,TCmd> where THope : IHope where TCmd : ICmd
-{
-    protected NATSResponder(IExchange exchange,
-        INATSResponderDriver<THope> responderDriver,
-        ICmdHandler cmdHandler,
-        Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange,
-        responderDriver,
-        cmdHandler,
-        hope2Cmd)
-    {
-    }
-}
 
-public interface INATSResponderDriver<THope> : IResponderDriverT<THope> where THope : IHope {}
 
-public class NATSResponderDriverT<THope> : INATSResponderDriver<THope>
-    where THope : IHope
+public class NATSResponderT<THope,TCmd> : ResponderT<THope, TCmd>
+    where THope : 
+    IHope where TCmd : ICmd
 {
     private readonly IEncodedConnection _bus;
-    private IActor _actor;
     private CancellationTokenSource _cts;
     private string _logMessage;
     private ISubscription _subscription;
-
-    protected NATSResponderDriverT(IEncodedConnection bus=null)
-    {
-        _bus = bus;
-        _bus.OnDeserialize += OnDeserialize;
-        _bus.OnSerialize += OnSerialize;
-    }
-
-
-    public Task StopRespondingAsync(CancellationToken cancellationToken = default)
+    protected override Task StopActingAsync(CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {
@@ -118,12 +67,7 @@ public class NATSResponderDriverT<THope> : INATSResponderDriver<THope>
         _bus.OnSerialize -= OnSerialize;
     }
 
-    public void SetActor(IActor actor)
-    {
-        _actor = actor;
-    }
-
-    public Task StartRespondingAsync(CancellationToken cancellationToken)
+    protected override Task StartActingAsync(CancellationToken cancellationToken)
     {
         return Task.Run(() =>
         {
@@ -134,7 +78,6 @@ public class NATSResponderDriverT<THope> : INATSResponderDriver<THope>
                     _logMessage = $"::CONNECT ::Bus [{_bus.ConnectedId}]";
                     Log.Information(_logMessage);
                 }
-
                 _logMessage = $"::RESPOND ::Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
@@ -144,7 +87,7 @@ public class NATSResponderDriverT<THope> : INATSResponderDriver<THope>
                     {
                         var hope = args.Message.Data.FromBytes<THope>();
                         Log.Debug($"::RECEIVED:: {args.Subject}");
-                        var rsp = await _actor.HandleCall(hope, cancellationToken);
+                        var rsp = await HandleCall(hope, cancellationToken);
                         _bus.Publish(args.Reply, rsp.ToBytes());
                         Log.Debug($"::RESPONDED:: {args.Reply} ~> {rsp.Topic} ");
                     });
@@ -166,5 +109,18 @@ public class NATSResponderDriverT<THope> : INATSResponderDriver<THope>
     private object OnDeserialize(byte[] data)
     {
         return data.FromBytes<THope>();
+    }
+
+    public NATSResponderT(
+        IEncodedConnection bus,
+        IExchange exchange,
+        ICmdHandler cmdHandler,
+        Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange,
+        cmdHandler,
+        hope2Cmd)
+    {
+        _bus = bus;
+        _bus.OnDeserialize += OnDeserialize;
+        _bus.OnSerialize += OnSerialize;
     }
 }

@@ -23,7 +23,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddConsoleLogger();
-builder.Services.BuildTestApp();
+builder.Services.AddEngineApp();
 
 var app = builder.Build();
 

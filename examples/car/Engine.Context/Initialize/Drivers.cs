@@ -1,35 +1,14 @@
 using DotCart.Abstractions.Drivers;
-using DotCart.Abstractions.Schema;
-using DotCart.Drivers.InMem;
-using DotCart.Drivers.Redis;
+using DotCart.Drivers.NATS;
 using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
+using IHope = DotCart.Abstractions.Schema.IHope;
 
 namespace Engine.Context.Initialize;
 
-public static partial class Inject
-{
-    public static IServiceCollection AddToDocRedisStoreDriver(this IServiceCollection services)
-    {
-        return services
-            .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
-            .AddTransient<IModelStore<Common.Schema.Engine>, RedisStore<Common.Schema.Engine>>();
-    }
-}
 
 public static class Drivers
 {
     
-    
-    
-    public class ResponderDriver : MemResponderDriver<Hope>
-    {
-        public ResponderDriver(GenerateHope<Hope> generateHope) : base(generateHope)
-        {
-        }
 
-        protected override void Dispose(bool disposing)
-        {
-        }
-    }
 }

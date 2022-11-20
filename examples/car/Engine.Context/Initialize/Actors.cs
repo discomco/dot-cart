@@ -1,32 +1,32 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Redis;
-using Engine.Contract.Initialize;
 
 namespace Engine.Context.Initialize;
 
 public static class Actors
 {
-    public interface IResponder : IActor<Spoke>
-    {
-    }
-
-    [Name("Engine.Initialize.Responder")]
-    public class Responder : ResponderT<IResponderDriverT<Hope>, Hope, Cmd>, IResponder
-    {
-        public Responder(IExchange exchange,
-            IResponderDriverT<Hope> responderDriver,
-            ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
-            responderDriver,
-            cmdHandler,
-            hope2Cmd)
-        {
-        }
-    }
+    
+    // public interface INATSResponder : IResponder,  IActor<Spoke>
+    // {
+    // }
+    //
+    // [Name("Engine.Initialize.Responder")]
+    // public class NATSResponder : NATSResponderT<Hope,Cmd>, INATSResponder
+    // {
+    //     protected NATSResponder(
+    //         IEncodedConnection bus,
+    //         IExchange exchange,
+    //         ICmdHandler cmdHandler,
+    //         Hope2Cmd<Cmd, Hope> hope2Cmd) : base(bus,
+    //         exchange,
+    //         cmdHandler,
+    //         hope2Cmd)
+    //     {
+    //     }
+    // }
 
     public interface IToMemDoc : IActor<Spoke>
     {

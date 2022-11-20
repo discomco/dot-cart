@@ -2,6 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Drivers.EventStoreDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -9,12 +10,22 @@ namespace DotCart.Context.Effects;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddProjector<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddSingletonProjector<TInfo>(this IServiceCollection services)
         where TInfo : ISubscriptionInfo
     {
         return services
+            .AddSingletonESDBProjectorDriver<TInfo>()
             .AddSingleton<IProjector, Projector<TInfo>>();
     }
+
+    public static IServiceCollection AddTransientProjector<TInfo>(this IServiceCollection services)
+        where TInfo : ISubscriptionInfo
+    {
+        return services
+            .AddTransientESDBProjectorDriver<TInfo>()
+            .AddTransient<IProjector, Projector<TInfo>>();
+    }
+    
 }
 
 public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISubscriptionInfo

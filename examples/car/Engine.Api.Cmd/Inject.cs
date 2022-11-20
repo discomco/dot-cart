@@ -1,5 +1,6 @@
 using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.Mediator;
+using Engine.Context;
 using Engine.Context.ChangeRpm;
 using Engine.Context.Common.Drivers;
 using Engine.Context.Initialize;
@@ -9,14 +10,10 @@ namespace Engine.Api.Cmd;
 
 public static class Inject
 {
-    public static IServiceCollection BuildTestApp(this IServiceCollection services)
+    public static IServiceCollection AddEngineApp(this IServiceCollection services)
     {
         return services
-//            .AddCartwheel()
-            .AddSingletonExchange()
-            .AddESDBInfra()
-            .AddSingletonESDBProjector<IEngineSubscriptionInfo>()
-            .AddInitializeSpoke();
+            .AddEngineContext();
         ;
         ;
         // .AddStartSpoke()

@@ -9,6 +9,7 @@ using DotCart.Drivers.Mediator;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
+using Engine.Context.Initialize;
 using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -19,7 +20,7 @@ public static class Inject
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
     {
         return services
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddAggregateBuilder()
             .AddTransient<ITry, TryCmd>()
             .AddTransient<IApply, ApplyEvt>();
@@ -75,15 +76,24 @@ public static class Inject
             .AddTransient(_ => Mappers._evt2Fact);
     }
 
+    public static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Mappers._evt2Fact)
+            .AddTransient(_ => Mappers._evt2State)
+            .AddTransient(_ => Mappers._hope2Cmd);
+    }
+    
+    
+
     public static IServiceCollection AddChangeRpmResponder(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => Mappers._hope2Cmd)
             .AddAggregateBuilder()
             .AddCmdHandler()
+            .AddChangeRpmMappers()
             .AddTransient(_ => Generators._generateHope)
-            .AddTransient<Drivers.IMemResponderDriver, Drivers.MemResponderDriver>()
-            .AddTransient<Actors.IResponder, Actors.Responder>()
-            .AddSpokedNATSResponder<Spoke, Hope, Cmd>();
+            .AddCoreNATS()
+            .AddTransient<Actors.IResponder, Actors.Responder>();
     }
 }

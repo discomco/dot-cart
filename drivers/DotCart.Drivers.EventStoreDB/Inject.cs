@@ -1,6 +1,5 @@
 ﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Effects;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Polly;
 using EventStore.Client;
@@ -11,11 +10,15 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
+
+  
+    
+    
     public static IServiceCollection AddESDBInfra(this IServiceCollection services)
     {
         return services
             .AddConfiguredESDBClients()
-            .AddESDBDrivers();
+            .AddESDBStoreDrivers();
     }
 
 
@@ -35,17 +38,29 @@ public static partial class Inject
     }
 
 
-    public static IServiceCollection AddSingletonESDBProjector<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddSingletonESDBProjectorDriver<TInfo>(this IServiceCollection services)
         where TInfo : ISubscriptionInfo
     {
         return services
+            .AddConfiguredESDBClients()
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
                     StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
-            .AddSingleton<IProjectorDriver<TInfo>, ESDBProjectorDriver<TInfo>>()
-            .AddProjector<TInfo>();
+            .AddSingleton<IProjectorDriver<TInfo>, ESDBProjectorDriver<TInfo>>();
     }
 
+    public static IServiceCollection AddTransientESDBProjectorDriver<TInfo>(this IServiceCollection services)
+        where TInfo : ISubscriptionInfo
+    {
+        return services
+            .AddConfiguredESDBClients()
+            .AddSingleton(_ =>
+                new SubscriptionFilterOptions(
+                    StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+            .AddTransient<IProjectorDriver<TInfo>, ESDBProjectorDriver<TInfo>>();
+    }
+
+    
 
     private static IServiceCollection AddEventStore(this IServiceCollection services,
         Action<EventStoreClientSettings>? clientSettings)

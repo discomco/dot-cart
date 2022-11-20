@@ -50,6 +50,6 @@ public class ToDocProjectionTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddInitializedRedisProjections();
+            .AddInitializedToRedisProjections();
     }
 }

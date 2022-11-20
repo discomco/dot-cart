@@ -11,7 +11,7 @@ using Serilog;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : ISubscriptionInfo
+internal class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : ISubscriptionInfo
 {
     private readonly IESDBPersistentSubscriptionsClient _client;
 

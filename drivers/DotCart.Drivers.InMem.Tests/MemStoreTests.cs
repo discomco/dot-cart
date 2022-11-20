@@ -67,7 +67,7 @@ public class MemStoreTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineAggregate()
+            .AddModelAggregate()
             .AddCmdHandler()
             .AddSingleton<IModelStore<Engine.Context.Common.Schema.Engine>,
                 MemStore<Engine.Context.Common.Schema.Engine>>();

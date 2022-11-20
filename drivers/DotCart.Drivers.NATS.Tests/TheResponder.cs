@@ -1,17 +1,18 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Drivers;
 using DotCart.TestKit.Behavior;
 using DotCart.TestKit.Schema;
+using NATS.Client;
 
 namespace DotCart.Drivers.NATS.Tests;
 
-public class TheResponder : ResponderT<IResponderDriverT<TheHope>, TheHope, TheCmd>, ITheResponder
+public class TheResponder : NATSResponderT<TheHope, TheCmd>, ITheResponder
 {
-    public TheResponder(IExchange exchange,
-        IResponderDriverT<TheHope> responderDriver,
+    public TheResponder(
+        IEncodedConnection bus,
+        IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TheCmd, TheHope> hope2Cmd) : base(exchange,
-        responderDriver,
+        Hope2Cmd<TheCmd, TheHope> hope2Cmd) : base(bus,
+        exchange,
         cmdHandler,
         hope2Cmd)
     {
