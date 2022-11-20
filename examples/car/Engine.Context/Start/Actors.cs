@@ -1,7 +1,5 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Schema;
-using DotCart.Drivers.InMem;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Contract.Start;
@@ -11,7 +9,6 @@ namespace Engine.Context.Start;
 
 public static class Actors
 {
-
     public interface IResponder : IActor<Spoke>
     {
     }

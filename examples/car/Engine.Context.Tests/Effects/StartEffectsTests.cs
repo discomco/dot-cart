@@ -8,7 +8,6 @@ using Engine.Context.Start;
 using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Mappers = Engine.Context.Start.Mappers;
 
 namespace Engine.Context.Tests.Effects;
 

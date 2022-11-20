@@ -1,4 +1,3 @@
-using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Clients;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -21,7 +20,7 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
     {
         return obj.ToBytes();
     }
-    
+
     private object OnDeserialize(byte[] data)
     {
         return data.FromBytes<THope>();
@@ -40,7 +39,7 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
         var res = Feedback.New(hope.AggId);
         try
         {
-            if (!_bus.IsClosed()) 
+            if (!_bus.IsClosed())
                 Log.Debug($"::CONNECT bus: {_bus.ConnectedId}");
             Log.Debug($"::REQUEST hope: AggId:{hope.AggId} on topic {hope.Topic}.");
             res = (Feedback)_bus.Request(hope.Topic, hope);
@@ -51,6 +50,7 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
             res.SetError(e.AsError());
             Log.Fatal($":: REQUEST :: [{GetType()}] = {e.InnerAndOuter()}");
         }
+
         return res;
     }
 }

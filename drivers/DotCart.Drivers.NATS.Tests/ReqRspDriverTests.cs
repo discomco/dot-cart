@@ -34,9 +34,8 @@ public class ReqRspDriverTests : IoCTests
     //     // THEN
     //     Assert.NotNull(_responderActor);
     // }
-    
-    
-    
+
+
     [Fact]
     public void ShouldResolveEncodedConnection()
     {
@@ -127,7 +126,6 @@ public class ReqRspDriverTests : IoCTests
         // _encodedConnection = TestEnv.ResolveRequired<IEncodedConnection>();
         // _theRequesterDriver = TestEnv.ResolveRequired<IRequesterT<TheHope>>();
         // _responderActor = TestEnv.ResolveRequired<ITheResponder>();
- 
     }
 
     protected override void SetTestEnvironment()

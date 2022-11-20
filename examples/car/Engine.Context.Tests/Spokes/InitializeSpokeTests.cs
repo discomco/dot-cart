@@ -56,7 +56,6 @@ public class InitializeSpokeTests : IoCTests
     {
         services
             .AddConsoleLogger()
-            
             .AddSingletonProjector<IEngineSubscriptionInfo>()
             .AddESDBInfra()
             .AddInitializeSpoke();

@@ -38,7 +38,7 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         _agg.SetID(_ID);
         _agg.Load(events);
         // THEN
-        Assert.Equal(events.Count()-1, _agg.Version);
+        Assert.Equal(events.Count() - 1, _agg.Version);
     }
 
 

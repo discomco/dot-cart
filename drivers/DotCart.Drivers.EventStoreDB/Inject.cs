@@ -10,10 +10,6 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-
-  
-    
-    
     public static IServiceCollection AddESDBInfra(this IServiceCollection services)
     {
         return services
@@ -60,7 +56,6 @@ public static partial class Inject
             .AddTransient<IProjectorDriver<TInfo>, ESDBProjectorDriver<TInfo>>();
     }
 
-    
 
     private static IServiceCollection AddEventStore(this IServiceCollection services,
         Action<EventStoreClientSettings>? clientSettings)

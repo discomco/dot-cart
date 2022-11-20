@@ -9,8 +9,6 @@ using DotCart.Drivers.Mediator;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
-using Engine.Context.Initialize;
-using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.ChangeRpm;
@@ -83,8 +81,7 @@ public static class Inject
             .AddTransient(_ => Mappers._evt2State)
             .AddTransient(_ => Mappers._hope2Cmd);
     }
-    
-    
+
 
     public static IServiceCollection AddChangeRpmResponder(this IServiceCollection services)
     {

@@ -11,8 +11,5 @@
         <PackageReference Include="AutoBogus.FakeItEasy" Version="2.13.1"/>
     </ItemGroup>
 
-    <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj"/>
-    </ItemGroup>
 
 </Project>

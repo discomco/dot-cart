@@ -1,6 +1,5 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Schema;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
@@ -15,7 +14,7 @@ public static class Actors
     {
     }
 
-    public class Responder : NATSResponderT<Hope,Cmd>, IResponder
+    public class Responder : NATSResponderT<Hope, Cmd>, IResponder
     {
         public Responder(
             IEncodedConnection bus,

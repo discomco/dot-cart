@@ -25,7 +25,6 @@ public static partial class Inject
             .AddTransientESDBProjectorDriver<TInfo>()
             .AddTransient<IProjector, Projector<TInfo>>();
     }
-    
 }
 
 public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISubscriptionInfo

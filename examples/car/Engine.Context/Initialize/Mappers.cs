@@ -10,8 +10,10 @@ public static class Mappers
 {
     public static readonly Evt2Fact<Fact, IEvt> _evt2Fact =
         evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
+
     public static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
         hope => Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+
     public static readonly Evt2State<Common.Schema.Engine, IEvt> _evt2Doc = (state, evt) =>
     {
         if (evt == null) return state;

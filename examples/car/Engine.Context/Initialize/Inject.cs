@@ -4,7 +4,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
-using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Mediator;
 using DotCart.Drivers.NATS;
@@ -15,9 +14,8 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Initialize;
 
-public static partial class Inject
+public static class Inject
 {
-
     public static IServiceCollection AddInitializeMappers(this IServiceCollection services)
     {
         return services
@@ -25,7 +23,7 @@ public static partial class Inject
             .AddTransient(_ => Mappers._evt2Doc)
             .AddTransient(_ => Mappers._hope2Cmd);
     }
-    
+
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
@@ -93,8 +91,5 @@ public static partial class Inject
             .AddInitializeMappers()
             .AddNATSResponder<Hope, Cmd>()
             .AddSpokedNATSResponder<Spoke, Hope, Cmd>();
-
-
-
     }
 }

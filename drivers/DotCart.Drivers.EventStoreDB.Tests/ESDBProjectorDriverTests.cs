@@ -28,9 +28,9 @@ public class ESDBProjectorDriverTests : IoCTests
     private IHostExecutor? _executor;
     private IESDBEngineEventFeeder? _feeder;
     private ILogger? _logger;
+    private IModelStore<Engine.Context.Common.Schema.Engine>? _memStore;
     private EventStreamGenerator<EngineID>? _newEventStream;
     private SubscriptionFilterOptions? _subOptions;
-    private IModelStore<Engine.Context.Common.Schema.Engine>? _memStore;
 
     public ESDBProjectorDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -92,10 +92,7 @@ public class ESDBProjectorDriverTests : IoCTests
 
         await _executor.StartAsync(token);
         // THEN
-        while (!token.IsCancellationRequested)
-        {
-            Thread.Sleep(100);
-        }
+        while (!token.IsCancellationRequested) Thread.Sleep(100);
 
         Assert.True(true);
     }

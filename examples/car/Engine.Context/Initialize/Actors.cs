@@ -8,7 +8,6 @@ namespace Engine.Context.Initialize;
 
 public static class Actors
 {
-    
     // public interface INATSResponder : IResponder,  IActor<Spoke>
     // {
     // }

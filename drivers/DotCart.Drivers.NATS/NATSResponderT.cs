@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using NATS.Client;
@@ -8,10 +7,9 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-
-public class NATSResponderT<TSpoke,THope,TCmd> : NATSResponderT<THope,TCmd>, IActor<TSpoke>
-    where TSpoke: ISpokeB
-    where THope : IHope 
+public class NATSResponderT<TSpoke, THope, TCmd> : NATSResponderT<THope, TCmd>, IActor<TSpoke>
+    where TSpoke : ISpokeB
+    where THope : IHope
     where TCmd : ICmd
 {
     public NATSResponderT(IEncodedConnection bus,
@@ -25,16 +23,29 @@ public class NATSResponderT<TSpoke,THope,TCmd> : NATSResponderT<THope,TCmd>, IAc
     }
 }
 
-
-
-public class NATSResponderT<THope,TCmd> : ResponderT<THope, TCmd>
-    where THope : 
-    IHope where TCmd : ICmd
+public class NATSResponderT<THope, TCmd> : ResponderT<THope, TCmd>
+    where THope :
+    IHope
+    where TCmd : ICmd
 {
     private readonly IEncodedConnection _bus;
     private CancellationTokenSource _cts;
     private string _logMessage;
     private ISubscription _subscription;
+
+    public NATSResponderT(
+        IEncodedConnection bus,
+        IExchange exchange,
+        ICmdHandler cmdHandler,
+        Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange,
+        cmdHandler,
+        hope2Cmd)
+    {
+        _bus = bus;
+        _bus.OnDeserialize += OnDeserialize;
+        _bus.OnSerialize += OnSerialize;
+    }
+
     protected override Task StopActingAsync(CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
@@ -78,6 +89,7 @@ public class NATSResponderT<THope,TCmd> : ResponderT<THope, TCmd>
                     _logMessage = $"::CONNECT ::Bus [{_bus.ConnectedId}]";
                     Log.Information(_logMessage);
                 }
+
                 _logMessage = $"::RESPOND ::Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
@@ -109,18 +121,5 @@ public class NATSResponderT<THope,TCmd> : ResponderT<THope, TCmd>
     private object OnDeserialize(byte[] data)
     {
         return data.FromBytes<THope>();
-    }
-
-    public NATSResponderT(
-        IEncodedConnection bus,
-        IExchange exchange,
-        ICmdHandler cmdHandler,
-        Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange,
-        cmdHandler,
-        hope2Cmd)
-    {
-        _bus = bus;
-        _bus.OnDeserialize += OnDeserialize;
-        _bus.OnSerialize += OnSerialize;
     }
 }

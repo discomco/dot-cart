@@ -11,7 +11,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize.Effects;
 
-public class InitializeResponderTests : ResponderTestsT<IResponderT<Hope,Cmd>, Hope, Cmd>
+public class InitializeResponderTests : ResponderTestsT<IResponderT<Hope, Cmd>, Hope, Cmd>
 {
     private IEncodedConnection _bus;
 
@@ -21,12 +21,10 @@ public class InitializeResponderTests : ResponderTestsT<IResponderT<Hope,Cmd>, H
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

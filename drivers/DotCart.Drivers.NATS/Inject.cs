@@ -1,6 +1,5 @@
 ﻿using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -11,7 +10,7 @@ public static class NATSHandlers
 {
 }
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddCoreNATS(this IServiceCollection services)
     {
@@ -43,25 +42,23 @@ public static partial class Inject
             .AddNatsClient(options, lifetime);
     }
 
-    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services) 
-        where TSpoke : ISpokeB 
-        where TCmd : ICmd 
+    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services)
+        where TSpoke : ISpokeB
+        where TCmd : ICmd
         where THope : IHope
     {
         return services
             .AddCoreNATS()
             .AddTransient<IActor<TSpoke>, NATSResponderT<TSpoke, THope, TCmd>>()
-            .AddTransient<IResponderT<THope,TCmd>, NATSResponderT<THope, TCmd>>();
-       
+            .AddTransient<IResponderT<THope, TCmd>, NATSResponderT<THope, TCmd>>();
     }
 
-    public static IServiceCollection AddNATSResponder<THope,TCmd>(this IServiceCollection services) 
-        where THope : IHope 
+    public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services)
+        where THope : IHope
         where TCmd : ICmd
     {
         return services
             .AddCoreNATS()
-            .AddTransient<IResponderT<THope,TCmd>, NATSResponderT<THope, TCmd>>();
+            .AddTransient<IResponderT<THope, TCmd>, NATSResponderT<THope, TCmd>>();
     }
-    
 }

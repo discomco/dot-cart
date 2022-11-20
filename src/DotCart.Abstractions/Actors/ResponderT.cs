@@ -1,8 +1,5 @@
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
-using Serilog;
 
 namespace DotCart.Abstractions.Actors;
 
@@ -53,5 +50,4 @@ public abstract class ResponderT<THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     {
         return Task.CompletedTask;
     }
-
 }

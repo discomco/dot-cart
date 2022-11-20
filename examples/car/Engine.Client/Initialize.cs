@@ -1,4 +1,3 @@
-using DotCart.Abstractions.Clients;
 using DotCart.Drivers.NATS;
 using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,13 +12,15 @@ public static class Initialize
         return services
             .AddTransient<IRequester, Requester>();
     }
-    public interface IRequester { }
+
+    public interface IRequester
+    {
+    }
+
     internal class Requester : NATSRequesterT<Hope>, IRequester
     {
         protected Requester(IEncodedConnection bus) : base(bus)
         {
         }
     }
-    
-    
 }

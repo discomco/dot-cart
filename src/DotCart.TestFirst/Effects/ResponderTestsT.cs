@@ -31,7 +31,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     [Fact]
     public abstract void ShouldResolveConnection();
 
-    
+
     [Fact]
     public void ShouldResolveResponder()
     {
