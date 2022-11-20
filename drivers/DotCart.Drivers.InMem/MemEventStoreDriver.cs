@@ -1,7 +1,8 @@
 using System.Collections.Immutable;
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Drivers.Mediator;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;

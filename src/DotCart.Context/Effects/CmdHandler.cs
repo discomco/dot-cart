@@ -1,9 +1,9 @@
 ﻿using Ardalis.GuardClauses;
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -32,7 +32,7 @@ internal class CmdHandler : ICmdHandler
         _aggregateStoreDriver = aggregateStoreDriver;
     }
 
-    public async Task<IFeedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default)
+    public async Task<Feedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try

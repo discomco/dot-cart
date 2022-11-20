@@ -1,5 +1,5 @@
-﻿using DotCart.Context.Abstractions.Drivers;
-using DotCart.Contract.Schemas;
+﻿using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;

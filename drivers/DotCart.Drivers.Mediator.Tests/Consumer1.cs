@@ -1,14 +1,16 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.TestKit;
 using DotCart.TestKit.Schema;
 using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public class Consumer1 : ActorT<Spoke>, IActor<ISpokeT<Spoke>, Consumer1>, IConsumer
+public interface IConsumer1
+{
+}
+
+public class Consumer1 : ActorB, IActor<Spoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)
     {
@@ -17,14 +19,19 @@ public class Consumer1 : ActorT<Spoke>, IActor<ISpokeT<Spoke>, Consumer1>, ICons
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return (Task<IMsg>)Task.CompletedTask;
     }
 
+
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
+    }
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {

@@ -23,7 +23,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
-        <ProjectReference Include="..\..\..\src\DotCart.Contract\DotCart.Contract.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
         <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>

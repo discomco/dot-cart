@@ -1,24 +1,21 @@
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Drivers;
+using DotCart.Context.Effects;
 using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
+using Engine.Context.Common;
 using Engine.Context.Start;
 using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Mappers = Engine.Context.Start.Mappers;
 
 namespace Engine.Context.Tests.Effects;
 
 public class StartEffectsTests : EffectsTests<
-    Common.Schema.Engine,
     IEvt,
-    Cmd,
-    Hope,
     Fact,
-    Actors.IResponder,
-    IModelStore<Common.Schema.Engine>,
-    Actors.IToRedisDoc
->
+    IModelStore<Common.Schema.Engine>>
 {
     public StartEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -32,6 +29,8 @@ public class StartEffectsTests : EffectsTests<
     {
         services
             .AddMemEventStore()
+            .AddCmdHandler()
+            .AddEngineAggregate()
             .AddStartActors();
     }
 }

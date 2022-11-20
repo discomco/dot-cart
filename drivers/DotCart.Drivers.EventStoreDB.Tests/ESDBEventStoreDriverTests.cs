@@ -1,8 +1,9 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Contract.Schemas;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
@@ -13,17 +14,17 @@ using Engine.Contract.Schema;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Constants = DotCart.Context.Abstractions.Constants;
+using Constants = DotCart.Abstractions.Behavior.Constants;
 using Exception = System.Exception;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
 public class ESDBEventStoreDriverTests : IoCTests
 {
-    private IAggregate _aggregate;
-    private IAggregateBuilder _aggregateBuilder;
-    private ICmdHandler _cmdHandler;
-    private IEventStoreDriver _eventStoreDriver;
+    private IAggregate? _aggregate;
+    private IAggregateBuilder? _aggregateBuilder;
+    private ICmdHandler? _cmdHandler;
+    private IEventStoreDriver? _eventStoreDriver;
     private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
     private EventStreamGenerator<EngineID> _newEventStream;
     private NewID<EngineID> _newID;

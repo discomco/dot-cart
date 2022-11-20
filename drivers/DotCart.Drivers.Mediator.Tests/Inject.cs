@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,12 +14,12 @@ public static class Inject
             .AddMemProjector()
             .AddTransient<ISpokeT<Spoke>, Spoke>()
             .AddTransient<ISpokeBuilder<ISpokeT<Spoke>>, SpokeBuilder>()
-            .AddTransient<IActor<Spoke, Consumer2>, Consumer2>()
-            .AddTransient<IActor<ISpokeT<Spoke>>, Consumer2>()
-            .AddTransient<IActor<Spoke, Consumer1>, Consumer1>()
-            .AddTransient<IActor<ISpokeT<Spoke>>, Consumer1>()
-            .AddTransient<IActor<ISpokeT<Spoke>>, Producer>()
-            .AddTransient<IActor<Spoke, Producer>, Producer>()
+            .AddTransient<IActor<Spoke>, Consumer2>()
+            .AddTransient<IConsumer2, Consumer2>()
+            .AddTransient<IActor<Spoke>, Consumer1>()
+            .AddTransient<IConsumer1, Consumer1>()
+            .AddTransient<IActor<Spoke>, Producer>()
+            .AddTransient<IProducer, Producer>()
             .AddHostedService(provider =>
             {
                 var builder = provider.GetRequiredService<ISpokeBuilder<ISpokeT<Spoke>>>();

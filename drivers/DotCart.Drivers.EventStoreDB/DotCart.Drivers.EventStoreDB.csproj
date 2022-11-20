@@ -18,8 +18,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Client\DotCart.Client.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
         <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
         <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>

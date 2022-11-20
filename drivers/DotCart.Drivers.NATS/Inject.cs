@@ -3,7 +3,11 @@ using NATS.Client;
 
 namespace DotCart.Drivers.NATS;
 
-public static class Inject
+public static class NATSHandlers
+{
+}
+
+public static partial class Inject
 {
     public static IServiceCollection AddCoreNATS(this IServiceCollection services)
     {
@@ -22,7 +26,7 @@ public static class Inject
                 {
                     Config.Uri
                 };
-            });
+            }, ServiceLifetime.Singleton);
         return services;
     }
 

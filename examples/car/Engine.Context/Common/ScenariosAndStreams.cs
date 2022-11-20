@@ -1,11 +1,10 @@
-using DotCart.Context.Abstractions;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using Engine.Context.Initialize;
 using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
-using IEvt = DotCart.Context.Abstractions.IEvt;
+using IEvt = DotCart.Abstractions.Behavior.IEvt;
 using Topics = Engine.Context.Initialize.Topics;
 
 namespace Engine.Context.Common;
@@ -43,9 +42,9 @@ public static class ScenariosAndStreams
         startEvt.Version = 1;
         // AND
         var revs = RandomRevs(ID);
-        var res = new List<IEvt>() {initEvt,startEvt};
+        var res = new List<IEvt> { initEvt, startEvt };
         res.AddRange(revs);
-        
+
 //        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
         return res;
@@ -63,6 +62,7 @@ public static class ScenariosAndStreams
             changeRpmEvt.Version = i + 2;
             res.Add(changeRpmEvt);
         }
+
         return res;
     }
 

@@ -1,8 +1,8 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
-using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Engine.Context.ChangeRpm;
 using Engine.Context.Common;

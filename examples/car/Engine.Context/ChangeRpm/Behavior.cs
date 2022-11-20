@@ -1,19 +1,17 @@
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
 using DotCart.Core;
 using Engine.Context.Common;
 using Engine.Contract.ChangeRpm;
 using Engine.Contract.Schema;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Engine.Context.ChangeRpm;
 
 [Topic(Topics.CmdTopic)]
-public record Cmd(IID AggregateID, Payload Payload) : Cmd<Payload>(Topics.CmdTopic, AggregateID, Payload), ICmd
+public record Cmd(IID AggregateID, Payload Payload) : CmdT<Payload>(Topics.CmdTopic, AggregateID, Payload), ICmd
 {
     public static Cmd New(IID aggregateID, Payload payload)
     {
@@ -22,11 +20,11 @@ public record Cmd(IID AggregateID, Payload Payload) : Cmd<Payload>(Topics.CmdTop
 }
 
 [Topic(Topics.EvtTopic)]
-public interface IEvt : IEvt<Payload>
+public interface IEvt : IEvtT<Payload>
 {
 }
 
-public class TryCmd : TryCmd<Cmd>
+public class TryCmd : TryCmdT<Cmd>
 {
     public override IEnumerable<Event> Raise(Cmd cmd)
     {
@@ -57,7 +55,7 @@ public class TryCmd : TryCmd<Cmd>
     }
 }
 
-public class ApplyEvt : ApplyEvt<Common.Schema.Engine, IEvt>
+public class ApplyEvt : ApplyEvtT<Common.Schema.Engine, IEvt>
 {
     public override Common.Schema.Engine Apply(Common.Schema.Engine state, Event evt)
     {

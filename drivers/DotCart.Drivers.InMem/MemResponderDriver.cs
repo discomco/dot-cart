@@ -1,7 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Contract;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using static System.Threading.Tasks.Task;
 
 

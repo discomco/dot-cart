@@ -1,14 +1,12 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.TestKit;
 using DotCart.TestKit.Schema;
 using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public class Consumer2 : ActorT<ISpokeT<Spoke>>, IActor<ISpokeT<Spoke>, Consumer2>, IConsumer
+public class Consumer2 : ActorB, IActor<Spoke>, IConsumer2
 {
     public Consumer2(IExchange exchange) : base(exchange)
     {
@@ -16,12 +14,17 @@ public class Consumer2 : ActorT<ISpokeT<Spoke>>, IActor<ISpokeT<Spoke>, Consumer
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return Task.CompletedTask;
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return (Task<IMsg>)Task.CompletedTask;
+    }
+
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
+    {
+        return Task.CompletedTask;
     }
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
@@ -41,4 +44,8 @@ public class Consumer2 : ActorT<ISpokeT<Spoke>>, IActor<ISpokeT<Spoke>, Consumer
             _exchange.Unsubscribe(TopicAtt.Get<TheMsg>(), this);
         }, cancellationToken);
     }
+}
+
+public interface IConsumer2
+{
 }

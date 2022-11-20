@@ -1,4 +1,5 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using DotCart.TestFirst;
@@ -37,7 +38,7 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         _agg.SetID(_ID);
         _agg.Load(events);
         // THEN
-        Assert.Equal(2, _agg.Version);
+        Assert.Equal(events.Count()-1, _agg.Version);
     }
 
 

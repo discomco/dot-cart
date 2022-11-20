@@ -1,4 +1,4 @@
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Engine.Contract.Schema;
 
@@ -29,16 +29,16 @@ public interface IHope : IHope<Payload>
 }
 
 [Topic(Topics.Hope)]
-public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
+public record Hope(string AggId, Payload Payload) : HopeT<Payload>(AggId, Payload), IHope
 {
-    public new static Hope New(string AggId, byte[] Data)
+    public static Hope New(string AggId, byte[] Data)
     {
-        return new Hope(AggId, Data);
+        return new Hope(AggId, Data.FromBytes<Payload>());
     }
 
     public static Hope New(string AggId, Payload payload)
     {
-        return new Hope(AggId, payload.ToBytes());
+        return new Hope(AggId, payload);
     }
 }
 
@@ -50,7 +50,7 @@ public interface IFact : IFact<Payload>
 [Topic(Topics.Fact)]
 public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
 {
-    public new static Fact New(string AggId, byte[] Data)
+    public static Fact New(string AggId, byte[] Data)
     {
         return new Fact(AggId, Data);
     }

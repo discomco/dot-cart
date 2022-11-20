@@ -1,22 +1,21 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public delegate TCmd Evt2Cmd<in TEvt, out TCmd>(Event Evt) where TEvt : IEvt where TCmd : ICmd;
-
-public class AggregatePolicy<TEvt, TCmd> : Actor, IAggregatePolicy where TEvt : IEvt where TCmd : ICmd
+public class AggregatePolicy<TEvt, TCmd> : ActorB, IAggregatePolicy where TEvt : IEvt where TCmd : ICmd
 {
-    private readonly Evt2Cmd<TEvt, TCmd> _evt2Cmd;
+    private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
     protected IAggregate? Aggregate;
 
     protected AggregatePolicy
     (
         IExchange exchange,
-        Evt2Cmd<TEvt, TCmd> evt2Cmd
+        Evt2Cmd<TCmd, TEvt> evt2Cmd
     ) : base(exchange)
     {
         _evt2Cmd = evt2Cmd;
@@ -40,7 +39,7 @@ public class AggregatePolicy<TEvt, TCmd> : Actor, IAggregatePolicy where TEvt : 
         }, cancellationToken);
     }
 
-    private Task<IFeedback> EnforceAsync(Event evt)
+    private Task<Feedback> EnforceAsync(Event evt)
     {
         var cmd = _evt2Cmd(evt);
         Aggregate.SetID(evt.AggregateID);

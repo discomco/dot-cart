@@ -1,10 +1,12 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Mediator;
+using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Engine.Contract.Initialize;
@@ -79,8 +81,9 @@ public static partial class Inject
             .AddCmdHandler()
             .AddTransient(_ => Generators._genHope)
             .AddTransient(_ => Mappers._hope2Cmd)
-            .AddSingleton<IResponderDriverT<Hope>, Drivers.ResponderDriver>()
-            .AddTransient<Actors.IResponder, Actors.Responder>()
-            .AddTransient<IActor<Spoke>, Actors.Responder>();
+            .AddSpokedNATSResponder<Spoke, Hope, Cmd>();
+        // .AddSingleton<IResponderDriverT<Hope>, Drivers.ResponderDriver>()
+        // .AddTransient<Actors.IResponder, Actors.Responder>()
+        // .AddTransient<IActor<Spoke>, Actors.Responder>();
     }
 }

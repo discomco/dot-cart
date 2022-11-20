@@ -1,5 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
@@ -35,8 +36,8 @@ public static class Inject
     public static IServiceCollection AddStartActors(this IServiceCollection services)
     {
         return services
-            .AddStartedToRedisProjections();
-        // .AddStartEmitter()
+            .AddStartedToRedisProjections()
+            .AddStartEmitter();
         // .AddStartResponder();
     }
 
@@ -50,8 +51,7 @@ public static class Inject
     {
         return services
             .AddSingletonExchange()
-            .AddTransient(_ => Mappers._evt2State)
-            .AddTransientRedisDb<Common.Schema.Engine>()
+            .AddTransient(_ => Mappers._evt2State).AddTransientRedisDb<Common.Schema.Engine>()
             .AddSingleton<IRedisStore<Common.Schema.Engine>, RedisStore<Common.Schema.Engine>>()
             .AddTransient<IActor<Spoke>, Actors.ToRedisDoc>()
             .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>();

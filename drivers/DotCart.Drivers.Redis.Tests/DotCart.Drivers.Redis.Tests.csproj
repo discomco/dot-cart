@@ -24,9 +24,7 @@
     <ItemGroup>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
         <ProjectReference Include="..\..\examples\car\Engine.Context\Engine.Context.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
     </ItemGroup>

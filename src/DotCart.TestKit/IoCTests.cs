@@ -12,6 +12,8 @@ public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
         TestEnv = testEnv;
         TestHelper = TestEnv.ResolveRequired<ITestHelper>();
         SetTestEnvironment();
+        testEnv.Services
+            .AddBaseTestEnv();
         InjectDependencies(testEnv.Services);
         Initialize();
     }
@@ -28,10 +30,5 @@ public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
 
     protected abstract void Initialize();
     protected abstract void SetTestEnvironment();
-
-    protected virtual void InjectDependencies(IServiceCollection services)
-    {
-        services
-            .AddBaseTestEnv();
-    }
+    protected abstract void InjectDependencies(IServiceCollection services);
 }

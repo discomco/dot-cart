@@ -1,4 +1,4 @@
-﻿using DotCart.Context.Abstractions;
+﻿using DotCart.Abstractions.Behavior;
 
 namespace DotCart.Context.Behaviors.Specifications.Provided;
 

@@ -7,7 +7,23 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.0"/>
+        <PackageReference Include="Serilog.Extensions.Logging" Version="3.1.0"/>
         <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Mediator\DotCart.Drivers.Mediator.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
+        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include=".env"/>
     </ItemGroup>
 
 </Project>

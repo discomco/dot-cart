@@ -1,6 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Effects;
-using DotCart.Contract;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Redis;
 using Engine.Contract.Start;
@@ -20,11 +20,12 @@ public static class Actors
         }
     }
 
-    public interface IResponder : IResponder<ResponderDriver, Hope, Cmd>
+    public interface IResponder : IActor<Spoke>
     {
     }
 
-    public class Responder : ResponderT<Spoke, ResponderDriver, Hope, Cmd>, IResponder
+
+    public class Responder : ResponderT<ResponderDriver, Hope, Cmd>, IResponder
     {
         public Responder(IExchange exchange,
             ResponderDriver responderDriver,
@@ -37,12 +38,11 @@ public static class Actors
         }
     }
 
-    public interface IToRedisDoc
+    public interface IToRedisDoc : IActor<Spoke>
     {
     }
 
-    public class ToRedisDoc : ProjectionT<Spoke,
-            IRedisStore<Common.Schema.Engine>,
+    public class ToRedisDoc : ProjectionT<IRedisStore<Common.Schema.Engine>,
             Common.Schema.Engine, IEvt>,
         IToRedisDoc
     {

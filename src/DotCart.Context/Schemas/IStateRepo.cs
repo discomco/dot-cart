@@ -1,4 +1,4 @@
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Schema;
 
 namespace DotCart.Context.Schemas;
 

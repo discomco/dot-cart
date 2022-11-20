@@ -1,15 +1,13 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using Engine.Context.Initialize;
 using Engine.Contract.Schema;
 using Serilog;
 
 namespace Engine.Context.Common.Effects;
 
-public class ESDBEngineEventFeeder : ActorT<Spoke>, IESDBEngineEventFeeder, IProducer
+public class ESDBEngineEventFeeder : ActorB, IESDBEngineEventFeeder, IProducer
 {
     private readonly IEventStoreDriver _eventStore;
     private readonly NewID<EngineID> _newId;

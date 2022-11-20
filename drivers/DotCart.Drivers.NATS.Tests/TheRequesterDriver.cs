@@ -1,9 +1,8 @@
-using DotCart.TestKit.Schema;
 using NATS.Client;
 
 namespace DotCart.Drivers.NATS.Tests;
 
-public class TheRequesterDriver : NATSRequesterDriverT<TheHope>
+public class TheRequesterDriver : NATSRequesterDriverT
 {
     public TheRequesterDriver(IEncodedConnection bus) : base(bus)
     {

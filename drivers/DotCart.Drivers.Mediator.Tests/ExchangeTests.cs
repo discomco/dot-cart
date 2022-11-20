@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
 using DotCart.TestFirst.Effects;
 using DotCart.TestKit;
@@ -10,9 +10,9 @@ namespace DotCart.Drivers.Mediator.Tests;
 
 public class ExchangeTests : ActorTestsT<IExchange>
 {
-    private IActor<Spoke, Consumer1> _consumer1;
-    private IActor<Spoke, Consumer2> _consumer2;
-    private IActor<Spoke, Producer> _producer;
+    private IConsumer1 _consumer1;
+    private IConsumer2 _consumer2;
+    private IProducer _producer;
     private IProjector _projector;
     private ISpokeT<Spoke> _spoke;
     private ISpokeBuilder<ISpokeT<Spoke>> _spokeBuilder;
@@ -39,7 +39,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _producer = TestEnv.ResolveRequired<IActor<Spoke, Producer>>();
+        _producer = TestEnv.ResolveRequired<IProducer>();
         // THEN
         Assert.NotNull(_producer);
     }
@@ -50,7 +50,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _consumer1 = TestEnv.ResolveRequired<IActor<Spoke, Consumer1>>();
+        _consumer1 = TestEnv.ResolveRequired<IConsumer1>();
         // THEN
         Assert.NotNull(_consumer1);
     }
@@ -61,7 +61,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _consumer2 = TestEnv.ResolveRequired<IActor<Spoke, Consumer2>>();
+        _consumer2 = TestEnv.ResolveRequired<IConsumer2>();
         // THEN
         Assert.NotNull(_consumer2);
     }
@@ -147,9 +147,11 @@ public class ExchangeTests : ActorTestsT<IExchange>
     protected override void Initialize()
     {
         _actor = TestEnv.ResolveRequired<IExchange>();
-        _producer = TestEnv.ResolveRequired<IActor<Spoke, Producer>>();
-        _consumer1 = TestEnv.ResolveRequired<IActor<Spoke, Consumer1>>();
-        _consumer2 = TestEnv.ResolveRequired<IActor<Spoke, Consumer2>>();
+
+        _producer = TestEnv.ResolveRequired<IProducer>();
+        _consumer1 = TestEnv.ResolveRequired<IConsumer1>();
+        _consumer2 = TestEnv.ResolveRequired<IConsumer2>();
+
         _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<ISpokeT<Spoke>>>();
         _spoke = TestEnv.ResolveRequired<ISpokeT<Spoke>>();
         _projector = TestEnv.Resolve<IProjector>();
@@ -161,7 +163,6 @@ public class ExchangeTests : ActorTestsT<IExchange>
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        base.InjectDependencies(services);
         services
             .AddTestEnv();
     }

@@ -1,6 +1,6 @@
-﻿using DotCart.Context.Abstractions.Drivers;
+﻿using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Effects;
-using DotCart.Contract.Schemas;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Polly;
 using EventStore.Client;

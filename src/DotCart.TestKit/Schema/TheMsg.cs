@@ -1,4 +1,4 @@
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 
 namespace DotCart.TestKit.Schema;

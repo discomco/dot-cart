@@ -1,10 +1,12 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Mediator;
+using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Engine.Contract.ChangeRpm;
@@ -26,11 +28,11 @@ public static class Inject
     public static IServiceCollection AddChangeRpmActors(this IServiceCollection services)
     {
         return services
-            .AddChangeRpmRedisProjections();
-            // .AddChangeRpmBehavior()
-            // .AddChangeRpmMemProjections()
-            // .AddChangeRpmEmitter()
-            // .AddChangeRpmResponder();
+            .AddChangeRpmToRedis()
+            .AddChangeRpmBehavior()
+            .AddChangeRpmMemProjections()
+            .AddChangeRpmEmitter()
+            .AddChangeRpmResponder();
     }
 
     public static IServiceCollection AddChangeRpmMemProjections(this IServiceCollection services)
@@ -43,7 +45,7 @@ public static class Inject
             .AddTransient<IActor<Spoke>, Actors.ToMemDoc>();
     }
 
-    public static IServiceCollection AddChangeRpmRedisProjections(this IServiceCollection services)
+    public static IServiceCollection AddChangeRpmToRedis(this IServiceCollection services)
     {
         return services
             .AddSingletonExchange()
@@ -51,7 +53,6 @@ public static class Inject
             .AddTransient(_ => Mappers._evt2State)
             .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
             .AddTransient<IActor<Spoke>, Actors.ToRedisDoc>();
-            
     }
 
     public static IServiceCollection AddChangeRpmSpoke(this IServiceCollection services)
@@ -66,8 +67,7 @@ public static class Inject
             })
             .AddChangeRpmActors();
     }
-    
-    
+
 
     public static IServiceCollection AddChangeRpmEmitter(this IServiceCollection services)
     {
@@ -82,8 +82,8 @@ public static class Inject
             .AddAggregateBuilder()
             .AddCmdHandler()
             .AddTransient(_ => Generators._generateHope)
-            .AddSingleton<IResponderDriverT<Hope>, Actors.ResponderDriver>()
+            .AddTransient<Drivers.IMemResponderDriver, Drivers.MemResponderDriver>()
             .AddTransient<Actors.IResponder, Actors.Responder>()
-            .AddTransient<IActor<Spoke>, Actors.Responder>();
+            .AddSpokedNATSResponder<Spoke, Hope, Cmd>();
     }
 }

@@ -1,7 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Context.Effects;
-using DotCart.Contract;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Redis;
 using Engine.Contract.ChangeRpm;
@@ -10,25 +9,15 @@ namespace Engine.Context.ChangeRpm;
 
 public static class Actors
 {
-    public interface IResponder : IResponder<MemResponderDriver<Hope>, Hope, Cmd>
+    public interface IResponder : IActor<Spoke>
     {
     }
 
 
-    public class Responder : ResponderT<Spoke, MemResponderDriver<Hope>, Hope, Cmd>, IResponder
+    public class Responder : ResponderT<Drivers.IMemResponderDriver, Hope, Cmd>, IResponder
     {
-        // public Responder(
-        //     IExchange exchange,
-        //     IResponderDriver<Hope> responderDriver,
-        //     ICmdHandler cmdHandler,
-        //     Hope2Cmd<Cmd, Hope> hope2Cmd) : base(
-        //     responderDriver,
-        //     cmdHandler,
-        //     hope2Cmd) : base()
-        // {
-        // }
-        public Responder(IExchange exchange,
-            MemResponderDriver<Hope> responderDriver,
+        protected Responder(IExchange exchange,
+            Drivers.IMemResponderDriver responderDriver,
             ICmdHandler cmdHandler,
             Hope2Cmd<Cmd, Hope> hope2Cmd) : base(exchange,
             responderDriver,
@@ -39,12 +28,12 @@ public static class Actors
     }
 
 
-    public interface IToMemDoc : IProjection<MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>
+    public interface IToMemDoc
     {
     }
 
-    public class ToMemDoc : ProjectionT<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
-        IToMemDoc
+    public class ToMemDoc : ProjectionT<MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
+        IToMemDoc, IActor<Spoke>
 
     {
         public ToMemDoc(IExchange exchange,
@@ -67,22 +56,17 @@ public static class Actors
         {
         }
     }
-    
-    
-    public interface IToRedisDoc : IProjection<
-        IRedisStore<Common.Schema.Engine>, 
-        Common.Schema.Engine, 
-        IEvt>
+
+
+    public interface IToRedisDoc
     {
-        
     }
-    
+
 
     public class ToRedisDoc : ProjectionT<
-        Spoke, 
-        IRedisStore<Common.Schema.Engine>, 
-        Common.Schema.Engine, 
-        IEvt>, IToRedisDoc
+        IRedisStore<Common.Schema.Engine>,
+        Common.Schema.Engine,
+        IEvt>, IToRedisDoc, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Common.Schema.Engine> modelStore,
@@ -92,7 +76,4 @@ public static class Actors
         {
         }
     }
-
-
-
 }

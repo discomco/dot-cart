@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Drivers;
 using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -10,15 +10,9 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Initialize.Effects;
 
 public class InitializeEffectsTests : EffectsTests<
-    Common.Schema.Engine,
     IEvt,
-    Cmd,
-    Hope,
     Fact,
-    Actors.IResponder,
-    IModelStore<Common.Schema.Engine>,
-    Actors.IToRedisDoc
->
+    IModelStore<Common.Schema.Engine>>
 {
     public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

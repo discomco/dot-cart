@@ -1,5 +1,6 @@
-using DotCart.Context.Effects;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 
@@ -11,7 +12,7 @@ public static class Mappers
         evt => Fact.New(evt.AggregateID.Id(), evt.GetPayload<Payload>());
 
     public static readonly Hope2Cmd<Cmd, Hope> _hope2Cmd =
-        hope => Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Payload>());
+        hope => Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
     public static Evt2State<Common.Schema.Engine, IEvt> _evt2State => (state, evt) =>
     {

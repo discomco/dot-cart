@@ -26,7 +26,6 @@
         <ProjectReference Include="..\..\examples\car\Engine.Context\Engine.Context.csproj"/>
         <ProjectReference Include="..\..\examples\car\Engine.Contract\Engine.Contract.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Behavior\DotCart.Behavior.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestEnv\DotCart.TestEnv.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestEnv\DotCart.TestEnv.csproj"/>

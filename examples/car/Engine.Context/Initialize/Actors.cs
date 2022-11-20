@@ -1,6 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Context.Effects;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.Redis;
@@ -15,7 +15,7 @@ public static class Actors
     }
 
     [Name("Engine.Initialize.Responder")]
-    public class Responder : ResponderT<Spoke, IResponderDriverT<Hope>, Hope, Cmd>, IResponder
+    public class Responder : ResponderT<IResponderDriverT<Hope>, Hope, Cmd>, IResponder
     {
         public Responder(IExchange exchange,
             IResponderDriverT<Hope> responderDriver,
@@ -28,12 +28,12 @@ public static class Actors
         }
     }
 
-    public interface IToMemDoc
+    public interface IToMemDoc : IActor<Spoke>
     {
     }
 
     [Name("Engine.Initialize.ToMemDocProjection")]
-    public class ToMemDoc : ProjectionT<Spoke, MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
+    public class ToMemDoc : ProjectionT<MemStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>,
         IToMemDoc
     {
         public ToMemDoc(IExchange exchange,
@@ -45,14 +45,13 @@ public static class Actors
         }
     }
 
-    public interface IToRedisDoc : IProjection<RedisStore<Common.Schema.Engine>, Common.Schema.Engine, IEvt>, IConsumer
+    public interface IToRedisDoc : IActor<Spoke>
     {
     }
 
     public class ToRedisDoc : ProjectionT<
-            Spoke, 
-            IRedisStore<Common.Schema.Engine>, 
-            Common.Schema.Engine, 
+            IRedisStore<Common.Schema.Engine>,
+            Common.Schema.Engine,
             IEvt>,
         IToRedisDoc
     {

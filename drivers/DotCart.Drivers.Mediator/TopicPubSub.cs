@@ -1,5 +1,6 @@
-using DotCart.Context.Abstractions;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using Serilog;
 using static System.Threading.Tasks.Task;
 

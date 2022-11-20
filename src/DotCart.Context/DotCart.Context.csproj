@@ -8,13 +8,11 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
-        <ProjectReference Include="..\DotCart.Client\DotCart.Client.csproj"/>
-        <ProjectReference Include="..\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj"/>
-        <ProjectReference Include="..\DotCart.Contract\DotCart.Contract.csproj"/>
+        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Behaviors\Effects"/>
+        <Folder Include="Drivers"/>
     </ItemGroup>
 
 

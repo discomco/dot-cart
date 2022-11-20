@@ -1,5 +1,5 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Drivers;
 
 namespace DotCart.Drivers.InMem;
 

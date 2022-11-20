@@ -1,6 +1,6 @@
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Behavior;
 
 namespace DotCart.Context.Behaviors;
 

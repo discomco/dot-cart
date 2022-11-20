@@ -1,9 +1,8 @@
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
 using DotCart.Core;
 using Engine.Context.Common;
 using Engine.Contract.Initialize;
@@ -11,7 +10,7 @@ using Engine.Contract.Schema;
 
 namespace Engine.Context.Initialize;
 
-public class ApplyEvt : ApplyEvt<Common.Schema.Engine, IEvt>
+public class ApplyEvt : ApplyEvtT<Common.Schema.Engine, IEvt>
 {
     public override Common.Schema.Engine Apply(Common.Schema.Engine state, Event evt)
     {
@@ -21,7 +20,7 @@ public class ApplyEvt : ApplyEvt<Common.Schema.Engine, IEvt>
     }
 }
 
-public class TryCmd : TryCmd<Cmd>
+public class TryCmd : TryCmdT<Cmd>
 {
     public override IFeedback Verify(Cmd cmd)
     {
@@ -79,12 +78,12 @@ public class Exception : System.Exception
 }
 
 [Topic(Topics.EvtTopic)]
-public interface IEvt : IEvt<Payload>
+public interface IEvt : IEvtT<Payload>
 {
 }
 
 [Topic(Topics.CmdTopic)]
-public record Cmd(IID AggregateID, Payload Payload) : Cmd<Payload>(Topics.CmdTopic, AggregateID, Payload)
+public record Cmd(IID AggregateID, Payload Payload) : CmdT<Payload>(Topics.CmdTopic, AggregateID, Payload)
 {
     public static Cmd New(IID aggregateID, Payload payload)
     {

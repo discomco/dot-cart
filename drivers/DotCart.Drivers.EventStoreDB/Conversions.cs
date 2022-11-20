@@ -1,5 +1,5 @@
-using DotCart.Context.Abstractions;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB;

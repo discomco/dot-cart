@@ -7,8 +7,12 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
-        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Schemas" />
     </ItemGroup>
 
 

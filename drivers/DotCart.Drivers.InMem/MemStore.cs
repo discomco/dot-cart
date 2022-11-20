@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using static System.GC;
 

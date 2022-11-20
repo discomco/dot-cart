@@ -1,4 +1,4 @@
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
@@ -6,6 +6,8 @@ using Engine.Contract.Initialize;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using IFact = Engine.Contract.Initialize.IFact;
+using IHope = Engine.Contract.Initialize.IHope;
 
 namespace Engine.Contract.Tests;
 

@@ -1,6 +1,5 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.Drivers.Mediator;
 using Microsoft.Extensions.DependencyInjection;
@@ -25,7 +24,7 @@ public static partial class Inject
 ///     It offers a straightforward interface to project events onto the TopicMediator
 /// </summary>
 [Topic("memory")]
-internal sealed class MemProjector : Actor, IMemProjector
+internal sealed class MemProjector : ActorB, IMemProjector
 {
     public MemProjector(IExchange exchange) : base(exchange)
     {

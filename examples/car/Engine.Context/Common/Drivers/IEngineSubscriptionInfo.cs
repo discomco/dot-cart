@@ -1,6 +1,5 @@
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Context.Drivers;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using Engine.Contract.Schema;
 
 namespace Engine.Context.Common.Drivers;

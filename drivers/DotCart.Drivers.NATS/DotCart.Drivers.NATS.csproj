@@ -14,8 +14,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Context.Abstractions\DotCart.Context.Abstractions.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Contract\DotCart.Contract.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj" />
         <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj" />
         <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj" />
         <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
@@ -24,7 +23,6 @@
     <ItemGroup>
         <Compile Remove="ResponderDriver.cs" />
         <Compile Remove="STANRequester.cs" />
-        <Compile Remove="NATSResponder.cs" />
         <Compile Remove="NATSListener.cs" />
         <Compile Remove="NATSEmitter.cs" />
     </ItemGroup>

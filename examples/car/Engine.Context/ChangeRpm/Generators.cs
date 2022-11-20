@@ -1,4 +1,4 @@
-using DotCart.Contract;
+using DotCart.Abstractions.Schema;
 using Engine.Contract.ChangeRpm;
 using Engine.Contract.Schema;
 

@@ -1,5 +1,4 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Spokes;
+using DotCart.Abstractions.Actors;
 
 namespace DotCart.Drivers.Mediator.Tests;
 

@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Actors;
 
 namespace DotCart.Context.Spokes;
 

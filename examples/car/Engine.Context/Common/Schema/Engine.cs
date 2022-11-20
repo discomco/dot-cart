@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using DotCart.Contract.Schemas;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;

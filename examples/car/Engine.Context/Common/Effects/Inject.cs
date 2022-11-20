@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Actors;
 using Engine.Context.Common.Schema;
 using Engine.Context.Initialize;
 using Microsoft.Extensions.DependencyInjection;

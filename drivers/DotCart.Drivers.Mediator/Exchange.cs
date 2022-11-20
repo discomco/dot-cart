@@ -1,6 +1,6 @@
 ﻿using System.Collections.Immutable;
-using DotCart.Context.Abstractions;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
@@ -28,14 +28,11 @@ internal class Exchange : ActiveComponent, IExchange
 
     public async Task Publish(string topic, IMsg msg, CancellationToken cancellationToken = default)
     {
-            var consumers = _readers
-                .Where(slot => slot.Key == topic)
-                .SelectMany(slot => slot.Value);
-            if (!consumers.Any()) return;
-            foreach (var consumer in consumers)
-            {
-                await consumer.HandleCast(msg, cancellationToken);
-            }
+        var consumers = _readers
+            .Where(slot => slot.Key == topic)
+            .SelectMany(slot => slot.Value);
+        if (!consumers.Any()) return;
+        foreach (var consumer in consumers) await consumer.HandleCast(msg, cancellationToken);
     }
 
     public Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
@@ -46,6 +43,12 @@ internal class Exchange : ActiveComponent, IExchange
     public Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
     {
         return (Task<IMsg>)CompletedTask;
+    }
+
+    public void Dispose()
+    {
+        _readers.Clear();
+        Log.Information($"[{GetType().Name}] ~> Stopped.");
     }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
@@ -68,11 +71,5 @@ internal class Exchange : ActiveComponent, IExchange
     {
         return Run(() => { Log.Information($"[{GetType().Name}] ~> Stopping;"); }, cancellationToken);
         return CompletedTask;
-    }
-
-    public void Dispose()
-    {
-        _readers.Clear();
-        Log.Information($"[{GetType().Name}] ~> Stopped.");
     }
 }

@@ -1,5 +1,5 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.InMem;
@@ -21,16 +21,16 @@ namespace DotCart.Drivers.EventStoreDB.Tests;
 
 public class ESDBProjectorDriverTests : IoCTests
 {
-    private IESDBPersistentSubscriptionsClient _client;
-    private IProjectorDriver _driver;
-    private IEventStoreDriver _eventStore;
-    private IExchange _exchange;
-    private IHostExecutor _executor;
-    private IESDBEngineEventFeeder _feeder;
-    private ILogger _logger;
-    private IModelStore<Engine.Context.Common.Schema.Engine> _memStore;
-    private EventStreamGenerator<EngineID> _newEventStream;
-    private SubscriptionFilterOptions _subOptions;
+    private IESDBPersistentSubscriptionsClient? _client;
+    private IProjectorDriver? _driver;
+    private IEventStoreDriver? _eventStore;
+    private IExchange? _exchange;
+    private IHostExecutor? _executor;
+    private IESDBEngineEventFeeder? _feeder;
+    private ILogger? _logger;
+    private EventStreamGenerator<EngineID>? _newEventStream;
+    private SubscriptionFilterOptions? _subOptions;
+    private IModelStore<Engine.Context.Common.Schema.Engine>? _memStore;
 
     public ESDBProjectorDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -94,6 +94,7 @@ public class ESDBProjectorDriverTests : IoCTests
         // THEN
         while (!token.IsCancellationRequested)
         {
+            Thread.Sleep(100);
         }
 
         Assert.True(true);

@@ -4,9 +4,9 @@ namespace DotCart.Core;
 
 public static class DotEnv
 {
-    public static bool IsDevelopemnt =>
+    public static bool IsDevelopment =>
         string.IsNullOrEmpty(Get(EnVars.ASPNETCORE_ENVIRONMENT)) &&
-        Get("ASPNETCORE_ENVIRONMENT")
+        Get("ASPNETCORE_ENVIRONMENT")!
             .Equals("Development");
 
     public static void FromEmbedded(Assembly assembly, string name = ".env")

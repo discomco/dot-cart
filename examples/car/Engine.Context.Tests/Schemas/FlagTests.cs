@@ -1,4 +1,4 @@
-using DotCart.Context.Abstractions;
+using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Engine.Contract.Schema;
 using Xunit.Abstractions;

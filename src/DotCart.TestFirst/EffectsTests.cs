@@ -1,36 +1,26 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
-using DotCart.Context.Effects;
-using DotCart.Contract.Dtos;
-using DotCart.Contract.Schemas;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
 public abstract class EffectsTests<
-    TState,
     TEvt,
-    TCmd,
-    THope,
     TFact,
-    TResponder,
-    TReadModelStore,
-    TToDocProjection
-> : IoCTests
-    where TState : IState
+    TReadModelStore> : IoCTests
     where TEvt : IEvt
-    where TCmd : ICmd
-    where THope : IHope
     where TFact : IFact
-    where TResponder : IActor
+
 {
     protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
     protected ICmdHandler _cmdHandler;
     protected IExchange _exchange;
-    protected TResponder _responder;
     protected IAggregateStoreDriver AggregateStoreDriver;
 
 
@@ -38,35 +28,6 @@ public abstract class EffectsTests<
     {
     }
 
-    [Fact]
-    public async Task ShouldStartResponder()
-    {
-        try
-        {
-            Assert.NotNull(_responder);
-            Assert.NotNull(AggregateStoreDriver);
-            Assert.NotNull(_aggregate);
-            var tokenSource = new CancellationTokenSource(1000);
-            var cancellationToken = tokenSource.Token;
-            // WHEN
-            await Task.Run(async () =>
-            {
-                await _responder.Activate(cancellationToken);
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    Thread.SpinWait(5);
-                    Output.WriteLine("Waiting");
-                }
-            }, cancellationToken);
-            var aStore = TestEnv.ResolveRequired<IAggregateStoreDriver>();
-            var t = aStore.GetType();
-        }
-        catch (TaskCanceledException e)
-        {
-            Assert.True(true);
-        }
-        // GIVEN
-    }
 
     [Fact]
     public void ShouldResolveReadModelStore()
@@ -90,16 +51,6 @@ public abstract class EffectsTests<
         Assert.NotNull(cmdHandler);
     }
 
-    [Fact]
-    public void ShouldResolveToDocProjection()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var toDoc = TestEnv.ResolveRequired<TToDocProjection>();
-        // THEN 
-        Assert.NotNull(toDoc);
-    }
 
     [Fact]
     public void ShouldResolveAggregateStore()
@@ -112,16 +63,6 @@ public abstract class EffectsTests<
         Assert.NotNull(aggStore);
     }
 
-    [Fact]
-    public void ShouldResolveHope2Cmd()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var h2c = TestEnv.ResolveRequired<Hope2Cmd<TCmd, THope>>();
-        // THEN
-        Assert.NotNull(h2c);
-    }
 
     [Fact]
     public void ShouldResolveEvt2Fact()
@@ -145,27 +86,6 @@ public abstract class EffectsTests<
         Assert.NotNull(aggBuilder);
     }
 
-    [Fact]
-    public void ShouldResolveResponder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var ir = TestEnv.ResolveRequired<TResponder>();
-        // THEN
-        Assert.NotNull(ir);
-    }
-
-    [Fact]
-    public void ShouldResolveEvt2State()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
-        // THEN
-        Assert.NotNull(evt2State);
-    }
 
     [Fact]
     public void ShouldResolveExchange()
@@ -180,7 +100,6 @@ public abstract class EffectsTests<
 
     protected override void Initialize()
     {
-        _responder = TestEnv.ResolveRequired<TResponder>();
         AggregateStoreDriver = TestEnv.ResolveRequired<IAggregateStoreDriver>();
         _aggregate = TestEnv.ResolveRequired<IAggregate>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();

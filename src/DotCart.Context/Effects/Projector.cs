@@ -1,6 +1,7 @@
-using DotCart.Context.Abstractions;
-using DotCart.Context.Abstractions.Drivers;
-using DotCart.Contract.Dtos;
+using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -13,11 +14,10 @@ public static partial class Inject
     {
         return services
             .AddSingleton<IProjector, Projector<TInfo>>();
-            
     }
 }
 
-public class Projector<TInfo> : Actor, IProjector, IProducer where TInfo : ISubscriptionInfo
+public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISubscriptionInfo
 {
     private readonly IProjectorDriver<TInfo> _projectorDriver;
 
