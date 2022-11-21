@@ -6,7 +6,6 @@ using DotCart.Context.Spokes;
 using DotCart.Drivers.Mediator;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
-using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Start;
@@ -84,7 +83,7 @@ public static class Inject
     public static IServiceCollection AddStartHopeGenerator(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => Generators._generateHope);
+            .AddTransient(_ => Contract.Start.Generators._generateHope);
     }
 
 

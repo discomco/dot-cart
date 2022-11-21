@@ -1,10 +1,6 @@
-using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
 using DotCart.Core;
-using DotCart.Drivers.EventStoreDB;
-using DotCart.Drivers.Serilog;
 using DotCart.TestKit;
-using Engine.Context.Common.Drivers;
 using Engine.Context.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -55,9 +51,6 @@ public class InitializeSpokeTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddConsoleLogger()
-            .AddSingletonProjector<IEngineSubscriptionInfo>()
-            .AddESDBInfra()
             .AddInitializeSpoke();
     }
 }

@@ -4,12 +4,12 @@ using Engine.Context.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Initialize.Effects;
+namespace Engine.Context.Tests.Initialize.Actors;
 
 public class ToDocProjectionTests : IoCTests
 {
     private IExchange _exchange;
-    private Actors.IToRedisDoc _toRedisDoc;
+    private Context.Initialize.Actors.IToRedisDoc _toRedisDoc;
 
     public ToDocProjectionTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -33,7 +33,7 @@ public class ToDocProjectionTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _toRedisDoc = TestEnv.ResolveRequired<Actors.IToRedisDoc>();
+        _toRedisDoc = TestEnv.ResolveRequired<Context.Initialize.Actors.IToRedisDoc>();
         // THEN
         Assert.NotNull(_toRedisDoc);
     }

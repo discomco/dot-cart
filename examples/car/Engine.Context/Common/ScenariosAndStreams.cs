@@ -1,11 +1,8 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using Engine.Context.Initialize;
-using Engine.Contract.Initialize;
-using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using IEvt = DotCart.Abstractions.Behavior.IEvt;
-using Topics = Engine.Context.Initialize.Topics;
 
 namespace Engine.Context.Common;
 
@@ -19,21 +16,22 @@ public static partial class Inject
 {
     public static IServiceCollection AddInitializeEngineWithThrottleUpStream(this IServiceCollection services)
     {
-        return services.AddTransient<EventStreamGenerator<EngineID>>(_ =>
+        return services.AddTransient<EventStreamGenerator<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
     {
-        return services.AddTransient<ScenarioGenerator<EngineID>>(_ => ScenariosAndStreams.InitializeScenario);
+        return services.AddTransient<ScenarioGenerator<Contract.Schema.EngineID>>(_ =>
+            ScenariosAndStreams.InitializeScenario);
     }
 }
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(EngineID ID)
+    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(Contract.Schema.EngineID ID)
     {
-        var initPayload = Payload.New(Details.New("New Engine"));
+        var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
         var initEvt = Event.New(ID, Topics.EvtTopic, initPayload, EventMeta.New("", ID.Id()));
         initEvt.Version = 0;
         // AND
@@ -50,7 +48,7 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    private static List<IEvt> RandomRevs(EngineID ID)
+    private static List<IEvt> RandomRevs(Contract.Schema.EngineID ID)
     {
         var res = new List<IEvt>();
         var counter = Random.Shared.Next(4, 15);
@@ -68,7 +66,7 @@ public static class ScenariosAndStreams
 
     public static IEnumerable<ICmd> InitializeScenario(IID ID)
     {
-        var initializePayload = Payload.New(Details.New("New Engine"));
+        var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
         var initializeCmd = Cmd.New(ID, initializePayload);
         return new[] { initializeCmd };
     }

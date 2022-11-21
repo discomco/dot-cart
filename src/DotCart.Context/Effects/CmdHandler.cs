@@ -22,14 +22,14 @@ public static partial class Inject
 internal class CmdHandler : ICmdHandler
 {
     private readonly IAggregate _aggregate;
-    private readonly IAggregateStoreDriver _aggregateStoreDriver;
+    private readonly IAggregateStore _aggregateStore;
 
     public CmdHandler(
         IAggregateBuilder aggBuilder,
-        IAggregateStoreDriver aggregateStoreDriver)
+        IAggregateStore aggregateStore)
     {
         _aggregate = aggBuilder.Build();
-        _aggregateStoreDriver = aggregateStoreDriver;
+        _aggregateStore = aggregateStore;
     }
 
     public async Task<Feedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default)
@@ -42,7 +42,7 @@ internal class CmdHandler : ICmdHandler
 
             _aggregate.SetID(aggId);
 
-            await _aggregateStoreDriver
+            await _aggregateStore
                 .LoadAsync(_aggregate, cancellationToken)
                 .ConfigureAwait(false);
 
@@ -50,7 +50,7 @@ internal class CmdHandler : ICmdHandler
                 .ExecuteAsync(cmd)
                 .ConfigureAwait(false);
 
-            await _aggregateStoreDriver
+            await _aggregateStore
                 .SaveAsync(_aggregate, cancellationToken)
                 .ConfigureAwait(false);
         }

@@ -10,14 +10,6 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddESDBInfra(this IServiceCollection services)
-    {
-        return services
-            .AddConfiguredESDBClients()
-            .AddESDBStoreDrivers();
-    }
-
-
     public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
     {
         return services?
@@ -38,7 +30,6 @@ public static partial class Inject
         where TInfo : ISubscriptionInfo
     {
         return services
-            .AddConfiguredESDBClients()
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
                     StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))

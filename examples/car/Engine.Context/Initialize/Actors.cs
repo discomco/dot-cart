@@ -8,25 +8,6 @@ namespace Engine.Context.Initialize;
 
 public static class Actors
 {
-    // public interface INATSResponder : IResponder,  IActor<Spoke>
-    // {
-    // }
-    //
-    // [Name("Engine.Initialize.Responder")]
-    // public class NATSResponder : NATSResponderT<Hope,Cmd>, INATSResponder
-    // {
-    //     protected NATSResponder(
-    //         IEncodedConnection bus,
-    //         IExchange exchange,
-    //         ICmdHandler cmdHandler,
-    //         Hope2Cmd<Cmd, Hope> hope2Cmd) : base(bus,
-    //         exchange,
-    //         cmdHandler,
-    //         hope2Cmd)
-    //     {
-    //     }
-    // }
-
     public interface IToMemDoc : IActor<Spoke>
     {
     }

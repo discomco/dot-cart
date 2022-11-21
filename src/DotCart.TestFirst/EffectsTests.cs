@@ -21,7 +21,7 @@ public abstract class EffectsTests<
     protected IAggregateBuilder _aggregateBuilder;
     protected ICmdHandler _cmdHandler;
     protected IExchange _exchange;
-    protected IAggregateStoreDriver AggregateStoreDriver;
+    protected IAggregateStore AggregateStore;
 
 
     protected EffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -58,7 +58,7 @@ public abstract class EffectsTests<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var aggStore = TestEnv.ResolveRequired<IAggregateStoreDriver>();
+        var aggStore = TestEnv.ResolveRequired<IAggregateStore>();
         // THEN
         Assert.NotNull(aggStore);
     }
@@ -100,7 +100,7 @@ public abstract class EffectsTests<
 
     protected override void Initialize()
     {
-        AggregateStoreDriver = TestEnv.ResolveRequired<IAggregateStoreDriver>();
+        AggregateStore = TestEnv.ResolveRequired<IAggregateStore>();
         _aggregate = TestEnv.ResolveRequired<IAggregate>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();

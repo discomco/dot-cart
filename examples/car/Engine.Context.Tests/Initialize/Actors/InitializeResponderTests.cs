@@ -3,15 +3,16 @@ using DotCart.Abstractions.Drivers;
 using DotCart.TestFirst.Effects;
 using DotCart.TestKit;
 using Engine.Context.Initialize;
-using Engine.Contract.Initialize;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Initialize.Effects;
+namespace Engine.Context.Tests.Initialize.Actors;
 
-public class InitializeResponderTests : ResponderTestsT<IResponderT<Hope, Cmd>, Hope, Cmd>
+public class
+    InitializeResponderTests : ResponderTestsT<IResponderT<Contract.Initialize.Hope, Cmd>, Contract.Initialize.Hope,
+        Cmd>
 {
     private IEncodedConnection _bus;
 
@@ -30,7 +31,7 @@ public class InitializeResponderTests : ResponderTestsT<IResponderT<Hope, Cmd>, 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSingleton(_ => A.Fake<IAggregateStoreDriver>())
+            .AddSingleton(_ => A.Fake<IAggregateStore>())
             .AddInitializeResponders();
     }
 

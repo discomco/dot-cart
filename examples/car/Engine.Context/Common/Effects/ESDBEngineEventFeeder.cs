@@ -2,23 +2,22 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using Engine.Context.Initialize;
-using Engine.Contract.Schema;
 using Serilog;
 
 namespace Engine.Context.Common.Effects;
 
 public class ESDBEngineEventFeeder : ActorB, IESDBEngineEventFeeder, IProducer
 {
-    private readonly IEventStoreDriver _eventStore;
-    private readonly NewID<EngineID> _newId;
+    private readonly IEventStore _eventStore;
+    private readonly NewID<Contract.Schema.EngineID> _newId;
     private readonly NewState<Schema.Engine> _newState;
-    private readonly EventStreamGenerator<EngineID> _newStream;
+    private readonly EventStreamGenerator<Contract.Schema.EngineID> _newStream;
 
     public ESDBEngineEventFeeder(
         IExchange exchange,
-        IEventStoreDriver eventStore,
-        EventStreamGenerator<EngineID> newStream,
-        NewID<EngineID> newID,
+        IEventStore eventStore,
+        EventStreamGenerator<Contract.Schema.EngineID> newStream,
+        NewID<Contract.Schema.EngineID> newID,
         NewState<Schema.Engine> newState) : base(exchange)
     {
         _eventStore = eventStore;

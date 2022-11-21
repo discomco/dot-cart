@@ -8,15 +8,14 @@ using Engine.Context.ChangeRpm;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
 using Engine.Context.Start;
-using Engine.Contract.Initialize;
-using Engine.Contract.Schema;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 using Cmd = Engine.Context.Initialize.Cmd;
 
 namespace Engine.Context.Tests.Behaviors;
 
-public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engine>
+public class EngineAggregateTests : AggregateTestsT<Schema.EngineID, Common.Schema.Engine>
 {
     private IAggregatePolicy? _startPolicy;
 
@@ -52,8 +51,8 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         Assert.NotNull(_ID);
         _agg.SetID(_ID);
         // WHEN
-        var details = Details.New("New Engine");
-        var cmd = Cmd.New(_ID, Payload.New(details));
+        var details = Schema.Details.New("New Engine");
+        var cmd = Cmd.New(_ID, Contract.Initialize.Payload.New(details));
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = feedback.GetPayload<Common.Schema.Engine>();
         // THEN
@@ -61,7 +60,8 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         if (!feedback.IsSuccess) Output.WriteLine(feedback.ErrState.ToString());
 
         Assert.True(feedback.IsSuccess);
-        Assert.True(state.Status.HasFlag(EngineStatus.Initialized));
+        var isInitialized = state.Status.HasFlag(Schema.EngineStatus.Initialized);
+        Assert.True(isInitialized);
 //        Thread.Sleep(1_000);
         state = (Common.Schema.Engine)_agg.GetState();
         Output.WriteLine($"{state}");
@@ -81,8 +81,8 @@ public class EngineAggregateTests : AggregateTestsT<EngineID, Common.Schema.Engi
         Assert.NotNull(feedback);
         Assert.True(feedback.IsSuccess);
         Assert.True(((int)state.Status).HasAllFlags(
-            (int)EngineStatus.Initialized,
-            (int)EngineStatus.Started));
+            (int)Schema.EngineStatus.Initialized,
+            (int)Schema.EngineStatus.Started));
         Output.WriteLine($"{state}");
     }
 

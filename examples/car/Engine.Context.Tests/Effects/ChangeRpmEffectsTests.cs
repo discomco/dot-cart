@@ -3,7 +3,6 @@ using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Engine.Context.ChangeRpm;
-using Engine.Contract.ChangeRpm;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -11,7 +10,7 @@ namespace Engine.Context.Tests.Effects;
 
 public class ChangeRpmEffectsTests : EffectsTests<
     IEvt,
-    Fact,
+    Contract.ChangeRpm.Fact,
     IModelStore<Common.Schema.Engine>>
 {
     public ChangeRpmEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

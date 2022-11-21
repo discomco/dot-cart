@@ -1,15 +1,14 @@
 using DotCart.Abstractions.Schema;
-using Engine.Contract.ChangeRpm;
-using Engine.Contract.Schema;
+using Engine.Contract;
 
 namespace Engine.Context.ChangeRpm;
 
 public static class Generators
 {
-    public static GenerateHope<Hope> _generateHope => () =>
+    public static GenerateHope<Contract.ChangeRpm.Hope> _generateHope => () =>
     {
-        var engineID = EngineID.New();
-        var pl = Payload.New(Random.Shared.Next(20));
-        return Hope.New(engineID.Id(), pl);
+        var engineID = Schema.IDCtor();
+        var pl = Contract.ChangeRpm.Payload.New(Random.Shared.Next(20));
+        return Contract.ChangeRpm.Hope.New(engineID.Id(), pl);
     };
 }

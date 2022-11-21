@@ -14,7 +14,7 @@ public static class Inject
     public static IServiceCollection AddConsoleLogger(this IServiceCollection services, bool enableSelfLog = false)
     {
         return services?
-            .AddSingleton(x => CreateSeriLogConsoleLogger(enableSelfLog));
+            .AddSingleton(x => CreateSerilogConsoleLogger(enableSelfLog));
     }
 
     public static IServiceCollection AddElasticSearchLogger(this ServiceCollection services,
@@ -26,7 +26,7 @@ public static class Inject
     }
 
 
-    public static ILogger CreateSeriLogConsoleLogger(bool enableSelfLog = false)
+    public static ILogger CreateSerilogConsoleLogger(bool enableSelfLog = false)
     {
         var level = DotEnv.Get(EnVars.LOG_LEVEL_MIN);
         if (enableSelfLog)
@@ -37,7 +37,7 @@ public static class Inject
 
         Log.Logger = new LoggerConfiguration()
 //            .MinimumLevel.Verbose()
-            .MinimumLevel.Verbose()
+            .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()

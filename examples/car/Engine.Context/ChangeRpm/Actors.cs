@@ -3,7 +3,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Drivers.InMem;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
-using Engine.Contract.ChangeRpm;
 using NATS.Client;
 
 namespace Engine.Context.ChangeRpm;
@@ -14,13 +13,13 @@ public static class Actors
     {
     }
 
-    public class Responder : NATSResponderT<Hope, Cmd>, IResponder
+    public class Responder : NATSResponderT<Contract.Start.Hope, Cmd>, IResponder
     {
         public Responder(
             IEncodedConnection bus,
             IExchange exchange,
             ICmdHandler cmdHandler,
-            Hope2Cmd<Cmd, Hope> hope2Cmd) : base(bus,
+            Hope2Cmd<Cmd, Contract.Start.Hope> hope2Cmd) : base(bus,
             exchange,
             cmdHandler,
             hope2Cmd)

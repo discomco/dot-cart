@@ -3,7 +3,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Effects;
 using DotCart.TestKit;
 using Engine.Context.Common;
-using Engine.Contract.Schema;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -37,12 +37,12 @@ public class MemStoreTests : IoCTests
         Assert.NotNull(_engModelStore);
         Assert.NotNull(_newEngine);
         var eng1 = _newEngine();
-        eng1.Id = EngineID.New().Id();
-        eng1.Details = Details.New("Engine1", "The First Engine");
+        eng1.Id = Schema.EngineID.New().Id();
+        eng1.Details = Schema.Details.New("Engine1", "The First Engine");
 
         var eng2 = _newEngine();
-        eng2.Id = EngineID.New().Id();
-        eng2.Details = Details.New("Engine2", "The Second Engine");
+        eng2.Id = Schema.EngineID.New().Id();
+        eng2.Details = Schema.Details.New("Engine2", "The Second Engine");
 
         // WHEN
         Task.WaitAll(

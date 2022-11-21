@@ -1,11 +1,10 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using Engine.Contract.Schema;
 
 namespace Engine.Context.Common.Drivers;
 
 [GroupName("engine-sub")]
-[IDPrefix(Constants.EngineIDPrefix)]
+[IDPrefix(Contract.Schema.EngineIDPrefix)]
 public interface IEngineSubscriptionInfo : ISubscriptionInfo
 {
 }

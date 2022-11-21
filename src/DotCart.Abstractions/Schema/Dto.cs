@@ -21,7 +21,8 @@ public record Dto(string AggId, byte[] Data) : IDto
             : Data.FromBytes<T>();
     }
 
-    public void SetPayload<T>(T state) where T : IPayload
+    public void SetPayload<T>(T state)
+        where T : IPayload
     {
         Data = state.ToBytes();
     }

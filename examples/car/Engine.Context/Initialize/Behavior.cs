@@ -5,8 +5,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Context.Common;
-using Engine.Contract.Initialize;
-using Engine.Contract.Schema;
+using Engine.Contract;
 
 namespace Engine.Context.Initialize;
 
@@ -15,7 +14,7 @@ public class ApplyEvt : ApplyEvtT<Common.Schema.Engine, IEvt>
     public override Common.Schema.Engine Apply(Common.Schema.Engine state, Event evt)
     {
         state.Id = evt.AggregateID.Id();
-        state.Status = EngineStatus.Initialized;
+        state.Status = Schema.EngineStatus.Initialized;
         return state;
     }
 }
@@ -43,7 +42,7 @@ public class TryCmd : TryCmdT<Cmd>
         return new[]
         {
             Event.New(
-                (EngineID)cmd.AggregateID,
+                (Schema.EngineID)cmd.AggregateID,
                 Topics.EvtTopic,
                 cmd.Payload,
                 Aggregate.GetMeta(),
@@ -78,14 +77,22 @@ public class Exception : System.Exception
 }
 
 [Topic(Topics.EvtTopic)]
-public interface IEvt : IEvtT<Payload>
+public interface IEvt : IEvtT<Contract.Initialize.Payload>
 {
 }
 
 [Topic(Topics.CmdTopic)]
-public record Cmd(IID AggregateID, Payload Payload) : CmdT<Payload>(Topics.CmdTopic, AggregateID, Payload)
+public record Cmd(
+    IID AggregateID,
+    Contract.Initialize.Payload Payload
+) : CmdT<Contract.Initialize.Payload>(
+    Topics.CmdTopic,
+    AggregateID,
+    Payload)
 {
-    public static Cmd New(IID aggregateID, Payload payload)
+    public static Cmd New(
+        IID aggregateID,
+        Contract.Initialize.Payload payload)
     {
         return new Cmd(aggregateID, payload);
     }

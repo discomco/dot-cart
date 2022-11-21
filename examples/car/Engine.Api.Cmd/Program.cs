@@ -1,6 +1,6 @@
 using DotCart.Core;
 using DotCart.Drivers.Serilog;
-using Engine.Api.Cmd;
+using Engine.Context;
 using Serilog;
 using Inject = DotCart.Drivers.Serilog.Inject;
 
@@ -12,7 +12,7 @@ var builder = WebApplication
 builder.Host.ConfigureLogging(logging => logging
         .ClearProviders()
         .AddSerilog())
-    .UseSerilog(Inject.CreateSeriLogConsoleLogger());
+    .UseSerilog(Inject.CreateSerilogConsoleLogger());
 
 
 // Add services to the container.
@@ -20,10 +20,12 @@ builder.Host.ConfigureLogging(logging => logging
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(config => config.CustomSchemaIds(x => x.FullName));
 
 builder.Services.AddConsoleLogger();
-builder.Services.AddEngineApp();
+
+builder.Services.AddEngineContext();
 
 var app = builder.Build();
 

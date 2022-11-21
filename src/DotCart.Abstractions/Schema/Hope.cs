@@ -17,5 +17,9 @@ public interface IHope<TPayload> : IHope
 public abstract record HopeT<TPayload>(string AggId, TPayload Payload) : Dto(AggId, Payload.ToBytes())
     where TPayload : IPayload
 {
-    public TPayload Payload => GetPayload<TPayload>();
+    public TPayload Payload
+    {
+        get => GetPayload<TPayload>();
+        set => SetPayload(value);
+    }
 }

@@ -1,9 +1,10 @@
 using System.Text.Json;
+using DotCart.Core;
 
 namespace DotCart.Abstractions.Schema;
 
 [Serializable]
-public sealed class Errors : List<KeyValuePair<string, Error>>
+public sealed class Errors : DuplicatesList<string, Error>
 {
     public void Add(string key, string message)
     {

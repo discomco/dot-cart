@@ -7,8 +7,7 @@ using DotCart.Drivers.InMem;
 using DotCart.TestKit;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
-using Engine.Contract.Initialize;
-using Engine.Contract.Schema;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -16,10 +15,10 @@ namespace Engine.Context.Tests.Effects;
 
 public class CmdHandlerTests : IoCTests
 {
-    private IAggregateStoreDriver _aggStoreDriver;
+    private IAggregateStore _aggStore;
     private ICmdHandler _cmdHandler;
     private NewState<Common.Schema.Engine> _newEngine;
-    private NewID<EngineID> _newID;
+    private NewID<Schema.EngineID> _newID;
 
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -38,7 +37,7 @@ public class CmdHandlerTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var es = TestEnv.ResolveRequired<IAggregateStoreDriver>();
+        var es = TestEnv.ResolveRequired<IAggregateStore>();
         // THEN
         Assert.NotNull(es);
     }
@@ -59,8 +58,8 @@ public class CmdHandlerTests : IoCTests
     {
         // GIVEN
         var engineID = _newID();
-        var details = Details.New("New engine");
-        var payload = Payload.New(details);
+        var details = Schema.Details.New("New engine");
+        var payload = Contract.Initialize.Payload.New(details);
         var initCmd = Cmd.New(engineID, payload);
         // WHEN
         var fbk = await _cmdHandler.HandleAsync(initCmd);
@@ -73,8 +72,8 @@ public class CmdHandlerTests : IoCTests
     {
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _newEngine = TestEnv.ResolveRequired<NewState<Common.Schema.Engine>>();
-        _aggStoreDriver = TestEnv.ResolveRequired<IAggregateStoreDriver>();
-        _newID = TestEnv.ResolveRequired<NewID<EngineID>>();
+        _aggStore = TestEnv.ResolveRequired<IAggregateStore>();
+        _newID = TestEnv.ResolveRequired<NewID<Schema.EngineID>>();
     }
 
     protected override void SetTestEnvironment()

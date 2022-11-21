@@ -1,7 +1,5 @@
 using System.Text;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
-using EventStore.Client;
 using Newtonsoft.Json;
 
 namespace DotCart.Drivers.EventStoreDB;
@@ -48,17 +46,5 @@ public static class SerializationHelper
         return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
         //return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(@event));
         //return JsonSerializer.SerializeToUtf8Bytes(@event);
-    }
-
-
-    public static StoreEvent ToStoreEvent(this IEvt @event,
-        long eventNumber)
-    {
-        return new StoreEvent(@event, eventNumber);
-    }
-
-    public static IEvt? Deserialize(ResolvedEvent resolvedEvent)
-    {
-        return Deserialize(resolvedEvent.Event.EventType, resolvedEvent.Event.Data.ToArray());
     }
 }

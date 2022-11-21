@@ -5,22 +5,22 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Context.Common;
-using Engine.Contract.ChangeRpm;
-using Engine.Contract.Schema;
+using Engine.Contract;
 
 namespace Engine.Context.ChangeRpm;
 
 [Topic(Topics.CmdTopic)]
-public record Cmd(IID AggregateID, Payload Payload) : CmdT<Payload>(Topics.CmdTopic, AggregateID, Payload), ICmd
+public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload) : CmdT<Contract.ChangeRpm.Payload>(
+    Topics.CmdTopic, AggregateID, Payload), ICmd
 {
-    public static Cmd New(IID aggregateID, Payload payload)
+    public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload)
     {
         return new Cmd(aggregateID, payload);
     }
 }
 
 [Topic(Topics.EvtTopic)]
-public interface IEvt : IEvtT<Payload>
+public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
 {
 }
 
@@ -30,7 +30,7 @@ public class TryCmd : TryCmdT<Cmd>
     {
         return new[]
         {
-            Event.New((EngineID)cmd.AggregateID,
+            Event.New((Schema.EngineID)cmd.AggregateID,
                 Topics.EvtTopic,
                 cmd.Payload,
                 Aggregate.GetMeta(),
@@ -59,7 +59,7 @@ public class ApplyEvt : ApplyEvtT<Common.Schema.Engine, IEvt>
 {
     public override Common.Schema.Engine Apply(Common.Schema.Engine state, Event evt)
     {
-        state.Power += evt.GetPayload<Payload>().Delta;
+        state.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
         return state;
     }
 }

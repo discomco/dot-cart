@@ -1,5 +1,4 @@
 using DotCart.Drivers.NATS;
-using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 
@@ -17,7 +16,7 @@ public static class Initialize
     {
     }
 
-    internal class Requester : NATSRequesterT<Hope>, IRequester
+    internal class Requester : NATSRequesterT<Contract.Initialize.Hope>, IRequester
     {
         protected Requester(IEncodedConnection bus) : base(bus)
         {

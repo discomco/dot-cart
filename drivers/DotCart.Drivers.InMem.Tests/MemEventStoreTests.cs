@@ -8,7 +8,7 @@ using Engine.Context.ChangeRpm;
 using Engine.Context.Common;
 using Engine.Context.Initialize;
 using Engine.Context.Start;
-using Engine.Contract.Schema;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -17,10 +17,10 @@ namespace DotCart.Drivers.InMem.Tests;
 public class MemEventStoreTests : IoCTests
 {
     private IAggregate _agg;
-    private IMemEventStoreDriver? _aggStore;
+    private IMemEventStore? _aggStore;
     private IID _engineId;
     private NewState<Engine.Context.Common.Schema.Engine> _newEngine;
-    private NewID<EngineID> _newEngineID;
+    private NewID<Schema.EngineID> _newEngineID;
     private IProjectorDriver _projectorDriver;
 
     public MemEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -44,7 +44,7 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newEngineID = TestEnv.ResolveRequired<NewID<EngineID>>();
+        var newEngineID = TestEnv.ResolveRequired<NewID<Schema.EngineID>>();
         // THEN
         Assert.NotNull(newEngineID);
     }
@@ -56,14 +56,14 @@ public class MemEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var me = TestEnv.Resolve<IMemEventStoreDriver>();
+        var me = TestEnv.Resolve<IMemEventStore>();
         // THEN
         Assert.NotNull(me);
     }
 
 
     [Fact]
-    public async Task<IMemEventStoreDriver> ShouldSaveAggregate()
+    public async Task<IMemEventStore> ShouldSaveAggregate()
     {
         // GIVEN
         Assert.NotNull(_aggStore);
@@ -99,10 +99,10 @@ public class MemEventStoreTests : IoCTests
     protected override void Initialize()
     {
         _newEngine = TestEnv.ResolveRequired<NewState<Engine.Context.Common.Schema.Engine>>();
-        _aggStore = TestEnv.ResolveRequired<IMemEventStoreDriver>();
+        _aggStore = TestEnv.ResolveRequired<IMemEventStore>();
         var builder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _agg = builder.Build();
-        _newEngineID = TestEnv.ResolveRequired<NewID<EngineID>>();
+        _newEngineID = TestEnv.ResolveRequired<NewID<Schema.EngineID>>();
         _engineId = _newEngineID();
     }
 

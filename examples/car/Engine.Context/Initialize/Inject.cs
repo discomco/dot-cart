@@ -1,15 +1,15 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
-using DotCart.Drivers.InMem;
+using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.Mediator;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
+using DotCart.Drivers.Serilog;
 using Engine.Context.Common;
-using Engine.Contract.Initialize;
+using Engine.Context.Common.Drivers;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Context.Initialize;
@@ -36,6 +36,7 @@ public static class Inject
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
     {
         return services
+            .AddConsoleLogger()
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
             .AddHostedService(provider =>
@@ -46,6 +47,7 @@ public static class Inject
             .AddInitializeMappers()
             .AddInitializeActors();
     }
+
 
     public static IServiceCollection AddInitializeActors(this IServiceCollection services)
     {
@@ -58,6 +60,8 @@ public static class Inject
     public static IServiceCollection AddInitializedToRedisProjections(this IServiceCollection services)
     {
         return services
+//            .AddSingletonESDBProjectorDriver<IEngineSubscriptionInfo>()
+            .AddSingletonProjector<IEngineSubscriptionInfo>()
             .AddSingletonExchange()
             .AddTransient(_ => Mappers._evt2Doc)
             .AddTransient<Actors.IToRedisDoc, Actors.ToRedisDoc>()
@@ -71,25 +75,17 @@ public static class Inject
             .AddTransient(_ => Mappers._evt2Fact);
     }
 
-    public static IServiceCollection AddInitializedToMemProjections(this IServiceCollection services)
-    {
-        return services
-            .AddSingletonExchange()
-            .AddTransient(_ => Mappers._evt2Doc)
-            .AddSingleton<IModelStore<Common.Schema.Engine>, MemStore<Common.Schema.Engine>>()
-            .AddTransient<Actors.IToMemDoc, Actors.ToMemDoc>()
-            .AddTransient<IActor<Spoke>, Actors.ToMemDoc>();
-    }
 
     public static IServiceCollection AddInitializeResponders(this IServiceCollection services)
     {
         return services
             .AddSingletonExchange()
+            .AddESDBStore()
+            .AddNATSResponder<Contract.Initialize.Hope, Cmd>()
+            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Cmd>()
             .AddAggregateBuilder()
             .AddModelAggregate()
             .AddCmdHandler()
-            .AddInitializeMappers()
-            .AddNATSResponder<Hope, Cmd>()
-            .AddSpokedNATSResponder<Spoke, Hope, Cmd>();
+            .AddInitializeMappers();
     }
 }

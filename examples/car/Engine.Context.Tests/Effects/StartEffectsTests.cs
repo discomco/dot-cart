@@ -5,7 +5,6 @@ using DotCart.TestFirst;
 using DotCart.TestKit;
 using Engine.Context.Common;
 using Engine.Context.Start;
-using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -13,7 +12,7 @@ namespace Engine.Context.Tests.Effects;
 
 public class StartEffectsTests : EffectsTests<
     IEvt,
-    Fact,
+    Contract.Start.Fact,
     IModelStore<Common.Schema.Engine>>
 {
     public StartEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

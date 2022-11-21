@@ -1,14 +1,12 @@
 using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
-using Engine.Contract.Schema;
-using Engine.Contract.Start;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests;
 
-public class StartContractTests : ContractTests<EngineID, IHope, IFact, Payload>
+public class StartContractTests : ContractTests<Schema.EngineID, Start.IHope, Start.IFact, Start.Payload>
 {
     public StartContractTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -19,7 +17,7 @@ public class StartContractTests : ContractTests<EngineID, IHope, IFact, Payload>
     {
         // GIVEN
         // WHEN
-        var pl = Payload.New;
+        var pl = Start.Payload.New;
         // THEN
         Assert.NotNull(pl);
     }
@@ -27,40 +25,40 @@ public class StartContractTests : ContractTests<EngineID, IHope, IFact, Payload>
     public override void ShouldCreateFactFromBytes()
     {
         // GIVEN
-        var pl = Payload.New;
+        var pl = Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var fact = Fact.New(ID.Id(), pl.ToBytes());
+        var fact = Start.Fact.New(ID.Id(), pl.ToBytes());
         // THEN
         Assert.NotNull(fact);
     }
 
     public override void ShouldCreateFactFromPayload()
     {
-        var pl = Payload.New;
+        var pl = Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var fact = Fact.New(ID.Id(), pl);
+        var fact = Start.Fact.New(ID.Id(), pl);
         // THEN
         Assert.NotNull(fact);
     }
 
     public override void ShouldCreateHopeFromBytes()
     {
-        var pl = Payload.New;
+        var pl = Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var hope = Hope.New(ID.Id(), pl.ToBytes());
+        var hope = Start.Hope.New(ID.Id(), pl.ToBytes());
         // THEN
         Assert.NotNull(hope);
     }
 
     public override void ShouldCreateHopeFromPayload()
     {
-        var pl = Payload.New;
+        var pl = Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var hope = Hope.New(ID.Id(), pl);
+        var hope = Start.Hope.New(ID.Id(), pl);
         // THEN
         Assert.NotNull(hope);
     }

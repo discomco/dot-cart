@@ -2,16 +2,13 @@ using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
-using Engine.Contract.Initialize;
-using Engine.Contract.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using IFact = Engine.Contract.Initialize.IFact;
-using IHope = Engine.Contract.Initialize.IHope;
 
 namespace Engine.Contract.Tests;
 
-public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Payload>
+public class
+    InitializeContractTests : ContractTests<Schema.EngineID, Initialize.IHope, Initialize.IFact, Initialize.Payload>
 {
     public InitializeContractTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,7 +18,7 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     protected override void Initialize()
     {
         base.Initialize();
-        _newID = TestEnv.ResolveRequired<NewID<EngineID>>();
+        _newID = TestEnv.ResolveRequired<NewID<Schema.EngineID>>();
     }
 
 
@@ -39,9 +36,9 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     public override void ShouldCreateNewPayload()
     {
         // GIVEN
-        var details = Details.New("Payload Details");
+        var details = Schema.Details.New("Payload Details");
         // WHEN
-        var pl = Payload.New(details);
+        var pl = Contract.Initialize.Payload.New(details);
         // THEN
         Assert.NotNull(pl);
     }
@@ -50,10 +47,10 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     {
         // GIVEN
         var aggId = _newID();
-        var details = Details.New("Payload Details");
-        var payload = Payload.New(details);
+        var details = Schema.Details.New("Payload Details");
+        var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var fact = Fact.New(aggId.Id(), payload.ToBytes());
+        var fact = Contract.Initialize.Fact.New(aggId.Id(), payload.ToBytes());
         // THEN
         Assert.NotNull(fact);
     }
@@ -62,10 +59,10 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     {
         // GIVEN
         var aggId = _newID();
-        var details = Details.New("New Engine");
-        var payload = Payload.New(details);
+        var details = Schema.Details.New("New Engine");
+        var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var fact = Fact.New(aggId.Id(), payload);
+        var fact = Contract.Initialize.Fact.New(aggId.Id(), payload);
         // THEN
         Assert.NotNull(fact);
     }
@@ -74,10 +71,10 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     {
         // GIVEN
         var aggId = _newID();
-        var details = Details.New("New Engine");
-        var payload = Payload.New(details);
+        var details = Schema.Details.New("New Engine");
+        var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var hope = Hope.New(aggId.Id(), payload.ToBytes());
+        var hope = Contract.Initialize.Hope.New(aggId.Id(), payload.ToBytes());
         // THEN
         Assert.NotNull(hope);
     }
@@ -86,10 +83,10 @@ public class InitializeContractTests : ContractTests<EngineID, IHope, IFact, Pay
     {
         // GIVEN
         var aggId = _newID();
-        var details = Details.New("New Engine");
-        var payload = Payload.New(details);
+        var details = Schema.Details.New("New Engine");
+        var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var fact = Fact.New(aggId.Id(), payload);
+        var fact = Contract.Initialize.Fact.New(aggId.Id(), payload);
         // THEN
         Assert.NotNull(fact);
     }

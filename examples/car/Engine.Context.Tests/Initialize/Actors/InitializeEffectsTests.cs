@@ -3,15 +3,14 @@ using DotCart.Drivers.InMem;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Engine.Context.Initialize;
-using Engine.Contract.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Initialize.Effects;
+namespace Engine.Context.Tests.Initialize.Actors;
 
 public class InitializeEffectsTests : EffectsTests<
     IEvt,
-    Fact,
+    Contract.Initialize.Fact,
     IModelStore<Common.Schema.Engine>>
 {
     public InitializeEffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
