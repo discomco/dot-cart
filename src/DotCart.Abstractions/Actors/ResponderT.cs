@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
@@ -17,18 +18,37 @@ public interface IResponderT<THope, TCmd> : IResponder
 {
 }
 
-public abstract class ResponderT<THope, TCmd> : ActorB, IResponderT<THope, TCmd>
+public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THope, TCmd>, IActor<TSpoke>
+    where TDriver : IResponderDriverT<THope>
     where THope : IHope
     where TCmd : ICmd
 {
+    public ResponderT(TDriver responderDriver,
+        IExchange exchange,
+        ICmdHandler cmdHandler,
+        Hope2Cmd<TCmd, THope> hope2Cmd) : base(responderDriver,
+        exchange,
+        cmdHandler,
+        hope2Cmd)
+    {
+    }
+}
+
+public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>, IActor where THope : IHope
+    where TCmd : ICmd
+    where TDriver: IResponderDriverT<THope>
+{
+    private readonly TDriver _responderDriver;
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
 
-    protected ResponderT(
+    public ResponderT(
+        TDriver responderDriver,
         IExchange exchange,
         ICmdHandler cmdHandler,
         Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange)
     {
+        _responderDriver = responderDriver;
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
@@ -49,5 +69,16 @@ public abstract class ResponderT<THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
+    }
+
+    protected override Task StartActingAsync(CancellationToken cancellationToken = default)
+    {
+        _responderDriver.SetActor(this);
+        return _responderDriver.StartRespondingAsync(cancellationToken);
+    }
+
+    protected override Task StopActingAsync(CancellationToken cancellationToken = default)
+    {
+        return _responderDriver.StopRespondingAsync(cancellationToken);
     }
 }

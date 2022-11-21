@@ -8,9 +8,7 @@ public interface IMsg
     string MsgId { get; }
     string Topic { get; }
     DateTime TimeStamp { get; }
-
     [JsonIgnore] byte[] Data { get; }
-
     void SetTimeStamp(DateTime timeStamp);
     TPayload GetPayload<TPayload>() where TPayload : IPayload;
     void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload;
@@ -21,9 +19,7 @@ public abstract record Msg(string Topic, byte[] Data) : IMsg
 {
     public string MsgId { get; } = GuidUtils.NewGuid;
     public string Topic { get; } = Topic;
-
     public byte[] Data { get; set; } = Data;
-
     public void SetData(byte[] data)
     {
         Data = data;

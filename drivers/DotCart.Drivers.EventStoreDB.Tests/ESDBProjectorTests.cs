@@ -26,7 +26,7 @@ public class ESDBProjectorTests : IoCTests
     private IEventStore? _eventStore;
     private IExchange? _exchange;
     private IHostExecutor? _executor;
-    private IESDBEngineEventFeeder? _feeder;
+    private IEventFeeder? _feeder;
     private ILogger? _logger;
     private IModelStore<Engine.Context.Common.Schema.Engine>? _memStore;
     private EventStreamGenerator<Schema.EngineID>? _newEventStream;
@@ -43,7 +43,7 @@ public class ESDBProjectorTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _driver = TestEnv.ResolveRequired<IProjectorDriver<IEngineSubscriptionInfo>>();
+        _driver = TestEnv.ResolveRequired<IProjectorDriverT<IEngineSubscriptionInfo>>();
         // THEN
         Assert.NotNull(_driver);
         return Task.CompletedTask;
@@ -170,7 +170,7 @@ public class ESDBProjectorTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _feeder = TestEnv.ResolveRequired<IESDBEngineEventFeeder>();
+        _feeder = TestEnv.ResolveRequired<IEventFeeder>();
         // THEN 
         Assert.NotNull(_feeder);
     }
@@ -190,7 +190,7 @@ public class ESDBProjectorTests : IoCTests
     protected override void Initialize()
     {
         _executor = TestEnv.ResolveRequired<IHostExecutor>();
-        _feeder = TestEnv.ResolveRequired<IESDBEngineEventFeeder>();
+        _feeder = TestEnv.ResolveRequired<IEventFeeder>();
         _newEventStream = TestEnv.ResolveRequired<EventStreamGenerator<Schema.EngineID>>();
         _memStore = TestEnv.ResolveRequired<IModelStore<Engine.Context.Common.Schema.Engine>>();
     }
@@ -203,8 +203,8 @@ public class ESDBProjectorTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddInitializeEngineWithThrottleUpStream()
-            .AddESDBEngineEventFeeder()
+            .AddInitializeWithThrottleUpEvents()
+            .AddEventFeeder()
             .AddSingletonESDBProjectorDriver<IEngineSubscriptionInfo>()
             .AddStartedToRedisProjections()
             .AddChangeRpmMemProjections()

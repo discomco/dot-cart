@@ -12,11 +12,8 @@ public abstract class ActorB : ActiveComponent, IActor
     {
         _exchange = exchange;
     }
-
     public abstract Task HandleCast(IMsg msg, CancellationToken cancellationToken = default);
     public abstract Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default);
-
-
     protected override Task PrepareAsync(CancellationToken cancellationToken = default)
     {
         return Run(async () =>

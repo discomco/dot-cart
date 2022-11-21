@@ -1,4 +1,4 @@
-using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -11,19 +11,20 @@ using Serilog;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-internal class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo : ISubscriptionInfo
+public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> where TInfo : ISubscriptionInfo
 {
     private readonly IESDBPersistentSubscriptionsClient _client;
-
     private readonly SubscriptionFilterOptions _filterOptions;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
+
     private readonly AsyncRetryPolicy _retryPolicy;
-    private IActor _actor;
+    //private IActor _actor;
 
     private CancellationTokenSource _cts;
 
     private PersistentSubscription _subscription;
     private bool _subscriptionExists;
+
 
     public ESDBProjectorDriver(
         IESDBPersistentSubscriptionsClient client,
@@ -40,7 +41,14 @@ internal class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo 
                                times => TimeSpan.FromMilliseconds(times * 100));
     }
 
-    public void Dispose()
+
+    public Task<IEvt> CreateEventAsync(object source, CancellationToken cancellationToken = default)
+    {
+        return (Task<IEvt>)Task.CompletedTask;
+    }
+
+
+    public override void Dispose()
     {
         if (_subscription != null)
             _subscription.Dispose();
@@ -75,10 +83,10 @@ internal class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo 
         return Task.CompletedTask;
     }
 
-    public void SetActor(IActor actor)
-    {
-        _actor = actor;
-    }
+    // public void SetActor(IActor actor)
+    // {
+    //     _actor = actor;
+    // }
 
 
     private async Task CreateSubscription(CancellationToken cancellationToken)
@@ -124,7 +132,7 @@ internal class ESDBProjectorDriver<TInfo> : IProjectorDriver<TInfo> where TInfo 
     {
         var evt = resolvedEvent.Event.ToEvent();
         Log.Information($"\u001b[33m {subscription.SubscriptionId}\u001b[0m=> {evt.AggregateID.Id()} ~> {evt.Topic}");
-        await _actor.HandleCast(evt, cancellationToken).ConfigureAwait(false);
+        await Cast(evt, cancellationToken).ConfigureAwait(false);
         await subscription.Ack(resolvedEvent);
     }
 }

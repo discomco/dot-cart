@@ -29,11 +29,11 @@ public static partial class Inject
 
 public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISubscriptionInfo
 {
-    private readonly IProjectorDriver<TInfo> _projectorDriver;
+    private readonly IProjectorDriverT<TInfo> _projectorDriver;
 
     public Projector(
         IExchange exchange,
-        IProjectorDriver<TInfo> projectorDriver) : base(exchange)
+        IProjectorDriverT<TInfo> projectorDriver) : base(exchange)
     {
         _projectorDriver = projectorDriver;
     }

@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Serilog;
 using static System.Threading.Tasks.Task;
 
 
@@ -11,44 +11,50 @@ public interface IEmitterB : IActor
 {
 }
 
-public abstract class EmitterT<TEmitterDriver, TEvt, TFact> : ActorB, IEmitterB
-    where TEmitterDriver : IEmitterDriver
+public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
     where TEvt : IEvt
     where TFact : IFact
 {
-    private readonly TEmitterDriver _emitterDriver;
+    private readonly IExchange _exchange;
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
 
 
     protected EmitterT(
         IExchange exchange,
-        TEmitterDriver emitterDriver,
         Evt2Fact<TFact, TEvt> evt2Fact) : base(exchange)
     {
+        _exchange = exchange;
         _evt2Fact = evt2Fact;
-        _emitterDriver = emitterDriver;
     }
 
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        return Handler((IEvt)msg, cancellationToken);
-    }
-
-
-    private Task Handler(IEvt evt, CancellationToken cancellationToken)
-    {
         return Run(() =>
         {
-            var fact = _evt2Fact((Event)evt);
-            return _emitterDriver.EmitFactAsync(fact);
+            var fact = _evt2Fact((Event)msg);
+            return EmitFactAsync(fact);
         }, cancellationToken);
     }
 
-    protected override Task StopActingAsync(CancellationToken cancellationToken)
+    protected abstract Task EmitFactAsync(TFact fact);
+
+    protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
         return Run(() =>
         {
+            Log.Information($":: EMITTER :: [{GetType()}] ~> STARTED");
+            _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
+            return CompletedTask;
+        }, cancellationToken);
+    }
+
+    
+    protected override Task StopActingAsync(CancellationToken cancellationToken=default)
+    {
+        return Run(() =>
+        {
+            Log.Information($":: EMITTER :: [{GetType()}] ~> STOPPED");
             _exchange.Unsubscribe(TopicAtt.Get<TEvt>(), this);
             return CompletedTask;
         }, cancellationToken);

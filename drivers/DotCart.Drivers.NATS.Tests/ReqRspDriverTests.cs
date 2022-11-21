@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Clients;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
@@ -143,7 +144,8 @@ public class ReqRspDriverTests : IoCTests
             // .AddSingleton<ITheResponder, TheResponder>()
             // .AddSingleton<IResponderT2<TheHope, TheCmd>, TheResponder>()
             .AddTransient<IRequesterT<TheHope>, TheRequester>()
-            .AddNATSResponder<TheHope, TheCmd>()
+            .AddTransient<IResponderDriverT<TheHope>, TheResponderDriver>()
+            .AddTransient<IResponderT<TheHope, TheCmd>, ResponderT<IResponderDriverT<TheHope>, TheHope, TheCmd>>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

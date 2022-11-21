@@ -111,7 +111,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     {
         await Task.Run(() =>
         {
-            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1);
+            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
         }, stoppingToken).ConfigureAwait(false);
     }
 }

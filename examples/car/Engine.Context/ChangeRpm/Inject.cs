@@ -90,7 +90,6 @@ public static class Inject
             .AddCmdHandler()
             .AddChangeRpmMappers()
             .AddTransient(_ => Generators._generateHope)
-            .AddCoreNATS()
-            .AddTransient<Actors.IResponder, Actors.Responder>();
+            .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Hope, Cmd>();
     }
 }

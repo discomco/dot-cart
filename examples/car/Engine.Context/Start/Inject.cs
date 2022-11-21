@@ -4,6 +4,7 @@ using DotCart.Context.Behaviors;
 using DotCart.Context.Effects;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.Mediator;
+using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Context.Common;
 using Microsoft.Extensions.DependencyInjection;
@@ -75,8 +76,7 @@ public static class Inject
             .AddCmdHandler()
             .AddStartHopeGenerator()
             .AddStartMappers()
-            .AddTransient<Actors.IResponder, Actors.Responder>()
-            .AddTransient<IActor<Spoke>, Actors.Responder>();
+            .AddSpokedNATSResponder<Spoke, Contract.Start.Hope, Cmd>();
     }
 
 

@@ -42,7 +42,7 @@ public abstract class ActiveComponent : IActiveComponent
         return CompletedTask;
     }
 
-    public void Dispose()
+    public virtual void Dispose()
     {
         _cts.Dispose();
     }
@@ -51,7 +51,7 @@ public abstract class ActiveComponent : IActiveComponent
     {
         return Run(async () =>
         {
-            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1);
+            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
             await CleanupAsync(stoppingToken).ConfigureAwait(false);
             await StopAsync(stoppingToken).ConfigureAwait(false);
         }, stoppingToken);

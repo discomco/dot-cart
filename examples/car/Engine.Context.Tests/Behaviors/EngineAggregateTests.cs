@@ -33,7 +33,7 @@ public class EngineAggregateTests : AggregateTestsT<Schema.EngineID, Common.Sche
         _agg = _builder.Build();
         Assert.NotNull(_agg);
         // AND
-        var events = ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream(_ID);
+        var events = ScenariosAndStreams.InitializeWithThrottleUpEvents(_ID);
         _agg.SetID(_ID);
         _agg.Load(events);
         // THEN

@@ -6,14 +6,14 @@ using Serilog;
 
 namespace Engine.Context.Common.Effects;
 
-public class ESDBEngineEventFeeder : ActorB, IESDBEngineEventFeeder, IProducer
+public class EventFeeder : ActorB, IEventFeeder, IProducer
 {
     private readonly IEventStore _eventStore;
     private readonly NewID<Contract.Schema.EngineID> _newId;
     private readonly NewState<Schema.Engine> _newState;
     private readonly EventStreamGenerator<Contract.Schema.EngineID> _newStream;
 
-    public ESDBEngineEventFeeder(
+    public EventFeeder(
         IExchange exchange,
         IEventStore eventStore,
         EventStreamGenerator<Contract.Schema.EngineID> newStream,
@@ -62,6 +62,6 @@ public class ESDBEngineEventFeeder : ActorB, IESDBEngineEventFeeder, IProducer
     }
 }
 
-public interface IESDBEngineEventFeeder : IActor<Spoke>
+public interface IEventFeeder : IActor<Spoke>
 {
 }

@@ -1,5 +1,6 @@
 ﻿using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -33,7 +34,6 @@ public static class Inject
         return services;
     }
 
-
     public static IServiceCollection AddStan(this IServiceCollection services,
         Action<Options> options = null,
         ServiceLifetime lifetime = ServiceLifetime.Transient)
@@ -42,23 +42,31 @@ public static class Inject
             .AddNatsClient(options, lifetime);
     }
 
-    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services)
-        where TSpoke : ISpokeB
-        where TCmd : ICmd
-        where THope : IHope
+
+    public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services) where TCmd : ICmd where THope : IHope
     {
         return services
             .AddCoreNATS()
-            .AddTransient<IActor<TSpoke>, NATSResponderT<TSpoke, THope, TCmd>>()
-            .AddTransient<IResponderT<THope, TCmd>, NATSResponderT<THope, TCmd>>();
+            .AddSingleton<IResponderDriverT<THope>, NATSResponderDriverT<THope>>()
+            .AddSingleton<IResponderT<THope, TCmd>, ResponderT<IResponderDriverT<THope>, THope, TCmd>>();
     }
 
-    public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services)
+    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services) 
+        where TCmd : ICmd 
         where THope : IHope
-        where TCmd : ICmd
     {
         return services
             .AddCoreNATS()
-            .AddTransient<IResponderT<THope, TCmd>, NATSResponderT<THope, TCmd>>();
+            .AddSingleton<IResponderDriverT<THope>, NATSResponderDriverT<THope>>()
+            .AddSingleton<IActor<TSpoke>, ResponderT<TSpoke,IResponderDriverT<THope>, THope, TCmd>>();
     }
+
+
+
+
+    
+
+    
+    
+   
 }

@@ -80,9 +80,7 @@ public class Cartwheel : BackgroundService
     {
         return Task.Run(() =>
         {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-            }
+            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
         }, stoppingToken);
     }
 

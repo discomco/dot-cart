@@ -14,10 +14,10 @@ public delegate IEnumerable<IEvt> EventStreamGenerator<in TID>(TID ID)
 
 public static partial class Inject
 {
-    public static IServiceCollection AddInitializeEngineWithThrottleUpStream(this IServiceCollection services)
+    public static IServiceCollection AddInitializeWithThrottleUpEvents(this IServiceCollection services)
     {
         return services.AddTransient<EventStreamGenerator<Contract.Schema.EngineID>>(_ =>
-            ScenariosAndStreams.InitializeEngineWithThrottleUpEventStream);
+            ScenariosAndStreams.InitializeWithThrottleUpEvents);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
@@ -29,7 +29,7 @@ public static partial class Inject
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeEngineWithThrottleUpEventStream(Contract.Schema.EngineID ID)
+    public static IEnumerable<IEvt> InitializeWithThrottleUpEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
         var initEvt = Event.New(ID, Topics.EvtTopic, initPayload, EventMeta.New("", ID.Id()));
@@ -48,7 +48,7 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    private static List<IEvt> RandomRevs(Contract.Schema.EngineID ID)
+    private static IEnumerable<IEvt> RandomRevs(ID ID)
     {
         var res = new List<IEvt>();
         var counter = Random.Shared.Next(4, 15);
@@ -72,10 +72,10 @@ public static class ScenariosAndStreams
     }
 
     public static async Task<IEnumerable<IFeedback>> RunScenario(IAggregate aggregate,
-        IEnumerable<ICmd> commands)
+        IEnumerable<ICmd> scenario)
     {
         var accu = new List<IFeedback>();
-        foreach (var command in commands)
+        foreach (var command in scenario)
         {
             var fbk = await aggregate.ExecuteAsync(command);
             accu.Add(fbk);
