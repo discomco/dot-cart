@@ -11,5 +11,6 @@ public static class TestConstants
     public const string TheIDPrefix = "the";
     public const string TheHopeTopic = "the_hope.topic";
     public const string CmdTopic = "the_cmd:topic";
+    public const string SubscriptionGroup = "the_group";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
 }

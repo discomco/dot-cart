@@ -8,7 +8,7 @@ public interface IProjectorDriver : IDriver
     Task StopStreamingAsync(CancellationToken cancellationToken = default);
 }
 
-public interface IProjectorDriverT<TInfo> : IProjectorDriver 
+public interface IProjectorDriverT<TInfo> : IProjectorDriver
     where TInfo : ISubscriptionInfo
 {
     Task<IEvt> CreateEventAsync(object source, CancellationToken cancellationToken = default);

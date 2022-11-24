@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Engine.Contract;
+using Engine.Behavior;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -12,16 +12,16 @@ namespace Engine.Api.Cmd.Controllers;
 public class InitializeController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<Context.Initialize.Cmd, Initialize.Hope> _hope2Cmd;
+    private readonly Hope2Cmd<Initialize.Cmd, Contract.Initialize.Hope> _hope2Cmd;
 
-    public InitializeController(ICmdHandler cmdHandler, Hope2Cmd<Context.Initialize.Cmd, Initialize.Hope> hope2Cmd)
+    public InitializeController(ICmdHandler cmdHandler, Hope2Cmd<Initialize.Cmd, Contract.Initialize.Hope> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Initialize.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] Contract.Initialize.Hope hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

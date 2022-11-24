@@ -36,11 +36,11 @@ public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THop
 
 public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>, IActor where THope : IHope
     where TCmd : ICmd
-    where TDriver: IResponderDriverT<THope>
+    where TDriver : IResponderDriverT<THope>
 {
-    private readonly TDriver _responderDriver;
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
+    private readonly TDriver _responderDriver;
 
     public ResponderT(
         TDriver responderDriver,

@@ -20,12 +20,11 @@ builder.Host.ConfigureLogging(logging => logging
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
-builder.Services.AddSwaggerGen(config => config.CustomSchemaIds(x => x.FullName));
+builder.Services.AddSwaggerGen(config => config.CustomSchemaIds(x => x.FullName.Replace("+", "_")));
 
 builder.Services.AddConsoleLogger();
 
-builder.Services.AddEngineContext();
+builder.Services.AddCartwheel();
 
 var app = builder.Build();
 

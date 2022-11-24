@@ -32,7 +32,7 @@ public static partial class Inject
         return services
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
-                    StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+                    StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
             .AddSingleton<IProjectorDriverT<TInfo>, ESDBProjectorDriver<TInfo>>();
     }
 
@@ -43,7 +43,7 @@ public static partial class Inject
             .AddConfiguredESDBClients()
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
-                    StreamFilter.Prefix($"{IDPrefix.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+                    StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
             .AddTransient<IProjectorDriverT<TInfo>, ESDBProjectorDriver<TInfo>>();
     }
 

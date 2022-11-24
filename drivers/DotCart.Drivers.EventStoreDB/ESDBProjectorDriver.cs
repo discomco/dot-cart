@@ -98,7 +98,7 @@ public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> wher
         {
             await _client.CreateToAllAsync(
                 GroupName.Get<TInfo>(),
-                EventTypeFilter.Prefix($"{IDPrefix.Get<TInfo>()}"),
+                EventTypeFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}"),
                 new PersistentSubscriptionSettings(),
                 null,
                 null, cancellationToken);

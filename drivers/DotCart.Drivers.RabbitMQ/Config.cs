@@ -1,4 +1,3 @@
-
 using DotCart.Core;
 
 namespace DotCart.Drivers.RabbitMQ;

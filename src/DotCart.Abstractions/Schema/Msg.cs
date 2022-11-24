@@ -20,6 +20,7 @@ public abstract record Msg(string Topic, byte[] Data) : IMsg
     public string MsgId { get; } = GuidUtils.NewGuid;
     public string Topic { get; } = Topic;
     public byte[] Data { get; set; } = Data;
+
     public void SetData(byte[] data)
     {
         Data = data;

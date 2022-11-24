@@ -28,7 +28,7 @@ public abstract class SubscriptionInfoTests<TInfo> : IoCTests where TInfo : ISub
         // GIVEN
         var prefix = string.Empty;
         // WHEN
-        prefix = IDPrefix.Get<TInfo>();
+        prefix = IDPrefixAtt.Get<TInfo>();
         // THEN
         Assert.NotEmpty(prefix);
     }

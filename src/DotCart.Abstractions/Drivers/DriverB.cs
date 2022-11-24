@@ -6,6 +6,7 @@ namespace DotCart.Abstractions.Drivers;
 public abstract class DriverB : IDriver
 {
     private IActor _actor;
+
     public virtual void Dispose()
     {
         throw new NotImplementedException();
@@ -15,7 +16,7 @@ public abstract class DriverB : IDriver
     {
         _actor = actor;
     }
-    
+
     protected Task Cast(IMsg msg, CancellationToken cancellationToken = default)
     {
         return _actor.HandleCast(msg, cancellationToken);
@@ -25,5 +26,4 @@ public abstract class DriverB : IDriver
     {
         return _actor.HandleCall(msg, cancellationToken);
     }
-    
 }

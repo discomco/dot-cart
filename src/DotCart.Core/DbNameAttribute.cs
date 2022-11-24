@@ -3,7 +3,7 @@ using DotCart.Drivers.Ardalis;
 
 namespace DotCart.Core;
 
-[AttributeUsage(AttributeTargets.Class)]
+[AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public class DbNameAttribute : Attribute
 {
     public DbNameAttribute(string dbName)

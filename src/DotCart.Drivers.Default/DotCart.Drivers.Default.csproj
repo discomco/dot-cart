@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
+    <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
+    <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
+    <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
+    <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
+    <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj" />
+  </ItemGroup>
+
+</Project>

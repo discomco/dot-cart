@@ -3,14 +3,10 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.InMem;
-using DotCart.Drivers.Serilog;
+using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
-using Engine.Context.ChangeRpm;
-using Engine.Context.Common;
-using Engine.Context.Common.Drivers;
-using Engine.Context.Common.Effects;
-using Engine.Context.Start;
-using Engine.Contract;
+using DotCart.TestKit.Actors;
+using DotCart.TestKit.Schema;
 using EventStore.Client;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,28 +22,14 @@ public class ESDBProjectorTests : IoCTests
     private IEventStore? _eventStore;
     private IExchange? _exchange;
     private IHostExecutor? _executor;
-    private IEventFeeder? _feeder;
     private ILogger? _logger;
-    private IModelStore<Engine.Context.Common.Schema.Engine>? _memStore;
-    private EventStreamGenerator<Schema.EngineID>? _newEventStream;
+    private IModelStore<TheDoc>? _memStore;
     private SubscriptionFilterOptions? _subOptions;
 
     public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
-
-    [Fact]
-    public Task ShouldResolveProjectorDriver()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _driver = TestEnv.ResolveRequired<IProjectorDriverT<IEngineSubscriptionInfo>>();
-        // THEN
-        Assert.NotNull(_driver);
-        return Task.CompletedTask;
-    }
 
     [Fact]
     public Task ShouldResolveSubscriptionFilterOptions()
@@ -72,29 +54,6 @@ public class ESDBProjectorTests : IoCTests
         // THEN
         Assert.NotNull(_executor);
         return Task.CompletedTask;
-    }
-
-    [Fact]
-    public async Task ShouldStartFeeder()
-    {
-        if (TestKit.Config.IsPipeline)
-        {
-            Assert.True(true);
-            return;
-        }
-
-        // GIVEN
-        Assert.NotNull(_feeder);
-        // WHEN
-        var source = new CancellationTokenSource(1_000);
-
-        var token = source.Token;
-
-        await _executor.StartAsync(token);
-        // THEN
-        while (!token.IsCancellationRequested) Thread.Sleep(100);
-
-        Assert.True(true);
     }
 
 
@@ -164,35 +123,10 @@ public class ESDBProjectorTests : IoCTests
         Assert.NotNull(_client);
     }
 
-    [Fact]
-    public void ShouldResolveESDBEngineEventFeeder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _feeder = TestEnv.ResolveRequired<IEventFeeder>();
-        // THEN 
-        Assert.NotNull(_feeder);
-    }
-
-    [Fact]
-    public void ShouldResolveEngineEventStreamGenerator()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _newEventStream = TestEnv.ResolveRequired<EventStreamGenerator<Schema.EngineID>>();
-        // THEN
-        Assert.NotNull(_newEventStream);
-    }
-
 
     protected override void Initialize()
     {
         _executor = TestEnv.ResolveRequired<IHostExecutor>();
-        _feeder = TestEnv.ResolveRequired<IEventFeeder>();
-        _newEventStream = TestEnv.ResolveRequired<EventStreamGenerator<Schema.EngineID>>();
-        _memStore = TestEnv.ResolveRequired<IModelStore<Engine.Context.Common.Schema.Engine>>();
     }
 
     protected override void SetTestEnvironment()
@@ -202,21 +136,10 @@ public class ESDBProjectorTests : IoCTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        services
-            .AddInitializeWithThrottleUpEvents()
-            .AddEventFeeder()
-            .AddSingletonESDBProjectorDriver<IEngineSubscriptionInfo>()
-            .AddStartedToRedisProjections()
-            .AddChangeRpmMemProjections()
-            .AddConsoleLogger();
-
-        if (TestKit.Config.IsPipeline)
             services
-                .AddMemEventStore()
-                .AddSingleton(_ => A.Fake<IESDBPersistentSubscriptionsClient>());
-        else
-            services
+                .AddSingletonExchange()
                 .AddConfiguredESDBClients()
+                .AddSingletonESDBProjectorDriver<ITheSubscriptionInfo>()
                 .AddESDBStore();
     }
 }

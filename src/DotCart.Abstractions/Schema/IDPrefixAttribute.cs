@@ -14,7 +14,7 @@ public class IDPrefixAttribute : Attribute
     public string Prefix { get; set; }
 }
 
-public static class IDPrefix
+public static class IDPrefixAtt
 {
     public static string Get<TID>()
     {

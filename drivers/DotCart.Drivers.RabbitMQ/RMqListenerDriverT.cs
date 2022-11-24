@@ -1,7 +1,4 @@
 using Ardalis.GuardClauses;
-using DotCart.Abstractions;
-using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -27,13 +24,35 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
     public string Topic => GetTopic();
 
     public abstract Task<TFact> CreateFactAsync(object source, CancellationToken cancellationToken = default);
-    
+
 
     public override void Dispose()
     {
         _connection.Dispose();
         _channel.Dispose();
         base.Dispose();
+    }
+
+    public Task StartListeningAsync(CancellationToken cancellationToken = default)
+    {
+        _connection = _connFact.CreateConnection();
+        _channel = _connection.CreateModel();
+        Log.Debug($"[{Topic}]-SUB [{GetType().PrettyPrint()}]");
+        _channel.ExchangeDeclare(Topic, ExchangeType.Fanout);
+        var queueName = _channel.QueueDeclare().QueueName;
+        _channel.QueueBind(queueName, Topic, "");
+        _consumer = new AsyncEventingBasicConsumer(_channel);
+        _consumer.Received += FactReceived;
+        _channel.BasicConsume(queueName, true, _consumer);
+        return Task.CompletedTask;
+    }
+
+    public Task StopListeningAsync(CancellationToken cancellationToken = default)
+    {
+        _connection.Close();
+        _channel.Close();
+        _consumer.Received -= FactReceived;
+        return Task.CompletedTask;
     }
 
     private string GetTopic()
@@ -56,27 +75,6 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
             Log.Error(e.InnerAndOuter());
         }
     }
-    protected abstract IMsg CreateFact(byte[] data);
-    
-    public Task StartListeningAsync(CancellationToken cancellationToken = default)
-    {
-        _connection = _connFact.CreateConnection();
-        _channel = _connection.CreateModel();
-        Log.Debug($"[{Topic}]-SUB [{GetType().PrettyPrint()}]");
-        _channel.ExchangeDeclare(Topic, ExchangeType.Fanout);
-        var queueName = _channel.QueueDeclare().QueueName;
-        _channel.QueueBind(queueName, Topic, "");
-        _consumer = new AsyncEventingBasicConsumer(_channel);
-        _consumer.Received += FactReceived;
-        _channel.BasicConsume(queueName, true, _consumer);
-        return Task.CompletedTask;
-    }
 
-    public Task StopListeningAsync(CancellationToken cancellationToken = default)
-    {
-        _connection.Close();
-        _channel.Close();
-        _consumer.Received -= FactReceived;
-        return Task.CompletedTask;
-    }
+    protected abstract IMsg CreateFact(byte[] data);
 }

@@ -6,9 +6,6 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-
-
-
 public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
     where THope : IHope
 {
@@ -23,24 +20,12 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
     }
 
 
-    
     public override void Dispose()
     {
         if (_subscription != null)
             _subscription.Dispose();
         if (_bus != null)
             _bus.Dispose();
-    }
-
-
-    private byte[] OnSerialize(object obj)
-    {
-        return obj.ToBytes();
-    }
-
-    private object OnDeserialize(byte[] data)
-    {
-        return data.FromBytes<THope>();
     }
 
     public Task StartRespondingAsync(CancellationToken cancellationToken = default)
@@ -61,7 +46,7 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
                         Log.Debug($"::RECEIVED:: {args.Subject} ~> {hope.AggId}");
                         var rsp = await Call(hope, cancellationToken);
                         args.Message.Respond(rsp.ToBytes());
-                       // _bus.Publish(args.Reply, rsp);
+                        // _bus.Publish(args.Reply, rsp);
                         Log.Debug($"::RESPONDED:: Topic: {args.Reply} ~> Id: {rsp.MsgId} ");
                     });
             }
@@ -74,22 +59,6 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
         }, cancellationToken);
     }
 
-    private Task ConnectAsync(CancellationToken cancellationToken)
-    {
-        return Task.Run(async () =>
-        {
-            while (_bus.IsClosed())
-            {
-                _logMessage = $"::CONNECTING ::Bus [{_bus.ConnectedId}]";
-                Thread.Sleep(1_000);
-            }
-            _logMessage = $"::CONNECTED ::Bus [{_bus.ConnectedId}]";
-            Log.Information(_logMessage);
-            _bus.OnDeserialize += OnDeserialize;
-            _bus.OnSerialize += OnSerialize;
-        }, cancellationToken);
-    }
-
     public Task StopRespondingAsync(CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
@@ -99,6 +68,34 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
             _subscription.Unsubscribe();
             _bus.OnDeserialize -= OnDeserialize;
             _bus.OnSerialize -= OnSerialize;
+        }, cancellationToken);
+    }
+
+
+    private byte[] OnSerialize(object obj)
+    {
+        return obj.ToBytes();
+    }
+
+    private object OnDeserialize(byte[] data)
+    {
+        return data.FromBytes<THope>();
+    }
+
+    private Task ConnectAsync(CancellationToken cancellationToken)
+    {
+        return Task.Run(async () =>
+        {
+            while (_bus.IsClosed())
+            {
+                _logMessage = $"::CONNECTING ::Bus [{_bus.ConnectedId}]";
+                Thread.Sleep(1_000);
+            }
+
+            _logMessage = $"::CONNECTED ::Bus [{_bus.ConnectedId}]";
+            Log.Information(_logMessage);
+            _bus.OnDeserialize += OnDeserialize;
+            _bus.OnSerialize += OnSerialize;
         }, cancellationToken);
     }
 }

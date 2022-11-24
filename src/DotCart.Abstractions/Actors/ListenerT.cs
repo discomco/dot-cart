@@ -8,8 +8,8 @@ public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
     where TFact : IFact
     where TCmd : ICmd
 {
-    private readonly IListenerDriverT<TFact> _driver;
     private readonly ICmdHandler _cmdHandler;
+    private readonly IListenerDriverT<TFact> _driver;
     private readonly Fact2Cmd<TCmd, TFact> _fact2Cmd;
 
     protected ListenerT(
@@ -23,7 +23,7 @@ public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
         _fact2Cmd = fact2Cmd;
     }
 
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken=default)
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
         var fact = (TFact)msg;
         var cmd = _fact2Cmd(fact);
@@ -34,5 +34,4 @@ public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
     {
         return (Task<IMsg>)Task.CompletedTask;
     }
-
 }

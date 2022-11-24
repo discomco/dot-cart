@@ -59,7 +59,7 @@ public abstract class TypedIDTests<TID> : IoCTests where TID : IID
             var ID = PrefixLessTypedId.NewComb(guid);
             // THEN
             Assert.NotNull(ID);
-            Assert.Equal("my", IDPrefix.Get<PrefixLessTypedId>());
+            Assert.Equal("my", IDPrefixAtt.Get<PrefixLessTypedId>());
             Assert.Equal($"my-{guid}", ID.Value);
         }
         catch (Exception)

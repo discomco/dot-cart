@@ -41,16 +41,10 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     public abstract void ShouldCreateNewPayload();
 
     [Fact]
-    public abstract void ShouldCreateFactFromBytes();
+    public abstract void ShouldCreateNewFact();
 
     [Fact]
-    public abstract void ShouldCreateFactFromPayload();
-
-    [Fact]
-    public abstract void ShouldCreateHopeFromBytes();
-
-    [Fact]
-    public abstract void ShouldCreateHopeFromPayload();
+    public abstract void ShouldCreateNewHope();
 
     [Fact]
     public void ShouldResolveIDCtor()

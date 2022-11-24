@@ -11,7 +11,7 @@ public static class Inject
     public static IServiceCollection AddRedis<TModel>(this IServiceCollection services)
         where TModel : IState
     {
-        return services?
+        return services
             .AddTransient(p =>
             {
                 var opts = ConfigurationOptions.Parse(Config.ConfigString);
@@ -28,7 +28,7 @@ public static class Inject
     public static IServiceCollection AddSingletonRedisConnection<TModel>(this IServiceCollection services)
         where TModel : IState
     {
-        return services?
+        return services
             .AddRedis<TModel>()
             .AddSingleton(p =>
             {
@@ -40,7 +40,7 @@ public static class Inject
     public static IServiceCollection AddTransientRedisConnection<TModel>(this IServiceCollection services)
         where TModel : IState
     {
-        return services?
+        return services
             .AddRedis<TModel>()
             .AddTransient(p =>
             {
@@ -51,15 +51,16 @@ public static class Inject
 
     public static IServiceCollection AddSingletonRedisDb<TModel>(this IServiceCollection services) where TModel : IState
     {
-        return services?
+        return services
             .AddSingletonRedisConnection<TModel>()
             .AddTransient<IModelStore<TModel>, RedisStore<TModel>>()
+            .AddTransient<IRedisStore<TModel>, RedisStore<TModel>>()
             .AddSingleton<IRedisDb, RedisDb>();
     }
 
     public static IServiceCollection AddTransientRedisDb<TModel>(this IServiceCollection services) where TModel : IState
     {
-        return services?
+        return services
             .AddTransientRedisConnection<TModel>()
             .AddTransient<IRedisStore<TModel>, RedisStore<TModel>>()
             .AddTransient<IModelStore<TModel>, RedisStore<TModel>>()

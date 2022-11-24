@@ -15,8 +15,8 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
     where TEvt : IEvt
     where TFact : IFact
 {
-    private readonly IExchange _exchange;
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
+    private readonly IExchange _exchange;
 
 
     protected EmitterT(
@@ -49,8 +49,8 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
         }, cancellationToken);
     }
 
-    
-    protected override Task StopActingAsync(CancellationToken cancellationToken=default)
+
+    protected override Task StopActingAsync(CancellationToken cancellationToken = default)
     {
         return Run(() =>
         {

@@ -38,7 +38,7 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
 
     private string GetIDPrefix()
     {
-        return IDPrefix.Get<TID>();
+        return IDPrefixAtt.Get<TID>();
     }
 
     [Fact]
