@@ -21,7 +21,7 @@ public abstract class AggregateT<TState> : IAggregate
     private bool _withAppliedEvents = false;
 
     protected AggregateT(
-        NewState<TState> newState)
+        StateCtor<TState> newState)
     {
         _state = newState();
         Version = Constants.NewAggregateVersion;

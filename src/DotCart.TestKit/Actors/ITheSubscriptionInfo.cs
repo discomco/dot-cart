@@ -6,7 +6,6 @@ namespace DotCart.TestKit.Actors;
 
 [GroupName(TestConstants.SubscriptionGroup)]
 [IDPrefix(TestConstants.TheIDPrefix)]
-public interface ITheSubscriptionInfo: ISubscriptionInfo
+public interface ITheSubscriptionInfo : ISubscriptionInfo
 {
-    
 }

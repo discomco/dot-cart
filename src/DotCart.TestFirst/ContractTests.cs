@@ -11,7 +11,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
     where TFact : IFact
     where TPayload : IPayload
 {
-    protected NewID<TID> _newID;
+    protected IDCtor<TID> _newID;
 
     protected ContractTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -52,7 +52,7 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.ResolveRequired<NewID<TID>>();
+        var ctor = TestEnv.ResolveRequired<IDCtor<TID>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -82,6 +82,6 @@ public abstract class ContractTests<TID, THope, TFact, TPayload> : IoCTests
 
     protected override void Initialize()
     {
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
     }
 }

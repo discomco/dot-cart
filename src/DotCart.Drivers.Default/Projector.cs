@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DotCart.Drivers.Default;
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddSingletonProjector<TInfo>(this IServiceCollection services)
         where TInfo : ISubscriptionInfo

@@ -7,7 +7,7 @@ public static class Stop
 {
     public const string FactTopic = "engine.stopped.v1";
     public const string HopeTopic = "engine.stop.v1";
-    
+
     public record Payload : IPayload
     {
         public static Payload New()
@@ -36,6 +36,5 @@ public static class Stop
         {
             return new Hope(aggId, payload);
         }
-        
     }
 }

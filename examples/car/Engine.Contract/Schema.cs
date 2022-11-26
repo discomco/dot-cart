@@ -1,8 +1,6 @@
 using DotCart.Abstractions.Schema;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Contract;
-
 
 public static class Schema
 {
@@ -18,7 +16,7 @@ public static class Schema
 
     public const string EngineIDPrefix = "engine";
 
-    public static NewID<EngineID> IDCtor => () => new EngineID();
+    public static IDCtor<EngineID> IDCtor => () => new EngineID();
 
     [IDPrefix(EngineIDPrefix)]
     public record EngineID : ID

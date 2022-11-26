@@ -2,7 +2,7 @@ using DotCart.Core;
 
 namespace DotCart.Abstractions.Schema;
 
-public delegate TID NewID<out TID>() where TID : IID;
+public delegate TID IDCtor<out TID>() where TID : IID;
 
 public interface IID
 {

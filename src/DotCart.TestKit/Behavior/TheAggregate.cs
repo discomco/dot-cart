@@ -6,7 +6,7 @@ namespace DotCart.TestKit.Behavior;
 
 public class TheAggregate : AggregateT<TheDoc>
 {
-    public TheAggregate(NewState<TheDoc> newState) : base(newState)
+    public TheAggregate(StateCtor<TheDoc> newState) : base(newState)
     {
     }
 }

@@ -46,6 +46,7 @@ public static class Start
     public static IServiceCollection AddStartBehavior(this IServiceCollection services)
     {
         return services
+            .AddEngineContract()
             .AddBaseBehavior()
             .AddStartMappers()
             .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()

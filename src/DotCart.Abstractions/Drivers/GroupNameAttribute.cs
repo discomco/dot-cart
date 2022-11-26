@@ -14,7 +14,7 @@ public class GroupNameAttribute : Attribute
     public string GroupName { get; }
 }
 
-public static class GroupName
+public static class GroupNameAtt
 {
     public static string Get<TInfo>() where TInfo : ISubscriptionInfo
     {

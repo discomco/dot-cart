@@ -9,7 +9,6 @@ using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
 using DotCart.TestKit.Behavior;
 using DotCart.TestKit.Schema;
-using Engine.Contract;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -22,8 +21,8 @@ public class ESDBEventStoreTests : IoCTests
     private IAggregateBuilder? _aggregateBuilder;
     private ICmdHandler? _cmdHandler;
     private IEventStore? _eventStore;
-    private NewState<TheDoc> _newDoc;
-    private NewID<TheID> _newID;
+    private StateCtor<TheDoc> _newDoc;
+    private IDCtor<TheID> _newID;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -97,7 +96,7 @@ public class ESDBEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.ResolveRequired<NewState<TheDoc>>();
+        var ctor = TestEnv.ResolveRequired<StateCtor<TheDoc>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -123,8 +122,8 @@ public class ESDBEventStoreTests : IoCTests
     protected override void Initialize()
     {
         _eventStore = TestEnv.ResolveRequired<IEventStore>();
-        _newDoc = TestEnv.ResolveRequired<NewState<TheDoc>>();
-        _newID = TestEnv.ResolveRequired<NewID<TheID>>();
+        _newDoc = TestEnv.ResolveRequired<StateCtor<TheDoc>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TheID>>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();

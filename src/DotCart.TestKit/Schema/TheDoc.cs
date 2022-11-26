@@ -6,7 +6,7 @@ namespace DotCart.TestKit.Schema;
 [DbName("1")]
 public record TheDoc(string Id, string Name, int Age, double Height) : IState
 {
-    public static NewState<TheDoc> Rand => RandomTheDoc;
+    public static StateCtor<TheDoc> Rand => RandomTheDoc;
 
 
     private static TheDoc RandomTheDoc()

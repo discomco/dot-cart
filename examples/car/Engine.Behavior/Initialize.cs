@@ -44,6 +44,7 @@ public static class Initialize
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
+            .AddEngineContract()
             .AddBaseBehavior()
             .AddInitializeMappers()
             .AddTransient<ITry, TryCmd>()

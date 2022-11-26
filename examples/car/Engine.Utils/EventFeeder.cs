@@ -9,16 +9,16 @@ namespace Engine.Utils;
 public class EventFeeder : ActorB, IEventFeeder, IProducer
 {
     private readonly IEventStore _eventStore;
-    private readonly NewID<Schema.EngineID> _newId;
-    private readonly NewState<Behavior.Engine> _newState;
+    private readonly IDCtor<Schema.EngineID> _newId;
+    private readonly StateCtor<Behavior.Engine> _newState;
     private readonly EventStreamGenerator<Schema.EngineID> _newStream;
 
     public EventFeeder(
         IExchange exchange,
         IEventStore eventStore,
         EventStreamGenerator<Schema.EngineID> newStream,
-        NewID<Schema.EngineID> newID,
-        NewState<Behavior.Engine> newState) : base(exchange)
+        IDCtor<Schema.EngineID> newID,
+        StateCtor<Behavior.Engine> newState) : base(exchange)
     {
         _eventStore = eventStore;
         _newStream = newStream;

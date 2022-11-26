@@ -1,6 +1,5 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
-using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
@@ -16,10 +15,8 @@ public static class Initialize
     {
         return services
             .AddEngineBehavior()
-            
             .AddTransient<IToRedisDoc, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
             .AddHostedService(provider =>

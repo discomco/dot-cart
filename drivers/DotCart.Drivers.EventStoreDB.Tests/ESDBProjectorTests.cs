@@ -2,13 +2,11 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
-using DotCart.Drivers.InMem;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
 using DotCart.TestKit.Actors;
 using DotCart.TestKit.Schema;
 using EventStore.Client;
-using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using Xunit.Abstractions;
@@ -136,10 +134,10 @@ public class ESDBProjectorTests : IoCTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-            services
-                .AddSingletonExchange()
-                .AddConfiguredESDBClients()
-                .AddSingletonESDBProjectorDriver<ITheSubscriptionInfo>()
-                .AddESDBStore();
+        services
+            .AddSingletonExchange()
+            .AddConfiguredESDBClients()
+            .AddSingletonESDBProjectorDriver<ITheSubscriptionInfo>()
+            .AddESDBStore();
     }
 }

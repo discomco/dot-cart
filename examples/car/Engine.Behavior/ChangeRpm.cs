@@ -43,6 +43,7 @@ public static class ChangeRpm
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
     {
         return services
+            .AddEngineContract()
             .AddBaseBehavior()
             .AddChangeRpmMappers()
             .AddTransient<ITry, TryCmd>()

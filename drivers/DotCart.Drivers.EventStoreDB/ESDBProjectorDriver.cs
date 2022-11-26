@@ -61,7 +61,7 @@ public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> wher
         {
             await CreateSubscription(_cts.Token);
             _subscription = await _client.SubscribeToAllAsync(
-                GroupName.Get<TInfo>(),
+                GroupNameAtt.Get<TInfo>(),
                 EventAppeared,
                 SubscriptionDropped,
                 null,
@@ -97,7 +97,7 @@ public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> wher
         try
         {
             await _client.CreateToAllAsync(
-                GroupName.Get<TInfo>(),
+                GroupNameAtt.Get<TInfo>(),
                 EventTypeFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}"),
                 new PersistentSubscriptionSettings(),
                 null,

@@ -3,13 +3,10 @@ using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Effects;
 
-public abstract class SubscriptionInfoTests<TInfo> : IoCTests where TInfo : ISubscriptionInfo
+public abstract class SubscriptionInfoTestsT<TInfo>  where TInfo : ISubscriptionInfo
 {
-    protected SubscriptionInfoTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    {
-    }
 
     [Fact]
     public void ShouldHaveGroupName()
@@ -17,7 +14,7 @@ public abstract class SubscriptionInfoTests<TInfo> : IoCTests where TInfo : ISub
         // GIVEN
         var groupName = string.Empty;
         // WHEN
-        groupName = GroupName.Get<TInfo>();
+        groupName = GroupNameAtt.Get<TInfo>();
         // THEN
         Assert.NotEmpty(groupName);
     }

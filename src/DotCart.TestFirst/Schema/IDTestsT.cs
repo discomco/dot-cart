@@ -2,14 +2,14 @@ using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Schema;
 
-public abstract class IDTests<TID> : IoCTests where TID : ID
+public abstract class IDTestsT<TID> : IoCTests where TID : ID
 {
-    protected NewID<TID> _newID;
+    protected IDCtor<TID> _newID;
 
 
-    public IDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -19,7 +19,7 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newID = TestEnv.ResolveRequired<NewID<TID>>();
+        var newID = TestEnv.ResolveRequired<IDCtor<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -55,6 +55,6 @@ public abstract class IDTests<TID> : IoCTests where TID : ID
 
     protected override void Initialize()
     {
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
     }
 }

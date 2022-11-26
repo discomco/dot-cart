@@ -11,8 +11,8 @@ namespace DotCart.TestFirst.Drivers;
 public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TState : IState where TID : IID
 {
     protected IConnectionMultiplexer _connection;
-    protected NewID<TID> _newID;
-    protected NewState<TState> _newState;
+    protected IDCtor<TID> _newID;
+    protected StateCtor<TState> _newState;
     protected IRedisDb _redisDB;
     protected IModelStore<TState> _redisStore;
 
@@ -28,7 +28,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -39,7 +39,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newState = TestEnv.ResolveRequired<NewState<TState>>();
+        _newState = TestEnv.ResolveRequired<StateCtor<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -160,7 +160,7 @@ public abstract class RedisStoreDriverTestsT<TID, TState> : IoCTests where TStat
         _redisStore = TestEnv.ResolveRequired<IModelStore<TState>>();
         _connection = TestEnv.ResolveRequired<IConnectionMultiplexer>();
         _redisDB = TestEnv.ResolveRequired<IRedisDb>();
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
-        _newState = TestEnv.ResolveRequired<NewState<TState>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        _newState = TestEnv.ResolveRequired<StateCtor<TState>>();
     }
 }

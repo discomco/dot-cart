@@ -1,22 +1,72 @@
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
+using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID where TState : IState
+public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEvt> : IoCTests 
+    where TID : IID 
+    where TState : IState
+    where TApplyEvt : ApplyEvtT<TState,TEvt>
+    where TTryCmd: TryCmdT<TCmd>
+    where TEvt : IEvt
+    where TCmd : ICmd
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
     protected TID _ID;
-    protected NewID<TID> _newID;
-    protected NewState<TState>? _newState;
+    protected IDCtor<TID> _newID;
+    protected StateCtor<TState>? _newState;
 
     protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
+    }
+    
+    [Fact]
+    public void ShouldResolveTryCmd()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var tryCmds = TestEnv.ResolveAll<ITry>();
+        // THEN
+        try
+        {
+            var tryCmd = tryCmds.FirstOrDefault(c => c.GetType() == typeof(TTryCmd));
+            Assert.NotNull(tryCmd);
+        }
+        catch (Exception e)
+        {
+            Output.WriteLine(e.InnerAndOuter());
+            Assert.True(false);
+            throw;
+        }
+    }
+
+    [Fact]
+    public void ShouldResolveApplyEvt()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var applyEvts = TestEnv.ResolveAll<IApply>(); 
+        // THEN
+        try
+        {
+            var apply = applyEvts.First(x => x.GetType() == typeof(TApplyEvt));
+            Assert.True(apply!=null);
+        }
+        catch (Exception e)
+        {
+            Output.WriteLine(e.InnerAndOuter());
+            Assert.True(false);
+            throw;
+        }
     }
 
     [Fact]
@@ -25,11 +75,10 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
-
 
     [Fact]
     public void ShouldResolveStateCtor()
@@ -37,7 +86,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newState = TestEnv.ResolveRequired<NewState<TState>>();
+        _newState = TestEnv.ResolveRequired<StateCtor<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -66,7 +115,7 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     }
 
     [Fact]
-    public void ShouldResolveBehavior()
+    public void ShouldResolveAggregate()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -82,9 +131,9 @@ public abstract class AggregateTestsT<TID, TState> : IoCTests where TID : IID wh
     protected override void Initialize()
     {
         _builder = TestEnv.Resolve<IAggregateBuilder>();
-        _newState = TestEnv.Resolve<NewState<TState>>();
+        _newState = TestEnv.Resolve<StateCtor<TState>>();
         _agg = _builder.Build();
-        _newID = TestEnv.ResolveRequired<NewID<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
         _ID = _newID();
     }
 }

@@ -14,8 +14,8 @@ public class CmdHandlerTests : IoCTests
 {
     private IAggregateStore _aggStore;
     private ICmdHandler _cmdHandler;
-    private NewState<Engine> _newEngine;
-    private NewID<Schema.EngineID> _newID;
+    private StateCtor<Engine> _newEngine;
+    private IDCtor<Schema.EngineID> _newID;
 
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -68,9 +68,9 @@ public class CmdHandlerTests : IoCTests
     protected override void Initialize()
     {
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
-        _newEngine = TestEnv.ResolveRequired<NewState<Engine>>();
+        _newEngine = TestEnv.ResolveRequired<StateCtor<Engine>>();
         _aggStore = TestEnv.ResolveRequired<IAggregateStore>();
-        _newID = TestEnv.ResolveRequired<NewID<Schema.EngineID>>();
+        _newID = TestEnv.ResolveRequired<IDCtor<Schema.EngineID>>();
     }
 
     protected override void SetTestEnvironment()

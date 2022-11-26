@@ -35,7 +35,7 @@ public class
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddDefaultDrivers<Behavior.Engine,IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddSingleton(_ => A.Fake<IAggregateStore>())
             .AddInitializeSpoke();
     }

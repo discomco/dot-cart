@@ -7,11 +7,10 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.Default;
 
-
 public static class Defaults
 {
-    public static IServiceCollection AddDefaultDrivers<TModel, TInfo>(this IServiceCollection services) 
-        where TModel : IState 
+    public static IServiceCollection AddDefaultDrivers<TModel, TInfo>(this IServiceCollection services)
+        where TModel : IState
         where TInfo : ISubscriptionInfo
     {
         return services

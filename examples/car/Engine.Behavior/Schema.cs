@@ -19,7 +19,7 @@ public static partial class Inject
 [DbName("3")]
 public record Engine : IState
 {
-    public static readonly NewState<Engine> Ctor = () => new Engine();
+    public static readonly StateCtor<Engine> Ctor = () => new Engine();
 
     public Engine()
     {

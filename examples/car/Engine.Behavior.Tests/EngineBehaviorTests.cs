@@ -2,7 +2,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
-using DotCart.TestFirst;
+using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.Contract;
 using Engine.Utils;
@@ -11,11 +11,16 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests;
 
-public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
+public class EngineBehaviorTests : FullBehaviorTestsT<Aggregate>
 {
     private IAggregatePolicy? _startPolicy;
+    private IAggregateBuilder _builder;
+    private IAggregate _agg;
+    private Schema.EngineID _ID;
+    private StateCtor<Engine> _newState;
+    private IDCtor<Schema.EngineID> _newID;
 
-    public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv)
+    public EngineBehaviorTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }
@@ -28,6 +33,7 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         Assert.NotNull(_builder);
         _agg = _builder.Build();
         Assert.NotNull(_agg);
+        _ID = _newID();
         // AND
         var events = ScenariosAndStreams.InitializeWithThrottleUpEvents(_ID);
         _agg.SetID(_ID);
@@ -36,7 +42,6 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         Assert.Equal(events.Count() - 1, _agg.Version);
     }
 
-
     [Fact]
     public async Task ShouldExecuteInitializeCmd()
     {
@@ -44,6 +49,7 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         Assert.NotNull(_builder);
         _agg = _builder.Build();
         Assert.NotNull(_agg);
+        _ID = _newID();
         Assert.NotNull(_ID);
         _agg.SetID(_ID);
         // WHEN
@@ -63,12 +69,14 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         Output.WriteLine($"{state}");
     }
 
+
+
     [Fact]
     public async Task ShouldExecuteStartCmd()
     {
         // GIVEN
-        await ShouldExecuteInitializeCmd();
-        var startCmd = Start.Cmd.New(_ID, Contract.Start.Payload.New);
+        await ShouldExecuteInitializeCmd(); 
+        var startCmd = Behavior.Start.Cmd.New(_ID, Contract.Start.Payload.New);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = feedback.GetPayload<Engine>();
@@ -82,6 +90,7 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         Output.WriteLine($"{state}");
     }
 
+    
     [Fact]
     public void ShouldResolveStartTryCmd()
     {
@@ -90,20 +99,19 @@ public class AggregateTests : AggregateTestsT<Schema.EngineID, Engine>
         // WHEN
         var builder = TestEnv.ResolveRequired<IAggregateBuilder>();
         var agg = builder.Build();
-        var topic = TopicAtt.Get<Start.Cmd>();
+        var topic = TopicAtt.Get<Behavior.Start.Cmd>();
         var knowsIt = agg.KnowsTry(topic);
         // THEN
         Assert.True(knowsIt);
     }
 
-    // protected override void Initialize()
-    // { 
-    //     base.Initialize();
-    //     // _builder = Container.GetService<IAggregateBuilder>();
-    //     // _newState = Container.GetService<NewState<Engine>>();
-    //     // _agg = _builder.Build();
-    //     // _newID = Container.GetRequiredService<NewID<EngineID>>();
-    // }
+    protected override void Initialize()
+    { 
+        _builder = TestEnv.ResolveRequired<IAggregateBuilder>();
+        _newState = TestEnv.ResolveRequired<StateCtor<Engine>>();
+        _agg = _builder.Build();
+        _newID = TestEnv.ResolveRequired<IDCtor<Schema.EngineID>>();
+    }
 
     protected override void SetTestEnvironment()
     {
