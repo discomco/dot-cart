@@ -7,7 +7,7 @@ namespace DotCart.Context.Spokes;
 
 public static class Inject
 {
-    public static IServiceCollection AddCartwheel(this IServiceCollection services)
+    public static IServiceCollection AddActorHost(this IServiceCollection services)
     {
         return services
             .AddHostedService<Cartwheel>();
@@ -18,6 +18,7 @@ public class Cartwheel : BackgroundService
 {
     private readonly IExchange _exchange;
     private readonly IProjector _projector;
+    private readonly IEnumerable<IActor> _actors;
 
     private CancellationTokenSource _cts;
     // private readonly IEnumerable<ISpokeB> _spokes;
@@ -25,11 +26,12 @@ public class Cartwheel : BackgroundService
     public Cartwheel(
         IExchange exchange
         , IProjector projector
-        // , IEnumerable<ISpokeB> spokes
+        , IEnumerable<IActor> actors
     )
     {
         _exchange = exchange;
         _projector = projector;
+        _actors = actors;
         // _spokes = spokes;
     }
 
@@ -38,7 +40,16 @@ public class Cartwheel : BackgroundService
         _cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
         await StartExchangeAsync(_cts.Token);
         await StartProjectorAsync(_cts.Token);
+        await StartActorsAsync(_cts.Token);
         base.StartAsync(_cts.Token);
+    }
+
+    private async Task StartActorsAsync(CancellationToken ctsToken)
+    {
+        foreach (var actor in _actors)
+        {
+            await actor.Activate(ctsToken);
+        }
     }
 
 

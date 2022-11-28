@@ -5,16 +5,14 @@ namespace Engine.Contract;
 
 public static class Initialize
 {
-    public static class Topics
-    {
-        public const string Fact = "engine.initialized.v1";
-        public const string Hope = "engine.initialize.v1";
-    }
+    public const string FactTopic = "engine.initialized.v1";
+    public const string HopeTopic = "engine.initialize.v1";
 
     public record Payload : IPayload
     {
         public Payload()
         {
+            Details = new Schema.Details();
         }
 
         private Payload(Schema.Details details)
@@ -30,31 +28,24 @@ public static class Initialize
         }
     }
 
-    [Topic(Topics.Hope)]
+    [Topic(HopeTopic)]
     public interface IHope : IHope<Payload>
     {
     }
-
-    [Topic(Topics.Hope)]
-    public record Hope(string AggId, Payload Payload) : HopeT<Payload>(AggId, Payload), IHope
+    [Topic(HopeTopic)]
+    public record Hope(Payload Payload) : HopeT<Payload>(string.Empty, Payload), IHope
     {
-        public static Hope New(string AggId, byte[] Data)
+        public static Hope New(Payload payload)
         {
-            return new Hope(AggId, Data.FromBytes<Payload>());
-        }
-
-        public static Hope New(string AggId, Payload payload)
-        {
-            return new Hope(AggId, payload);
+            return new Hope(payload);
         }
     }
-
-    [Topic(Topics.Fact)]
+    [Topic(FactTopic)]
     public interface IFact : IFact<Payload>
     {
     }
 
-    [Topic(Topics.Fact)]
+    [Topic(FactTopic)]
     public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
     {
         public static Fact New(string AggId, byte[] Data)

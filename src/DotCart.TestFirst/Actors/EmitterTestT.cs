@@ -5,7 +5,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Effects;
+namespace DotCart.TestFirst.Actors;
 
 public abstract class EmitterTestT<TEmitter, TEvt, TFact> : IoCTests
     where TEmitter : IEmitterB

@@ -41,9 +41,9 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
         {
             if (!_bus.IsClosed())
                 Log.Debug($"::CONNECT bus: {_bus.ConnectedId}");
-            Log.Debug($"::REQUEST hope: AggId:{hope.AggId} on topic {hope.Topic}.");
-            res = (Feedback)_bus.Request(hope.Topic, hope);
-            Log.Debug($"::RECEIVED feedback: AggId:{res.AggId} on {res.Topic}.");
+            Log.Debug($"::REQUEST hope: AggId:{hope.AggId} on topic {TopicAtt.Get(hope)}.");
+            res = (Feedback)_bus.Request(TopicAtt.Get(hope), hope);
+            Log.Debug($"::RECEIVED feedback: AggId:{res.AggId}.");
         }
         catch (Exception e)
         {

@@ -44,7 +44,8 @@ public abstract class ActiveComponent : IActiveComponent
 
     public virtual void Dispose()
     {
-        _cts.Dispose();
+        if (_cts != null)
+            _cts.Dispose();
     }
 
     private Task LoopAsync(CancellationToken stoppingToken)

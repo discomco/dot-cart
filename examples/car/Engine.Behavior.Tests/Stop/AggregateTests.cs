@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 public class AggregateTests : AggregateTestsT<
-    Schema.EngineID, 
+    Schema.EngineID,
     Engine,
     Behavior.Stop.TryCmd,
     Behavior.Stop.ApplyEvt,
@@ -21,8 +21,8 @@ public class AggregateTests : AggregateTestsT<
 
     protected override void SetTestEnvironment()
     {
-        
     }
+
 
     protected override void InjectDependencies(IServiceCollection services)
     {

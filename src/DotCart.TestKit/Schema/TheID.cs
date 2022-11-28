@@ -19,7 +19,7 @@ public record TheID : ID
     {
     }
 
-    public static IDCtor<TheID> Ctor => () => New;
+    public static IDCtorT<TheID> Ctor => () => New;
 
     public static TheID New => new(GuidUtils.LowerCaseGuid);
 }

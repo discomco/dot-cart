@@ -1,3 +1,4 @@
+using Ardalis.GuardClauses;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -26,9 +27,9 @@ public class InitializeController : ControllerBase
         var feedback = Feedback.New(hope.AggId);
         try
         {
-            if (hope == null)
-                throw new ArgumentException("request cannot be null", nameof(hope));
-            feedback = await _cmdHandler.HandleAsync(_hope2Cmd(hope));
+            Guard.Against.Null(hope);
+            var cmd = _hope2Cmd(hope);
+            feedback = await _cmdHandler.HandleAsync(cmd);
         }
         catch (Exception e)
         {

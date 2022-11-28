@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Drivers.Default;
-using DotCart.TestFirst.Effects;
+using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Behavior;
 using FakeItEasy;
@@ -12,7 +12,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Initialize;
 
 public class
-    InitializeResponderTests : ResponderTestsT<
+    ResponderTests : ResponderTestsT<
         IResponderT<Contract.Initialize.Hope, Behavior.Initialize.Cmd>,
         Contract.Initialize.Hope,
         Behavior.Initialize.Cmd
@@ -20,7 +20,7 @@ public class
 {
     private IEncodedConnection _bus;
 
-    public InitializeResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

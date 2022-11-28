@@ -6,7 +6,7 @@ namespace DotCart.TestFirst.Schema;
 
 public abstract class IDTestsT<TID> : IoCTests where TID : ID
 {
-    protected IDCtor<TID> _newID;
+    protected IDCtorT<TID> _newID;
 
 
     public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -19,7 +19,7 @@ public abstract class IDTestsT<TID> : IoCTests where TID : ID
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -55,6 +55,6 @@ public abstract class IDTestsT<TID> : IoCTests where TID : ID
 
     protected override void Initialize()
     {
-        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
     }
 }

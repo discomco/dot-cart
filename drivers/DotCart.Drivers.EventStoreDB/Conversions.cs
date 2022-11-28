@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB;
@@ -12,7 +13,7 @@ public static class Conversions
         try
         {
             var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
-            var typeName = evt.Topic;
+            var typeName = TopicAtt.Get(evt);
             ReadOnlyMemory<byte> metaData = evt.MetaData;
             ReadOnlyMemory<byte> data = evt.Data;
             return new EventData(eventId, typeName, data, metaData);

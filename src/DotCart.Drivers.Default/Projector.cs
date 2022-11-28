@@ -2,6 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using DotCart.Drivers.EventStoreDB;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -42,9 +43,9 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISub
     public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
         Log.Information(msg is IEvt evt
-            ? $"[{Name}] ~> {evt.Topic} @ {evt.AggregateID.Id()}"
-            : $"[{Name}] ~> {msg.Topic}");
-        await _exchange.Publish(msg.Topic, (IEvt)msg, cancellationToken);
+            ? $"[{Name}] ~> {TopicAtt.Get(evt)} @ {evt.AggregateID.Id()}"
+            : $"[{Name}] ~> {TopicAtt.Get(msg)}");
+        await _exchange.Publish( TopicAtt.Get(msg), (IEvt)msg, cancellationToken);
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)

@@ -8,24 +8,23 @@ public static class Constants
     public const long NewAggregateVersion = -1;
 }
 
-public record Event(ID AggregateID, string EventType, long Version, byte[] Data, byte[] MetaData,
+public record Event(
+    ID AggregateID, 
+    string EventType, 
+    long Version, 
+    byte[] Data, 
+    byte[] MetaData,
     DateTime TimeStamp) : IEvt
 {
     public string EventId { get; set; } = GuidUtils.LowerCaseGuid;
-
     public string EventType { get; set; } = EventType;
-
-
     public string AggregateId { get; set; }
-
     public string MsgId => EventId;
-
     public string Topic => EventType;
 
     public DateTime TimeStamp { get; private set; } = TimeStamp;
 
     public byte[] Data { get; set; } = Data;
-
 
     public long Version { get; set; } = Version;
 
@@ -104,6 +103,10 @@ public record Event(ID AggregateID, string EventType, long Version, byte[] Data,
             timeStamp);
     }
 }
+
+
+
+
 
 public record EventMeta(string AggregateType, string AggregateId)
 {

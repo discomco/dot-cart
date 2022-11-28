@@ -15,13 +15,30 @@ public static class Schema
     }
 
     public const string EngineIDPrefix = "engine";
+    public static readonly IDCtorT<EngineID> IDCtor = () => new EngineID();
+        
 
-    public static IDCtor<EngineID> IDCtor => () => new EngineID();
+    public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
+    {
+        ((int)status).SetFlag((int)flag);
+        return status;
+    }
+
+    public static EngineStatus UnsetFlag(this EngineStatus status, EngineStatus flag)
+    {
+        ((int)status).UnsetFlag((int)flag);
+        return status;
+    }
+
+    public static bool HasFlagFast(this EngineStatus value, EngineStatus flag)
+    {
+        return (value & flag) != 0;
+    }
 
     [IDPrefix(EngineIDPrefix)]
     public record EngineID : ID
     {
-        public EngineID(string value = "") : base(EngineIDPrefix, value)
+        public EngineID(string value = "") : base(IDPrefixAtt.Get<EngineID>(), value)
         {
         }
 
@@ -30,7 +47,6 @@ public static class Schema
             return new EngineID();
         }
     }
-
 
     public record Details(string Name = "new engine", string Description = "")
     {

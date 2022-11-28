@@ -8,7 +8,7 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddModelCtor(this IServiceCollection services)
+    public static IServiceCollection AddStateCtor(this IServiceCollection services)
     {
         return services
             .AddIDCtor()
@@ -19,7 +19,7 @@ public static partial class Inject
 [DbName("3")]
 public record Engine : IState
 {
-    public static readonly StateCtor<Engine> Ctor = () => new Engine();
+    public static readonly StateCtorT<Engine> Ctor = () => new Engine();
 
     public Engine()
     {

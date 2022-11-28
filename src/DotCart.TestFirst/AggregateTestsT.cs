@@ -19,8 +19,8 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
     protected TID _ID;
-    protected IDCtor<TID> _newID;
-    protected StateCtor<TState>? _newState;
+    protected IDCtorT<TID> _newID;
+    protected StateCtorT<TState>? _newState;
 
     protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -75,7 +75,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -86,7 +86,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newState = TestEnv.ResolveRequired<StateCtor<TState>>();
+        _newState = TestEnv.ResolveRequired<StateCtorT<TState>>();
         // THEN
         Assert.NotNull(_newState);
     }
@@ -131,9 +131,9 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     protected override void Initialize()
     {
         _builder = TestEnv.Resolve<IAggregateBuilder>();
-        _newState = TestEnv.Resolve<StateCtor<TState>>();
+        _newState = TestEnv.Resolve<StateCtorT<TState>>();
         _agg = _builder.Build();
-        _newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         _ID = _newID();
     }
 }

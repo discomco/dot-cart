@@ -9,16 +9,16 @@ namespace Engine.Utils;
 public class EventFeeder : ActorB, IEventFeeder, IProducer
 {
     private readonly IEventStore _eventStore;
-    private readonly IDCtor<Schema.EngineID> _newId;
-    private readonly StateCtor<Behavior.Engine> _newState;
-    private readonly EventStreamGenerator<Schema.EngineID> _newStream;
+    private readonly IDCtorT<Contract.Schema.EngineID> _newId;
+    private readonly StateCtorT<Behavior.Engine> _newState;
+    private readonly EventStreamGenerator<Contract.Schema.EngineID> _newStream;
 
     public EventFeeder(
         IExchange exchange,
         IEventStore eventStore,
-        EventStreamGenerator<Schema.EngineID> newStream,
-        IDCtor<Schema.EngineID> newID,
-        StateCtor<Behavior.Engine> newState) : base(exchange)
+        EventStreamGenerator<Contract.Schema.EngineID> newStream,
+        IDCtorT<Contract.Schema.EngineID> newID,
+        StateCtorT<Behavior.Engine> newState) : base(exchange)
     {
         _eventStore = eventStore;
         _newStream = newStream;
@@ -49,9 +49,9 @@ public class EventFeeder : ActorB, IEventFeeder, IProducer
         {
             var ID = _newId();
             var events = _newStream(ID);
-            Thread.Sleep(10_000);
             Log.Information("Feeding Events");
             await _eventStore.AppendEventsAsync(ID, events, cancellationToken);
+            Thread.Sleep(60_000);
         }
     }
 

@@ -11,8 +11,8 @@ public abstract class SchemaTests<TID, TState> : IoCTests
 {
     private static string serializedState;
 
-    protected IDCtor<TID> NewId;
-    protected StateCtor<TState> NewState;
+    protected IDCtorT<TID> NewId;
+    protected StateCtorT<TState> NewState;
 
     protected SchemaTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -25,7 +25,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var newID = TestEnv.ResolveRequired<IDCtor<TID>>();
+        var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         // THEN
         Assert.NotNull(newID);
     }
@@ -36,7 +36,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.ResolveRequired<StateCtor<TState>>();
+        var ctor = TestEnv.ResolveRequired<StateCtorT<TState>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -59,7 +59,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
     public void ShouldCreateState()
     {
         // GIVEN
-        var newState = TestEnv.Resolve<StateCtor<TState>>();
+        var newState = TestEnv.Resolve<StateCtorT<TState>>();
         // WHEN
         var state = newState();
         // THEN
@@ -70,7 +70,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
     public void ShouldCreateDifferentStates()
     {
         // GIVEN
-        var newState = TestEnv.Resolve<StateCtor<TState>>();
+        var newState = TestEnv.Resolve<StateCtorT<TState>>();
         // WHEN
         var state1 = newState();
         var state2 = newState();
@@ -104,7 +104,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
 
     protected override void Initialize()
     {
-        NewId = TestEnv.ResolveRequired<IDCtor<TID>>();
-        NewState = TestEnv.ResolveRequired<StateCtor<TState>>();
+        NewId = TestEnv.ResolveRequired<IDCtorT<TID>>();
+        NewState = TestEnv.ResolveRequired<StateCtorT<TState>>();
     }
 }

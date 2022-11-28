@@ -21,8 +21,8 @@ public class ESDBEventStoreTests : IoCTests
     private IAggregateBuilder? _aggregateBuilder;
     private ICmdHandler? _cmdHandler;
     private IEventStore? _eventStore;
-    private StateCtor<TheDoc> _newDoc;
-    private IDCtor<TheID> _newID;
+    private StateCtorT<TheDoc> _newDoc;
+    private IDCtorT<TheID> _newID;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -96,7 +96,7 @@ public class ESDBEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.ResolveRequired<StateCtor<TheDoc>>();
+        var ctor = TestEnv.ResolveRequired<StateCtorT<TheDoc>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -122,8 +122,8 @@ public class ESDBEventStoreTests : IoCTests
     protected override void Initialize()
     {
         _eventStore = TestEnv.ResolveRequired<IEventStore>();
-        _newDoc = TestEnv.ResolveRequired<StateCtor<TheDoc>>();
-        _newID = TestEnv.ResolveRequired<IDCtor<TheID>>();
+        _newDoc = TestEnv.ResolveRequired<StateCtorT<TheDoc>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TheID>>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();

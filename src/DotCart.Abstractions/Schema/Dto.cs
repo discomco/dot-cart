@@ -26,19 +26,12 @@ public record Dto(string AggId, byte[] Data) : IDto
     {
         Data = state.ToBytes();
     }
-
-    public string MsgId { get; }
-
-    public string Topic => TopicAtt.Get(this);
-
+    public string MsgId { get; } = GuidUtils.LowerCaseGuid;
     public DateTime TimeStamp { get; private set; }
-
     public void SetTimeStamp(DateTime timeStamp)
     {
         TimeStamp = timeStamp;
     }
-
-
     public static Dto New(string aggId, byte[] data)
     {
         return new Dto(aggId, data);

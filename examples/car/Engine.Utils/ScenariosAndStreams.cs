@@ -13,36 +13,34 @@ public delegate IEnumerable<IEvt> EventStreamGenerator<in TID>(TID ID)
 
 public static partial class Inject
 {
-    public static IServiceCollection AddInitializeWithThrottleUpEvents(this IServiceCollection services)
+    public static IServiceCollection AddInitializeWithChangeRpmEvents(this IServiceCollection services)
     {
-        return services.AddTransient<EventStreamGenerator<Schema.EngineID>>(_ =>
-            ScenariosAndStreams.InitializeWithThrottleUpEvents);
+        return services.AddTransient<EventStreamGenerator<Contract.Schema.EngineID>>(_ =>
+            ScenariosAndStreams.InitializeWithChangeRpmEvents);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
     {
-        return services.AddTransient<ScenarioGenerator<Schema.EngineID>>(_ =>
+        return services.AddTransient<ScenarioGenerator<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeScenario);
     }
 }
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeWithThrottleUpEvents(Schema.EngineID ID)
+    public static IEnumerable<IEvt> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
-        var initPayload = Contract.Initialize.Payload.New(Schema.Details.New("New Engine"));
+        var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
         var initEvt = Event.New(ID, Behavior.Initialize.EvtTopic, initPayload, EventMeta.New("", ID.Id()));
         initEvt.Version = 0;
         // AND
-        var startPayload = Start.Payload.New;
+        var startPayload = Contract.Start.Payload.New;
         var startEvt = Event.New(ID, Behavior.Start.EvtTopic, startPayload, EventMeta.New("", ID.Id()));
         startEvt.Version = 1;
         // AND
         var revs = RandomRevs(ID);
         var res = new List<IEvt> { initEvt, startEvt };
         res.AddRange(revs);
-
-//        var throttleUpCmd = ThrottleUp.Cmd.New(_engineID, throttleUpPayload);
         // WHEN
         return res;
     }
@@ -63,10 +61,11 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    public static IEnumerable<ICmd> InitializeScenario(IID ID)
+    public static IEnumerable<ICmd> InitializeScenario(ID ID)
     {
-        var initializePayload = Contract.Initialize.Payload.New(Schema.Details.New("New Engine"));
-        var initializeCmd = Behavior.Initialize.Cmd.New(ID, initializePayload);
+        var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
+        var initializeCmd = Behavior.Initialize.Cmd.New(initializePayload);
+        initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }
 

@@ -20,7 +20,7 @@ public class ContractTests : ContractTests<Contract.Schema.EngineID, Contract.St
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddEngineContract();
+            .AddIDCtor();
     }
 
     public override void ShouldCreateNewPayload()

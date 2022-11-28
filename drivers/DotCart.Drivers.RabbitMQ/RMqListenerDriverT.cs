@@ -67,7 +67,7 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
             Guard.Against.Null(ea, nameof(ea));
             Guard.Against.Null(ea.Body, nameof(ea.Body));
             var fact = await CreateFactAsync(ea.Body.ToArray());
-            Log.Debug($"[{Topic}]-RCV Fact({fact.Topic})");
+            Log.Debug($"[{Topic}]-RCV Fact({TopicAtt.Get(fact)})");
             Cast(fact);
         }
         catch (Exception e)

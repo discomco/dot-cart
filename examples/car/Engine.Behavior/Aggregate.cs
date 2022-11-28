@@ -5,7 +5,7 @@ namespace Engine.Behavior;
 
 public class Aggregate : AggregateT<Engine>
 {
-    public Aggregate(StateCtor<Engine> newState) : base(newState)
+    public Aggregate(StateCtorT<Engine> newState) : base(newState)
     {
     }
 }

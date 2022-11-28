@@ -20,8 +20,9 @@ public static class Initialize
         evt => Contract.Initialize.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Initialize.Payload>());
 
     private static readonly Hope2Cmd<Cmd, Contract.Initialize.Hope> _hope2Cmd =
-        hope => Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+        hope => Cmd.New(hope.Payload);
 
+   
     private static readonly Evt2State<Engine, IEvt> _evt2Doc = (state, evt) =>
     {
         if (evt == null) return state;
@@ -44,7 +45,7 @@ public static class Initialize
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
-            .AddEngineContract()
+            .AddIDCtor()
             .AddBaseBehavior()
             .AddInitializeMappers()
             .AddTransient<ITry, TryCmd>()
@@ -83,12 +84,12 @@ public static class Initialize
         {
             return new[]
             {
-                Event.New(
-                    (Schema.EngineID)cmd.AggregateID,
-                    EvtTopic,
+                Evt.Create(
+                    cmd.AggregateID,
+                    Aggregate.Version,
                     cmd.Payload,
                     Aggregate.GetMeta(),
-                    Aggregate.Version)
+                    DateTime.UtcNow)
                 // Evt(, Payload.New(cmd.Payload.Engine))
             };
         }
@@ -123,15 +124,25 @@ public static class Initialize
     {
     }
 
-    [Topic(CmdTopic)]
-    public record Cmd(IID AggregateID, Contract.Initialize.Payload Payload)
-        : CmdT<Contract.Initialize.Payload>(CmdTopic, AggregateID, Payload)
+    public record Evt(ID AggregateID, long Version, byte[] Data, byte[] MetaData, DateTime TimeStamp)
+        : Event(AggregateID, TopicAtt.Get<IEvt>(), Version, Data, MetaData, TimeStamp), IEvt
     {
-        public static Cmd New(
-            IID aggregateID,
-            Contract.Initialize.Payload payload)
+        public static Event Create(ID aggregateID, long version, Contract.Initialize.Payload payload, EventMeta meta, DateTime timesStamp)
         {
-            return new Cmd(aggregateID, payload);
+            return new Evt(aggregateID, version, payload.ToBytes(), meta.ToBytes(), timesStamp);
+        }
+    }
+    
+    
+
+
+    [Topic(CmdTopic)]
+    public record Cmd(Contract.Initialize.Payload Payload)
+        : CmdT<Contract.Initialize.Payload>(Schema.EngineID.New(), Payload)
+    {
+        public static Cmd New(Contract.Initialize.Payload payload)
+        {
+            return new Cmd(payload);
         }
     }
 }

@@ -19,7 +19,7 @@ public class
     protected override void Initialize()
     {
         base.Initialize();
-        _newID = TestEnv.ResolveRequired<IDCtor<Contract.Schema.EngineID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<Contract.Schema.EngineID>>();
     }
 
 

@@ -2,7 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Effects;
+namespace DotCart.TestFirst.Actors;
 
 public abstract class ActorTestsT<TActor> : IoCTests where TActor : IActor
 {

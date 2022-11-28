@@ -26,7 +26,7 @@ public static class Start
     private static readonly Evt2State<Engine, IEvt> _evt2Doc =
         (state, _) =>
         {
-            ((int)state.Status).SetFlag((int)Schema.EngineStatus.Started);
+            state.Status = state.Status.SetFlag(Schema.EngineStatus.Started);
             return state;
         };
 
@@ -46,7 +46,7 @@ public static class Start
     public static IServiceCollection AddStartBehavior(this IServiceCollection services)
     {
         return services
-            .AddEngineContract()
+            .AddIDCtor()
             .AddBaseBehavior()
             .AddStartMappers()
             .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()
@@ -109,7 +109,7 @@ public static class Start
             return new[]
             {
                 Event.New(
-                    (Schema.EngineID)cmd.AggregateID,
+                    cmd.AggregateID,
                     EvtTopic,
                     cmd.Payload,
                     Aggregate.GetMeta(),
@@ -129,10 +129,10 @@ public static class Start
     }
 
     [Topic(CmdTopic)]
-    public record Cmd(IID AggregateID, Contract.Start.Payload Payload) : CmdT<Contract.Start.Payload>(CmdTopic,
-        AggregateID, Payload)
+    public record Cmd(ID AggregateID, Contract.Start.Payload Payload) 
+        : CmdT<Contract.Start.Payload>(AggregateID, Payload)
     {
-        public static Cmd New(IID aggregateID, Contract.Start.Payload payload)
+        public static Cmd New(ID aggregateID, Contract.Start.Payload payload)
         {
             return new Cmd(aggregateID, payload);
         }

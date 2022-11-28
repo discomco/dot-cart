@@ -24,6 +24,6 @@ public static partial class Inject
             .AddSingletonExchange()
             .AddAggregateBuilder()
             .AddTransient<IAggregate, Aggregate>()
-            .AddModelCtor();
+            .AddStateCtor();
     }
 }

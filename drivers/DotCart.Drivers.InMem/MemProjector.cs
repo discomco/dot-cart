@@ -34,7 +34,7 @@ internal sealed class MemProjector : ActorB, IMemProjector
     {
         return Run(() =>
         {
-            _exchange.Publish(msg.Topic, msg, cancellationToken);
+            _exchange.Publish(TopicAtt.Get(msg), msg, cancellationToken);
             return CompletedTask;
         }, cancellationToken);
     }

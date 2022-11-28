@@ -1,9 +1,7 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.TestKit;
-using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Effects;
+namespace DotCart.TestFirst.Actors;
 
 public abstract class SubscriptionInfoTestsT<TInfo>  where TInfo : ISubscriptionInfo
 {

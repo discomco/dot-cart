@@ -30,7 +30,6 @@ public static class ChangeRpm
     private static Hope2Cmd<Cmd, Contract.ChangeRpm.Hope> _hope2Cmd =>
         hope => Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Contract.ChangeRpm.Payload>());
 
-
     private static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
     {
         return services
@@ -43,7 +42,7 @@ public static class ChangeRpm
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
     {
         return services
-            .AddEngineContract()
+            .AddIDCtor()
             .AddBaseBehavior()
             .AddChangeRpmMappers()
             .AddTransient<ITry, TryCmd>()
@@ -51,11 +50,27 @@ public static class ChangeRpm
     }
 
 
-    [Topic(CmdTopic)]
-    public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload) : CmdT<Contract.ChangeRpm.Payload>(
-        CmdTopic, AggregateID, Payload), ICmd
+    [Topic(EvtTopic)]
+    public record Evt(
+            ID AggregateID,
+            long Version,
+            byte[] Data,
+            byte[] MetaData,
+            DateTime TimeStamp)
+        : Event(AggregateID, EvtTopic, Version, Data, MetaData, TimeStamp)
+
     {
-        public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload)
+        public static Event New(ID AggregateID, long Version, byte[] Data, byte[] MetaData, DateTime TimeStamp)
+        {
+            return new Evt(AggregateID, Version, Data, MetaData, TimeStamp);
+        }
+    }
+
+    [Topic(CmdTopic)]
+    public record Cmd(ID AggregateID, Contract.ChangeRpm.Payload Payload) 
+        : CmdT<Contract.ChangeRpm.Payload>(AggregateID, Payload), ICmd
+    {
+        public static Cmd New(ID aggregateID, Contract.ChangeRpm.Payload payload)
         {
             return new Cmd(aggregateID, payload);
         }
@@ -70,16 +85,26 @@ public static class ChangeRpm
     {
         public override IEnumerable<Event> Raise(Cmd cmd)
         {
-            return new[]
-            {
-                Event.New((Schema.EngineID)cmd.AggregateID,
-                    EvtTopic,
-                    cmd.Payload,
-                    Aggregate.GetMeta(),
-                    Aggregate.Version)
-            };
+            var res = new List<Event>();
+            var rpmChanged = Event.New(
+                cmd.AggregateID,
+                EvtTopic,
+                cmd.Payload,
+                Aggregate.GetMeta(),
+                Aggregate.Version);
+            res.Add(rpmChanged);
+            var newPower = ((Engine)Aggregate.GetState()).Power + cmd.Payload.Delta;
+            if (newPower > 0)
+                return res;
+            var stopped = Event.New(
+                cmd.AggregateID,
+                Stop.EvtTopic,
+                Contract.Stop.Payload.New(),
+                Aggregate.GetMeta(),
+                Aggregate.Version);
+            res.Add(stopped);
+            return res;
         }
-
 
         public override IFeedback Verify(Cmd cmd)
         {

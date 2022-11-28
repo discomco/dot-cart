@@ -6,7 +6,6 @@ namespace DotCart.Abstractions.Schema;
 public interface IMsg
 {
     string MsgId { get; }
-    string Topic { get; }
     DateTime TimeStamp { get; }
     [JsonIgnore] byte[] Data { get; }
     void SetTimeStamp(DateTime timeStamp);

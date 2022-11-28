@@ -21,9 +21,7 @@ public static class Stop
     }
 
     [Topic(FactTopic)]
-    public record Fact(string AggId, Payload Payload) : Dto(AggId, Payload.ToBytes()), IFact
-    {
-    }
+    public record Fact(string AggId, Payload Payload) : Dto(AggId, Payload.ToBytes()), IFact;
 
     public interface IHope : IHope<Payload>
     {

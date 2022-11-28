@@ -6,8 +6,8 @@ using DotCart.TestKit.Schema;
 namespace DotCart.TestKit.Behavior;
 
 [Topic(TestConstants.CmdTopic)]
-public record TheCmd(IID AggregateID, ThePayload Payload)
-    : CmdT<ThePayload>(TopicAtt.Get<TheCmd>(), AggregateID, Payload)
+public record TheCmd(ID AggregateID, ThePayload Payload)
+    : CmdT<ThePayload>(AggregateID, Payload)
 {
     public static TheCmd New(string aggId, byte[] data)
     {

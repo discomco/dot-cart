@@ -26,6 +26,8 @@ builder.Services.AddConsoleLogger();
 
 builder.Services.AddCartwheel();
 
+//builder.Services.AddEventFeeder();
+
 var app = builder.Build();
 
 

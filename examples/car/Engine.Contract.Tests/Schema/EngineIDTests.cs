@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Schema;
-using DotCart.TestFirst;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,7 +14,7 @@ public class EngineIDTests : IDTestsT<Contract.Schema.EngineID>
 
     protected override void Initialize()
     {
-        _newID = TestEnv.ResolveRequired<IDCtor<Contract.Schema.EngineID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<Contract.Schema.EngineID>>();
     }
 
     protected override void SetTestEnvironment()

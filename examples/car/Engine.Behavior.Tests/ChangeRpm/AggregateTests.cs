@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.ChangeRpm;
 
 public class AggregateTests : AggregateTestsT<
-    Schema.EngineID, 
-    Engine, 
+    Schema.EngineID,
+    Engine,
     Behavior.ChangeRpm.TryCmd,
-    Behavior.ChangeRpm.ApplyEvt, 
-    Behavior.ChangeRpm.Cmd, 
+    Behavior.ChangeRpm.ApplyEvt,
+    Behavior.ChangeRpm.Cmd,
     Behavior.ChangeRpm.IEvt>
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -20,7 +20,6 @@ public class AggregateTests : AggregateTestsT<
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

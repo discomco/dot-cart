@@ -9,10 +9,5 @@ public static class Inject
         return services
             .AddTransient(_ => Schema.IDCtor);
     }
-
-    public static IServiceCollection AddEngineContract(this IServiceCollection services)
-    {
-        return services
-            .AddIDCtor();
-    }
+    
 }

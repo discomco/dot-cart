@@ -3,11 +3,12 @@ using Ardalis.GuardClauses;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public abstract class AggregateT<TState> : IAggregate
+public class AggregateT<TState> : IAggregate
     where TState : IState
 {
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
@@ -21,7 +22,7 @@ public abstract class AggregateT<TState> : IAggregate
     private bool _withAppliedEvents = false;
 
     protected AggregateT(
-        StateCtor<TState> newState)
+        StateCtorT<TState> newState)
     {
         _state = newState();
         Version = Constants.NewAggregateVersion;
@@ -127,8 +128,11 @@ public abstract class AggregateT<TState> : IAggregate
         var feedback = Feedback.New(cmd.AggregateID.Id());
         try
         {
+            Guard.Against.Null(cmd);
+            Guard.Against.Null(cmd.AggregateID);
+            this.SetID(cmd.AggregateID);
             Guard.Against.BehaviorIDNotSet(this);
-            var fTry = _tryFuncs[cmd.Topic];
+            var fTry = _tryFuncs[TopicAtt.Get(cmd)];
             feedback = ((dynamic)fTry).Verify((dynamic)cmd);
             if (!feedback.IsSuccess) return feedback;
             IEnumerable<IEvt> events = ((dynamic)fTry).Raise((dynamic)cmd);

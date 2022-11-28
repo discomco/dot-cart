@@ -1,6 +1,6 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
-using DotCart.TestFirst.Effects;
+using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;

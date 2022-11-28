@@ -41,7 +41,7 @@ public abstract class RMqEmitterDriverT<TFact> : DriverB, IEmitterDriverT<TFact,
     // TODO: Add retry policy
     public async Task EmitAsync(TFact fact, CancellationToken cancellationToken = default)
     {
-        Log.Debug($"[{Topic}]-EMIT Fact[{fact.Topic}]");
+        Log.Debug($"[{Topic}]-EMIT Fact[{TopicAtt.Get(fact)}]");
         var body = await ToTarget(fact, cancellationToken).ConfigureAwait(false);
         _channel.BasicPublish(Topic, "", null, body);
     }

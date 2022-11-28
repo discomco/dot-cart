@@ -2,8 +2,6 @@ using DotCart.Core;
 
 namespace DotCart.Abstractions.Schema;
 
-public delegate TID IDCtor<out TID>() where TID : IID;
-
 public interface IID
 {
     string Value { get; }
@@ -27,11 +25,15 @@ public record ID : IID
     {
         return $"{Prefix}{IDFuncs.PrefixSeparator}{Value}";
     }
-
+    public static ID New<TID>(string id)
+    {
+        return new ID(IDPrefixAtt.Get<TID>(), id);
+    }
     public static ID New(string prefix)
     {
         return new ID(prefix);
     }
+    
 }
 
 public static class IDFuncs
@@ -45,4 +47,10 @@ public static class IDFuncs
         var parts = idString.Split(PrefixSeparator);
         return new ID(parts[0], parts[1]);
     }
+    
+    
+    
+    
+    
+    
 }
