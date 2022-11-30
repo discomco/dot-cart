@@ -21,14 +21,22 @@ public static class Stop
     }
 
     [Topic(FactTopic)]
-    public record Fact(string AggId, Payload Payload) : Dto(AggId, Payload.ToBytes()), IFact;
+    public record Fact(string AggId, Payload Payload)
+        : FactT<Payload>(AggId, Payload), IFact
+    {
+        public static Fact New(string aggId, Payload payload)
+        {
+            return new Fact(aggId, payload);
+        }
+    }
 
     public interface IHope : IHope<Payload>
     {
     }
 
     [Topic(HopeTopic)]
-    public record Hope(string AggId, Payload Payload) : Dto(AggId, Payload.ToBytes()), IHope
+    public record Hope(string AggId, Payload Payload)
+        : HopeT<Payload>(AggId, Payload), IHope
     {
         public static Hope New(string aggId, Payload payload)
         {

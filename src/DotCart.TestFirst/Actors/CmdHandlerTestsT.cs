@@ -12,18 +12,18 @@ namespace DotCart.TestFirst.Actors;
 public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
     where TState : IState
     where TID : IID
-    where TCmd: ICmd
+    where TCmd : ICmd
     where TPayload : IPayload
 {
-    protected IAggregateStore _aggStore;
-    protected ICmdHandler _cmdHandler;
-    protected StateCtorT<TState> _newState;
     protected static IDCtorT<TID> _newID;
+    protected IAggregateStore _aggStore;
     protected TCmd _cmd;
+    protected ICmdHandler _cmdHandler;
     protected Feedback _feedback;
 
-    protected CmdCtorT<TCmd,TID, TPayload> _newCmd;
+    protected CmdCtorT<TCmd, TID, TPayload> _newCmd;
     protected PayloadCtorT<TPayload> _newPayload;
+    protected StateCtorT<TState> _newState;
 
 
     public CmdHandlerTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
@@ -49,9 +49,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
     {
         Assert.NotNull(_newCmd);
     }
-    
-    
-    
+
 
     [Fact]
     public void ShouldResolveCmdHandler()
@@ -114,7 +112,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
         // THEN
         Assert.NotNull(_newPayload);
     }
- 
+
     [Fact]
     public async Task ShouldHandleCmd()
     {
@@ -133,6 +131,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
             Output.WriteLine(e.InnerAndOuter());
             Assert.True(false);
         }
+
         // THEN
         Assert.NotNull(_feedback);
     }
@@ -141,7 +140,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
     {
         return _newCmd(_newID(), _newPayload());
     }
-    
+
 
     protected override void Initialize()
     {
@@ -152,11 +151,4 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
         _newCmd = TestEnv.ResolveRequired<CmdCtorT<TCmd, TID, TPayload>>();
         _newPayload = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
     }
-    
-    
-    
-    
 }
-
- 
- 

@@ -130,7 +130,7 @@ public class AggregateT<TState> : IAggregate
         {
             Guard.Against.Null(cmd);
             Guard.Against.Null(cmd.AggregateID);
-            this.SetID(cmd.AggregateID);
+            SetID(cmd.AggregateID);
             Guard.Against.BehaviorIDNotSet(this);
             var fTry = _tryFuncs[TopicAtt.Get(cmd)];
             feedback = ((dynamic)fTry).Verify((dynamic)cmd);
@@ -168,7 +168,7 @@ public class AggregateT<TState> : IAggregate
 
     private TState ApplyEvent(TState state, IEvt evt, long version)
     {
-        if (_uncommittedEvents.Any(x => Equals(x.MsgId, evt.MsgId)))
+        if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId)))
             return _state;
         Version = evt.Version;
 //        evt.Version = version;

@@ -5,5 +5,4 @@ namespace DotCart.TestKit.Tests;
 
 public class TheSubscriptionInfoTests : SubscriptionInfoTestsT<ITheSubscriptionInfo>
 {
-
 }

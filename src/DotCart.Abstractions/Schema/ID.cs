@@ -10,13 +10,19 @@ public interface IID
 
 public record ID : IID
 {
-    public ID(string prefix, string value = "")
+    protected ID(string prefix, string value = "")
     {
         if (value == string.Empty)
             value = GuidUtils.LowerCaseGuid;
         Prefix = prefix.CheckPrefix();
         Value = value.CheckValue();
     }
+
+    public static IID New(string prefix, string value = "")
+    {
+        return new ID(prefix, value);
+    }
+    
 
     public string Prefix { get; set; }
     public string Value { get; set; }
@@ -25,14 +31,10 @@ public record ID : IID
     {
         return $"{Prefix}{IDFuncs.PrefixSeparator}{Value}";
     }
-    public static ID New<TID>(string id)
-    {
-        return new ID(IDPrefixAtt.Get<TID>(), id);
-    }
-    public static ID New(string prefix)
-    {
-        return new ID(prefix);
-    }
+    
+    
+    
+    
     
 }
 
@@ -40,17 +42,27 @@ public static class IDFuncs
 {
     public const char PrefixSeparator = '.';
 
-    public static ID IDFromIdString(this string idString)
+    
+    
+    public static IID IDFromIdString(this string idString)
     {
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))
             throw new ArgumentException($"idString must not be null or empty and must contain '{PrefixSeparator}' ");
         var parts = idString.Split(PrefixSeparator);
-        return new ID(parts[0], parts[1]);
+        return ID.New(parts[0], parts[1]);
     }
-    
-    
-    
-    
-    
+
+    public static string PrefixFromIdString(this string idString)
+    {
+        var parts = idString.Split(PrefixSeparator);
+        return parts[0];
+    }
+
+    public static string ValueFromIdString(this string idString)
+    {
+        var parts = idString.Split(PrefixSeparator);
+        return parts[1];
+
+    }
     
 }

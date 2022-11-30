@@ -12,12 +12,6 @@ public sealed class Errors : DuplicatesList<string, Error>
         Add(key, err);
     }
 
-    public void Add(string key, Error ex)
-    {
-        var element = new KeyValuePair<string, Error>(key, ex);
-        base.Add(element);
-    }
-
     public void Add(string key, Exception e)
     {
         Add(key, e.AsError());

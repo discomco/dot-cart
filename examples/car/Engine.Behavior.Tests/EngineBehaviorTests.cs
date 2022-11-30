@@ -4,7 +4,7 @@ using DotCart.Context.Behaviors;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
-using Engine.Utils;
+using Engine.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 using Schema = Engine.Contract.Schema;
@@ -54,12 +54,12 @@ public class EngineBehaviorTests : FullBehaviorTestsT<Aggregate>
         var cmd = Behavior.Initialize.Cmd.New(Contract.Initialize.Payload.New(details));
         _agg.SetID(cmd.AggregateID);
         var feedback = await _agg.ExecuteAsync(cmd);
-        var state = feedback.GetPayload<Engine>();
+        var state = (Engine)feedback.Payload;
         // THEN
         Assert.NotNull(feedback);
         if (!feedback.IsSuccess) Output.WriteLine(feedback.ErrState.ToString());
         Assert.True(feedback.IsSuccess);
-        var isInitialized = state.Status.HasFlag(Contract.Schema.EngineStatus.Initialized);
+        var isInitialized = state.Status.HasFlag(Schema.EngineStatus.Initialized);
         Assert.True(isInitialized);
 //        Thread.Sleep(1_000);
         state = (Engine)_agg.GetState();
@@ -77,7 +77,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT<Aggregate>
 //        _agg.SetID(_ID);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
-        var state = feedback.GetPayload<Engine>();
+        var state = (Engine)feedback.Payload;
         // THEN
         if (!feedback.IsSuccess) Output.WriteLine(feedback.ErrState.ToString());
         Assert.NotNull(feedback);

@@ -34,7 +34,8 @@ public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THop
     }
 }
 
-public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>, IActor where THope : IHope
+public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
+    where THope : IHope
     where TCmd : ICmd
     where TDriver : IResponderDriverT<THope>
 {

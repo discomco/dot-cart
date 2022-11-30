@@ -22,7 +22,7 @@ public static class Initialize
     private static readonly Hope2Cmd<Cmd, Contract.Initialize.Hope> _hope2Cmd =
         hope => Cmd.New(hope.Payload);
 
-   
+
     private static readonly Evt2State<Engine, IEvt> _evt2Doc = (state, evt) =>
     {
         if (evt == null) return state;
@@ -84,11 +84,12 @@ public static class Initialize
         {
             return new[]
             {
-                Evt.Create(
+                Event.New(
                     cmd.AggregateID,
+                    TopicAtt.Get<IEvt>(),
+                    cmd.Payload.ToBytes(),
+                    Aggregate.GetMeta().ToBytes(),
                     Aggregate.Version,
-                    cmd.Payload,
-                    Aggregate.GetMeta(),
                     DateTime.UtcNow)
                 // Evt(, Payload.New(cmd.Payload.Engine))
             };
@@ -124,18 +125,7 @@ public static class Initialize
     {
     }
 
-    public record Evt(ID AggregateID, long Version, byte[] Data, byte[] MetaData, DateTime TimeStamp)
-        : Event(AggregateID, TopicAtt.Get<IEvt>(), Version, Data, MetaData, TimeStamp), IEvt
-    {
-        public static Event Create(ID aggregateID, long version, Contract.Initialize.Payload payload, EventMeta meta, DateTime timesStamp)
-        {
-            return new Evt(aggregateID, version, payload.ToBytes(), meta.ToBytes(), timesStamp);
-        }
-    }
     
-    
-
-
     [Topic(CmdTopic)]
     public record Cmd(Contract.Initialize.Payload Payload)
         : CmdT<Contract.Initialize.Payload>(Schema.EngineID.New(), Payload)

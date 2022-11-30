@@ -28,7 +28,7 @@ public static class ChangeRpm
             evt.GetPayload<Contract.ChangeRpm.Payload>());
 
     private static Hope2Cmd<Cmd, Contract.ChangeRpm.Hope> _hope2Cmd =>
-        hope => Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Contract.ChangeRpm.Payload>());
+        hope => Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
     private static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
     {
@@ -50,27 +50,11 @@ public static class ChangeRpm
     }
 
 
-    [Topic(EvtTopic)]
-    public record Evt(
-            ID AggregateID,
-            long Version,
-            byte[] Data,
-            byte[] MetaData,
-            DateTime TimeStamp)
-        : Event(AggregateID, EvtTopic, Version, Data, MetaData, TimeStamp)
-
-    {
-        public static Event New(ID AggregateID, long Version, byte[] Data, byte[] MetaData, DateTime TimeStamp)
-        {
-            return new Evt(AggregateID, Version, Data, MetaData, TimeStamp);
-        }
-    }
-
     [Topic(CmdTopic)]
-    public record Cmd(ID AggregateID, Contract.ChangeRpm.Payload Payload) 
+    public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload)
         : CmdT<Contract.ChangeRpm.Payload>(AggregateID, Payload), ICmd
     {
-        public static Cmd New(ID aggregateID, Contract.ChangeRpm.Payload payload)
+        public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload)
         {
             return new Cmd(aggregateID, payload);
         }
@@ -86,22 +70,23 @@ public static class ChangeRpm
         public override IEnumerable<Event> Raise(Cmd cmd)
         {
             var res = new List<Event>();
-            var rpmChanged = Event.New(
-                cmd.AggregateID,
-                EvtTopic,
-                cmd.Payload,
-                Aggregate.GetMeta(),
-                Aggregate.Version);
+            var rpmChanged = Event.New(cmd.AggregateID,
+                TopicAtt.Get<IEvt>(),
+                cmd.Payload.ToBytes(),
+                Aggregate.GetMeta().ToBytes(),
+                Aggregate.Version,
+                DateTime.UtcNow);
             res.Add(rpmChanged);
             var newPower = ((Engine)Aggregate.GetState()).Power + cmd.Payload.Delta;
             if (newPower > 0)
                 return res;
             var stopped = Event.New(
                 cmd.AggregateID,
-                Stop.EvtTopic,
-                Contract.Stop.Payload.New(),
-                Aggregate.GetMeta(),
-                Aggregate.Version);
+                TopicAtt.Get<Behavior.Stop.IEvt>(),
+                Contract.Stop.Payload.New().ToBytes(),
+                Aggregate.GetMeta().ToBytes(),
+                Aggregate.Version,
+                DateTime.UtcNow);
             res.Add(stopped);
             return res;
         }

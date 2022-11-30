@@ -16,14 +16,12 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
     where TFact : IFact
 {
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
-    private readonly IExchange _exchange;
 
 
     protected EmitterT(
         IExchange exchange,
         Evt2Fact<TFact, TEvt> evt2Fact) : base(exchange)
     {
-        _exchange = exchange;
         _evt2Fact = evt2Fact;
     }
 

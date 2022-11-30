@@ -16,9 +16,9 @@ public static class Inject
 
 public class Cartwheel : BackgroundService
 {
+    private readonly IEnumerable<IActor> _actors;
     private readonly IExchange _exchange;
     private readonly IProjector _projector;
-    private readonly IEnumerable<IActor> _actors;
 
     private CancellationTokenSource _cts;
     // private readonly IEnumerable<ISpokeB> _spokes;
@@ -46,10 +46,7 @@ public class Cartwheel : BackgroundService
 
     private async Task StartActorsAsync(CancellationToken ctsToken)
     {
-        foreach (var actor in _actors)
-        {
-            await actor.Activate(ctsToken);
-        }
+        foreach (var actor in _actors) await actor.Activate(ctsToken);
     }
 
 

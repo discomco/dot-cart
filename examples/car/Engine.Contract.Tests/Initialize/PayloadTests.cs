@@ -1,14 +1,27 @@
+using DotCart.TestFirst.Schema;
+using DotCart.TestKit;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit.Abstractions;
+
 namespace Engine.Contract.Tests.Initialize;
 
-public class PayloadTests
+public class PayloadTests : PayloadTestsT<Contract.Initialize.Payload>
 {
-    [Fact]
-    public void ShouldDetailsBeRequired()
+    public PayloadTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
-        // GIVEN
-        // WHEN
-        var pl = new Contract.Initialize.Payload();
-        // THEN
-        Assert.NotNull(pl.Details);
+    }
+
+    protected override void Initialize()
+    {
+    }
+
+    protected override void SetTestEnvironment()
+    {
+    }
+
+    protected override void InjectDependencies(IServiceCollection services)
+    {
+        services
+            .AddTransient(_ => TestUtils.Initialize.PayloadCtor);
     }
 }

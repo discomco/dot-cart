@@ -1,4 +1,3 @@
-using DotCart.Abstractions.Schema;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,10 +37,10 @@ public class ContractTests : ContractTests<Contract.Schema.EngineID, Contract.St
         var ID = _newID();
         var pl = Contract.Stop.Payload.New();
         // WHEN
-        var f = Dto.New(ID.Id(), pl);
+        var f = Contract.Stop.Fact.New(ID.Id(), pl);
         // THEN 
         Assert.NotNull(f);
-        Assert.NotEmpty(f.Data);
+        Assert.NotNull(f.Payload);
     }
 
 

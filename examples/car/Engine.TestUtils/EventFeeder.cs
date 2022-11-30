@@ -1,10 +1,9 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using Engine.Contract;
 using Serilog;
 
-namespace Engine.Utils;
+namespace Engine.TestUtils;
 
 public class EventFeeder : ActorB, IEventFeeder, IProducer
 {

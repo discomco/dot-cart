@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class IDTestsT<TID> : IoCTests where TID : ID
+public abstract class IDTestsT<TID> : IoCTests where TID : IID
 {
     protected IDCtorT<TID> _newID;
 
@@ -33,7 +33,7 @@ public abstract class IDTestsT<TID> : IoCTests where TID : ID
         var newID = _newID();
         // THEN
         Assert.NotNull(newID);
-        Assert.Equal(GetIDPrefix(), newID.Prefix);
+        Assert.Equal(GetIDPrefix(), IDPrefixAtt.Get(newID));
     }
 
     private string GetIDPrefix()

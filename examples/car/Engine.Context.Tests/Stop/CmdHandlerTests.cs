@@ -4,7 +4,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
-public class CmdHandlerTests: EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract.Stop.Payload>
+public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract.Stop.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -13,15 +13,13 @@ public class CmdHandlerTests: EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract.
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         base.InjectDependencies(services);
-            services
-                .AddTransient(_ => Engine.Utils.Stop.TestPayloadCtor)
-                .AddTransient(_ => Engine.Utils.Stop.TestCmdCtor);
-        
+        services
+            .AddTransient(_ => TestUtils.Stop.TestPayloadCtor)
+            .AddTransient(_ => TestUtils.Stop.TestCmdCtor);
     }
 }

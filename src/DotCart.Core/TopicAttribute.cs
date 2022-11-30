@@ -26,6 +26,4 @@ public static class TopicAtt
         if (atts.Length == 0) throw new Exception($"Attribute 'Topic' is not defined on {obj.GetType()}!");
         return atts[0].Id;
     }
-    
-    
 }

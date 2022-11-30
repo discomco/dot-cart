@@ -8,11 +8,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst;
 
-public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEvt> : IoCTests 
-    where TID : IID 
+public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEvt> : IoCTests
+    where TID : IID
     where TState : IState
-    where TApplyEvt : ApplyEvtT<TState,TEvt>
-    where TTryCmd: TryCmdT<TCmd>
+    where TApplyEvt : ApplyEvtT<TState, TEvt>
+    where TTryCmd : TryCmdT<TCmd>
     where TEvt : IEvt
     where TCmd : ICmd
 {
@@ -26,7 +26,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public void ShouldResolveTryCmd()
     {
@@ -54,12 +54,12 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var applyEvts = TestEnv.ResolveAll<IApply>(); 
+        var applyEvts = TestEnv.ResolveAll<IApply>();
         // THEN
         try
         {
             var apply = applyEvts.First(x => x.GetType() == typeof(TApplyEvt));
-            Assert.True(apply!=null);
+            Assert.True(apply != null);
         }
         catch (Exception e)
         {

@@ -22,7 +22,7 @@ public static class IDExtensions
 
     public static string CheckValue(this string value)
     {
-        if (string.IsNullOrEmpty(value)) 
+        if (string.IsNullOrEmpty(value))
             value = GuidUtils.LowerCaseGuid;
         value = value.ToLower();
         var match = ValueRegex.IsMatch(value);

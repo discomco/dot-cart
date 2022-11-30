@@ -1,20 +1,19 @@
-using DotCart.Core;
-
 namespace DotCart.Abstractions.Schema;
 
-public interface IFeedback : IDto
+public interface IFeedback : IDto, IMsg
 {
     ErrorState ErrState { get; }
     IEnumerable<string> Warnings { get; }
     IEnumerable<string> Infos { get; }
     bool IsSuccess { get; }
     void SetError(Error error);
+    void SetPayload<TState>(TState state) where TState : IState;
 }
 
-public record Feedback(string AggId, byte[] Data)
-    : Dto(AggId, Data), IFeedback
+public record Feedback(string AggId) : IFeedback
 {
-    public static Feedback Empty => New();
+    public static Feedback Empty => New("");
+    public IState Payload { get; set; }
     public ErrorState ErrState { get; } = new();
     public IEnumerable<string> Warnings { get; } = Array.Empty<string>();
     public IEnumerable<string> Infos { get; } = Array.Empty<string>();
@@ -25,18 +24,18 @@ public record Feedback(string AggId, byte[] Data)
         ErrState.Errors.Add(error.Code.ToString(), error);
     }
 
-    private static Feedback New()
+    public void SetPayload<TState>(TState state) where TState : IState
     {
-        return new Feedback("", Array.Empty<byte>());
+        Payload = state;
     }
 
     public static Feedback New(string Id)
     {
-        return new Feedback(Id, Array.Empty<byte>());
+        return new Feedback(Id);
     }
 
     public static Feedback New<TPayload>(string aggId, TPayload payload) where TPayload : IPayload
     {
-        return new Feedback(aggId, payload.ToBytes());
+        return new Feedback(aggId);
     }
 }

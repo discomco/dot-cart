@@ -9,5 +9,4 @@ public static class Inject
         return services
             .AddTransient(_ => Schema.IDCtor);
     }
-    
 }

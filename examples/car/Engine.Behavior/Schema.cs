@@ -23,7 +23,7 @@ public record Engine : IState
 
     public Engine()
     {
-        Details = new Schema.Details("New Engine");
+        Details = new Schema.Details();
         Status = Schema.EngineStatus.Unknown;
     }
 
@@ -40,7 +40,7 @@ public record Engine : IState
     {
         Id = id;
         Status = Schema.EngineStatus.Unknown;
-        Details = new Schema.Details("New Engine");
+        Details = Schema.Details.New("New Engine");
     }
 
     [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]

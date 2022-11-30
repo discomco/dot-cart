@@ -44,10 +44,11 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
                     {
                         var hope = (THope)args.ReceivedObject;
                         Log.Debug($"::RECEIVED:: {args.Subject} ~> {hope.AggId}");
-                        var rsp = await Call(hope, cancellationToken);
+                        var msg = await Call(hope, cancellationToken);
+                        var rsp = (Feedback)msg;
                         args.Message.Respond(rsp.ToBytes());
                         // _bus.Publish(args.Reply, rsp);
-                        Log.Debug($"::RESPONDED:: Topic: {args.Reply} ~> Id: {rsp.MsgId} ");
+                        Log.Debug($"::RESPONDED:: Topic: {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
                     });
             }
             catch (Exception e)

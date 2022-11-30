@@ -40,16 +40,12 @@ public static class ChangeRpm
     }
 
     [Topic(Topics.Fact)]
-    public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    public record Fact(string AggId, Payload Payload)
+        : FactT<Payload>(AggId, Payload), IFact
     {
-        public static Fact New(string AggId, byte[] Data)
-        {
-            return new Fact(AggId, Data);
-        }
-
         public static Fact New(string AggId, Payload payload)
         {
-            return new Fact(AggId, payload.ToBytes());
+            return new Fact(AggId, payload);
         }
     }
 }

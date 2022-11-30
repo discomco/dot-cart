@@ -28,7 +28,8 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
 
     public override void Dispose()
     {
-        if (_bus == null) return;
+        if (_bus == null)
+            return;
         _bus.OnSerialize -= OnSerialize;
         _bus.OnDeserialize -= OnDeserialize;
         _bus.Dispose();

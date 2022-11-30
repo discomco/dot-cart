@@ -21,7 +21,7 @@ public static class Start
 
     private static readonly Hope2Cmd<Cmd, Contract.Start.Hope> _hope2Cmd =
         hope =>
-            Cmd.New(hope.AggId.IDFromIdString(), hope.GetPayload<Contract.Start.Payload>());
+            Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
     private static readonly Evt2State<Engine, IEvt> _evt2Doc =
         (state, _) =>
@@ -110,10 +110,11 @@ public static class Start
             {
                 Event.New(
                     cmd.AggregateID,
-                    EvtTopic,
-                    cmd.Payload,
-                    Aggregate.GetMeta(),
-                    Aggregate.Version)
+                    TopicAtt.Get<Start.IEvt>(),
+                    cmd.Payload.ToBytes(),
+                    Aggregate.GetMeta().ToBytes(),
+                    Aggregate.Version,
+                    DateTime.UtcNow)
             };
         }
     }
@@ -129,10 +130,10 @@ public static class Start
     }
 
     [Topic(CmdTopic)]
-    public record Cmd(ID AggregateID, Contract.Start.Payload Payload) 
+    public record Cmd(IID AggregateID, Contract.Start.Payload Payload)
         : CmdT<Contract.Start.Payload>(AggregateID, Payload)
     {
-        public static Cmd New(ID aggregateID, Contract.Start.Payload payload)
+        public static Cmd New(IID aggregateID, Contract.Start.Payload payload)
         {
             return new Cmd(aggregateID, payload);
         }

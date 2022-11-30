@@ -7,11 +7,11 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj" />
+        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="Drivers" />
+        <Folder Include="Drivers"/>
     </ItemGroup>
 
 

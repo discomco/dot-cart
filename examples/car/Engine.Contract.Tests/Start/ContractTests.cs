@@ -1,4 +1,3 @@
-using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -29,7 +28,7 @@ public class ContractTests : ContractTests<Contract.Schema.EngineID, Contract.St
         var pl = Contract.Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var fact = Contract.Start.Fact.New(ID.Id(), pl.ToBytes());
+        var fact = Contract.Start.Fact.New(ID.Id(), pl);
         // THEN
         Assert.NotNull(fact);
     }
@@ -40,7 +39,7 @@ public class ContractTests : ContractTests<Contract.Schema.EngineID, Contract.St
         var pl = Contract.Start.Payload.New;
         var ID = _newID();
         // WHEN
-        var hope = Contract.Start.Hope.New(ID.Id(), pl.ToBytes());
+        var hope = Contract.Start.Hope.New(ID.Id(), pl);
         // THEN
         Assert.NotNull(hope);
     }

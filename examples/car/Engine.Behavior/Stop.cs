@@ -46,10 +46,10 @@ public static class Stop
 
 
     [Topic(CmdTopic)]
-    public record Cmd(ID AggregateID, Contract.Stop.Payload Payload)
+    public record Cmd(IID AggregateID, Contract.Stop.Payload Payload)
         : CmdT<Contract.Stop.Payload>(AggregateID, Payload)
     {
-        public static Cmd New(ID ID, Contract.Stop.Payload payload)
+        public static Cmd New(IID ID, Contract.Stop.Payload payload)
         {
             return new Cmd(ID, payload);
         }
@@ -60,24 +60,7 @@ public static class Stop
     {
     }
 
-    [Topic(EvtTopic)]
-    public record Evt(ID AggregateID,
-            long Version,
-            Contract.ChangeRpm.Payload Payload,
-            byte[] MetaData,
-            DateTime TimeStamp)
-        : Event(AggregateID, EvtTopic, Version, Payload.ToBytes(), MetaData, TimeStamp)
-    {
-        public static Evt New(ID AggregateID,
-            long Version,
-            Contract.ChangeRpm.Payload payload,
-            byte[] MetaData,
-            DateTime TimeStamp)
-        {
-            return new Evt(AggregateID, Version, payload, MetaData, TimeStamp);
-        }
-    }
-
+    
     public class TryCmd : TryCmdT<Cmd>
     {
         public override IFeedback Verify(Cmd cmd)
@@ -103,9 +86,10 @@ public static class Stop
                 Event.New(
                     cmd.AggregateID,
                     TopicAtt.Get<IEvt>(),
-                    cmd.Payload,
-                    Aggregate.GetMeta(),
-                    Aggregate.Version
+                    cmd.Payload.ToBytes(),
+                    Aggregate.GetMeta().ToBytes(),
+                    Aggregate.Version,
+                    DateTime.UtcNow
                 )
             };
         }

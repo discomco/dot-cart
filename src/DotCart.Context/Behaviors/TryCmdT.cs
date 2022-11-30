@@ -5,11 +5,10 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-
 public delegate Feedback VerifyFunc<in TState, in TCmd, TPayload>(TState state, TCmd cmd)
-    where TState: IState 
-    where TCmd: ICmd<TPayload>
-    where TPayload: IPayload;
+    where TState : IState
+    where TCmd : ICmd<TPayload>
+    where TPayload : IPayload;
 
 public abstract class TryCmdT<TCmd> : ITry<TCmd>
     where TCmd : ICmd

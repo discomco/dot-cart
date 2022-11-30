@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -51,7 +50,7 @@ public class
         var details = Contract.Schema.Details.New("Payload Details");
         var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var fact = Contract.Initialize.Fact.New(aggId.Id(), payload.ToBytes());
+        var fact = Contract.Initialize.Fact.New(aggId.Id(), payload);
         // THEN
         Assert.NotNull(fact);
     }
@@ -63,7 +62,7 @@ public class
         var details = Contract.Schema.Details.New("New Engine");
         var payload = Contract.Initialize.Payload.New(details);
         // WHEN
-        var hope = Contract.Initialize.Hope.New(aggId.Id(), payload.ToBytes());
+        var hope = Contract.Initialize.Hope.New(payload);
         // THEN
         Assert.NotNull(hope);
     }

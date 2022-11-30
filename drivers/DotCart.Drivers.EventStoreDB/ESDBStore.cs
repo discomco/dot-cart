@@ -121,7 +121,7 @@ public class ESDBStore : IEventStore
     private static Event ToEvent(ResolvedEvent evt)
     {
         return new Event(
-            evt.Event.EventStreamId.IDFromIdString(),
+            evt.Event.EventStreamId,
             evt.Event.EventType,
             evt.Event.EventNumber.ToInt64(),
             evt.Event.Data.ToArray(),

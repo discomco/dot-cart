@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 
 namespace Engine.Contract;
 
@@ -16,7 +17,7 @@ public static class Schema
 
     public const string EngineIDPrefix = "engine";
     public static readonly IDCtorT<EngineID> IDCtor = () => new EngineID();
-        
+
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
     {
@@ -42,17 +43,26 @@ public static class Schema
         {
         }
 
-        public static EngineID New()
+        public static EngineID New(string value = "")
         {
-            return new EngineID();
+            if (string.IsNullOrEmpty(value))
+                value = GuidUtils.LowerCaseGuid;
+            return new EngineID(value.ToLower());
         }
     }
 
-    public record Details(string Name = "new engine", string Description = "")
+    public record Details
     {
+
+        public string Name { get; set; }
+        public string Description { get; set; }
         public static Details New(string name, string description = "")
         {
-            return new Details(name, description);
+            return new Details
+            {
+                Name = name,
+                Description = description
+            };
         }
     }
 }

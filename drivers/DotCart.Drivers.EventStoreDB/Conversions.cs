@@ -12,7 +12,7 @@ public static class Conversions
         if (evt == null) return null;
         try
         {
-            var eventId = Uuid.FromGuid(Guid.Parse(evt.MsgId));
+            var eventId = Uuid.FromGuid(Guid.Parse(evt.EventId));
             var typeName = TopicAtt.Get(evt);
             ReadOnlyMemory<byte> metaData = evt.MetaData;
             ReadOnlyMemory<byte> data = evt.Data;

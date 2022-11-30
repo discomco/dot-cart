@@ -36,4 +36,19 @@ public static class JsonUtils
             ? default(T)
             : JsonSerializer.Deserialize<T>(json);
     }
+
+
+    public static byte[] ToUtf8(object obj)
+    {
+        return obj == null
+            ? Array.Empty<byte>()
+            : JsonSerializer.SerializeToUtf8Bytes(obj);
+    }
+
+    public static T FromUtf8<T>(this byte[] bytes)
+    {
+        if (bytes == null) return default(T);
+        var span = new ReadOnlySpan<byte>(bytes);
+        return JsonSerializer.Deserialize<T>(span);
+    }
 }

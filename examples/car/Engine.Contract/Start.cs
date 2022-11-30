@@ -5,16 +5,6 @@ namespace Engine.Contract;
 
 public static class Start
 {
-    public static class Generators
-    {
-        public static GenerateHope<Hope> _generateHope => () =>
-        {
-            var pl = Payload.New;
-            var aggId = Schema.IDCtor();
-            return Hope.New(aggId.Id(), pl.ToBytes());
-        };
-    }
-
     public static class Topics
     {
         public const string Hope = "engine.start.v1";
@@ -32,16 +22,11 @@ public static class Start
     }
 
     [Topic(Topics.Fact)]
-    public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
     {
-        public static Fact New(string AggId, byte[] Data)
-        {
-            return new Fact(AggId, Data);
-        }
-
         public static Fact New(string AggId, Payload payload)
         {
-            return new Fact(AggId, payload.ToBytes());
+            return new Fact(AggId, payload);
         }
     }
 
@@ -51,16 +36,12 @@ public static class Start
     }
 
     [Topic(Topics.Hope)]
-    public record Hope(string AggId, byte[] Data) : Dto(AggId, Data), IHope
+    public record Hope(string AggId, Payload Payload)
+        : HopeT<Payload>(AggId, Payload), IHope
     {
-        public static Hope New(string AggId, byte[] Data)
-        {
-            return new Hope(AggId, Data);
-        }
-
         public static Hope New(string AggId, Payload payload)
         {
-            return new Hope(AggId, payload.ToBytes());
+            return new Hope(AggId, payload);
         }
     }
 }

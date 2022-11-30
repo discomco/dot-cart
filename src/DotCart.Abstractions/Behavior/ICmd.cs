@@ -4,7 +4,7 @@ namespace DotCart.Abstractions.Behavior;
 
 public interface ICmd
 {
-    ID AggregateID { get; }
+    IID AggregateID { get; }
 //    string Topic { get; }
 }
 

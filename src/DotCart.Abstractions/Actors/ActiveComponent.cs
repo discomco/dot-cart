@@ -52,7 +52,8 @@ public abstract class ActiveComponent : IActiveComponent
     {
         return Run(async () =>
         {
-            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
+            while (!stoppingToken.IsCancellationRequested)
+                Thread.Sleep(1000);
             await CleanupAsync(stoppingToken).ConfigureAwait(false);
             await StopAsync(stoppingToken).ConfigureAwait(false);
         }, stoppingToken);

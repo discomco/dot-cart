@@ -9,19 +9,19 @@ public static class Constants
 }
 
 public record Event(
-    ID AggregateID, 
-    string EventType, 
-    long Version, 
-    byte[] Data, 
+    string AggregateId,
+    string EventType,
+    long Version,
+    byte[] Data,
     byte[] MetaData,
     DateTime TimeStamp) : IEvt
 {
-    public string EventId { get; set; } = GuidUtils.LowerCaseGuid;
+    public IID AggregateID => ID.New( AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString() );
     public string EventType { get; set; } = EventType;
-    public string AggregateId { get; set; }
-    public string MsgId => EventId;
+    
+    public string AggregateId { get; set; } = AggregateId;
+    public string EventId { get; set; } = GuidUtils.LowerCaseGuid;
     public string Topic => EventType;
-
     public DateTime TimeStamp { get; private set; } = TimeStamp;
 
     public byte[] Data { get; set; } = Data;
@@ -32,9 +32,6 @@ public record Event(
     {
         Version = version;
     }
-
-    public ID AggregateID { get; } = AggregateID;
-
     public byte[] MetaData { get; set; } = MetaData;
 
     public void SetMetaPayload<TPayload>(TPayload payload)
@@ -72,22 +69,24 @@ public record Event(
         Data = data;
     }
 
-    public static Event New<TPayload>(ID aggregateID,
-        string eventType,
-        TPayload payload,
-        EventMeta meta,
-        long version = Constants.NewAggregateVersion)
-    {
-        return new Event(
-            aggregateID,
-            eventType,
-            version,
-            payload.ToBytes(),
-            meta.ToBytes(),
-            DateTime.UtcNow);
-    }
+    // public static Event New<TPayload>(
+    //     IID aggregateID,
+    //     string eventType,
+    //     TPayload payload,
+    //     EventMeta meta,
+    //     long version = Constants.NewAggregateVersion)
+    // {
+    //     return new Event(
+    //         aggregateID,
+    //         eventType,
+    //         version,
+    //         payload.ToBytes(),
+    //         meta.ToBytes(),
+    //         DateTime.UtcNow);
+    // }
 
-    public static Event New(ID aggregateID,
+    public static Event New(
+        IID aggregateID,
         string eventType,
         byte[] data,
         byte[] meta,
@@ -95,7 +94,7 @@ public record Event(
         DateTime timeStamp)
     {
         return new Event(
-            aggregateID,
+            aggregateID.Id(),
             eventType,
             version,
             data,
@@ -103,10 +102,6 @@ public record Event(
             timeStamp);
     }
 }
-
-
-
-
 
 public record EventMeta(string AggregateType, string AggregateId)
 {

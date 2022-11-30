@@ -8,19 +8,9 @@ public static class Initialize
     public const string FactTopic = "engine.initialized.v1";
     public const string HopeTopic = "engine.initialize.v1";
 
-    public record Payload : IPayload
+    public record Payload(Schema.Details Details) : IPayload
     {
-        public Payload()
-        {
-            Details = new Schema.Details();
-        }
-
-        private Payload(Schema.Details details)
-        {
-            Details = details;
-        }
-
-        public Schema.Details Details { get; }
+        public Schema.Details Details { get; } = Details;
 
         public static Payload New(Schema.Details details)
         {
@@ -32,6 +22,7 @@ public static class Initialize
     public interface IHope : IHope<Payload>
     {
     }
+
     [Topic(HopeTopic)]
     public record Hope(Payload Payload) : HopeT<Payload>(string.Empty, Payload), IHope
     {
@@ -40,22 +31,17 @@ public static class Initialize
             return new Hope(payload);
         }
     }
+
     [Topic(FactTopic)]
     public interface IFact : IFact<Payload>
-    {
-    }
+    { }
 
     [Topic(FactTopic)]
-    public record Fact(string AggId, byte[] Data) : Dto(AggId, Data), IFact
+    public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
     {
-        public static Fact New(string AggId, byte[] Data)
-        {
-            return new Fact(AggId, Data);
-        }
-
         public static Fact New(string AggId, Payload payload)
         {
-            return new Fact(AggId, payload.ToBytes());
+            return new Fact(AggId, payload);
         }
     }
 }
