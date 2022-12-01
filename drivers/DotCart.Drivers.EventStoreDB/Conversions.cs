@@ -13,7 +13,7 @@ public static class Conversions
         try
         {
             var eventId = Uuid.FromGuid(Guid.Parse(evt.EventId));
-            var typeName = TopicAtt.Get(evt);
+            var typeName = evt.Topic;
             ReadOnlyMemory<byte> metaData = evt.MetaData;
             ReadOnlyMemory<byte> data = evt.Data;
             return new EventData(eventId, typeName, data, metaData);

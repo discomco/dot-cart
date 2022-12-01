@@ -30,6 +30,7 @@ public class InitializeController : ControllerBase
             Guard.Against.Null(hope);
             var cmd = _hope2Cmd(hope);
             feedback = await _cmdHandler.HandleAsync(cmd);
+            return Ok(feedback);
         }
         catch (Exception e)
         {
