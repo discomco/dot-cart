@@ -15,4 +15,10 @@ public static class Stop
             Contract.Stop.Payload>
         TestCmdCtor =
             (_, _) => Behavior.Stop.Cmd.New(Schema.TestIDCtor(), TestPayloadCtor());
+
+    public static readonly HopeCtorT<
+            Contract.Stop.Hope,
+            Contract.Stop.Payload>
+        HopeCtor =
+            (_, _) => Contract.Stop.Hope.New(Schema.TestIDCtor().Id(), TestPayloadCtor());
 }

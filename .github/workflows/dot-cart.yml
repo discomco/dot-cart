@@ -9,6 +9,9 @@ env:
   EVENTSTORE_URI: "esdb+discover://eventstore:2113?tls=false"
   EVENTSTORE_USER: "admin"
   EVENTSTORE_PWD: "changeit"
+  NATS_URI: "nats://nats:4222"
+  NATS_USR: "a"
+  NATS_PWD: "a"
 
 jobs:
   

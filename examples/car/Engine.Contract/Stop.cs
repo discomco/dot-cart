@@ -43,4 +43,5 @@ public static class Stop
             return new Hope(aggId, payload);
         }
     }
+    
 }

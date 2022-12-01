@@ -24,4 +24,9 @@ public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Initializ
             .AddTransient(_ => TestUtils.Initialize.HopeCtor);
 
     }
+
+    protected override string GetExpectedTopic()
+    {
+        return Contract.Initialize.HopeTopic;
+    }
 }

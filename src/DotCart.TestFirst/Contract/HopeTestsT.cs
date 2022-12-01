@@ -57,6 +57,19 @@ namespace Engine.Contract.Tests.Initialize;
         Assert.Equal(hope, desHope);
     }
 
+    [Fact]
+    protected void ShouldHaveTopic()
+    {
+        // GIVEN
+        var expectedTopic = GetExpectedTopic();
+        // WHEN
+        var foundTopic = TopicAtt.Get<THope>();
+        // THEN
+        Assert.Equal(expectedTopic, foundTopic);
+    }
+
+    protected abstract string GetExpectedTopic();
+
 
     protected override void Initialize()
     {
