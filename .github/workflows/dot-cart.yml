@@ -56,12 +56,14 @@ jobs:
 
     runs-on: ubuntu-latest
     environment: Production
+    container: mcr.microsoft.com/dotnet/sdk
     strategy:
       matrix:
         dotnet-version: [ '7.0.x' ]
 
 
     services:
+      
       eventstore:
         env:
           EVENTSTORE_CLUSTER_SIZE: "1"

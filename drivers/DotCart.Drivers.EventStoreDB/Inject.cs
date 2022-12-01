@@ -12,7 +12,7 @@ public static partial class Inject
 {
     public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
     {
-        return services?
+        return services
             .AddPolly()
             .AddEventStore(s =>
             {
