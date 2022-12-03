@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using DotCart.Abstractions.Actors;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
 namespace DotCart.TestKit;
@@ -41,5 +42,13 @@ public class IoCTestContainer : IDisposable
     public IEnumerable<T> ResolveAll<T>()
     {
         return Provider.GetServices<T>();
+    }
+
+    public IActor<TSpoke>? ResolveActor<TSpoke, TActor>() 
+        where TSpoke : ISpokeT<TSpoke> 
+        where TActor: IActor<TSpoke>
+    {
+        IEnumerable<IActor<TSpoke>?> actors = ResolveAll<IActor<TSpoke>>();
+        return actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));
     }
 }

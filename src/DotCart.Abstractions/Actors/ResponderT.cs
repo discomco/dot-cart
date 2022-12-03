@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 
 namespace DotCart.Abstractions.Actors;
 
@@ -17,6 +18,8 @@ public interface IResponderT<THope, TCmd> : IResponder
     where TCmd : ICmd
 {
 }
+
+
 
 public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THope, TCmd>, IActor<TSpoke>
     where TDriver : IResponderDriverT<THope>
@@ -43,6 +46,11 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
     private readonly TDriver _responderDriver;
 
+    protected override string GetName()
+    {
+        return $"{typeof(TDriver).Name}::Responder<{TopicAtt.Get<THope>()}>";
+    }
+
     public ResponderT(
         TDriver responderDriver,
         IExchange exchange,
@@ -53,6 +61,8 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
+    
+    
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {

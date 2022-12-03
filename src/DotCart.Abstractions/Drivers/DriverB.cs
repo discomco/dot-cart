@@ -7,11 +7,6 @@ public abstract class DriverB : IDriver
 {
     private IActor _actor;
 
-    public virtual void Dispose()
-    {
-        throw new NotImplementedException();
-    }
-
     public void SetActor(IActor actor)
     {
         _actor = actor;
@@ -26,4 +21,7 @@ public abstract class DriverB : IDriver
     {
         return _actor.HandleCall(msg, cancellationToken);
     }
+
+    public virtual void Dispose()
+    {}
 }

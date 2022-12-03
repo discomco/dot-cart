@@ -10,6 +10,7 @@ public interface IConsumer1
 {
 }
 
+
 public class Consumer1 : ActorB, IActor<Spoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)
@@ -26,7 +27,6 @@ public class Consumer1 : ActorB, IActor<Spoke>, IConsumer1
     {
         return (Task<IMsg>)Task.CompletedTask;
     }
-
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {

@@ -76,11 +76,11 @@ public class MemStore<TState> : IModelStore<TState> where TState : IState
         {
             lock (getMutex)
             {
-                return !Exists(id).Result
+                return !Exists(id, cancellationToken).Result
                     ? default
                     : InnerStore[id];
             }
-        });
+        }, cancellationToken);
     }
 
     public async Task<bool> HasData(CancellationToken cancellationToken)

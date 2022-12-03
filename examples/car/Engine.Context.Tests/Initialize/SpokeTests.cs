@@ -1,44 +1,17 @@
-using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
+using DotCart.TestFirst.Delivery;
 using DotCart.TestKit;
 using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
+
 namespace Engine.Context.Tests.Initialize;
 
-public class SpokeTests : IoCTests
+[Name(Context.Initialize.SpokeName)]
+public class SpokeTests : SpokeTestsT<Context.Initialize.Spoke>
 {
-    private ISpokeBuilder<Context.Initialize.Spoke> _builder;
-    private Context.Initialize.Spoke _spoke;
-
-    public SpokeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    {
-    }
-
-
-    [Fact]
-    public void ShouldResolveSpoke()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _spoke = TestEnv.ResolveHosted<Context.Initialize.Spoke>();
-        // THEN
-        Assert.NotNull(_spoke);
-    }
-
-    [Fact]
-    public void ShouldResolveSpokeBuilder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _builder = TestEnv.ResolveRequired<ISpokeBuilder<Context.Initialize.Spoke>>();
-        // THEN
-        Assert.NotNull(_builder);
-    }
 
     protected override void Initialize()
     {
@@ -55,4 +28,10 @@ public class SpokeTests : IoCTests
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddInitializeSpoke();
     }
+
+    public SpokeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    {
+    }
+
+    
 }

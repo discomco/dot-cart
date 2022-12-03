@@ -7,7 +7,13 @@ namespace DotCart.Abstractions.Actors;
 public abstract class ActiveComponent : IActiveComponent
 {
     private CancellationTokenSource _cts;
-    public string Name => GetType().Name;
+    public string Name => GetName();
+
+    protected virtual string GetName()
+    {
+        return NameAtt.Get(this);
+    }
+
     public ComponentStatus Status { get; private set; }
 
     public Task Activate(CancellationToken stoppingToken = default)
@@ -70,7 +76,8 @@ public abstract class ActiveComponent : IActiveComponent
         {
             try
             {
-                Log.Information($"Actor::{Name} ~> ACTIVATED");
+                var activated = "ACTIVATED".AsFact();
+                Log.Information($"{activated} [{Name}]");
                 Status = ComponentStatus.Active;
                 await StartActingAsync(cancellationToken).ConfigureAwait(false);
             }

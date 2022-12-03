@@ -2,6 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using NATS.Client;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -18,7 +19,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     }
 
     [Fact]
-    public void ShouldResolveHope2Cmd()
+    public async Task ShouldResolveHope2Cmd()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -29,11 +30,11 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     }
 
     [Fact]
-    public abstract void ShouldResolveConnection();
+    public abstract Task ShouldResolveConnection();
 
 
     [Fact]
-    public void ShouldResolveResponder()
+    public async Task ShouldResolveResponder()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -71,4 +72,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
             Assert.True(true);
         }
     }
+    
+    
+    
 }

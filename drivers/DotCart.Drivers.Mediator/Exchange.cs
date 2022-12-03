@@ -1,11 +1,13 @@
 ﻿using System.Collections.Immutable;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.Mediator;
 
+[Name("dotcart:exchange")]
 internal class Exchange : ActiveComponent, IExchange
 {
     private ImmutableDictionary<string, List<IActor>> _readers = ImmutableDictionary<string, List<IActor>>.Empty;
@@ -32,7 +34,8 @@ internal class Exchange : ActiveComponent, IExchange
             .Where(slot => slot.Key == topic)
             .SelectMany(slot => slot.Value);
         if (!consumers.Any()) return;
-        foreach (var consumer in consumers) await consumer.HandleCast(msg, cancellationToken);
+        foreach (var consumer in consumers) 
+            await consumer.HandleCast(msg, cancellationToken);
     }
 
     public Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
@@ -48,7 +51,8 @@ internal class Exchange : ActiveComponent, IExchange
     public void Dispose()
     {
         _readers.Clear();
-        Log.Information($"[{GetType().Name}] ~> Stopped.");
+        var stopped = "STOPPED".AsFact();
+        Log.Information($"{stopped} [{GetType().Name}]");
     }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
@@ -63,13 +67,16 @@ internal class Exchange : ActiveComponent, IExchange
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
-        return Run(() => { Log.Information($"[{GetType().Name}] ~> Started;"); }, cancellationToken);
-        return CompletedTask;
+        return Run(() =>
+        {
+            var started = "STARTED".AsFact();
+            Log.Information($"{started} [{GetType().Name}]");
+        }, cancellationToken);
     }
 
     protected override Task StopActingAsync(CancellationToken cancellationToken)
     {
-        return Run(() => { Log.Information($"[{GetType().Name}] ~> Stopping;"); }, cancellationToken);
-        return CompletedTask;
+        var stopping = "STOPPING".AsVerb();
+        return Run(() => { Log.Information($"{stopping} [{GetType().Name}]"); }, cancellationToken);
     }
 }

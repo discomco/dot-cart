@@ -23,7 +23,7 @@ public static partial class Inject
 ///     that is meant to be injected into an AggregateStore
 ///     It offers a straightforward interface to project events onto the TopicMediator
 /// </summary>
-[Topic("memory")]
+[Topic(MemProjectorName)]
 internal sealed class MemProjector : ActorB, IMemProjector
 {
     public MemProjector(IExchange exchange) : base(exchange)
@@ -43,6 +43,8 @@ internal sealed class MemProjector : ActorB, IMemProjector
     {
         return (Task<IMsg>)CompletedTask;
     }
+
+    private const string MemProjectorName = "dotcart:mem_projector";
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {

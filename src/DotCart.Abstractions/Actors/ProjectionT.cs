@@ -71,7 +71,8 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT3
     {
         return Run(() =>
         {
-            Log.Information($"[{GetType().Name}] subscribed to {TopicAtt.Get<TEvt>()} ");
+            var subscribed = "SUBSCRIBED".AsFact();
+            Log.Information($"{subscribed} {TopicAtt.Get<TEvt>()}  ~> [{GetType().Name}]");
             _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
             return CompletedTask;
         }, cancellationToken);

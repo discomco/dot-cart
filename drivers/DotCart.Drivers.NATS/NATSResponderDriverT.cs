@@ -35,7 +35,8 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
             try
             {
                 await ConnectAsync(cancellationToken);
-                _logMessage = $"::RESPOND ::Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
+                var responding = "RESPONDING".AsVerb();
+                _logMessage = $"NATS{responding} Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
                 _subscription = _bus.SubscribeAsync(
@@ -43,12 +44,14 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
                     async (sender, args) =>
                     {
                         var hope = (THope)args.ReceivedObject;
-                        Log.Debug($"::RECEIVED:: {args.Subject} ~> {hope.AggId}");
+                        var received = "RECEIVED".AsFact();
+                        Log.Debug($"NATS{received} Req {args.Subject} ~> {hope.AggId}");
                         var msg = await Call(hope, cancellationToken);
                         var rsp = (Feedback)msg;
                         args.Message.Respond(rsp.ToBytes());
                         // _bus.Publish(args.Reply, rsp);
-                        Log.Debug($"::RESPONDED:: Topic: {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
+                        var responded = "RESPONDED".AsFact();
+                        Log.Debug($"NATS{responded} Rsp {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
                     });
             }
             catch (Exception e)
@@ -89,11 +92,13 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
         {
             while (_bus.IsClosed())
             {
-                _logMessage = $"::CONNECTING ::Bus [{_bus.ConnectedId}]";
+                var connecting = "CONNECTING".AsVerb();
+                _logMessage = $"{connecting} NATS [{_bus.ConnectedId}]";
                 Thread.Sleep(1_000);
             }
 
-            _logMessage = $"::CONNECTED ::Bus [{_bus.ConnectedId}]";
+            var connected = "CONNECTED".AsFact();
+            _logMessage = $"{connected} NATS [{_bus.ConnectedId}]";
             Log.Information(_logMessage);
             _bus.OnDeserialize += OnDeserialize;
             _bus.OnSerialize += OnSerialize;

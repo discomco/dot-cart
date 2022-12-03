@@ -29,6 +29,7 @@ public static class Inject
     }
 }
 
+[Name("dotcart:projector")]
 public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISubscriptionInfo
 {
     private readonly IProjectorDriverT<TInfo> _projectorDriver;
@@ -63,7 +64,8 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer where TInfo : ISub
         return Task.Run(() =>
         {
             _projectorDriver.SetActor(this);
-            Log.Information("Projector :: has Started.");
+            var started = "STARTED".AsVerb();
+            Log.Information($"{started} [Projector<{GroupNameAtt.Get<TInfo>()}-{IDPrefixAtt.Get<TInfo>()}>]");
             return _projectorDriver.StartStreamingAsync(cancellationToken);
         }, cancellationToken);
     }

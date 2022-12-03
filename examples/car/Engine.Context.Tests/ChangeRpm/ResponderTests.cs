@@ -1,22 +1,16 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Drivers;
-using DotCart.Drivers.Default;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
-using Engine.Behavior;
-using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Initialize;
+namespace Engine.Context.Tests.ChangeRpm;
 
-public class
-    ResponderTests : ResponderTestsT<
-        IResponderT<Contract.Initialize.Hope, Behavior.Initialize.Cmd>,
-        Contract.Initialize.Hope,
-        Behavior.Initialize.Cmd
-    >
+public class ResponderTests: ResponderTestsT<
+    IResponderT<Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>,
+    Contract.ChangeRpm.Hope,
+    Behavior.ChangeRpm.Cmd>
 {
     private IEncodedConnection _bus;
 
@@ -26,18 +20,19 @@ public class
 
     protected override void Initialize()
     {
+        
     }
 
     protected override void SetTestEnvironment()
     {
+        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            // .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
-            // .AddSingleton(_ => A.Fake<IAggregateStore>())
-            .AddInitializeSpoke();
+            .AddChangeRpmSpoke();
+
     }
 
     [Fact]
@@ -51,6 +46,4 @@ public class
         Assert.NotNull(_bus);
     }
 
-    
-    
 }

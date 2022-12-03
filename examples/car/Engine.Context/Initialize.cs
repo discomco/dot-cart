@@ -1,6 +1,7 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
+using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
@@ -15,8 +16,8 @@ public static class Initialize
     {
         return services
             .AddEngineBehavior()
-            .AddTransient<IToRedisDoc, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
+            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>()
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
             .AddHostedService(provider =>
@@ -24,15 +25,21 @@ public static class Initialize
                 var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
                 return spokeBuilder.Build();
             })
-            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
-            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>();
+            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>();
     }
+    
+
+    
+    
 
     public interface IToRedisDoc : IActor<Spoke>
     {
     }
 
-    internal class ToRedisDoc : ProjectionT<
+    public const string ToRedisDocName = "engine:initialized:to_redis_doc:v1";
+        
+    [Name(ToRedisDocName)]
+    public class ToRedisDoc : ProjectionT<
             IRedisStore<Behavior.Engine>,
             Behavior.Engine,
             Behavior.Initialize.IEvt>,
@@ -63,6 +70,10 @@ public static class Initialize
     {
     }
 
+    public const string SpokeName = "Engine:Initialize:Spoke";
+
+
+    [Name(SpokeName)]
     public class Spoke : SpokeT<Spoke>, ISpoke
     {
         public Spoke(

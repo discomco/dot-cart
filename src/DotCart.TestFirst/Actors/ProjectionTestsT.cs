@@ -7,15 +7,20 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ProjectionTestsT<TProjection, TState, TEvt> : IoCTests
-    where TProjection : IProjectionB
+public abstract class ProjectionTestsT<TSpoke, TProjection, TState, TEvt> : IoCTests
+    where TProjection : IActor<TSpoke>
     where TState : IState
     where TEvt : IEvt
+    where TSpoke: ISpokeT<TSpoke>
 
 {
     public ProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    {
-    }
+    {}
+    
+    private IExchange _exchange;
+    private IActor<TSpoke>? _projection;
+    private Evt2State<TState,TEvt> _evt2State;
+
 
     [Fact]
     public void ShouldResolveProjection()
@@ -23,9 +28,9 @@ public abstract class ProjectionTestsT<TProjection, TState, TEvt> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var toDoc = TestEnv.ResolveRequired<TProjection>();
+        _projection = TestEnv.ResolveActor<TSpoke, TProjection>();
         // THEN 
-        Assert.NotNull(toDoc);
+        Assert.NotNull(_projection);
     }
 
     [Fact]
@@ -34,8 +39,20 @@ public abstract class ProjectionTestsT<TProjection, TState, TEvt> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
         // THEN
-        Assert.NotNull(evt2State);
+        Assert.NotNull(_evt2State);
     }
+    
+    [Fact]
+    public void ShouldResolveExchange()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _exchange = TestEnv.ResolveRequired<IExchange>();
+        // THEN
+        Assert.NotNull(_exchange);
+    }
+
 }
