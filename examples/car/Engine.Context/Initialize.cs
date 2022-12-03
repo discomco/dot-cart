@@ -12,6 +12,10 @@ namespace Engine.Context;
 
 public static class Initialize
 {
+    public const string ToRedisDocName = "engine:initialized:to_redis_doc:v1";
+
+    public const string SpokeName = "engine:initialize:spoke";
+
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
     {
         return services
@@ -27,17 +31,12 @@ public static class Initialize
             })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>();
     }
-    
 
-    
-    
 
     public interface IToRedisDoc : IActor<Spoke>
     {
     }
 
-    public const string ToRedisDocName = "engine:initialized:to_redis_doc:v1";
-        
     [Name(ToRedisDocName)]
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Behavior.Engine>,
@@ -69,8 +68,6 @@ public static class Initialize
     public interface ISpoke : ISpokeT<Spoke>
     {
     }
-
-    public const string SpokeName = "Engine:Initialize:Spoke";
 
 
     [Name(SpokeName)]

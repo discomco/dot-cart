@@ -12,6 +12,10 @@ public abstract class DriverB : IDriver
         _actor = actor;
     }
 
+    public virtual void Dispose()
+    {
+    }
+
     protected Task Cast(IMsg msg, CancellationToken cancellationToken = default)
     {
         return _actor.HandleCast(msg, cancellationToken);
@@ -21,7 +25,4 @@ public abstract class DriverB : IDriver
     {
         return _actor.HandleCall(msg, cancellationToken);
     }
-
-    public virtual void Dispose()
-    {}
 }

@@ -2,7 +2,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
-using NATS.Client;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -72,7 +71,4 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
             Assert.True(true);
         }
     }
-    
-    
-    
 }

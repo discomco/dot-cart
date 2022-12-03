@@ -28,7 +28,6 @@ public abstract class EffectsTests<
     {
     }
 
-
     [Fact]
     public void ShouldResolveReadModelStore()
     {
@@ -38,29 +37,6 @@ public abstract class EffectsTests<
         var rms = TestEnv.ResolveRequired<TReadModelStore>();
         // THEN
         Assert.NotNull(rms);
-    }
-
-    [Fact]
-    public void ShouldResolveCmdHandler()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
-        // THEN
-        Assert.NotNull(cmdHandler);
-    }
-
-
-    [Fact]
-    public void ShouldResolveAggregateStore()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var aggStore = TestEnv.ResolveRequired<IAggregateStore>();
-        // THEN
-        Assert.NotNull(aggStore);
     }
 
 
@@ -84,6 +60,29 @@ public abstract class EffectsTests<
         var aggBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         // THEN 
         Assert.NotNull(aggBuilder);
+    }
+
+    [Fact]
+    public void ShouldResolveCmdHandler()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
+        // THEN
+        Assert.NotNull(cmdHandler);
+    }
+
+
+    [Fact]
+    public void ShouldResolveAggregateStore()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var aggStore = TestEnv.ResolveRequired<IAggregateStore>();
+        // THEN
+        Assert.NotNull(aggStore);
     }
 
 

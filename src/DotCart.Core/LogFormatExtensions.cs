@@ -5,16 +5,24 @@ namespace DotCart.Core;
 public static class LogFormatExtensions
 {
     public static string AsVerb(this string value)
-        => Output.Background.Blue(Output.Black($"::{value}::"));
+    {
+        return Output.Background.Blue(Output.Black($"::{value}::"));
+    }
 
     public static string AsSubject(this string value)
-        => Output.Background.White(Output.Black($"::{value}::"));
+    {
+        return Output.Background.White(Output.Black($"::{value}::"));
+    }
 
     public static string AsFact(this string value)
-        => Output.Background.Green(Output.White($"::{value}::"));
+    {
+        return Output.Background.Green(Output.White($"::{value}::"));
+    }
 
     public static string AsError(this string value)
-        => Output.Background.Red(Output.Yellow($"::{value}::"));
+    {
+        return Output.Background.Red(Output.Yellow($"::{value}::"));
+    }
 }
 
 public static class AppVerbs

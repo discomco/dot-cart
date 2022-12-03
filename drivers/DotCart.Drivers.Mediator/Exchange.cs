@@ -34,7 +34,7 @@ internal class Exchange : ActiveComponent, IExchange
             .Where(slot => slot.Key == topic)
             .SelectMany(slot => slot.Value);
         if (!consumers.Any()) return;
-        foreach (var consumer in consumers) 
+        foreach (var consumer in consumers)
             await consumer.HandleCast(msg, cancellationToken);
     }
 

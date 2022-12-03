@@ -47,7 +47,7 @@ public static class JsonUtils
 
     public static T FromUtf8<T>(this byte[] bytes)
     {
-        if (bytes == null) return default(T);
+        if (bytes == null) return default;
         var span = new ReadOnlySpan<byte>(bytes);
         return JsonSerializer.Deserialize<T>(span);
     }

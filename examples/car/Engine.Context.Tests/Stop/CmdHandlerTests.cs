@@ -19,7 +19,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract
     {
         base.InjectDependencies(services);
         services
-            .AddTransient(_ => TestUtils.Stop.TestPayloadCtor)
-            .AddTransient(_ => TestUtils.Stop.TestCmdCtor);
+            .AddTransient(_ => TestUtils.Stop.PayloadCtor)
+            .AddTransient(_ => TestUtils.Stop.CmdCtor);
     }
 }

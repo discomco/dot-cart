@@ -53,9 +53,9 @@ public static class Schema
 
     public record Details
     {
-
         public string Name { get; set; }
         public string Description { get; set; }
+
         public static Details New(string name, string description = "")
         {
             return new Details

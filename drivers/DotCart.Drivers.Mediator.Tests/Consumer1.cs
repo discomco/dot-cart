@@ -10,7 +10,6 @@ public interface IConsumer1
 {
 }
 
-
 public class Consumer1 : ActorB, IActor<Spoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)

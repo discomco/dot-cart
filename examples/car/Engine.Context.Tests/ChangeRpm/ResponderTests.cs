@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeRpm;
 
-public class ResponderTests: ResponderTestsT<
+public class ResponderTests : ResponderTestsT<
     IResponderT<Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>,
     Contract.ChangeRpm.Hope,
     Behavior.ChangeRpm.Cmd>
@@ -20,19 +20,16 @@ public class ResponderTests: ResponderTestsT<
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
             .AddChangeRpmSpoke();
-
     }
 
     [Fact]
@@ -45,5 +42,4 @@ public class ResponderTests: ResponderTestsT<
         // THEN
         Assert.NotNull(_bus);
     }
-
 }

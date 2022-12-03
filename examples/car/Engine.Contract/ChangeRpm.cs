@@ -7,8 +7,8 @@ public static class ChangeRpm
 {
     public static class Topics
     {
-        public const string Hope = "engine.change_rpm.v1";
-        public const string Fact = "engine.rpm_changed.v1";
+        public const string Hope_v1 = "engine.change_rpm.v1";
+        public const string Fact_v1 = "engine.rpm_changed.v1";
     }
 
     public record Payload(int Delta) : IPayload
@@ -19,12 +19,12 @@ public static class ChangeRpm
         }
     }
 
-    [Topic(Topics.Hope)]
+    [Topic(Topics.Hope_v1)]
     public interface IHope : IHope<Payload>
     {
     }
 
-    [Topic(Topics.Hope)]
+    [Topic(Topics.Hope_v1)]
     public record Hope(string AggId, Payload Payload) : HopeT<Payload>(AggId, Payload), IHope
     {
 //        public Payload Payload { get; set; } = Payload;
@@ -34,12 +34,12 @@ public static class ChangeRpm
         }
     }
 
-    [Topic(Topics.Fact)]
+    [Topic(Topics.Fact_v1)]
     public interface IFact : IFact<Payload>
     {
     }
 
-    [Topic(Topics.Fact)]
+    [Topic(Topics.Fact_v1)]
     public record Fact(string AggId, Payload Payload)
         : FactT<Payload>(AggId, Payload), IFact
     {

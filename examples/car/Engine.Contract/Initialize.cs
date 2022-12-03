@@ -5,8 +5,12 @@ namespace Engine.Contract;
 
 public static class Initialize
 {
-    public const string FactTopic = "engine.initialized.v1";
-    public const string HopeTopic = "engine.initialize.v1";
+    public static class Topics
+    {
+        public const string Fact_v1 = "engine.initialized.v1";
+        public const string Hope_v1 = "engine.initialize.v1";
+    }
+
 
     public record Payload(Schema.Details Details) : IPayload
     {
@@ -18,12 +22,12 @@ public static class Initialize
         }
     }
 
-    [Topic(HopeTopic)]
+    [Topic(Topics.Hope_v1)]
     public interface IHope : IHope<Payload>
     {
     }
 
-    [Topic(HopeTopic)]
+    [Topic(Topics.Hope_v1)]
     public record Hope(Payload Payload) : HopeT<Payload>(string.Empty, Payload), IHope
     {
         public static Hope New(Payload payload)
@@ -32,11 +36,12 @@ public static class Initialize
         }
     }
 
-    [Topic(FactTopic)]
+    [Topic(Topics.Fact_v1)]
     public interface IFact : IFact<Payload>
-    { }
+    {
+    }
 
-    [Topic(FactTopic)]
+    [Topic(Topics.Fact_v1)]
     public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
     {
         public static Fact New(string AggId, Payload payload)

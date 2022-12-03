@@ -11,10 +11,10 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     private readonly IProjector _projector;
 
-    private bool _allActorsUp;
-
     private IImmutableDictionary<string, IActor<TSpoke>> _actors =
         ImmutableDictionary<string, IActor<TSpoke>>.Empty;
+
+    private bool _allActorsUp;
 
     protected SpokeT(IExchange exchange, IProjector projector)
     {
@@ -61,6 +61,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
                     actor.Value.Activate(cancellationToken).ConfigureAwait(false);
                     await Task.Delay(20, cancellationToken).ConfigureAwait(false);
                 }
+
                 _allActorsUp = ScanActors();
             }
     }
@@ -122,10 +123,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
         {
             Status = ComponentStatus.Active;
             Log.Debug($"::RUNNING:: Spoke: [{NameAtt.Get<TSpoke>()}");
-            while (!stoppingToken.IsCancellationRequested)
-            {
-                Thread.Sleep(1000);
-            }
+            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
         }, stoppingToken);
     }
 

@@ -9,11 +9,6 @@ public abstract class ActiveComponent : IActiveComponent
     private CancellationTokenSource _cts;
     public string Name => GetName();
 
-    protected virtual string GetName()
-    {
-        return NameAtt.Get(this);
-    }
-
     public ComponentStatus Status { get; private set; }
 
     public Task Activate(CancellationToken stoppingToken = default)
@@ -52,6 +47,11 @@ public abstract class ActiveComponent : IActiveComponent
     {
         if (_cts != null)
             _cts.Dispose();
+    }
+
+    protected virtual string GetName()
+    {
+        return NameAtt.Get(this);
     }
 
     private Task LoopAsync(CancellationToken stoppingToken)

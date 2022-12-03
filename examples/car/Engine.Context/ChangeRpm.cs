@@ -1,6 +1,7 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
+using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
@@ -11,6 +12,11 @@ namespace Engine.Context;
 
 public static class ChangeRpm
 {
+    public const string ToRedisDocProjectionName = "engine:changed_rpm:to_redis_doc";
+
+
+    public const string SpokeName = "engine:change_rpm:spoke";
+
     public static IServiceCollection AddChangeRpmSpoke(this IServiceCollection services)
     {
         return services
@@ -28,6 +34,7 @@ public static class ChangeRpm
     }
 
 
+    [Name(ToRedisDocProjectionName)]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,
@@ -51,6 +58,8 @@ public static class ChangeRpm
         }
     }
 
+
+    [Name(SpokeName)]
     public class Spoke : SpokeT<Spoke>
     {
         public Spoke(

@@ -16,9 +16,9 @@ public record Event(
     byte[] MetaData,
     DateTime TimeStamp) : IEvt
 {
-    public IID AggregateID => ID.New( AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString() );
+    public IID AggregateID => ID.New(AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString());
     public string EventType { get; set; } = EventType;
-    
+
     public string AggregateId { get; set; } = AggregateId;
     public string EventId { get; set; } = GuidUtils.LowerCaseGuid;
     public string Topic => EventType;
@@ -32,6 +32,7 @@ public record Event(
     {
         Version = version;
     }
+
     public byte[] MetaData { get; set; } = MetaData;
 
     public void SetMetaPayload<TPayload>(TPayload payload)

@@ -44,9 +44,9 @@ public class IoCTestContainer : IDisposable
         return Provider.GetServices<T>();
     }
 
-    public IActor<TSpoke>? ResolveActor<TSpoke, TActor>() 
-        where TSpoke : ISpokeT<TSpoke> 
-        where TActor: IActor<TSpoke>
+    public IActor<TSpoke>? ResolveActor<TSpoke, TActor>()
+        where TSpoke : ISpokeT<TSpoke>
+        where TActor : IActor<TSpoke>
     {
         IEnumerable<IActor<TSpoke>?> actors = ResolveAll<IActor<TSpoke>>();
         return actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));

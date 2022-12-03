@@ -3,18 +3,18 @@ using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace Engine.Contract.Tests.Initialize;
+namespace DotCart.TestFirst.Contract;
 
- public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
+public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
     where TID : IID
     where THope : IHope<TPayload>
     where TPayload : IPayload
 
 {
+    protected HopeCtorT<THope, TPayload> _newHope;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
-    protected HopeCtorT<THope,TPayload> _newHope;
-    
+
     public HopeTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
@@ -68,7 +68,10 @@ namespace Engine.Contract.Tests.Initialize;
         Assert.Equal(expectedTopic, foundTopic);
     }
 
-    protected abstract string GetExpectedTopic();
+    private string GetExpectedTopic()
+    {
+        return TopicAtt.Get(this);
+    }
 
 
     protected override void Initialize()

@@ -9,11 +9,11 @@ namespace DotCart.TestFirst.Delivery;
 public abstract class SpokeTestsT<TSpoke> : IoCTests
     where TSpoke : ISpokeT<TSpoke>
 {
+    protected IEnumerable<IActor<TSpoke>> _actors;
     protected ISpokeBuilder<TSpoke> _builder;
-    protected TSpoke _spoke;
     protected Exception _caught;
     protected string _name;
-    protected IEnumerable<IActor<TSpoke>> _actors;
+    protected TSpoke _spoke;
 
     public SpokeTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -93,19 +93,19 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         _spoke = TestEnv.ResolveHosted<TSpoke>();
-        var cts = new CancellationTokenSource(5_000);
+        var cts = new CancellationTokenSource(2_000);
         // WHEN
         var _executor = TestEnv.ResolveRequired<IHostExecutor>();
         Assert.NotNull(_executor);
         // THEN
         _executor.StartAsync(cts.Token);
-        bool isStarted = false;
+        var isStarted = false;
         await Task.Run(() =>
         {
-            Thread.Sleep(2_000);
+            Thread.Sleep(500);
             while (!cts.IsCancellationRequested)
             {
-                Thread.Sleep(1_000);
+                Thread.Sleep(1);
                 isStarted = _spoke.Status == ComponentStatus.Inactive;
             }
         }, cts.Token);

@@ -1,3 +1,5 @@
+using DotCart.Core;
+using DotCart.TestFirst.Contract;
 using DotCart.TestKit;
 using Engine.Contract.Tests.Initialize;
 using Engine.TestUtils;
@@ -6,7 +8,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Start;
 
-public class HopeTests: HopeTestsT<Contract.Schema.EngineID, Contract.Start.Hope, Contract.Start.Payload>
+[Topic(Contract.Start.Topics.Hope_v1)]
+public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Start.Hope, Contract.Start.Payload>
 {
     public HopeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -14,7 +17,6 @@ public class HopeTests: HopeTestsT<Contract.Schema.EngineID, Contract.Start.Hope
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -23,11 +25,5 @@ public class HopeTests: HopeTestsT<Contract.Schema.EngineID, Contract.Start.Hope
             .AddTestIDCtor()
             .AddTransient(_ => TestUtils.Start.PayloadCtor)
             .AddTransient(_ => TestUtils.Start.HopeCtor);
-
-    }
-
-    protected override string GetExpectedTopic()
-    {
-        return Contract.Start.Topics.Hope;
     }
 }

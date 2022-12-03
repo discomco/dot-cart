@@ -1,10 +1,6 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Drivers;
-using DotCart.Drivers.Default;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
-using Engine.Behavior;
-using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 using Xunit.Abstractions;
@@ -50,7 +46,4 @@ public class
         // THEN
         Assert.NotNull(_bus);
     }
-
-    
-    
 }

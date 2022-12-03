@@ -18,11 +18,6 @@ public record ID : IID
         Value = value.CheckValue();
     }
 
-    public static IID New(string prefix, string value = "")
-    {
-        return new ID(prefix, value);
-    }
-    
 
     public string Prefix { get; set; }
     public string Value { get; set; }
@@ -31,19 +26,18 @@ public record ID : IID
     {
         return $"{Prefix}{IDFuncs.PrefixSeparator}{Value}";
     }
-    
-    
-    
-    
-    
+
+    public static IID New(string prefix, string value = "")
+    {
+        return new ID(prefix, value);
+    }
 }
 
 public static class IDFuncs
 {
     public const char PrefixSeparator = '.';
 
-    
-    
+
     public static IID IDFromIdString(this string idString)
     {
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))
@@ -62,7 +56,5 @@ public static class IDFuncs
     {
         var parts = idString.Split(PrefixSeparator);
         return parts[1];
-
     }
-    
 }

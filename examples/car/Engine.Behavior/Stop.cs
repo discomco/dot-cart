@@ -60,7 +60,7 @@ public static class Stop
     {
     }
 
-    
+
     public class TryCmd : TryCmdT<Cmd>
     {
         public override IFeedback Verify(Cmd cmd)

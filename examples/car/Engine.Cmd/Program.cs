@@ -6,7 +6,7 @@ using Inject = DotCart.Drivers.Serilog.Inject;
 DotEnv.FromEmbedded();
 
 
-IHost host = Host.CreateDefaultBuilder(args)
+var host = Host.CreateDefaultBuilder(args)
     .ConfigureLogging(logging =>
         logging
             .ClearProviders()

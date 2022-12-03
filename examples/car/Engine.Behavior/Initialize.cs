@@ -125,7 +125,7 @@ public static class Initialize
     {
     }
 
-    
+
     [Topic(CmdTopic)]
     public record Cmd(Contract.Initialize.Payload Payload)
         : CmdT<Contract.Initialize.Payload>(Schema.EngineID.New(), Payload)

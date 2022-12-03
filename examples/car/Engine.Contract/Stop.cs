@@ -5,8 +5,12 @@ namespace Engine.Contract;
 
 public static class Stop
 {
-    public const string FactTopic = "engine.stopped.v1";
-    public const string HopeTopic = "engine.stop.v1";
+    public static class Topics
+    {
+        public const string Fact_v1 = "engine.stopped.v1";
+        public const string Hope_v1 = "engine.stop.v1";
+    }
+
 
     public record Payload : IPayload
     {
@@ -16,11 +20,12 @@ public static class Stop
         }
     }
 
+    [Topic(Topics.Fact_v1)]
     public interface IFact : IFact<Payload>
     {
     }
 
-    [Topic(FactTopic)]
+    [Topic(Topics.Fact_v1)]
     public record Fact(string AggId, Payload Payload)
         : FactT<Payload>(AggId, Payload), IFact
     {
@@ -30,11 +35,12 @@ public static class Stop
         }
     }
 
+    [Topic(Topics.Hope_v1)]
     public interface IHope : IHope<Payload>
     {
     }
 
-    [Topic(HopeTopic)]
+    [Topic(Topics.Hope_v1)]
     public record Hope(string AggId, Payload Payload)
         : HopeT<Payload>(AggId, Payload), IHope
     {
@@ -43,5 +49,4 @@ public static class Stop
             return new Hope(aggId, payload);
         }
     }
-    
 }

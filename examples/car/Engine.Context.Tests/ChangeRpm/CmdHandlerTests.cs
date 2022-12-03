@@ -18,7 +18,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.ChangeRpm.Cmd, Con
     {
         base.InjectDependencies(services);
         services
-            .AddTransient(_ => TestUtils.ChangeRpm.RandomPayloadCtor)
-            .AddTransient(_ => TestUtils.ChangeRpm.RandomCmdCtor);
+            .AddTransient(_ => TestUtils.ChangeRpm.PayloadCtor)
+            .AddTransient(_ => TestUtils.ChangeRpm.CmdCtor);
     }
 }

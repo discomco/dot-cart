@@ -26,6 +26,8 @@ public static partial class Inject
 [Topic(MemProjectorName)]
 internal sealed class MemProjector : ActorB, IMemProjector
 {
+    private const string MemProjectorName = "dotcart:mem_projector";
+
     public MemProjector(IExchange exchange) : base(exchange)
     {
     }
@@ -43,8 +45,6 @@ internal sealed class MemProjector : ActorB, IMemProjector
     {
         return (Task<IMsg>)CompletedTask;
     }
-
-    private const string MemProjectorName = "dotcart:mem_projector";
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {

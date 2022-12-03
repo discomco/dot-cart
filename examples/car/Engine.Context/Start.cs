@@ -1,6 +1,7 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
+using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
@@ -11,6 +12,11 @@ namespace Engine.Context;
 
 public static class Start
 {
+    public const string ToRedisDocName_v1 = Behavior.Start.EvtTopic_v1 + ":to_redis_doc";
+
+
+    public const string SpokeName = "engine:start:spoke";
+
     public static IServiceCollection AddStartSpoke(this IServiceCollection services)
     {
         return services
@@ -32,7 +38,9 @@ public static class Start
     {
     }
 
-    public class ToRedisDoc : ProjectionT<IRedisStore<Behavior.Engine>,
+    [Name(ToRedisDocName_v1)]
+    public class ToRedisDoc : ProjectionT<
+            IRedisStore<Behavior.Engine>,
             Behavior.Engine, Behavior.Start.IEvt>,
         IToRedisDoc
     {
@@ -54,6 +62,7 @@ public static class Start
         }
     }
 
+    [Name(SpokeName)]
     public class Spoke : SpokeT<Spoke>
     {
         public Spoke(

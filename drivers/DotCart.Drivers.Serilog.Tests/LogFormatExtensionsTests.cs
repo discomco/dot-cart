@@ -8,6 +8,10 @@ namespace DotCart.Drivers.Serilog.Tests;
 
 public class LogConstantsTests : IoCTests
 {
+    public LogConstantsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    {
+    }
+
     [Fact]
     public void ShouldPutAsVerb()
     {
@@ -15,26 +19,17 @@ public class LogConstantsTests : IoCTests
         Log.Information(s);
         Output.WriteLine(s);
     }
-    
-    
 
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
-    {
-        
-    }
-
-    public LogConstantsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 }

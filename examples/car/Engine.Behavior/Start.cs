@@ -13,8 +13,8 @@ namespace Engine.Behavior;
 
 public static class Start
 {
-    public const string CmdTopic = "engine:start:v1";
-    public const string EvtTopic = "engine:started:v1";
+    public const string CmdTopic_v1 = "engine:start:v1";
+    public const string EvtTopic_v1 = "engine:started:v1";
 
     private static readonly Evt2Fact<Contract.Start.Fact, IEvt> _evt2Fact =
         evt => Contract.Start.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Start.Payload>());
@@ -110,7 +110,7 @@ public static class Start
             {
                 Event.New(
                     cmd.AggregateID,
-                    TopicAtt.Get<Start.IEvt>(),
+                    TopicAtt.Get<IEvt>(),
                     cmd.Payload.ToBytes(),
                     Aggregate.GetMeta().ToBytes(),
                     Aggregate.Version,
@@ -129,7 +129,7 @@ public static class Start
         }
     }
 
-    [Topic(CmdTopic)]
+    [Topic(CmdTopic_v1)]
     public record Cmd(IID AggregateID, Contract.Start.Payload Payload)
         : CmdT<Contract.Start.Payload>(AggregateID, Payload)
     {
@@ -139,7 +139,7 @@ public static class Start
         }
     }
 
-    [Topic(EvtTopic)]
+    [Topic(EvtTopic_v1)]
     public interface IEvt : IEvtT<Contract.Start.Payload>
     {
     }

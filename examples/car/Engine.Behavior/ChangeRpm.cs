@@ -82,7 +82,7 @@ public static class ChangeRpm
                 return res;
             var stopped = Event.New(
                 cmd.AggregateID,
-                TopicAtt.Get<Behavior.Stop.IEvt>(),
+                TopicAtt.Get<Stop.IEvt>(),
                 Contract.Stop.Payload.New().ToBytes(),
                 Aggregate.GetMeta().ToBytes(),
                 Aggregate.Version,

@@ -18,5 +18,4 @@ public interface IEvt : IMsg
     TPayload GetPayload<TPayload>() where TPayload : IPayload;
     void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload;
     void SetData(byte[] data);
-
 }

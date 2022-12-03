@@ -19,8 +19,6 @@ public interface IResponderT<THope, TCmd> : IResponder
 {
 }
 
-
-
 public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THope, TCmd>, IActor<TSpoke>
     where TDriver : IResponderDriverT<THope>
     where THope : IHope
@@ -46,11 +44,6 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     private readonly Hope2Cmd<TCmd, THope> _hope2Cmd;
     private readonly TDriver _responderDriver;
 
-    protected override string GetName()
-    {
-        return $"{typeof(TDriver).Name}::Responder<{TopicAtt.Get<THope>()}>";
-    }
-
     public ResponderT(
         TDriver responderDriver,
         IExchange exchange,
@@ -61,8 +54,7 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
-    
-    
+
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
@@ -74,6 +66,11 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
         var hope = (THope)msg;
         var cmd = _hope2Cmd(hope);
         return await _cmdHandler.HandleAsync(cmd, cancellationToken);
+    }
+
+    protected override string GetName()
+    {
+        return $"{typeof(TDriver).Name}::Responder<{TopicAtt.Get<THope>()}>";
     }
 
 

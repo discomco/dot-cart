@@ -7,8 +7,8 @@ public static class Start
 {
     public static class Topics
     {
-        public const string Hope = "engine.start.v1";
-        public const string Fact = "engine.started.v1";
+        public const string Hope_v1 = "engine.start.v1";
+        public const string Fact_v1 = "engine.started.v1";
     }
 
     public record Payload : IPayload
@@ -16,12 +16,12 @@ public static class Start
         public static readonly Payload New = new();
     }
 
-    [Topic(Topics.Fact)]
+    [Topic(Topics.Fact_v1)]
     public interface IFact : IFact<Payload>
     {
     }
 
-    [Topic(Topics.Fact)]
+    [Topic(Topics.Fact_v1)]
     public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
     {
         public static Fact New(string AggId, Payload payload)
@@ -30,12 +30,12 @@ public static class Start
         }
     }
 
-    [Topic(Topics.Hope)]
+    [Topic(Topics.Hope_v1)]
     public interface IHope : IHope<Payload>
     {
     }
 
-    [Topic(Topics.Hope)]
+    [Topic(Topics.Hope_v1)]
     public record Hope(string AggId, Payload Payload)
         : HopeT<Payload>(AggId, Payload), IHope
     {
