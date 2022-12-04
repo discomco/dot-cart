@@ -38,6 +38,12 @@ public static class IDFuncs
     public const char PrefixSeparator = '.';
 
 
+    public static TID IDFromIdString<TID>(this string idString, IDCtorT<TID> ctor)
+        where TID : IID
+    {
+        return ctor(idString.ValueFromIdString());
+    }
+
     public static IID IDFromIdString(this string idString)
     {
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))

@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB;
@@ -24,16 +25,32 @@ public static class Conversions
         }
     }
 
+    public static TEvt ToEvent<TEvt, TID>(this EventRecord rEvt, 
+        EvtCtorT<TEvt, TID> evtCtor, 
+        IDCtorT<TID> idCtor) 
+        where TEvt : IEvt
+        where TID : IID
+    {
+        var id = rEvt.EventStreamId.IDFromIdString(idCtor);
+        var evt = evtCtor(id);
+        evt.SetData(rEvt.Data.ToArray());
+        evt.SetMetaData(rEvt.Metadata.ToArray());
+        evt.SetEventType(rEvt.EventType);
+        evt.SetVersion(rEvt.EventNumber.ToInt64());
+        evt.SetTimeStamp(rEvt.Created);
+        return evt;
+    }
+
     public static Event ToEvent(this EventRecord rEvt)
     {
         if (rEvt == null) return null;
-        var res = Event.New(
-            rEvt.EventStreamId.IDFromIdString(),
+        var res = new Event(
+            rEvt.EventStreamId,
             rEvt.EventType,
             rEvt.Data.ToArray(),
-            rEvt.Metadata.ToArray(),
-            rEvt.EventNumber.ToInt64(),
-            rEvt.Created);
+            rEvt.Metadata.ToArray());
+        res.SetVersion(rEvt.EventNumber.ToInt64());
+        res.SetTimeStamp(rEvt.Created);
         return res;
     }
 }

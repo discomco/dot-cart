@@ -14,10 +14,8 @@ namespace Engine.Behavior;
 
 public static class Stop
 {
-    public const string EvtTopic = "engine:stopped:v1";
-    public const string CmdTopic = "engine:stop:v1";
 
-    public static readonly Evt2State<Engine, IEvt> _evt2Doc = (state, evt) =>
+    public static readonly Evt2State<Engine, Evt> _evt2Doc = (state, evt) =>
     {
         state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
         return state;
@@ -45,7 +43,7 @@ public static class Stop
     }
 
 
-    [Topic(CmdTopic)]
+    [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.Stop.Payload Payload)
         : CmdT<Contract.Stop.Payload>(AggregateID, Payload)
     {
@@ -55,11 +53,25 @@ public static class Stop
         }
     }
 
-    [Topic(EvtTopic)]
-    public interface IEvt : IEvtT<Contract.Stop.Payload>
-    {
-    }
+    public record EvtMeta(string AggregateType, string AggregateId)
+        : EventMeta(AggregateType, AggregateId);
 
+    [Topic(Topics.Evt_v1)]
+    public record Evt(IID AggregateID,
+            Contract.Stop.Payload Payload,
+            EvtMeta Meta)
+        : EvtT<Contract.Stop.Payload, EvtMeta>(
+            AggregateID,
+            TopicAtt.Get<Evt>(),
+            Payload,
+            Meta)
+    {
+        public static Evt New(IID AggregateID, Contract.Stop.Payload payload)
+        {
+            var meta = new EvtMeta(nameof(Aggregate), AggregateID.Id());
+            return new Evt(AggregateID, payload, meta);
+        }
+    }
 
     public class TryCmd : TryCmdT<Cmd>
     {
@@ -83,26 +95,22 @@ public static class Stop
         {
             return new[]
             {
-                Event.New(
-                    cmd.AggregateID,
-                    TopicAtt.Get<IEvt>(),
-                    cmd.Payload.ToBytes(),
-                    Aggregate.GetMeta().ToBytes(),
-                    Aggregate.Version,
-                    DateTime.UtcNow
-                )
+                Evt.New(cmd.AggregateID, cmd.Payload)
             };
         }
     }
 
-    public class ApplyEvt : ApplyEvtT<Engine, IEvt>
+    public class ApplyEvt : ApplyEvtT<Engine, Evt>
     {
-        public override Engine Apply(Engine state, Event evt)
+        // public override Engine Apply(Engine state, Event evt)
+        // {
+        //     state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
+        //     state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Stopped);
+        //     state.Power = 0;
+        //     return state;
+        // }
+        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
         {
-            state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
-            state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Stopped);
-            state.Power = 0;
-            return state;
         }
     }
 
@@ -123,5 +131,11 @@ public static class Stop
         public Exception(string? message, System.Exception? innerException) : base(message, innerException)
         {
         }
+    }
+
+    public static class Topics
+    {
+        public const string Evt_v1 = "engine:stopped:v1";
+        public const string Cmd_v1 = "engine:stop:v1";
     }
 }

@@ -32,17 +32,17 @@ public class AggregatePolicy<TEvt, TCmd> : ActorB, IAggregatePolicy where TEvt :
     {
         return Task.Run(async () =>
         {
-            var fbk = await EnforceAsync((Event)arg);
+            var fbk = await EnforceAsync((IEvt)arg);
             if (!fbk.IsSuccess)
                 Log.Error($"[{GetType().Name}] Failed => {fbk.ErrState}");
             return Task.CompletedTask;
         }, cancellationToken);
     }
 
-    private Task<Feedback> EnforceAsync(Event evt)
+    private Task<Feedback> EnforceAsync(IEvt evt)
     {
-        var cmd = _evt2Cmd(evt);
-        Aggregate.SetID(evt.AggregateID);
+        var cmd = _evt2Cmd((TEvt)evt);
+        Aggregate.SetID(evt.AggregateId.IDFromIdString());
         return Aggregate.ExecuteAsync(cmd);
     }
 

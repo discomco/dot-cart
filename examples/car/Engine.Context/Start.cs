@@ -12,7 +12,7 @@ namespace Engine.Context;
 
 public static class Start
 {
-    public const string ToRedisDocName_v1 = Behavior.Start.EvtTopic_v1 + ":to_redis_doc";
+    public const string ToRedisDocName_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_doc";
 
 
     public const string SpokeName = "engine:start:spoke";
@@ -41,12 +41,12 @@ public static class Start
     [Name(ToRedisDocName_v1)]
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Behavior.Engine>,
-            Behavior.Engine, Behavior.Start.IEvt>,
+            Behavior.Engine, Behavior.Start.Evt>,
         IToRedisDoc
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.Start.IEvt> evt2State) : base(exchange,
+            Evt2State<Behavior.Engine, Behavior.Start.Evt> evt2State) : base(exchange,
             modelStore,
             evt2State)
         {

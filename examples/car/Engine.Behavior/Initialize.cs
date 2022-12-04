@@ -1,3 +1,4 @@
+using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -13,17 +14,15 @@ namespace Engine.Behavior;
 
 public static class Initialize
 {
-    public const string CmdTopic = "engine:initialize:v1";
-    public const string EvtTopic = "engine:initialized:v1";
 
-    private static readonly Evt2Fact<Contract.Initialize.Fact, IEvt> _evt2Fact =
+    private static readonly Evt2Fact<Contract.Initialize.Fact, Evt> _evt2Fact =
         evt => Contract.Initialize.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Initialize.Payload>());
 
     private static readonly Hope2Cmd<Cmd, Contract.Initialize.Hope> _hope2Cmd =
         hope => Cmd.New(hope.Payload);
 
 
-    private static readonly Evt2State<Engine, IEvt> _evt2Doc = (state, evt) =>
+    private static readonly Evt2State<Engine, Behavior.Initialize.Evt> _evt2Doc = (state, evt) =>
     {
         if (evt == null) return state;
         if (evt.GetPayload<Engine>() == null) return state;
@@ -52,13 +51,16 @@ public static class Initialize
             .AddTransient<IApply, ApplyEvt>();
     }
 
-    public class ApplyEvt : ApplyEvtT<Engine, IEvt>
+    public class ApplyEvt : ApplyEvtT<Engine, Evt>
     {
-        public override Engine Apply(Engine state, Event evt)
+        // public override Engine Apply(Engine state, Event evt)
+        // {
+        //     state.Id = evt.AggregateID.Id();
+        //     state.Status = Schema.EngineStatus.Initialized;
+        //     return state;
+        // }
+        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
         {
-            state.Id = evt.AggregateID.Id();
-            state.Status = Schema.EngineStatus.Initialized;
-            return state;
         }
     }
 
@@ -84,14 +86,7 @@ public static class Initialize
         {
             return new[]
             {
-                Event.New(
-                    cmd.AggregateID,
-                    TopicAtt.Get<IEvt>(),
-                    cmd.Payload.ToBytes(),
-                    Aggregate.GetMeta().ToBytes(),
-                    Aggregate.Version,
-                    DateTime.UtcNow)
-                // Evt(, Payload.New(cmd.Payload.Engine))
+                Evt.New(cmd.AggregateID, cmd.Payload)
             };
         }
     }
@@ -120,13 +115,29 @@ public static class Initialize
         }
     }
 
-    [Topic(EvtTopic)]
-    public interface IEvt : IEvtT<Contract.Initialize.Payload>
+
+    public record EvtMeta(string AggregateType, string AggregateId)
+        : EventMeta(AggregateType, AggregateId);
+
+    [Topic(Topics.Evt_v1)]
+    public record Evt(IID AggregateID,
+        Contract.Initialize.Payload Payload,
+        EvtMeta Meta) : EvtT<
+        Contract.Initialize.Payload,
+        EvtMeta>(AggregateID,
+        TopicAtt.Get<Evt>(),
+        Payload,
+        Meta)
     {
+        public static Evt New(IID aggregateID, Contract.Initialize.Payload payload)
+        {
+            var meta = new EvtMeta(nameof(Aggregate), aggregateID.Id());
+            return new Evt(aggregateID, payload, meta);
+        }
     }
 
 
-    [Topic(CmdTopic)]
+    [Topic(Topics.Cmd_v1)]
     public record Cmd(Contract.Initialize.Payload Payload)
         : CmdT<Contract.Initialize.Payload>(Schema.EngineID.New(), Payload)
     {
@@ -134,5 +145,11 @@ public static class Initialize
         {
             return new Cmd(payload);
         }
+    }
+
+    public static class Topics
+    {
+        public const string Cmd_v1 = "engine:initialize:v1";
+        public const string Evt_v1 = "engine:initialized:v1";
     }
 }

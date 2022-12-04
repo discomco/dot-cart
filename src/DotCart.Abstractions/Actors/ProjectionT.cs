@@ -63,7 +63,7 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT3
     {
         Log.Information($"PROJECTION::[{GetType().Name}] ~> [{TopicAtt.Get(evt)}] => [{evt.AggregateId}] ");
         var state = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false);
-        state = _evt2State(state, (Event)evt);
+        state = _evt2State(state, (TEvt)evt);
         await _modelStore.SetAsync(evt.AggregateId, state, cancellationToken).ConfigureAwait(false);
     }
 

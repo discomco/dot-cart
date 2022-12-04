@@ -13,16 +13,14 @@ namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    public const string CmdTopic = "engine:change_rpm:v1";
-    public const string EvtTopic = "engine:changed_rpm:v1";
 
-    private static readonly Evt2State<Engine, IEvt> _evt2Doc = (state, evt) =>
+    private static readonly Evt2State<Engine, Evt> _evt2Doc = (state, evt) =>
     {
         state.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
         return state;
     };
 
-    private static Evt2Fact<Contract.ChangeRpm.Fact, IEvt> _evt2Fact =>
+    private static Evt2Fact<Contract.ChangeRpm.Fact, Evt> _evt2Fact =>
         evt => Contract.ChangeRpm.Fact.New(
             evt.AggregateID.Id(),
             evt.GetPayload<Contract.ChangeRpm.Payload>());
@@ -50,7 +48,7 @@ public static class ChangeRpm
     }
 
 
-    [Topic(CmdTopic)]
+    [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload)
         : CmdT<Contract.ChangeRpm.Payload>(AggregateID, Payload), ICmd
     {
@@ -60,33 +58,38 @@ public static class ChangeRpm
         }
     }
 
-    [Topic(EvtTopic)]
-    public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
+    public record EvtMeta(string AggregateType, string AggregateId)
+        : EventMeta(AggregateType, AggregateId);
+
+
+    [Topic(Topics.Evt_v1)]
+    public record Evt(
+        IID AggregateID,
+        Contract.ChangeRpm.Payload Payload,
+        EvtMeta Meta) : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(
+        AggregateID,
+        TopicAtt.Get<Evt>(),
+        Payload,
+        Meta)
     {
-    }
+        public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
+        {
+            var meta = new EvtMeta(nameof(Aggregate), engineID.Id());
+            return new Evt(engineID, payload, meta);
+        }
+    };
 
     public class TryCmd : TryCmdT<Cmd>
     {
         public override IEnumerable<Event> Raise(Cmd cmd)
         {
             var res = new List<Event>();
-            var rpmChanged = Event.New(cmd.AggregateID,
-                TopicAtt.Get<IEvt>(),
-                cmd.Payload.ToBytes(),
-                Aggregate.GetMeta().ToBytes(),
-                Aggregate.Version,
-                DateTime.UtcNow);
+            var rpmChanged = Evt.New(cmd.AggregateID, cmd.Payload); 
             res.Add(rpmChanged);
             var newPower = ((Engine)Aggregate.GetState()).Power + cmd.Payload.Delta;
             if (newPower > 0)
                 return res;
-            var stopped = Event.New(
-                cmd.AggregateID,
-                TopicAtt.Get<Stop.IEvt>(),
-                Contract.Stop.Payload.New().ToBytes(),
-                Aggregate.GetMeta().ToBytes(),
-                Aggregate.Version,
-                DateTime.UtcNow);
+            var stopped = Stop.Evt.New(cmd.AggregateID, Contract.Stop.Payload.New());
             res.Add(stopped);
             return res;
         }
@@ -107,13 +110,18 @@ public static class ChangeRpm
         }
     }
 
-    public class ApplyEvt : ApplyEvtT<Engine, IEvt>
+    public class ApplyEvt : ApplyEvtT<Engine, Evt>
     {
-        public override Engine Apply(Engine state, Event evt)
+        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
         {
-            state.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-            return state;
         }
+        
+        // public override Engine Apply(Engine state, Event evt)
+        // {
+        //     state.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+        //     return state;
+        // }
+
     }
 
     public class Exception : System.Exception
@@ -138,5 +146,11 @@ public static class ChangeRpm
         {
             return new Exception(msg);
         }
+    }
+
+    public static class Topics
+    {
+        public const string Cmd_v1 = "engine:change_rpm:v1";
+        public const string Evt_v1 = "engine:changed_rpm:v1";
     }
 }

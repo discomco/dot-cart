@@ -25,7 +25,7 @@ public class AggregateT<TState> : IAggregate
         StateCtorT<TState> newState)
     {
         _state = newState();
-        Version = Constants.NewAggregateVersion;
+        Version = EventConst.NewAggregateVersion;
     }
 
     public bool KnowsApply(string evtType)
@@ -155,7 +155,7 @@ public class AggregateT<TState> : IAggregate
 
     private async Task RaiseEvent(IEvt evt)
     {
-        evt.Version = Version + 1;
+        evt.SetVersion(Version + 1);
         // if (Version >= evt.Version) 
         //     return;
         evt.SetTimeStamp(DateTime.UtcNow);

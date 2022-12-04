@@ -6,6 +6,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
+using Elasticsearch.Net;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,24 +14,28 @@ namespace Engine.Behavior;
 
 public static class Start
 {
-    public const string CmdTopic_v1 = "engine:start:v1";
-    public const string EvtTopic_v1 = "engine:started:v1";
+    public static class Topics
+    {
+        public const string Cmd_v1 = "engine:start:v1";
+        public const string Evt_v1 = "engine:started:v1";
+    }
 
-    private static readonly Evt2Fact<Contract.Start.Fact, IEvt> _evt2Fact =
+
+    private static readonly Evt2Fact<Contract.Start.Fact, Evt> _evt2Fact =
         evt => Contract.Start.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Start.Payload>());
 
     private static readonly Hope2Cmd<Cmd, Contract.Start.Hope> _hope2Cmd =
         hope =>
             Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly Evt2State<Engine, IEvt> _evt2Doc =
+    private static readonly Evt2State<Engine, Evt> _evt2Doc =
         (state, _) =>
         {
             state.Status = state.Status.SetFlag(Schema.EngineStatus.Started);
             return state;
         };
 
-    private static readonly Evt2Cmd<Cmd, Initialize.IEvt> _evt2Cmd =
+    private static readonly Evt2Cmd<Cmd, Initialize.Evt> _evt2Cmd =
         evt =>
             Cmd.New(evt.AggregateID, Contract.Start.Payload.New);
 
@@ -78,12 +83,15 @@ public static class Start
         }
     }
 
-    public class ApplyEvt : ApplyEvtT<Engine, IEvt>
+    public class ApplyEvt : ApplyEvtT<Engine, Evt>
     {
-        public override Engine Apply(Engine state, Event evt)
+        // public override Engine Apply(Engine state, Event evt)
+        // {
+        //     state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Started);
+        //     return state;
+        // }
+        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
         {
-            state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Started);
-            return state;
         }
     }
 
@@ -108,28 +116,22 @@ public static class Start
         {
             return new[]
             {
-                Event.New(
-                    cmd.AggregateID,
-                    TopicAtt.Get<IEvt>(),
-                    cmd.Payload.ToBytes(),
-                    Aggregate.GetMeta().ToBytes(),
-                    Aggregate.Version,
-                    DateTime.UtcNow)
+                Evt.New(cmd.AggregateID, cmd.Payload)
             };
         }
     }
 
-    public class StartOnInitializedPolicy : AggregatePolicy<Initialize.IEvt, Cmd>
+    public class StartOnInitializedPolicy : AggregatePolicy<Initialize.Evt, Cmd>
     {
         public StartOnInitializedPolicy(
             IExchange exchange,
-            Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd)
+            Evt2Cmd<Cmd, Initialize.Evt> evt2Cmd)
             : base(exchange, evt2Cmd)
         {
         }
     }
 
-    [Topic(CmdTopic_v1)]
+    [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.Start.Payload Payload)
         : CmdT<Contract.Start.Payload>(AggregateID, Payload)
     {
@@ -139,8 +141,22 @@ public static class Start
         }
     }
 
-    [Topic(EvtTopic_v1)]
-    public interface IEvt : IEvtT<Contract.Start.Payload>
+    public record EvtMeta(string AggregateType, string AggregateId)
+        : EventMeta(AggregateType, AggregateId);
+
+    [Topic(Topics.Evt_v1)]
+    public record Evt(IID AggregateID,
+        Contract.Start.Payload Payload,
+        EvtMeta Meta) : EvtT<Contract.Start.Payload, EvtMeta>(AggregateID,
+        TopicAtt.Get<Evt>(),
+        Payload,
+        Meta)
     {
+        public static Evt New(IID aggregateID, Contract.Start.Payload payload)
+        {
+            var meta = new EvtMeta(nameof(Aggregate), aggregateID.Id());
+            return new Evt(aggregateID, payload, meta);
+        }
     }
 }
+

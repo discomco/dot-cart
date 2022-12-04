@@ -19,7 +19,8 @@ public record TheID : ID
     {
     }
 
-    public static IDCtorT<TheID> Ctor => () => New;
+    public static readonly IDCtorT<TheID> Ctor = 
+        _ => New;
 
     public static TheID New => new(GuidUtils.LowerCaseGuid);
 }

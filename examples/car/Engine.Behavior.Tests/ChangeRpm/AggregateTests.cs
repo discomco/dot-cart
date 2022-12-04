@@ -1,4 +1,5 @@
 using DotCart.TestFirst;
+using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,7 +13,7 @@ public class AggregateTests : AggregateTestsT<
     Behavior.ChangeRpm.TryCmd,
     Behavior.ChangeRpm.ApplyEvt,
     Behavior.ChangeRpm.Cmd,
-    Behavior.ChangeRpm.IEvt>
+    Behavior.ChangeRpm.Evt>
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

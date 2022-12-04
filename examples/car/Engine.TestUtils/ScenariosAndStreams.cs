@@ -31,24 +31,12 @@ public static class ScenariosAndStreams
     public static IEnumerable<IEvt> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initEvt = Event.New(
-            ID,
-            TopicAtt.Get<Behavior.Initialize.IEvt>(),
-            initPayload.ToBytes(),
-            EventMeta.New("", ID.Id()).ToBytes(),
-            0,
-            DateTime.UtcNow);
-
+        var initEvt = Behavior.Initialize.Evt.New(ID, initPayload);
+        initEvt.SetVersion(0);
         // AND
         var startPayload = Contract.Start.Payload.New;
-        var startEvt = Event.New(
-            ID,
-            TopicAtt.Get<Behavior.Start.IEvt>(),
-            startPayload.ToBytes(),
-            EventMeta.New("", ID.Id()).ToBytes(),
-            1,
-            DateTime.UtcNow
-        );
+        var startEvt = Behavior.Start.Evt.New(ID, startPayload);
+        startEvt.SetVersion(1);
         // AND
         var revs = RandomRevs(ID);
         var res = new List<IEvt> { initEvt, startEvt };
@@ -65,14 +53,10 @@ public static class ScenariosAndStreams
         {
             var delta = Random.Shared.Next(-10, 10);
             var changeRpmPld = Contract.ChangeRpm.Payload.New(delta);
-            var changeRpmEvt = Event.New(
+            var changeRpmEvt = Behavior.ChangeRpm.Evt.New(
                 ID,
-                TopicAtt.Get<Behavior.ChangeRpm.IEvt>(),
-                changeRpmPld.ToBytes(),
-                EventMeta.New("", ID.Id()).ToBytes(),
-                0,
-                DateTime.UtcNow);
-            changeRpmEvt.Version = i + 2;
+                changeRpmPld);
+            changeRpmEvt.SetVersion(i + 2);
             res.Add(changeRpmEvt);
         }
 

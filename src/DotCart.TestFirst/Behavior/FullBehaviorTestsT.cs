@@ -10,4 +10,8 @@ public abstract class FullBehaviorTestsT<TAggregate> : IoCTests
     protected FullBehaviorTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
+    
+    
+    
+    
 }

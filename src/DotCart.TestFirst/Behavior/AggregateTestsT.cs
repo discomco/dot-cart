@@ -1,3 +1,4 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
@@ -6,7 +7,7 @@ using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Behavior;
 
 public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEvt> : IoCTests
     where TID : IID
@@ -21,6 +22,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     protected TID _ID;
     protected IDCtorT<TID> _newID;
     protected StateCtorT<TState>? _newState;
+    protected Evt2State<TState,TEvt> _evt2State;
 
     protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -125,6 +127,17 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         Assert.NotNull(agg);
         var state = agg.GetState();
         Assert.NotNull(state);
+    }
+
+    [Fact]
+    public async Task ShouldResolveEvt2State()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
+        // THEN
+        Assert.NotNull(_evt2State);
     }
 
 

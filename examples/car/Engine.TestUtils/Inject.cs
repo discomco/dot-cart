@@ -1,4 +1,6 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
+using DotCart.Core;
 using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 

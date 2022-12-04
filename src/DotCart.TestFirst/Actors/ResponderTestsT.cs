@@ -2,6 +2,8 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using FakeItEasy;
+using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -16,7 +18,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     public ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-
+    
     [Fact]
     public async Task ShouldResolveHope2Cmd()
     {
@@ -35,8 +37,10 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     [Fact]
     public async Task ShouldResolveResponder()
     {
+        
         // GIVEN
         Assert.NotNull(TestEnv);
+        TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
         // WHEN
         _responder = TestEnv.ResolveRequired<TResponder>();
         // THEN
@@ -48,6 +52,9 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     {
         // GIVEN
         Assert.NotNull(TestEnv);
+        // GIVEN
+        TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
+
         // WHEN
         _responder = TestEnv.ResolveRequired<TResponder>();
         try

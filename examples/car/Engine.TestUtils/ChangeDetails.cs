@@ -1,4 +1,6 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 
 namespace Engine.TestUtils;
 
@@ -20,4 +22,15 @@ public static class ChangeDetails
             Contract.ChangeDetails.Payload>
         FactCtor =
             (_, _) => Contract.ChangeDetails.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
+
+    public static CmdCtorT<Behavior.ChangeDetails.Cmd,
+            Contract.Schema.EngineID,
+            Contract.ChangeDetails.Payload>
+        CmdCtor =
+            (_, _) => Behavior.ChangeDetails.Cmd.New(Schema.IDCtor(), PayloadCtor());
+
+    public static EvtCtorT<Behavior.ChangeDetails.Evt, Contract.Schema.EngineID>
+        EvtCtor = 
+            _ => Behavior.ChangeDetails.Evt.New(Schema.IDCtor(), PayloadCtor()); 
+
 }

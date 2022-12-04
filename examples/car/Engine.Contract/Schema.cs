@@ -16,7 +16,10 @@ public static class Schema
     }
 
     public const string EngineIDPrefix = "engine";
-    public static readonly IDCtorT<EngineID> IDCtor = () => new EngineID();
+
+    public static readonly IDCtorT<EngineID>
+        IDCtor =
+            _ => new EngineID();
 
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
