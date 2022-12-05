@@ -11,7 +11,7 @@ public interface IProjectionB : IActor
 {
 }
 
-public interface IProjectionT3<TDriver, TState, in TEvt> : IProjectionB
+public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
     where TDriver : IModelStore<TState>
     where TState : IState
     where TEvt : IEvt
@@ -28,7 +28,7 @@ public interface IProjectionT3<TDriver, TState, in TEvt> : IProjectionB
 /// </typeparam>
 /// <typeparam name="TState">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT3<TDriver, TState, TEvt>
+public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<TDriver, TState, TEvt>
     where TDriver : IModelStore<TState>
     where TState : IState
     where TEvt : IEvt
@@ -71,7 +71,7 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT3
     {
         return Run(() =>
         {
-            var subscribed = "SUBSCRIBED".AsFact();
+            var subscribed = AppFacts.Subscribed;
             Log.Information($"{subscribed} {TopicAtt.Get<TEvt>()}  ~> [{GetType().Name}]");
             _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
             return CompletedTask;

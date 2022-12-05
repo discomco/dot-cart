@@ -11,15 +11,15 @@ public interface ITry
     void SetAggregate(IAggregate aggregate);
 }
 
-public interface ITry<in TCmd> : ITry
-    where TCmd : ICmd
-{
-    IFeedback Verify(TCmd cmd);
-    IEnumerable<Event> Raise(TCmd cmd);
-}
+// public interface ITry<in TCmd> : ITry
+//     where TCmd : ICmd
+// {
+// }
 
-public interface ITry<in TCmd, TState> : ITry<TCmd>
+public interface ITry<in TCmd, in TState> : ITry
     where TCmd : ICmd
     where TState : IState
 {
+    IFeedback Verify(TCmd cmd, TState state);
+    IEnumerable<Event> Raise(TCmd cmd, TState state);
 }

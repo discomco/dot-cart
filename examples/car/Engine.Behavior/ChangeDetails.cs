@@ -1,12 +1,56 @@
+using Ardalis.GuardClauses;
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Contract;
+using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 
 namespace Engine.Behavior;
 
+
+public static partial class Inject
+{
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<ITry<ChangeDetails.Cmd, Engine>, ChangeDetails.TryCmd>();
+    }
+} 
+
+
+
 public static class ChangeDetails
 {
+    public class TryCmd : TryCmdT<Cmd, Engine>
+    {
+        public override IFeedback Verify(Cmd cmd, Engine state)
+        {
+            var fbk = Feedback.New(cmd.AggregateID.Id());
+            try
+            {
+                Guard.Against.EngineNotInitialized(state);
+            }
+            catch (Exception e)
+            {
+                fbk.SetError(e.AsError());
+                Log.Error($"{AppErrors.Error} - {e.InnerAndOuter()}");
+            }
+            return fbk;
+        }
+
+        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
+        {
+            return new[]
+            {
+                Evt.New(cmd.AggregateID, cmd.Payload)
+            };
+        }
+    }
+
+
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload) 
         : CmdT<Contract.ChangeDetails.Payload>(AggregateID,
@@ -39,7 +83,7 @@ public static class ChangeDetails
     {
         
         public static Evt New(
-            Schema.EngineID engineID, 
+            IID engineID,
             Contract.ChangeDetails.Payload payload)
         {
             var meta = EventMeta.New(

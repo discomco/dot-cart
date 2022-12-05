@@ -10,8 +10,15 @@ public abstract class FullBehaviorTestsT<TAggregate> : IoCTests
     protected FullBehaviorTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
-    
-    
-    
+
+    [Fact]
+    public async Task ShouldResolveExchange()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        
+        // THEN
+    }
+
 }

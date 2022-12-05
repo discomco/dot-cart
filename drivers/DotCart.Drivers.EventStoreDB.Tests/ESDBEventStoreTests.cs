@@ -6,6 +6,7 @@ using DotCart.Context.Actors;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
 using DotCart.TestKit.Behavior;
 using DotCart.TestKit.Schema;
@@ -23,6 +24,7 @@ public class ESDBEventStoreTests : IoCTests
     private IEventStore? _eventStore;
     private StateCtorT<TheDoc> _newDoc;
     private IDCtorT<TheID> _newID;
+    private IExchange _exchange;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -75,6 +77,17 @@ public class ESDBEventStoreTests : IoCTests
         var agg = aggBuilder.Build();
         // THEN
         Assert.NotNull(agg);
+    }
+
+    [Fact]
+    public async Task ShouldResolveExchange()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _exchange = TestEnv.ResolveRequired<IExchange>();
+        // THEN
+        Assert.NotNull(_exchange);
     }
 
 
@@ -142,10 +155,8 @@ public class ESDBEventStoreTests : IoCTests
             .AddTransient(_ => TheDoc.Rand)
             .AddTransient(_ => TheID.Ctor)
             .AddSingleton<IAggregateStore, ESDBStore>()
-            .AddSingleton<IEventStore, ESDBStore>();
-        if (TestKit.Config.IsPipeline)
-            services.AddSingleton(_ => A.Fake<IESDBEventSourcingClient>());
-        else
-            services.AddConfiguredESDBClients();
+            .AddSingleton<IEventStore, ESDBStore>()
+            .AddSingletonExchange()
+            .AddConfiguredESDBClients();
     }
 }

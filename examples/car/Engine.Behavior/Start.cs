@@ -95,14 +95,14 @@ public static class Start
         }
     }
 
-    public class TryCmd : TryCmdT<Cmd>
+    public class TryCmd : TryCmdT<Cmd, Engine>
     {
-        public override IFeedback Verify(Cmd cmd)
+        public override IFeedback Verify(Cmd cmd, Engine state)
         {
             var fbk = Feedback.Empty;
             try
             {
-                Guard.Against.StateIsNotInitialized((Engine)Aggregate.GetState());
+                Guard.Against.EngineNotInitialized(state);
             }
             catch (Exception e)
             {
@@ -112,7 +112,7 @@ public static class Start
             return fbk;
         }
 
-        public override IEnumerable<Event> Raise(Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
         {
             return new[]
             {
@@ -121,6 +121,10 @@ public static class Start
         }
     }
 
+
+    public const string EngineStartsOnInitializedPolicy = "engine:starts_on_nitialized:policy";
+    
+    [Name(EngineStartsOnInitializedPolicy)]
     public class StartOnInitializedPolicy : AggregatePolicy<Initialize.Evt, Cmd>
     {
         public StartOnInitializedPolicy(

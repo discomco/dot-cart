@@ -79,14 +79,14 @@ public static class ChangeRpm
         }
     };
 
-    public class TryCmd : TryCmdT<Cmd>
+    public class TryCmd : TryCmdT<Cmd, Engine>
     {
-        public override IEnumerable<Event> Raise(Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
         {
             var res = new List<Event>();
             var rpmChanged = Evt.New(cmd.AggregateID, cmd.Payload); 
             res.Add(rpmChanged);
-            var newPower = ((Engine)Aggregate.GetState()).Power + cmd.Payload.Delta;
+            var newPower = state.Power + cmd.Payload.Delta;
             if (newPower > 0)
                 return res;
             var stopped = Stop.Evt.New(cmd.AggregateID, Contract.Stop.Payload.New());
@@ -94,18 +94,17 @@ public static class ChangeRpm
             return res;
         }
 
-        public override IFeedback Verify(Cmd cmd)
+        public override IFeedback Verify(Cmd cmd, Engine state)
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
             try
             {
-                Guard.Against.EngineNotStarted((Engine)Aggregate.GetState());
+                Guard.Against.EngineNotStarted(state);
             }
             catch (Exception e)
             {
                 fbk.SetError(e.AsError());
             }
-
             return fbk;
         }
     }

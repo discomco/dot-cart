@@ -34,11 +34,17 @@ public static class AppVerbs
     public static string Deactivating = "DEACTIVATING".AsVerb();
 }
 
+public static class AppErrors
+{
+    public static string Error = "ERROR".AsError();
+}
+
 public static class AppFacts
 {
     public static string Connected = "CONNECTED".AsFact();
     public static string Started = "STARTED".AsFact();
-    public static string Stopped = "STOPPED".AsFact();
+    public static readonly string Stopped = "STOPPED".AsFact();
     public static string Activated = "ACTIVATED".AsFact();
     public static string Deactivated = "DEACTIVATED".AsFact();
+    public static readonly string Subscribed = "SUBSCRIBED".AsFact();
 }

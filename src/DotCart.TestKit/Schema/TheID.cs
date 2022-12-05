@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestKit.Schema;
 
+
 public static class Inject
 {
     public static IServiceCollection AddTheIDCtor(this IServiceCollection services)
@@ -22,5 +23,5 @@ public record TheID : ID
     public static readonly IDCtorT<TheID> Ctor = 
         _ => New;
 
-    public static TheID New => new(GuidUtils.LowerCaseGuid);
+    public static TheID New => new("FD1A9876-158F-4EF5-A5B5-468465404551");
 }

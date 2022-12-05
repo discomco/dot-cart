@@ -16,11 +16,13 @@ internal abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
     private object _pubMutex = new();
 
     public Dictionary<string, List<object>> Handlers =>
-        handlers.Value ?? (handlers.Value = new Dictionary<string, List<object>>());
+        handlers.Value 
+        ?? (handlers.Value = new Dictionary<string, List<object>>());
 
     public void Subscribe(string topic, Action<TMsg> handler)
     {
-        GetHandlersOf(topic).Add(handler);
+        GetHandlersOf(topic)
+            .Add(handler);
     }
 
     public Task SubscribeAsync(string topic, Func<TMsg, Task> handler, CancellationToken cancellationToken)

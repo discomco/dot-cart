@@ -11,19 +11,20 @@ namespace DotCart.Context.Behaviors;
 public class AggregateT<TState> : IAggregate
     where TState : IState
 {
+    private readonly IExchange _exchange;
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
 
     private readonly object execMutex = new();
     public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>();
     private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
-    private ulong _nextVersion;
     protected TState _state;
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
     private bool _withAppliedEvents = false;
+    private ulong _nextVersion;
 
-    protected AggregateT(
-        StateCtorT<TState> newState)
+    protected AggregateT(IExchange exchange, StateCtorT<TState> newState)
     {
+        _exchange = exchange;
         _state = newState();
         Version = EventConst.NewAggregateVersion;
     }
@@ -133,9 +134,9 @@ public class AggregateT<TState> : IAggregate
             SetID(cmd.AggregateID);
             Guard.Against.BehaviorIDNotSet(this);
             var fTry = _tryFuncs[TopicAtt.Get(cmd)];
-            feedback = ((dynamic)fTry).Verify((dynamic)cmd);
+            feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state );
             if (!feedback.IsSuccess) return feedback;
-            IEnumerable<IEvt> events = ((dynamic)fTry).Raise((dynamic)cmd);
+            IEnumerable<IEvt> events = ((dynamic)fTry).Raise((dynamic)cmd, (dynamic)_state);
             foreach (var @event in events)
                 await RaiseEvent(@event);
             feedback.SetPayload(_state);
@@ -162,6 +163,7 @@ public class AggregateT<TState> : IAggregate
         _state = ApplyEvent(_state, evt, evt.Version);
 //        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
+        await _exchange.Publish(TopicAtt.Get(evt), evt);
         //await _mediator.PublishAsync(evt.Topic, evt);
     }
 

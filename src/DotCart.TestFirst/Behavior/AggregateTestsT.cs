@@ -13,7 +13,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     where TID : IID
     where TState : IState
     where TApplyEvt : ApplyEvtT<TState, TEvt>
-    where TTryCmd : TryCmdT<TCmd>
+    where TTryCmd : TryCmdT<TCmd, TState>
     where TEvt : IEvt
     where TCmd : ICmd
 {

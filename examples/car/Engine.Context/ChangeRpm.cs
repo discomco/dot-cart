@@ -35,6 +35,7 @@ public static class ChangeRpm
 
 
     [Name(ToRedisDocProjectionName)]
+    [DbName("3")]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,

@@ -24,8 +24,8 @@ public static class Schema
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
     {
-        ((int)status).SetFlag((int)flag);
-        return status;
+        var newStatus = ((int)status).SetFlag((int)flag);
+        return (EngineStatus)newStatus;
     }
 
     public static EngineStatus UnsetFlag(this EngineStatus status, EngineStatus flag)

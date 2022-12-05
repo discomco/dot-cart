@@ -64,14 +64,14 @@ public static class Initialize
         }
     }
 
-    public class TryCmd : TryCmdT<Cmd>
+    public class TryCmd : TryCmdT<Cmd, Engine>
     {
-        public override IFeedback Verify(Cmd cmd)
+        public override IFeedback Verify(Cmd cmd, Engine state)
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
             try
             {
-                Guard.Against.EngineInitialized((Engine)Aggregate.GetState());
+                Guard.Against.EngineInitialized(state);
             }
             catch (Exception e)
             {
@@ -82,7 +82,7 @@ public static class Initialize
             return fbk;
         }
 
-        public override IEnumerable<Event> Raise(Cmd cmd)
+        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
         {
             return new[]
             {

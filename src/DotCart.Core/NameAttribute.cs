@@ -6,9 +6,9 @@ namespace DotCart.Core;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public class NameAttribute : Attribute
 {
-    public NameAttribute(string groupName)
+    public NameAttribute(string name)
     {
-        Name = groupName;
+        Name = name;
     }
 
     public string Name { get; }

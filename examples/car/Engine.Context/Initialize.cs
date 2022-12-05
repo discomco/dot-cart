@@ -13,7 +13,6 @@ namespace Engine.Context;
 public static class Initialize
 {
     public const string ToRedisDocName = "engine:initialized:to_redis_doc:v1";
-
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)

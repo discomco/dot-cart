@@ -10,27 +10,27 @@ namespace DotCart.Drivers.Mediator;
 [Name("dotcart:exchange")]
 internal class Exchange : ActiveComponent, IExchange
 {
-    private ImmutableDictionary<string, List<IActor>> _readers = ImmutableDictionary<string, List<IActor>>.Empty;
+    private ImmutableDictionary<string, List<IActor>> _topics = ImmutableDictionary<string, List<IActor>>.Empty;
 
     public void Subscribe(string topic, IActor consumer)
     {
-        if (!_readers.ContainsKey(topic))
-            _readers = _readers.Add(topic, new List<IActor>());
-        var lst = _readers[topic];
+        if (!_topics.ContainsKey(topic))
+            _topics = _topics.Add(topic, new List<IActor>());
+        var lst = _topics[topic];
         lst.Add(consumer);
-        _readers = _readers.SetItem(topic, lst);
+        _topics = _topics.SetItem(topic, lst);
     }
 
     public void Unsubscribe(string topic, IActor consumer)
     {
-        if (!_readers.ContainsKey(topic))
+        if (!_topics.ContainsKey(topic))
             return;
-        _readers[topic].Remove(consumer);
+        _topics[topic].Remove(consumer);
     }
 
     public async Task Publish(string topic, IMsg msg, CancellationToken cancellationToken = default)
     {
-        var consumers = _readers
+        var consumers = _topics
             .Where(slot => slot.Key == topic)
             .SelectMany(slot => slot.Value);
         if (!consumers.Any()) return;
@@ -50,8 +50,8 @@ internal class Exchange : ActiveComponent, IExchange
 
     public void Dispose()
     {
-        _readers.Clear();
-        var stopped = "STOPPED".AsFact();
+        _topics.Clear();
+        var stopped = AppFacts.Stopped;
         Log.Information($"{stopped} [{GetType().Name}]");
     }
 
