@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
+using DotCart.Context.Behaviors;
 using DotCart.Drivers.EventStoreDB;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
@@ -13,9 +14,10 @@ using Schema = Engine.Contract.Schema;
 namespace Engine.Context.Tests;
 
 public abstract class
-    EngineCmdHandlerTests<TCmd, TPayload> : CmdHandlerTestsT<Schema.EngineID, Behavior.Engine, TCmd, TPayload>
+    EngineCmdHandlerTests<TCmd, TEvt, TPayload> : CmdHandlerTestsT<Schema.EngineID, Behavior.Engine, TCmd, TEvt, TPayload>
     where TCmd : ICmd
     where TPayload : IPayload
+    where TEvt : IEvt
 {
     public EngineCmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -26,7 +28,7 @@ public abstract class
     {
         services
             .AddESDBStore()
-            .AddBaseBehavior()
+            .AddBaseBehavior<IEngineAggregateInfo, Behavior.Engine, TCmd, TEvt> ()
             .AddCmdHandler()
             .AddTestIDCtor()
             .AddStateCtor();

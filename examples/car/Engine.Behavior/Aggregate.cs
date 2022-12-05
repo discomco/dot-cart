@@ -31,15 +31,6 @@ public static partial class Inject
             .AddStopBehavior();
     }
 
-    public static IServiceCollection AddBaseBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddConsoleLogger()
-            .AddSingletonExchange()
-            .AddAggregateBuilder()
-            .AddTransient<IAggregate, Aggregate>()
-            .AddStateCtor();
-    }
 }
 
 public static class Guards
@@ -108,9 +99,16 @@ public record Engine : IState
     }
 }
 
-public class Aggregate : AggregateT<Engine>
+
+[Name("engine:aggregate")]
+public interface IEngineAggregateInfo: IAggregateInfoB
 {
-    public Aggregate(IExchange exchange, StateCtorT<Engine> newState) : base(exchange, newState)
-    {
-    }
+    
 }
+
+// public class Aggregate : AggregateT<Engine>
+// {
+//     public Aggregate(IExchange exchange, StateCtorT<Engine> newState) : base(exchange, newState)
+//     {
+//     }
+// }

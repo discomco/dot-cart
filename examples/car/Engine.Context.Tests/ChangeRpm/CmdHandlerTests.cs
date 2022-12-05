@@ -1,10 +1,11 @@
 using DotCart.TestKit;
+using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeRpm;
 
-public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.ChangeRpm.Cmd, Contract.ChangeRpm.Payload>
+public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.ChangeRpm.Cmd, Behavior.ChangeRpm.Evt, Contract.ChangeRpm.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -18,6 +19,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.ChangeRpm.Cmd, Con
     {
         base.InjectDependencies(services);
         services
+            .AddChangeRpmBehavior()
             .AddTransient(_ => TestUtils.ChangeRpm.PayloadCtor)
             .AddTransient(_ => TestUtils.ChangeRpm.CmdCtor);
     }

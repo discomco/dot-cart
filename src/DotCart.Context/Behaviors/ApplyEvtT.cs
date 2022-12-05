@@ -5,7 +5,7 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public abstract class ApplyEvtT<TState, TEvt> : IApply
+public class ApplyEvtT<TState, TEvt> : IApply<TState,TEvt>
     where TEvt : IEvt
     where TState : IState
 {

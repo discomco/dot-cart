@@ -11,7 +11,7 @@ using Schema = Engine.Contract.Schema;
 
 namespace Engine.Behavior.Tests;
 
-public class EngineBehaviorTests : FullBehaviorTestsT<Aggregate>
+public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregateInfo, Engine>>
 {
     private IAggregate _agg;
     private IAggregateBuilder _builder;

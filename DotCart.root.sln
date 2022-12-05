@@ -93,6 +93,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "car", "car", "{13625733-5471-49E9-9FB9-04C93AEEE659}"
 	ProjectSection(SolutionItems) = preProject
 		examples\car\Directory.Build.props = examples\car\Directory.Build.props
+		examples\car\readme.md = examples\car\readme.md
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Engine.Client", "examples\car\Engine.Client\Engine.Client.csproj", "{6868610E-8545-448A-8CA2-B78D66F6334C}"

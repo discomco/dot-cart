@@ -8,8 +8,9 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregateT<TState> : IAggregate
+public class AggregateT<TInfo,TState> : IAggregate
     where TState : IState
+    where TInfo : IAggregateInfoB
 {
     private readonly IExchange _exchange;
     private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
@@ -22,7 +23,9 @@ public class AggregateT<TState> : IAggregate
     private bool _withAppliedEvents = false;
     private ulong _nextVersion;
 
-    protected AggregateT(IExchange exchange, StateCtorT<TState> newState)
+    public AggregateT(
+        IExchange exchange, 
+        StateCtorT<TState> newState)
     {
         _exchange = exchange;
         _state = newState();
@@ -67,7 +70,7 @@ public class AggregateT<TState> : IAggregate
 
     public string GetName()
     {
-        return GetType().FullName;
+        return NameAtt.Get<TInfo>();
     }
 
     public void ClearUncommittedEvents()
@@ -135,7 +138,8 @@ public class AggregateT<TState> : IAggregate
             Guard.Against.BehaviorIDNotSet(this);
             var fTry = _tryFuncs[TopicAtt.Get(cmd)];
             feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state );
-            if (!feedback.IsSuccess) return feedback;
+            if (!feedback.IsSuccess) 
+                return feedback;
             IEnumerable<IEvt> events = ((dynamic)fTry).Raise((dynamic)cmd, (dynamic)_state);
             foreach (var @event in events)
                 await RaiseEvent(@event);
@@ -182,3 +186,7 @@ public class AggregateT<TState> : IAggregate
         return newState;
     }
 }
+
+
+public interface IAggregateInfoB
+{}

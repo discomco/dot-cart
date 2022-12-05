@@ -60,7 +60,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
         try
         {
             Assert.NotNull(_responder);
-            var tokenSource = new CancellationTokenSource(1000);
+            var tokenSource = new CancellationTokenSource(1_000);
             var cancellationToken = tokenSource.Token;
             // WHEN
             await Task.Run(async () =>

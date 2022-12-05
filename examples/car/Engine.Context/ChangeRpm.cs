@@ -21,6 +21,7 @@ public static class ChangeRpm
     {
         return services
             .AddEngineBehavior()
+            .AddChangeRpmMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()

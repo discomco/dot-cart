@@ -6,7 +6,6 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
-using Elasticsearch.Net;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,6 +13,27 @@ namespace Engine.Behavior;
 
 public static class Start
 {
+    public static IServiceCollection AddStartMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
+    public static IServiceCollection AddStartBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, Evt>()
+            .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()
+            .AddTransient(_ => _evt2Cmd)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
+    }
+
+
     public static class Topics
     {
         public const string Cmd_v1 = "engine:start:v1";
@@ -21,43 +41,55 @@ public static class Start
     }
 
 
-    private static readonly Evt2Fact<Contract.Start.Fact, Evt> _evt2Fact =
-        evt => Contract.Start.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Start.Payload>());
+    private static readonly Evt2Fact<Contract.Start.Fact, Evt>
+        _evt2Fact =
+            evt =>
+                Contract.Start.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Start.Payload>());
 
-    private static readonly Hope2Cmd<Cmd, Contract.Start.Hope> _hope2Cmd =
-        hope =>
-            Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+    private static readonly Hope2Cmd<Cmd, Contract.Start.Hope>
+        _hope2Cmd =
+            hope =>
+                Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly Evt2State<Engine, Evt> _evt2Doc =
-        (state, _) =>
-        {
-            state.Status = state.Status.SetFlag(Schema.EngineStatus.Started);
-            return state;
-        };
+    private static readonly Evt2State<Engine, Evt>
+        _evt2State =
+            (state, _) =>
+            {
+                state.Status = state.Status.SetFlag(Schema.EngineStatus.Started);
+                return state;
+            };
 
     private static readonly Evt2Cmd<Cmd, Initialize.Evt> _evt2Cmd =
         evt =>
             Cmd.New(evt.AggregateID, Contract.Start.Payload.New);
 
-    private static IServiceCollection AddStartMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Cmd)
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _hope2Cmd);
-    }
+    private static readonly SpecFuncT<Engine, Cmd>
+        _specFunc =
+            (_, state) =>
+            {
+                var fbk = Feedback.Empty;
+                try
+                {
+                    Guard.Against.EngineNotInitialized(state);
+                }
+                catch (Exception e)
+                {
+                    fbk.SetError(e.AsError());
+                }
 
-    public static IServiceCollection AddStartBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddIDCtor()
-            .AddBaseBehavior()
-            .AddStartMappers()
-            .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()
-            .AddTransient<ITry, TryCmd>()
-            .AddTransient<IApply, ApplyEvt>();
-    }
+                return fbk;
+            };
+
+    private static readonly RaiseFuncT<Engine, Cmd>
+        _raiseFunc =
+            (cmd, _) =>
+            {
+                return new[]
+                {
+                    Evt.New(cmd.AggregateID, cmd.Payload)
+                };
+            };
+
 
     public class Exception : System.Exception
     {
@@ -83,49 +115,11 @@ public static class Start
         }
     }
 
-    public class ApplyEvt : ApplyEvtT<Engine, Evt>
-    {
-        // public override Engine Apply(Engine state, Event evt)
-        // {
-        //     state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Started);
-        //     return state;
-        // }
-        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
-        {
-        }
-    }
-
-    public class TryCmd : TryCmdT<Cmd, Engine>
-    {
-        public override IFeedback Verify(Cmd cmd, Engine state)
-        {
-            var fbk = Feedback.Empty;
-            try
-            {
-                Guard.Against.EngineNotInitialized(state);
-            }
-            catch (Exception e)
-            {
-                fbk.SetError(e.AsError());
-            }
-
-            return fbk;
-        }
-
-        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
-        {
-            return new[]
-            {
-                Evt.New(cmd.AggregateID, cmd.Payload)
-            };
-        }
-    }
-
 
     public const string EngineStartsOnInitializedPolicy = "engine:starts_on_nitialized:policy";
-    
+
     [Name(EngineStartsOnInitializedPolicy)]
-    public class StartOnInitializedPolicy : AggregatePolicy<Initialize.Evt, Cmd>
+    public class StartOnInitializedPolicy : AggregatePolicyT<Initialize.Evt, Cmd>
     {
         public StartOnInitializedPolicy(
             IExchange exchange,
@@ -158,9 +152,8 @@ public static class Start
     {
         public static Evt New(IID aggregateID, Contract.Start.Payload payload)
         {
-            var meta = new EvtMeta(nameof(Aggregate), aggregateID.Id());
+            var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
             return new Evt(aggregateID, payload, meta);
         }
     }
 }
-

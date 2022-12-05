@@ -1,3 +1,5 @@
+using DotCart.Abstractions.Schema;
+
 namespace DotCart.Abstractions.Behavior;
 
 public interface IApply
@@ -6,9 +8,9 @@ public interface IApply
     void SetAggregate(IAggregate aggregate);
 }
 
-// public interface IApply<TState, in TEvt> : IApply
-//     where TEvt : IEvt
-//     where TState : IState
-// {
-//     TState Apply(TState state, Event evt);
-// }
+public interface IApply<TState, in TEvt> : IApply
+    where TEvt : IEvt
+    where TState : IState
+{
+    TState Apply(TState state, TEvt evt);
+}

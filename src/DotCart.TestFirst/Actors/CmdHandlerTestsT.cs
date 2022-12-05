@@ -9,10 +9,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class CmdHandlerTestsT<TID, TState, TCmd, TPayload> : IoCTests
+public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCTests
     where TState : IState
     where TID : IID
     where TCmd : ICmd
+    where TEvt: IEvt
     where TPayload : IPayload
 {
     protected static IDCtorT<TID> _newID;

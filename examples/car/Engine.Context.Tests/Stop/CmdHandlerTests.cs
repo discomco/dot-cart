@@ -1,10 +1,11 @@
 using DotCart.TestKit;
+using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
-public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract.Stop.Payload>
+public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Behavior.Stop.Evt, Contract.Stop.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -19,6 +20,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Contract
     {
         base.InjectDependencies(services);
         services
+            .AddStopBehavior()
             .AddTransient(_ => TestUtils.Stop.PayloadCtor)
             .AddTransient(_ => TestUtils.Stop.CmdCtor);
     }

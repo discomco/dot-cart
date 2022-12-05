@@ -3,8 +3,6 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public delegate bool SpecFunc<in TState, TCmd>(TState state) where TState : IState where TCmd : ICmd;
-
 public interface ITry
 {
     string CmdType { get; }
@@ -21,5 +19,5 @@ public interface ITry<in TCmd, in TState> : ITry
     where TState : IState
 {
     IFeedback Verify(TCmd cmd, TState state);
-    IEnumerable<Event> Raise(TCmd cmd, TState state);
+    IEnumerable<IEvt> Raise(TCmd cmd, TState state);
 }

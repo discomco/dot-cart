@@ -1,4 +1,4 @@
-using DotCart.TestFirst;
+using DotCart.Context.Behaviors;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -10,8 +10,8 @@ namespace Engine.Behavior.Tests.ChangeRpm;
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Engine,
-    Behavior.ChangeRpm.TryCmd,
-    Behavior.ChangeRpm.ApplyEvt,
+    TryCmdT<Behavior.ChangeRpm.Cmd, Engine>,
+    ApplyEvtT<Engine, Behavior.ChangeRpm.Evt>,
     Behavior.ChangeRpm.Cmd,
     Behavior.ChangeRpm.Evt>
 {

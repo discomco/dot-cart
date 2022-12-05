@@ -7,12 +7,10 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class
-    ResponderTests : ResponderTestsT<
+public class ResponderTests : ResponderTestsT<
         IResponderT<Contract.Initialize.Hope, Behavior.Initialize.Cmd>,
         Contract.Initialize.Hope,
-        Behavior.Initialize.Cmd
-    >
+        Behavior.Initialize.Cmd>
 {
     private IEncodedConnection _bus;
 

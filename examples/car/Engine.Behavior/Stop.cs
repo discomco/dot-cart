@@ -14,33 +14,64 @@ namespace Engine.Behavior;
 
 public static class Stop
 {
-
-    public static readonly Evt2State<Engine, Evt> _evt2Doc = (state, evt) =>
-    {
-        state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
-        return state;
-    };
-
-    public static readonly Hope2Cmd<Cmd, Contract.Stop.Hope> _hope2Cmd = hope =>
-        Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
-
-
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
-            .AddIDCtor()
-            .AddBaseBehavior()
-            .AddStopMappers()
-            .AddTransient<ITry, TryCmd>()
-            .AddTransient<IApply, ApplyEvt>();
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, Evt>()
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
     }
 
     public static IServiceCollection AddStopMappers(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2State)
             .AddTransient(_ => _hope2Cmd);
     }
+
+
+    private static readonly Evt2State<Engine, Evt>
+        _evt2State =
+            (state, evt) =>
+            {
+                state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
+                return state;
+            };
+
+    private static readonly Hope2Cmd<Cmd, Contract.Stop.Hope>
+        _hope2Cmd =
+            hope =>
+                Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+
+    private static readonly SpecFuncT<Engine, Cmd>
+        _specFunc =
+            (cmd, state) =>
+            {
+                var fbk = Feedback.New(cmd.AggregateID.Id());
+                try
+                {
+                    Guard.Against.EngineNotStarted(state);
+                }
+                catch (Exception e)
+                {
+                    Log.Debug(e.InnerAndOuter());
+                    fbk.SetError(e.AsError());
+                }
+
+                return fbk;
+            };
+
+    private static readonly RaiseFuncT<Engine, Cmd>
+        _raiseFunc =
+            (cmd, _) =>
+            {
+                return new[]
+                {
+                    Evt.New(cmd.AggregateID, cmd.Payload)
+                };
+            };
 
 
     [Topic(Topics.Cmd_v1)]
@@ -68,51 +99,11 @@ public static class Stop
     {
         public static Evt New(IID AggregateID, Contract.Stop.Payload payload)
         {
-            var meta = new EvtMeta(nameof(Aggregate), AggregateID.Id());
+            var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), AggregateID.Id());
             return new Evt(AggregateID, payload, meta);
         }
     }
 
-    public class TryCmd : TryCmdT<Cmd, Engine>
-    {
-        public override IFeedback Verify(Cmd cmd, Engine state)
-        {
-            var fbk = Feedback.New(cmd.AggregateID.Id());
-            try
-            {
-                Guard.Against.EngineNotStarted(state);
-            }
-            catch (Exception e)
-            {
-                Log.Debug(e.InnerAndOuter());
-                fbk.SetError(e.AsError());
-            }
-
-            return fbk;
-        }
-
-        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
-        {
-            return new[]
-            {
-                Evt.New(cmd.AggregateID, cmd.Payload)
-            };
-        }
-    }
-
-    public class ApplyEvt : ApplyEvtT<Engine, Evt>
-    {
-        // public override Engine Apply(Engine state, Event evt)
-        // {
-        //     state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
-        //     state.Status = (Schema.EngineStatus)((int)state.Status).SetFlag((int)Schema.EngineStatus.Stopped);
-        //     state.Power = 0;
-        //     return state;
-        // }
-        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
-        {
-        }
-    }
 
     public class Exception : System.Exception
     {

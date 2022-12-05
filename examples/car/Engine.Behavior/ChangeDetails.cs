@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
@@ -10,23 +11,36 @@ using Serilog;
 
 namespace Engine.Behavior;
 
-
 public static partial class Inject
 {
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddTransient<ITry<ChangeDetails.Cmd, Engine>, ChangeDetails.TryCmd>();
-    }
-} 
 
+} 
 
 
 public static class ChangeDetails
 {
-    public class TryCmd : TryCmdT<Cmd, Engine>
+    
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
     {
-        public override IFeedback Verify(Cmd cmd, Engine state)
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo,Engine, ChangeDetails.Cmd, ChangeDetails.Evt> ()
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _evt2State);
+    }
+
+
+    private static readonly Evt2State<Engine, Evt>
+        _evt2State =
+            (state, evt) =>
+            {
+                state.Details = evt.Payload.Details;
+                return state;
+            };
+
+    private static readonly SpecFuncT<Engine, Cmd>
+        _specFunc = (cmd, state) =>
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
             try
@@ -39,17 +53,17 @@ public static class ChangeDetails
                 Log.Error($"{AppErrors.Error} - {e.InnerAndOuter()}");
             }
             return fbk;
-        }
+        };
 
-        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
-        {
-            return new[]
+    private static readonly RaiseFuncT<Engine, Cmd>
+        _raiseFunc =
+            (cmd, _) =>
             {
-                Evt.New(cmd.AggregateID, cmd.Payload)
-            };
-        }
-    }
-
+                return new[]
+                {
+                    Evt.New(cmd.AggregateID, cmd.Payload)
+                };
+            };  
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload) 
@@ -60,17 +74,12 @@ public static class ChangeDetails
             => new(engineId, payload);
     }
     
-    
-    
-
     public static class Topics
     {
         public const string Cmd_v1 = "engine:change_details:v1";
         public const string Evt_v1 = "engine:details_changed:v1";
     }
     
-    
-
     [Topic(Topics.Evt_v1)]
     public record Evt(IID AggregateID, 
         Contract.ChangeDetails.Payload Payload,
@@ -87,9 +96,11 @@ public static class ChangeDetails
             Contract.ChangeDetails.Payload payload)
         {
             var meta = EventMeta.New(
-                nameof(Aggregate), 
+                NameAtt.Get<IEngineAggregateInfo>(), 
                 engineID.Id());
             return new Evt(engineID, payload, meta);
         }
     }
+
+
 }

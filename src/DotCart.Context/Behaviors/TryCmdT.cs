@@ -5,21 +5,32 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public delegate Feedback VerifyFunc<in TState, in TCmd, TPayload>(TState state, TCmd cmd)
-    where TState : IState
-    where TCmd : ICmd<TPayload>
-    where TPayload : IPayload;
-
-public abstract class TryCmdT<TCmd, TState> : ITry<TCmd, TState> 
+public class TryCmdT<TCmd, TState> : ITry<TCmd, TState> 
     where TCmd : ICmd 
     where TState : IState
 {
+    private readonly SpecFuncT<TState, TCmd> _specify;
+    private readonly RaiseFuncT<TState, TCmd> _raise;
     protected IAggregate Aggregate;
     public string CmdType => TopicAtt.Get<TCmd>();
     public void SetAggregate(IAggregate aggregate)
     {
         Aggregate = aggregate;
     }
-    public abstract IFeedback Verify(TCmd cmd, TState state);
-    public abstract IEnumerable<Event> Raise(TCmd cmd, TState state);
+
+    public TryCmdT(SpecFuncT<TState, TCmd> specify, RaiseFuncT<TState, TCmd> raise)
+    {
+        _specify = specify;
+        _raise = raise;
+    }
+
+    public IFeedback Verify(TCmd cmd, TState state)
+    {
+        return _specify(cmd, state);
+    }
+
+    public IEnumerable<IEvt> Raise(TCmd cmd, TState state)
+    {
+        return _raise(cmd, state);
+    }
 }

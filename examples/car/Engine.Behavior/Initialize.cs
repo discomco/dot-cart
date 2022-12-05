@@ -1,4 +1,3 @@
-using System.Reflection.Metadata.Ecma335;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -12,85 +11,89 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Behavior;
 
+
+public static partial class Inject
+{ 
+    
+}
+
+
 public static class Initialize
 {
-
-    private static readonly Evt2Fact<Contract.Initialize.Fact, Evt> _evt2Fact =
-        evt => Contract.Initialize.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Initialize.Payload>());
-
-    private static readonly Hope2Cmd<Cmd, Contract.Initialize.Hope> _hope2Cmd =
-        hope => Cmd.New(hope.Payload);
-
-
-    private static readonly Evt2State<Engine, Behavior.Initialize.Evt> _evt2Doc = (state, evt) =>
-    {
-        if (evt == null) return state;
-        if (evt.GetPayload<Engine>() == null) return state;
-        state = evt.GetPayload<Engine>();
-        state.Id = evt.AggregateID.Id();
-        state.Status = Schema.EngineStatus.Initialized;
-        return state;
-    };
-
-    private static IServiceCollection AddInitializeMappers(this IServiceCollection services)
+    public static IServiceCollection AddInitializeMappers(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2State)
             .AddTransient(_ => _hope2Cmd);
     }
-
 
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
-            .AddIDCtor()
-            .AddBaseBehavior()
-            .AddInitializeMappers()
-            .AddTransient<ITry, TryCmd>()
-            .AddTransient<IApply, ApplyEvt>();
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine,Cmd,Evt>()
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
     }
-
-    public class ApplyEvt : ApplyEvtT<Engine, Evt>
-    {
-        // public override Engine Apply(Engine state, Event evt)
-        // {
-        //     state.Id = evt.AggregateID.Id();
-        //     state.Status = Schema.EngineStatus.Initialized;
-        //     return state;
-        // }
-        public ApplyEvt(Evt2State<Engine, Evt> evt2State) : base(evt2State)
-        {
-        }
-    }
-
-    public class TryCmd : TryCmdT<Cmd, Engine>
-    {
-        public override IFeedback Verify(Cmd cmd, Engine state)
-        {
-            var fbk = Feedback.New(cmd.AggregateID.Id());
-            try
+    
+    private static readonly Evt2Fact<
+            Contract.Initialize.Fact,
+            Evt>
+        _evt2Fact =
+            evt => Contract.Initialize.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Initialize.Payload>());
+    
+    private static readonly Hope2Cmd<
+            Cmd,
+            Contract.Initialize.Hope>
+        _hope2Cmd =
+            hope => Cmd.New(hope.Payload);
+    
+    private static readonly Evt2State<
+            Engine, 
+            Evt>
+        _evt2State =
+            (state, evt) =>
             {
-                Guard.Against.EngineInitialized(state);
-            }
-            catch (Exception e)
-            {
-                fbk.SetError(e.AsError());
-                Console.WriteLine(e);
-            }
-
-            return fbk;
-        }
-
-        public override IEnumerable<Event> Raise(Cmd cmd, Engine state)
-        {
-            return new[]
-            {
-                Evt.New(cmd.AggregateID, cmd.Payload)
+                if (evt == null) return state;
+                if (evt.GetPayload<Engine>() == null) return state;
+                state = evt.GetPayload<Engine>();
+                state.Id = evt.AggregateID.Id();
+                state.Status = Schema.EngineStatus.Initialized;
+                return state;
             };
-        }
-    }
 
+    private static readonly SpecFuncT<
+            Engine, 
+            Cmd>
+        _specFunc =
+            (cmd, state) =>
+            {
+                var fbk = Feedback.New(cmd.AggregateID.Id());
+                try
+                {
+                    Guard.Against.EngineInitialized(state);
+                }
+                catch (Exception e)
+                {
+                    fbk.SetError(e.AsError());
+                    Console.WriteLine(e);
+                }
+
+                return fbk;
+            };
+
+    private static readonly RaiseFuncT<Engine, Cmd>
+        _raiseFunc =
+            (cmd, _) =>
+            {
+                return new[]
+                {
+                    Evt.New(cmd.AggregateID, cmd.Payload)
+                };
+            };
+    
     public class Exception : System.Exception
     {
         public Exception()
@@ -114,8 +117,7 @@ public static class Initialize
             return new Exception(msg);
         }
     }
-
-
+    
     public record EvtMeta(string AggregateType, string AggregateId)
         : EventMeta(AggregateType, AggregateId);
 
@@ -131,7 +133,7 @@ public static class Initialize
     {
         public static Evt New(IID aggregateID, Contract.Initialize.Payload payload)
         {
-            var meta = new EvtMeta(nameof(Aggregate), aggregateID.Id());
+            var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
             return new Evt(aggregateID, payload, meta);
         }
     }

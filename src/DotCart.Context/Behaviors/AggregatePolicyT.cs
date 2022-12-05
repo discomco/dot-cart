@@ -7,12 +7,14 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregatePolicy<TEvt, TCmd> : ActorB, IAggregatePolicy where TEvt : IEvt where TCmd : ICmd
+public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy 
+    where TEvt : IEvt 
+    where TCmd : ICmd 
 {
     private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
     protected IAggregate? Aggregate;
 
-    protected AggregatePolicy
+    protected AggregatePolicyT
     (
         IExchange exchange,
         Evt2Cmd<TCmd, TEvt> evt2Cmd

@@ -27,4 +27,8 @@
     <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Behavior" />
+  </ItemGroup>
+
 </Project>

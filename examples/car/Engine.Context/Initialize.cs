@@ -19,6 +19,7 @@ public static class Initialize
     {
         return services
             .AddEngineBehavior()
+            .AddInitializeMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>()
             .AddTransient<Spoke>()

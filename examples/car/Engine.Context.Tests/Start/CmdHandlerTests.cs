@@ -1,10 +1,11 @@
 using DotCart.TestKit;
+using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Start;
 
-public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Start.Cmd, Contract.Start.Payload>
+public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Start.Cmd, Behavior.Start.Evt, Contract.Start.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -18,6 +19,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Start.Cmd, Contrac
     {
         base.InjectDependencies(services);
         services
+            .AddStartBehavior()
             .AddTransient(_ => TestUtils.Start.CmdCtor)
             .AddTransient(_ => TestUtils.Start.PayloadCtor);
     }

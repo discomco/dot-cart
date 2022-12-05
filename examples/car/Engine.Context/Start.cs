@@ -14,13 +14,13 @@ public static class Start
 {
     public const string ToRedisDocName_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_doc";
 
-
     public const string SpokeName = "engine:start:spoke";
 
     public static IServiceCollection AddStartSpoke(this IServiceCollection services)
     {
         return services
             .AddEngineBehavior()
+            .AddStartMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
