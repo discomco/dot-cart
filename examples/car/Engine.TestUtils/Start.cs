@@ -16,11 +16,21 @@ public static class Start
         CmdCtor =
             (_, _) => Behavior.Start.Cmd.New(Schema.IDCtor(), PayloadCtor());
 
-    public static readonly HopeCtorT<Contract.Start.Hope, Contract.Start.Payload>
+    public static readonly HopeCtorT<
+            Contract.Start.Hope, 
+            Contract.Start.Payload>
         HopeCtor =
             (_, _) => Contract.Start.Hope.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.Start.Fact, Contract.Start.Payload>
+    public static readonly FactCtorT<
+            Contract.Start.Fact, 
+            Contract.Start.Payload>
         FactCtor = 
             (_, _) => Contract.Start.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
+
+    public static readonly EvtCtorT<
+            Behavior.Start.Evt, 
+            Contract.Schema.EngineID>
+        EvtCtor = 
+            _ => Behavior.Start.Evt.New(Schema.IDCtor(), PayloadCtor());
 }

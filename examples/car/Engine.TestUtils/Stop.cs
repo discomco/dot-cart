@@ -28,4 +28,9 @@ public static class Stop
             Contract.Stop.Payload>
         FactCtor = 
             (_, _) => Contract.Stop.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
+
+    public static readonly EvtCtorT<Behavior.Stop.Evt, Contract.Schema.EngineID>
+        EvtCtor = 
+            _ => Behavior.Stop.Evt.New(Schema.IDCtor(), PayloadCtor());
+
 }

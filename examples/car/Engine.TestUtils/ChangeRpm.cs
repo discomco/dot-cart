@@ -17,17 +17,24 @@ public static class ChangeRpm
         PayloadCtor =
             () => Contract.ChangeRpm.Payload.New(Random.Shared.Next(-10, +10));
 
-    public static HopeCtorT<
+    public static readonly HopeCtorT<
             Contract.ChangeRpm.Hope,
             Contract.ChangeRpm.Payload>
         HopeCtor =
             (_, _) => Contract.ChangeRpm.Hope.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static FactCtorT<
+    public static readonly FactCtorT<
             Contract.ChangeRpm.Fact,
             Contract.ChangeRpm.Payload>
         FactCtor =
             (_, _) => Contract.ChangeRpm.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
+    
+    public static readonly EvtCtorT<
+        Behavior.ChangeRpm.Evt, 
+        Contract.Schema.EngineID>
+        EvtCtor = 
+            _ => Behavior.ChangeRpm.Evt.New(Schema.IDCtor(), PayloadCtor());
+
 
 
 }

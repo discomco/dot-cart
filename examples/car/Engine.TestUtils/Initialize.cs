@@ -5,6 +5,10 @@ namespace Engine.TestUtils;
 
 public static class Initialize
 {
+    public static readonly EvtCtorT<Behavior.Initialize.Evt, Contract.Schema.EngineID>
+        EvtCtor =
+            _ => Behavior.Initialize.Evt.New(Schema.IDCtor(), PayloadCtor());
+
     public static readonly PayloadCtorT<
             Contract.Initialize.Payload>
         PayloadCtor =
@@ -27,10 +31,8 @@ public static class Initialize
             (_, _) => Contract.Initialize.Hope.New(PayloadCtor());
 
     public static readonly FactCtorT<
-            Contract.Initialize.Fact, 
+            Contract.Initialize.Fact,
             Contract.Initialize.Payload>
         FactCtor =
             (_, _) => Contract.Initialize.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
-
-
 }
