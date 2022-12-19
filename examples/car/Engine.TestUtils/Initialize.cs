@@ -7,16 +7,15 @@ namespace Engine.TestUtils;
 
 public static class Initialize
 {
-    public static readonly EvtCtorT<Event, Contract.Schema.EngineID>
+    public static readonly EvtCtorT<Behavior.Initialize.IEvt, Contract.Initialize.Payload, EventMeta>
         EvtCtor =
-            _ => Behavior.Initialize.NewEvt(
-                Schema.IDCtor(),
-                PayloadCtor(),
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    Schema.IDCtor().Id()
-                )
-            );
+            (_, _, _) =>
+                Behavior.Initialize._newEvt(
+                    Schema.IDCtor(),
+                    PayloadCtor(),
+                    Schema.MetaCtor(null)
+                );
+
 
     public static readonly PayloadCtorT<
             Contract.Initialize.Payload>

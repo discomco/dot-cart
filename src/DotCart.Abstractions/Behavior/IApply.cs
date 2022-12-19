@@ -12,5 +12,5 @@ public interface IApply<TState, in TEvt> : IApply
     where TEvt : IEvtB
     where TState : IState
 {
-    TState Apply(TState state, TEvt evt);
+    TState Apply(TState state, Event evt);
 }

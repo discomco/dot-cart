@@ -25,21 +25,16 @@ public static class Conversions
         }
     }
 
-    public static TEvt ToEvent<TEvt, TID>(this EventRecord rEvt, 
-        EvtCtorT<TEvt, TID> evtCtor, 
-        IDCtorT<TID> idCtor) 
-        where TEvt : IEvtB
-        where TID : IID
-    {
-        var id = rEvt.EventStreamId.IDFromIdString(idCtor);
-        var evt = evtCtor(id);
-        evt.SetData(rEvt.Data.ToArray());
-        evt.SetMetaData(rEvt.Metadata.ToArray());
-        evt.SetEventType(rEvt.EventType);
-        evt.SetVersion(rEvt.EventNumber.ToInt64());
-        evt.SetTimeStamp(rEvt.Created);
-        return evt;
-    }
+    // public static Event ToEvent<TID>(this EventRecord rEvt, 
+    //     IDCtorT<TID> idCtor) 
+    //     where TID : IID
+    // {
+    //     var id = rEvt.EventStreamId.IDFromIdString(idCtor);
+    //     var evt = Event.New(id, rEvt.EventType, rEvt.Data.ToArray(), rEvt.Metadata.ToArray());
+    //     evt.SetVersion(rEvt.EventNumber.ToInt64());
+    //     evt.SetTimeStamp(rEvt.Created);
+    //     return evt;
+    // }
 
     public static Event ToEvent(this EventRecord rEvt)
     {

@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -11,7 +12,7 @@ namespace Engine.Behavior.Tests.Initialize;
 public class EvtTests : EvtTestsT<
     Schema.EngineID, 
     Behavior.Initialize.IEvt, 
-    Contract.Initialize.Payload>
+    Contract.Initialize.Payload, EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

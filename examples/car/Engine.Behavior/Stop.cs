@@ -69,7 +69,7 @@ public static class Stop
             {
                 return new[]
                 {
-                    NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
 
@@ -90,30 +90,13 @@ public static class Stop
     [Topic(Topics.Evt_v1)]
     public interface IEvt: IEvtT<Contract.Stop.Payload>
     {}
-
-    public static Event NewEvt(IID aggregateID, Contract.Stop.Payload payload, EventMeta meta)
-    {
-        return Event.New(aggregateID, 
-            TopicAtt.Get<IEvt>(), 
-            payload.ToBytes(), 
-            meta.ToBytes());
-    }
     
-    // public record Evt(IID AggregateID,
-    //         Contract.Stop.Payload Payload,
-    //         EvtMeta Meta)
-    //     : EvtT<Contract.Stop.Payload, EvtMeta>(
-    //         AggregateID,
-    //         TopicAtt.Get<Evt>(),
-    //         Payload,
-    //         Meta)
-    // {
-    //     public static Evt New(IID AggregateID, Contract.Stop.Payload payload)
-    //     {
-    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), AggregateID.Id());
-    //         return new Evt(AggregateID, payload, meta);
-    //     }
-    // }
+    public static EvtCtorT<IEvt, Contract.Stop.Payload, EventMeta>
+        _newEvt = 
+            (id, payload, meta) => Event.New(id, 
+                TopicAtt.Get<IEvt>(), 
+                payload.ToBytes(), 
+                meta.ToBytes());  
 
 
     public class Exception : System.Exception

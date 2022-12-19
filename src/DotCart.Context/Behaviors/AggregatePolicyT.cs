@@ -33,18 +33,21 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
 
     private Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken)
     {
+        if (evt.IsCommitted) 
+            return Task.CompletedTask;
         return Task.Run(async () =>
         {
             var fbk = await EnforceAsync((dynamic)evt);
             if (!fbk.IsSuccess)
-                Log.Error($"[{GetType().Name}] Failed => {fbk.ErrState}");
+                Log.Error($"[{NameAtt.Get(this)}] Failed => {fbk.ErrState}");
             return Task.CompletedTask;
         }, cancellationToken);
     }
 
     private Task<Feedback> EnforceAsync(IEvtB evt)
     {
-        var cmd = _evt2Cmd((TEvt)evt);
+        Log.Information($"Enforcing [{NameAtt.Get(this)}] on {evt.Topic}");
+        var cmd = _evt2Cmd((Event)evt);
         Aggregate.SetID(evt.AggregateId.IDFromIdString());
         return Aggregate.ExecuteAsync(cmd);
     }

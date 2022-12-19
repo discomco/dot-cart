@@ -36,12 +36,12 @@ public static class ChangeRpm
             (cmd, state) =>
             {
                 var res = new List<Event>();
-                var rpmChanged = NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
+                var rpmChanged = _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
                 res.Add(rpmChanged);
                 var newPower = state.Power + cmd.Payload.Delta;
                 if (newPower > 0)
                     return res;
-                var stopped = Stop.NewEvt(
+                var stopped = Stop._newEvt(
                     cmd.AggregateID,
                     Contract.Stop.Payload.New(),
                     EventMeta.New(
@@ -109,25 +109,25 @@ public static class ChangeRpm
     {
     }
 
-    public static Event NewEvt(IID aggregateID, Contract.ChangeRpm.Payload payload, EventMeta meta)
-    {
-        return Event.New(
-            aggregateID,
-            TopicAtt.Get<IEvt>(),
-            payload.ToBytes(),
-            meta.ToBytes()
-        );
-    }
+    public static EvtCtorT<IEvt, Contract.ChangeRpm.Payload, EventMeta>
+        _newEvt =
+            (id, payload, meta) => Event.New(
+                id,
+                TopicAtt.Get<IEvt>(),
+                payload.ToBytes(),
+                meta.ToBytes()
+            );
 
-    // public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)
-    //     : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(AggregateID, TopicAtt.Get<Evt>(), Payload, Meta)
-    // {
-    //     public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
-    //     {
-    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), engineID.Id());
-    //         return new Evt(engineID, payload, meta);
-    //     }
-    // }
+
+// public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)
+//     : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(AggregateID, TopicAtt.Get<Evt>(), Payload, Meta)
+// {
+//     public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
+//     {
+//         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), engineID.Id());
+//         return new Evt(engineID, payload, meta);
+//     }
+// }
 
     public class Exception : System.Exception
     {
@@ -156,6 +156,6 @@ public static class ChangeRpm
     public static class Topics
     {
         public const string Cmd_v1 = "engine:change_rpm:v1";
-        public const string Evt_v1 = "engine:changed_rpm:v1";
+        public const string Evt_v1 = "engine:rpm_changed:v1";
     }
 }

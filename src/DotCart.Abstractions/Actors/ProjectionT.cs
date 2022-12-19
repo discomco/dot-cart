@@ -61,9 +61,9 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<
 
     private async Task Handler(IEvtB evt, CancellationToken cancellationToken = default)
     {
-        Log.Information($"PROJECTION::[{GetType().Name}] ~> [{TopicAtt.Get(evt)}] => [{evt.AggregateId}] ");
+        Log.Information($"PROJECTION::[{GetType().Name}] ~> [{evt.Topic}] => [{evt.AggregateId}] ");
         var state = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false);
-        state = _evt2State(state, (TEvt)evt);
+        state = _evt2State(state, (Event)evt);
         await _modelStore.SetAsync(evt.AggregateId, state, cancellationToken).ConfigureAwait(false);
     }
 

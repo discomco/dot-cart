@@ -33,16 +33,16 @@ public static class ScenariosAndStreams
     
     
     
-    
+ 
     
     public static IEnumerable<IEvtB> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initEvt = Behavior.Initialize.NewEvt(ID, initPayload, Schema.MetaCtor(ID.Id()) );
+        var initEvt = Behavior.Initialize._newEvt(ID, initPayload, Schema.MetaCtor(ID.Id()) );
         initEvt.SetVersion(0);
         // AND
         var startPayload = Contract.Start.Payload.New;
-        var startEvt = Behavior.Start.NewEvt(ID, startPayload, Schema.MetaCtor(ID.Id()));
+        var startEvt = Behavior.Start._newEvt(ID, startPayload, Schema.MetaCtor(ID.Id()));
         startEvt.SetVersion(1);
         // AND
         var revs = RandomRevs(ID);
@@ -60,7 +60,7 @@ public static class ScenariosAndStreams
         {
             var delta = Random.Shared.Next(-10, 10);
             var changeRpmPld = Contract.ChangeRpm.Payload.New(delta);
-            var changeRpmEvt = Behavior.ChangeRpm.NewEvt(
+            var changeRpmEvt = Behavior.ChangeRpm._newEvt(
                 ID,
                 changeRpmPld,
                 Schema.MetaCtor(ID.Id()));

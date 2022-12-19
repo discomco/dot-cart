@@ -30,16 +30,7 @@ public static class Start
         FactCtor =
             (_, _) => Contract.Start.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static readonly EvtCtorT<
-            Event,
-            Contract.Schema.EngineID>
-        EvtCtor =
-            _ => Behavior.Start.NewEvt(
-                Schema.IDCtor(),
-                PayloadCtor(),
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    Schema.IDCtor().Id()
-                )
-            );
+    public static readonly EvtCtorT<Behavior.Start.IEvt, Contract.Start.Payload, EventMeta>
+        EvtCtor = 
+            (_, _, _) => Behavior.Start._newEvt(Schema.IDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 }

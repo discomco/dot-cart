@@ -11,12 +11,9 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Behavior;
 
-
 public static partial class Inject
-{ 
-    
+{
 }
-
 
 public static class Initialize
 {
@@ -32,40 +29,49 @@ public static class Initialize
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine,Cmd,IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc);
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _newEvt);
     }
-    
+
+    public static readonly EvtCtorT<IEvt, Contract.Initialize.Payload, EventMeta>
+        _newEvt =
+            (id, payload, meta) => Event.New(id,
+                TopicAtt.Get<IEvt>(),
+                payload.ToBytes(),
+                meta.ToBytes()
+            );
+
     private static readonly Evt2Fact<
             Contract.Initialize.Fact,
             IEvt>
         _evt2Fact =
             evt => Contract.Initialize.Fact.New(evt.AggregateId, evt.GetPayload<Contract.Initialize.Payload>());
-    
+
     private static readonly Hope2Cmd<
             Cmd,
             Contract.Initialize.Hope>
         _hope2Cmd =
-            hope => Cmd.New(hope.AggId.IDFromIdString(),hope.Payload);
-    
+            hope => Cmd.New(Schema.EngineID.New(), hope.Payload);
+
     private static readonly Evt2State<
-            Engine, 
+            Engine,
             IEvt>
         _evt2State =
             (state, evt) =>
             {
                 if (evt == null) return state;
-                if (evt.GetPayload<Engine>() == null) return state;
-                state = evt.GetPayload<Engine>();
+                if (evt.GetPayload<Contract.Initialize.Payload>() == null) return state;
                 state.Id = evt.AggregateId;
+                state.Details = evt.GetPayload<Contract.Initialize.Payload>().Details;
                 state.Status = Schema.EngineStatus.Initialized;
                 return state;
             };
 
     private static readonly SpecFuncT<
-            Engine, 
+            Engine,
             Cmd>
         _specFunc =
             (cmd, state) =>
@@ -84,17 +90,18 @@ public static class Initialize
                 return fbk;
             };
 
-    public static Event NewEvt(
-        IID aggregateID, 
-        Contract.Initialize.Payload payload,
-        EventMeta meta)
-    {
-        return Event.New(aggregateID, 
-            TopicAtt.Get<IEvt>(), 
-            payload.ToBytes(),
-            meta.ToBytes()
-            );
-    }
+
+    // public static Event NewEvt(
+    //     IID aggregateID,
+    //     Contract.Initialize.Payload payload,
+    //     EventMeta meta)
+    // {
+    //     return Event.New(aggregateID,
+    //         TopicAtt.Get<IEvt>(),
+    //         payload.ToBytes(),
+    //         meta.ToBytes()
+    //     );
+    // }
 
     private static readonly RaiseFuncT<Engine, Cmd>
         _raiseFunc =
@@ -102,10 +109,10 @@ public static class Initialize
             {
                 return new[]
                 {
-                    NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
-    
+
     public class Exception : System.Exception
     {
         public Exception()
@@ -129,16 +136,16 @@ public static class Initialize
             return new Exception(msg);
         }
     }
-    
+
     // public record EvtMeta(string AggregateType, string AggregateId)
     //     : EventMeta(AggregateType, AggregateId);
 
-    
-    [Topic(Topics.Evt_v1)]    
+
+    [Topic(Topics.Evt_v1)]
     public interface IEvt : IEvtT<Contract.Initialize.Payload>
     {
     }
-    
+
 
     // public record Evt(IID AggregateID,
     //     Contract.Initialize.Payload Payload,
@@ -163,8 +170,8 @@ public static class Initialize
     {
         public static Cmd New(IID aggID, Contract.Initialize.Payload payload)
         {
-            return new Cmd( 
-                aggID,payload, 
+            return new Cmd(
+                aggID, payload,
                 EventMeta.New(
                     NameAtt.Get<IEngineAggregateInfo>(),
                     aggID.Id()

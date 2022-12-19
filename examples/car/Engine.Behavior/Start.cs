@@ -26,7 +26,7 @@ public static class Start
         return services
             .AddStateCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()
+            .AddTransient<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _evt2Cmd)
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
@@ -59,7 +59,7 @@ public static class Start
                 return state;
             };
 
-    private static Evt2Cmd<Cmd, Initialize.IEvt> _evt2Cmd =>
+    public static Evt2Cmd<Cmd, Initialize.IEvt> _evt2Cmd =>
         evt =>
             Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
@@ -85,18 +85,17 @@ public static class Start
             {
                 return new[]
                 {
-                    NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
 
 
-    public static Event NewEvt(IID aggregateID, Contract.Start.Payload payload, EventMeta meta)
-    {
-        return Event.New(aggregateID, 
-            TopicAtt.Get<IEvt>(), 
-            payload.ToBytes(), 
-            meta.ToBytes());
-    }  
+    public static readonly EvtCtorT<IEvt, Contract.Start.Payload, EventMeta>
+        _newEvt = 
+            (id, payload, meta) => Event.New(id, 
+                TopicAtt.Get<IEvt>(), 
+                payload.ToBytes(), 
+                meta.ToBytes());  
 
     public class Exception : System.Exception
     {
@@ -123,12 +122,12 @@ public static class Start
     }
 
 
-    public const string EngineStartsOnInitializedPolicy = "engine:starts_on_nitialized:policy";
+    public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
 
-    [Name(EngineStartsOnInitializedPolicy)]
-    public class StartOnInitializedPolicy : AggregatePolicyT<Initialize.IEvt, Cmd>
+    [Name(OnInitialized_v1)]
+    public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>
     {
-        public StartOnInitializedPolicy(
+        public OnInitialized(
             IExchange exchange,
             Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd)
             : base(exchange, evt2Cmd)
@@ -151,28 +150,11 @@ public static class Start
         }
     }
 
-    // public record EvtMeta(string AggregateType, string AggregateId)
-    //     : EventMeta(AggregateType, AggregateId);
-
-    
-    
+   
     [Topic(Topics.Evt_v1)]
     public interface IEvt : IEvtT<Contract.Start.Payload>
     {}
     
 
-    // [Topic(Topics.Evt_v1)]
-    // public record Evt(IID AggregateID,
-    //     Contract.Start.Payload Payload,
-    //     EvtMeta Meta) : EvtT<Contract.Start.Payload, EvtMeta>(AggregateID,
-    //     TopicAtt.Get<Evt>(),
-    //     Payload,
-    //     Meta)
-    // {
-    //     public static Evt New(IID aggregateID, Contract.Start.Payload payload)
-    //     {
-    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
-    //         return new Evt(aggregateID, payload, meta);
-    //     }
-    // }
+ 
 }

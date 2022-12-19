@@ -37,9 +37,9 @@ public static class ChangeDetails
                 )
             );
 
-    public static readonly EvtCtorT<Event, Contract.Schema.EngineID>
-        EvtCtor =
-            _ => Behavior.ChangeDetails.NewEvt(Schema.IDCtor(), PayloadCtor());
+    public static readonly EvtCtorT<Behavior.ChangeDetails.IEvt, Contract.ChangeDetails.Payload, EventMeta>
+        EvtCtor = 
+            (_, _, _) => Behavior.ChangeDetails._newEvt(Schema.IDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 
 
     [Tag(StateTags.Invalid)] public static readonly StateCtorT<Behavior.Engine>

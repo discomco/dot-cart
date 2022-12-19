@@ -167,7 +167,7 @@ public class AggregateT<TInfo,TState> : IAggregate
         _state = ApplyEvent(_state, evt);
 //        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
-        await _exchange.Publish(TopicAtt.Get(evt), evt);
+        await _exchange.Publish(evt.Topic, evt);
         //await _mediator.PublishAsync(evt.Topic, evt);
     }
 

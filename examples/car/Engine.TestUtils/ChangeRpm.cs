@@ -34,14 +34,10 @@ public static class ChangeRpm
         FactCtor =
             (_, _) => Contract.ChangeRpm.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static readonly EvtCtorT<
-            Event,
-            Contract.Schema.EngineID>
-        EvtCtor =
-            _ => Behavior.ChangeRpm.NewEvt(Schema.IDCtor(), PayloadCtor(),
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    Schema.IDCtor().Id()
-                )
-            );
+    public static readonly EvtCtorT<Behavior.ChangeRpm.IEvt, Contract.ChangeRpm.Payload, EventMeta>
+        EvtCtor  = 
+            (_, _, _) => Behavior.ChangeRpm._newEvt(
+                Schema.IDCtor(), 
+                PayloadCtor(),
+                Schema.MetaCtor(null));
 }

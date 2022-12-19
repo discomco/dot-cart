@@ -28,16 +28,14 @@ public static class Stop
     public static readonly FactCtorT<
             Contract.Stop.Fact,
             Contract.Stop.Payload>
-        FactCtor = 
+        FactCtor =
             (_, _) => Contract.Stop.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static readonly EvtCtorT<Event, Contract.Schema.EngineID>
-        EvtCtor = 
-            _ => Behavior.Stop.NewEvt(
-                Schema.IDCtor(), 
-                PayloadCtor(), 
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(), 
-                    Schema.IDCtor().Id()) );
-
+    public static readonly EvtCtorT<Behavior.Stop.IEvt, Contract.Stop.Payload, EventMeta>
+        EvtCtor =
+            (_, _, _) => Behavior.Stop._newEvt(
+                Schema.IDCtor(),
+                PayloadCtor(),
+                Schema.MetaCtor(null)
+            );
 }

@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -8,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 [Topic(Behavior.Stop.Topics.Evt_v1)]
-public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Stop.IEvt, Contract.Stop.Payload> 
+public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Stop.IEvt, Contract.Stop.Payload, EventMeta> 
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

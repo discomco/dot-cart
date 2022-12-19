@@ -30,7 +30,7 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
     {
         return Run(() =>
         {
-            var fact = _evt2Fact((TEvt)msg);
+            var fact = _evt2Fact((Event)msg);
             return EmitFactAsync(fact);
         }, cancellationToken);
     }
