@@ -11,7 +11,7 @@ namespace DotCart.Drivers.InMem;
 
 public interface IMemEventStore : IEventStore
 {
-    IEnumerable<IEvt> GetStream(IID engineId);
+    IEnumerable<IEvtB> GetStream(IID engineId);
 }
 
 public static partial class Inject
@@ -39,8 +39,8 @@ internal class MemEventStore : IMemEventStore
     private IActor _actor;
 
 
-    private IImmutableDictionary<string, IEnumerable<IEvt>?> Streams =
-        ImmutableSortedDictionary<string, IEnumerable<IEvt>?>.Empty;
+    private IImmutableDictionary<string, IEnumerable<IEvtB>?> Streams =
+        ImmutableSortedDictionary<string, IEnumerable<IEvtB>?>.Empty;
 
 
     public MemEventStore(IMemProjector projector)
@@ -50,7 +50,7 @@ internal class MemEventStore : IMemEventStore
 
     public bool IsClosed { get; private set; }
 
-    public IEnumerable<IEvt> GetStream(IID engineId)
+    public IEnumerable<IEvtB> GetStream(IID engineId)
     {
         return Streams[engineId.Id()];
     }
@@ -71,7 +71,7 @@ internal class MemEventStore : IMemEventStore
         {
             lock (loadMutex)
             {
-                IEnumerable<IEvt>? evts = new List<IEvt>();
+                IEnumerable<IEvtB>? evts = new List<IEvtB>();
                 if (Streams.TryGetValue(aggregate.Id(), out evts))
                     aggregate.Load(evts);
             }
@@ -95,12 +95,12 @@ internal class MemEventStore : IMemEventStore
     }
 
 
-    public Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
+    public Task<IEnumerable<IEvtB>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }
 
-    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events,
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvtB> events,
         CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();

@@ -13,7 +13,7 @@ public abstract class EffectsTests<
     TEvt,
     TFact,
     TReadModelStore> : IoCTests
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TFact : IFact
 
 {

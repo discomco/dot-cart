@@ -14,8 +14,8 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     where TState : IState
     where TApplyEvt : ApplyEvtT<TState, TEvt>
     where TTryCmd : TryCmdT<TCmd, TState>
-    where TEvt : IEvt
-    where TCmd : ICmd
+    where TEvt : IEvtB
+    where TCmd : ICmdB
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;

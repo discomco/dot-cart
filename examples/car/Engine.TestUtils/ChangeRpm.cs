@@ -1,5 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
+using Engine.Behavior;
 
 namespace Engine.TestUtils;
 
@@ -10,7 +12,10 @@ public static class ChangeRpm
             Contract.Schema.EngineID,
             Contract.ChangeRpm.Payload>
         CmdCtor =
-            (id, _) => Behavior.ChangeRpm.Cmd.New(id, PayloadCtor());
+            (id, _) => Behavior.ChangeRpm.Cmd.New(id, PayloadCtor(), EventMeta.New(
+                NameAtt.Get<IEngineAggregateInfo>(),
+                id.Id()
+            ) );
 
     public static readonly PayloadCtorT<
             Contract.ChangeRpm.Payload>
@@ -28,13 +33,15 @@ public static class ChangeRpm
             Contract.ChangeRpm.Payload>
         FactCtor =
             (_, _) => Contract.ChangeRpm.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
-    
+
     public static readonly EvtCtorT<
-        Behavior.ChangeRpm.Evt, 
-        Contract.Schema.EngineID>
-        EvtCtor = 
-            _ => Behavior.ChangeRpm.Evt.New(Schema.IDCtor(), PayloadCtor());
-
-
-
+            Event,
+            Contract.Schema.EngineID>
+        EvtCtor =
+            _ => Behavior.ChangeRpm.NewEvt(Schema.IDCtor(), PayloadCtor(),
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(),
+                    Schema.IDCtor().Id()
+                )
+            );
 }

@@ -25,7 +25,7 @@ public static class Start
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, Evt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
             .AddTransient<IAggregatePolicy, StartOnInitializedPolicy>()
             .AddTransient(_ => _evt2Cmd)
             .AddTransient(_ => _evt2State)
@@ -41,17 +41,17 @@ public static class Start
     }
 
 
-    private static readonly Evt2Fact<Contract.Start.Fact, Evt>
+    private static readonly Evt2Fact<Contract.Start.Fact, IEvt>
         _evt2Fact =
             evt =>
-                Contract.Start.Fact.New(evt.AggregateID.Id(), evt.GetPayload<Contract.Start.Payload>());
+                Contract.Start.Fact.New(evt.AggregateId, evt.GetPayload<Contract.Start.Payload>());
 
     private static readonly Hope2Cmd<Cmd, Contract.Start.Hope>
         _hope2Cmd =
             hope =>
                 Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly Evt2State<Engine, Evt>
+    private static readonly Evt2State<Engine, IEvt>
         _evt2State =
             (state, _) =>
             {
@@ -59,9 +59,9 @@ public static class Start
                 return state;
             };
 
-    private static readonly Evt2Cmd<Cmd, Initialize.Evt> _evt2Cmd =
+    private static Evt2Cmd<Cmd, Initialize.IEvt> _evt2Cmd =>
         evt =>
-            Cmd.New(evt.AggregateID, Contract.Start.Payload.New);
+            Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
     private static readonly SpecFuncT<Engine, Cmd>
         _specFunc =
@@ -76,7 +76,6 @@ public static class Start
                 {
                     fbk.SetError(e.AsError());
                 }
-
                 return fbk;
             };
 
@@ -86,10 +85,18 @@ public static class Start
             {
                 return new[]
                 {
-                    Evt.New(cmd.AggregateID, cmd.Payload)
+                    NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
 
+
+    public static Event NewEvt(IID aggregateID, Contract.Start.Payload payload, EventMeta meta)
+    {
+        return Event.New(aggregateID, 
+            TopicAtt.Get<IEvt>(), 
+            payload.ToBytes(), 
+            meta.ToBytes());
+    }  
 
     public class Exception : System.Exception
     {
@@ -119,41 +126,53 @@ public static class Start
     public const string EngineStartsOnInitializedPolicy = "engine:starts_on_nitialized:policy";
 
     [Name(EngineStartsOnInitializedPolicy)]
-    public class StartOnInitializedPolicy : AggregatePolicyT<Initialize.Evt, Cmd>
+    public class StartOnInitializedPolicy : AggregatePolicyT<Initialize.IEvt, Cmd>
     {
         public StartOnInitializedPolicy(
             IExchange exchange,
-            Evt2Cmd<Cmd, Initialize.Evt> evt2Cmd)
+            Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd)
             : base(exchange, evt2Cmd)
         {
         }
     }
 
     [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.Start.Payload Payload)
-        : CmdT<Contract.Start.Payload>(AggregateID, Payload)
+    public record Cmd(IID AggregateID, Contract.Start.Payload Payload, EventMeta Meta)
+        : CmdT<Contract.Start.Payload, EventMeta>(AggregateID, Payload, Meta)
     {
         public static Cmd New(IID aggregateID, Contract.Start.Payload payload)
         {
-            return new Cmd(aggregateID, payload);
+            return new Cmd(
+                aggregateID, 
+                payload, 
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(), 
+                    aggregateID.Id()));
         }
     }
 
-    public record EvtMeta(string AggregateType, string AggregateId)
-        : EventMeta(AggregateType, AggregateId);
+    // public record EvtMeta(string AggregateType, string AggregateId)
+    //     : EventMeta(AggregateType, AggregateId);
 
+    
+    
     [Topic(Topics.Evt_v1)]
-    public record Evt(IID AggregateID,
-        Contract.Start.Payload Payload,
-        EvtMeta Meta) : EvtT<Contract.Start.Payload, EvtMeta>(AggregateID,
-        TopicAtt.Get<Evt>(),
-        Payload,
-        Meta)
-    {
-        public static Evt New(IID aggregateID, Contract.Start.Payload payload)
-        {
-            var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
-            return new Evt(aggregateID, payload, meta);
-        }
-    }
+    public interface IEvt : IEvtT<Contract.Start.Payload>
+    {}
+    
+
+    // [Topic(Topics.Evt_v1)]
+    // public record Evt(IID AggregateID,
+    //     Contract.Start.Payload Payload,
+    //     EvtMeta Meta) : EvtT<Contract.Start.Payload, EvtMeta>(AggregateID,
+    //     TopicAtt.Get<Evt>(),
+    //     Payload,
+    //     Meta)
+    // {
+    //     public static Evt New(IID aggregateID, Contract.Start.Payload payload)
+    //     {
+    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
+    //         return new Evt(aggregateID, payload, meta);
+    //     }
+    // }
 }

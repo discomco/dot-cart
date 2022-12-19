@@ -14,7 +14,7 @@ public interface IProjectionB : IActor
 public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
     where TDriver : IModelStore<TState>
     where TState : IState
-    where TEvt : IEvt
+    where TEvt : IEvtB
 {
 }
 
@@ -31,7 +31,7 @@ public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
 public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<TDriver, TState, TEvt>
     where TDriver : IModelStore<TState>
     where TState : IState
-    where TEvt : IEvt
+    where TEvt : IEvtB
 {
     private readonly Evt2State<TState, TEvt> _evt2State;
     private readonly TDriver _modelStore;
@@ -51,7 +51,7 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        return Handler((IEvt)msg, cancellationToken);
+        return Handler((IEvtB)msg, cancellationToken);
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
@@ -59,7 +59,7 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<
         return (Task<IMsg>)CompletedTask;
     }
 
-    private async Task Handler(IEvt evt, CancellationToken cancellationToken = default)
+    private async Task Handler(IEvtB evt, CancellationToken cancellationToken = default)
     {
         Log.Information($"PROJECTION::[{GetType().Name}] ~> [{TopicAtt.Get(evt)}] => [{evt.AggregateId}] ");
         var state = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false);

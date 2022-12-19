@@ -42,9 +42,9 @@ public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> wher
     }
 
 
-    public Task<IEvt> CreateEventAsync(object source, CancellationToken cancellationToken = default)
+    public Task<IEvtB> CreateEventAsync(object source, CancellationToken cancellationToken = default)
     {
-        return (Task<IEvt>)Task.CompletedTask;
+        return (Task<IEvtB>)Task.CompletedTask;
     }
 
 

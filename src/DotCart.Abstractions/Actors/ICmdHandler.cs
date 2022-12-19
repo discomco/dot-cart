@@ -5,5 +5,5 @@ namespace DotCart.Abstractions.Actors;
 
 public interface ICmdHandler
 {
-    Task<Feedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default);
+    Task<Feedback> HandleAsync(ICmdB cmd, CancellationToken cancellationToken = default);
 }

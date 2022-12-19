@@ -7,7 +7,7 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static class Conversions
 {
-    public static EventData ToEventData(this IEvt evt)
+    public static EventData ToEventData(this IEvtB evt)
     {
         if (evt == null) return null;
         try
@@ -28,7 +28,7 @@ public static class Conversions
     public static TEvt ToEvent<TEvt, TID>(this EventRecord rEvt, 
         EvtCtorT<TEvt, TID> evtCtor, 
         IDCtorT<TID> idCtor) 
-        where TEvt : IEvt
+        where TEvt : IEvtB
         where TID : IID
     {
         var id = rEvt.EventStreamId.IDFromIdString(idCtor);

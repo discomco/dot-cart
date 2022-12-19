@@ -40,11 +40,11 @@ public static class ChangeRpm
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,
-        Behavior.ChangeRpm.Evt>, IActor<Spoke>
+        Behavior.ChangeRpm.IEvt>, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.ChangeRpm.Evt> evt2State) : base(exchange,
+            Evt2State<Behavior.Engine, Behavior.ChangeRpm.IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)
         {

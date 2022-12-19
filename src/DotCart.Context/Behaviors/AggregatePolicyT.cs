@@ -8,10 +8,11 @@ using Serilog;
 namespace DotCart.Context.Behaviors;
 
 public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy 
-    where TEvt : IEvt 
-    where TCmd : ICmd 
+    where TEvt : IEvtB 
+    where TCmd : ICmdB 
 {
     private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
+    
     protected IAggregate? Aggregate;
 
     protected AggregatePolicyT
@@ -30,18 +31,18 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         Aggregate = aggregate;
     }
 
-    private Task HandleEvtAsync(IEvt arg, CancellationToken cancellationToken)
+    private Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken)
     {
         return Task.Run(async () =>
         {
-            var fbk = await EnforceAsync((IEvt)arg);
+            var fbk = await EnforceAsync((dynamic)evt);
             if (!fbk.IsSuccess)
                 Log.Error($"[{GetType().Name}] Failed => {fbk.ErrState}");
             return Task.CompletedTask;
         }, cancellationToken);
     }
 
-    private Task<Feedback> EnforceAsync(IEvt evt)
+    private Task<Feedback> EnforceAsync(IEvtB evt)
     {
         var cmd = _evt2Cmd((TEvt)evt);
         Aggregate.SetID(evt.AggregateId.IDFromIdString());
@@ -65,7 +66,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        return HandleEvtAsync((IEvt)msg, cancellationToken);
+        return HandleEvtAsync((IEvtB)msg, cancellationToken);
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)

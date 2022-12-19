@@ -4,6 +4,22 @@ namespace DotCart.Core;
 
 public static class JsonUtils
 {
+
+    public static bool IsJson(this string source)
+    {
+        if (source == null)
+            return false;
+        try
+        {
+            JsonDocument.Parse(source);
+            return true;
+        }
+        catch (JsonException)
+        {
+            return false;
+        }
+    }
+
     public static T? FromBytes<T>(this byte[] data)
     {
         var jsonUtfReader = new Utf8JsonReader(data);

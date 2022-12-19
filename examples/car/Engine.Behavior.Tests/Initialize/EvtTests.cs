@@ -10,7 +10,7 @@ namespace Engine.Behavior.Tests.Initialize;
 [Topic(Behavior.Initialize.Topics.Evt_v1)]
 public class EvtTests : EvtTestsT<
     Schema.EngineID, 
-    Behavior.Initialize.Evt, 
+    Behavior.Initialize.IEvt, 
     Contract.Initialize.Payload>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

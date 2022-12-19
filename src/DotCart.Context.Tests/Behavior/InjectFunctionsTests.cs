@@ -9,36 +9,36 @@ using Xunit.Abstractions;
 
 namespace DotCart.Context.Tests.Behavior;
 
-public delegate Feedback MyFunc<in TDis>(TDis dis) where TDis : IEvt;
+public delegate Feedback MyFunc<in TDis>(TDis dis) where TDis : IEvtB;
 
 public static class MyFuncs
 {
-    [Topic("Event1")] public static readonly MyFunc<IEvt> _doFunc1 = evt => Feedback.New($"blabla1, {evt.EventId}");
+    [Topic("Event1")] public static readonly MyFunc<IEvtB> _doFunc1 = evt => Feedback.New($"blabla1, {evt.EventId}");
 
-    [Topic("Event2")] public static readonly MyFunc<IEvt> _doFunc2 = evt => Feedback.New($"blabla2, {evt.EventId}");
+    [Topic("Event2")] public static readonly MyFunc<IEvtB> _doFunc2 = evt => Feedback.New($"blabla2, {evt.EventId}");
 
-    public interface IEvt1 : IEvt
+    public interface IEvt1 : IEvtB
     {
     }
 
-    public interface IEvt2 : IEvt
+    public interface IEvt2 : IEvtB
     {
     }
 }
 
 public class Receiver : IReceiver
 {
-    public readonly IEnumerable<MyFunc<IEvt>> _funcs;
-    private IImmutableDictionary<string, MyFunc<IEvt>> _funcsDict = ImmutableDictionary<string, MyFunc<IEvt>>.Empty;
+    public readonly IEnumerable<MyFunc<IEvtB>> _funcs;
+    private IImmutableDictionary<string, MyFunc<IEvtB>> _funcsDict = ImmutableDictionary<string, MyFunc<IEvtB>>.Empty;
 
-    public Receiver(IEnumerable<MyFunc<IEvt>> funcs)
+    public Receiver(IEnumerable<MyFunc<IEvtB>> funcs)
     {
         _funcs = funcs;
     }
 
     public IEnumerable FuncsDict => _funcsDict.AsEnumerable();
 
-    public IImmutableDictionary<string, MyFunc<IEvt>> InjectFuncs(IEnumerable<MyFunc<IEvt>> funcs)
+    public IImmutableDictionary<string, MyFunc<IEvtB>> InjectFuncs(IEnumerable<MyFunc<IEvtB>> funcs)
     {
         foreach (var func in funcs)
         {

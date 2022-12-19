@@ -32,7 +32,7 @@ internal class CmdHandler : ICmdHandler
         _aggregateStore = aggregateStore;
     }
 
-    public async Task<Feedback> HandleAsync(ICmd cmd, CancellationToken cancellationToken = default)
+    public async Task<Feedback> HandleAsync(ICmdB cmd, CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try

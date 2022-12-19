@@ -8,23 +8,23 @@ public static class EventConst
     public const long NewAggregateVersion = -1;
 }
 
-public abstract record EvtT<TPayload, TMeta>
-    (IID AggregateID,
-        string EventType,
-        TPayload Payload,
-        TMeta Meta)
-    : Event(AggregateID.Id(),
-        EventType,
-        Payload.ToBytes(),
-        Meta.ToBytes()), IEvtT<TPayload, TMeta>
-    where TPayload : IPayload
-    where TMeta : IEventMeta;
+// public abstract record EvtT<TPayload, TMeta>
+//     (IID AggregateID,
+//         string EventType,
+//         TPayload Payload,
+//         TMeta Meta)
+//     : Event(AggregateID.Id(),
+//         EventType,
+//         Payload.ToBytes(),
+//         Meta.ToBytes()), IEvtT<TPayload, TMeta>
+//     where TPayload : IPayload
+//     where TMeta : IEventMeta;
 
 public record Event(
     string AggregateId,
     string EventType,
     byte[] Data,
-    byte[] MetaData) : IEvt
+    byte[] MetaData) : IEvtB
 {
     public IID AggregateID => ID.New(AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString());
     public string EventType { get; set; } = EventType;
@@ -32,11 +32,17 @@ public record Event(
     public string AggregateId { get; set; } = AggregateId;
     public string EventId { get; set; } = GuidUtils.LowerCaseGuid;
     public string Topic => EventType;
-    public DateTime TimeStamp { get; private set; } 
+    public DateTime TimeStamp { get; private set; }
 
     public byte[] Data { get; set; } = Data;
+    public bool IsCommitted { get; private set; }
 
-    public long Version { get;  private set; }
+    public long Version { get; private set; }
+
+    public void SetIsCommitted(bool isCommitted)
+    {
+        IsCommitted = isCommitted;
+    }
 
     public void SetVersion(long version)
     {
@@ -45,18 +51,18 @@ public record Event(
 
     public byte[] MetaData { get; set; } = MetaData;
 
-    public void SetMetaPayload<TPayload>(TPayload payload)
+    public void SetMeta<TMeta>(TMeta meta) where TMeta : IEventMeta
     {
-        MetaData = payload == null
+        MetaData = meta == null
             ? Array.Empty<byte>()
-            : payload.ToBytes();
+            : meta.ToBytes();
     }
 
-    public TPayload GetMetaPayload<TPayload>()
+    public TMeta GetMeta<TMeta>() where TMeta : IEventMeta
     {
         return MetaData == null
             ? default
-            : MetaData.FromBytes<TPayload>();
+            : MetaData.FromBytes<TMeta>();
     }
 
     public void SetTimeStamp(DateTime timeStamp)
@@ -117,19 +123,5 @@ public record Event(
             eventType,
             data,
             meta);
-    }
-}
-
-public record EventMeta(string AggregateType, string AggregateId) : IEventMeta
-{
-    public static readonly byte[] Empty = Array.Empty<byte>();
-
-    public string AggregateType { get; set; } = AggregateType;
-
-    public string AggregateId { get; set; } = AggregateId;
-
-    public static EventMeta New(string? fullName, string id)
-    {
-        return new EventMeta(fullName, id);
     }
 }

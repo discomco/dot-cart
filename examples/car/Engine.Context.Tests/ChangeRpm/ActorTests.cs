@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeRpm;
 
 public class ActorTests : EffectsTests<
-    Behavior.ChangeRpm.Evt,
+    Behavior.ChangeRpm.IEvt,
     Contract.ChangeRpm.Fact,
     IModelStore<Behavior.Engine>>
 {

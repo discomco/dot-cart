@@ -100,7 +100,7 @@ public record Engine : IState
 }
 
 
-[Name("engine:aggregate")]
+[Name("engine:aggregate:v1")]
 public interface IEngineAggregateInfo: IAggregateInfoB
 {
     

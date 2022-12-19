@@ -69,7 +69,7 @@ public class ESDBStore : IEventStore
     }
 
 
-    public async Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IEvtB>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default)
     {
         var ret = new List<Event>();
         var readResult = _client.ReadStreamAsync(Direction.Forwards,
@@ -86,7 +86,7 @@ public class ESDBStore : IEventStore
     }
 
 
-    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events,
+    public Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvtB> events,
         CancellationToken cancellationToken = default)
     {
         return _retryPolicy.ExecuteAsync(async () =>
@@ -106,10 +106,10 @@ public class ESDBStore : IEventStore
     }
 
 
-    private static async Task<IEnumerable<IEvt>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult,
+    private static async Task<IEnumerable<IEvtB>> GetStoreEventsAsync(EventStoreClient.ReadStreamResult readResult,
         CancellationToken cancellationToken = default)
     {
-        var res = new List<IEvt>();
+        var res = new List<IEvtB>();
         var state = await readResult.ReadState.ConfigureAwait(false);
         if (state == ReadState.StreamNotFound)
             return res;

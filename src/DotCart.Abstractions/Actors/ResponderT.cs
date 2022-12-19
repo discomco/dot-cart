@@ -7,7 +7,7 @@ namespace DotCart.Abstractions.Actors;
 
 public delegate TCmd Hope2Cmd<out TCmd, in THope>(THope hope)
     where THope : IHope
-    where TCmd : ICmd;
+    where TCmd : ICmdB;
 
 public interface IResponder : IActor
 {
@@ -15,14 +15,14 @@ public interface IResponder : IActor
 
 public interface IResponderT<THope, TCmd> : IResponder
     where THope : IHope
-    where TCmd : ICmd
+    where TCmd : ICmdB
 {
 }
 
 public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THope, TCmd>, IActor<TSpoke>
     where TDriver : IResponderDriverT<THope>
     where THope : IHope
-    where TCmd : ICmd
+    where TCmd : ICmdB
 {
     public ResponderT(TDriver responderDriver,
         IExchange exchange,
@@ -37,7 +37,7 @@ public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THop
 
 public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     where THope : IHope
-    where TCmd : ICmd
+    where TCmd : ICmdB
     where TDriver : IResponderDriverT<THope>
 {
     private readonly ICmdHandler _cmdHandler;

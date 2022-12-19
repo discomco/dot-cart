@@ -11,7 +11,7 @@ public class ToDocTests : ProjectionTestsT<
     IModelStore<Behavior.Engine>,
     Context.Initialize.ToRedisDoc,
     Behavior.Engine,
-    Behavior.Initialize.Evt>
+    Behavior.Initialize.IEvt>
 {
     public ToDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
-public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Behavior.Stop.Evt, Contract.Stop.Payload>
+public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Stop.Cmd, Behavior.Stop.IEvt, Contract.Stop.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

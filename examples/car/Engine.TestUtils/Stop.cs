@@ -1,6 +1,8 @@
 using System.Xml.Schema;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
+using Engine.Behavior;
 
 namespace Engine.TestUtils;
 
@@ -29,8 +31,13 @@ public static class Stop
         FactCtor = 
             (_, _) => Contract.Stop.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
-    public static readonly EvtCtorT<Behavior.Stop.Evt, Contract.Schema.EngineID>
+    public static readonly EvtCtorT<Event, Contract.Schema.EngineID>
         EvtCtor = 
-            _ => Behavior.Stop.Evt.New(Schema.IDCtor(), PayloadCtor());
+            _ => Behavior.Stop.NewEvt(
+                Schema.IDCtor(), 
+                PayloadCtor(), 
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(), 
+                    Schema.IDCtor().Id()) );
 
 }

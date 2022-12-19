@@ -3,7 +3,7 @@ using Engine.Context;
 using Serilog;
 using Inject = DotCart.Drivers.Serilog.Inject;
 
-DotEnv.FromEmbedded();
+//DotEnv.FromEmbedded();
 
 
 var host = Host.CreateDefaultBuilder(args)

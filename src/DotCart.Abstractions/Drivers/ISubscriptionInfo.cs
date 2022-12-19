@@ -8,6 +8,6 @@ public interface ISubscriptionInfo
 
 public record SubscriptionInfo(string GroupName, string Prefix) : ISubscriptionInfo
 {
-    public string GroupName { get; set; }
-    public string Prefix { get; set; }
+    public string GroupName { get; set; } = GroupName;
+    public string Prefix { get; set; } = Prefix;
 }

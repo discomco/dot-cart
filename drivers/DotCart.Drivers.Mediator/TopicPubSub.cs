@@ -55,7 +55,7 @@ internal abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
         }, cancellationToken);
     }
 
-    public Task UnsubscribeAsync(string topic, Func<IEvt, Task> handler, CancellationToken cancellationToken = default)
+    public Task UnsubscribeAsync(string topic, Func<IEvtB, Task> handler, CancellationToken cancellationToken = default)
     {
         return Run(() => { GetHandlersOf(topic).Remove(handler); }, cancellationToken);
     }

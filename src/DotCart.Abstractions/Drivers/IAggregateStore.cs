@@ -21,8 +21,8 @@ public interface ICloseAsync
 
 public interface IEventStore : IAggregateStore
 {
-    Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvt> events,
+    Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvtB> events,
         CancellationToken cancellationToken = default);
 
-    Task<IEnumerable<IEvt>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IEvtB>> ReadEventsAsync(IID ID, CancellationToken cancellationToken = default);
 }

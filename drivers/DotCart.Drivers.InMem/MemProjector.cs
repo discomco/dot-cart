@@ -21,9 +21,9 @@ public static partial class Inject
 /// <summary>
 ///     MemProjector is an in-memory Unit of Effect,
 ///     that is meant to be injected into an AggregateStore
-///     It offers a straightforward interface to project events onto the TopicMediator
+///     It offers a straightforward interface to project events onto the Exchange
 /// </summary>
-[Topic(MemProjectorName)]
+[Name(MemProjectorName)]
 internal sealed class MemProjector : ActorB, IMemProjector
 {
     private const string MemProjectorName = "dotcart:mem_projector";

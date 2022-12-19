@@ -8,20 +8,20 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="EventStore.Client.Grpc" Version="22.0.0"/>
-        <PackageReference Include="EventStore.Client.Grpc.Operations" Version="22.0.0"/>
-        <PackageReference Include="EventStore.Client.Grpc.UserManagement" Version="22.0.0"/>
-        <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="22.0.0"/>
-        <PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="22.0.0"/>
-        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0"/>
-        <PackageReference Include="Newtonsoft.Json" Version="13.0.1"/>
+        <PackageReference Include="EventStore.Client.Grpc" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc.Operations" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc.UserManagement" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc.PersistentSubscriptions" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc.ProjectionManagement" Version="22.0.0" />
+        <PackageReference Include="EventStore.Client.Grpc.Streams" Version="22.0.0" />
+        <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
     </ItemGroup>
 
 

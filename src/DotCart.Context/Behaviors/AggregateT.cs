@@ -13,10 +13,10 @@ public class AggregateT<TInfo,TState> : IAggregate
     where TInfo : IAggregateInfoB
 {
     private readonly IExchange _exchange;
-    private readonly ICollection<IEvt> _uncommittedEvents = new LinkedList<IEvt>();
+    private readonly ICollection<IEvtB> _uncommittedEvents = new LinkedList<IEvtB>();
 
     private readonly object execMutex = new();
-    public ICollection<IEvt> _appliedEvents = new LinkedList<IEvt>();
+    public ICollection<IEvtB> _appliedEvents = new LinkedList<IEvtB>();
     private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
     protected TState _state;
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
@@ -78,7 +78,7 @@ public class AggregateT<TInfo,TState> : IAggregate
         _uncommittedEvents.Clear();
     }
 
-    public IEnumerable<IEvt> UncommittedEvents => _uncommittedEvents;
+    public IEnumerable<IEvtB> UncommittedEvents => _uncommittedEvents;
 
     public IState GetState()
     {
@@ -103,12 +103,12 @@ public class AggregateT<TInfo,TState> : IAggregate
         return this;
     }
 
-    public void Load(IEnumerable<IEvt>? events)
+    public void Load(IEnumerable<IEvtB>? events)
     {
         try
         {
             Guard.Against.BehaviorIDNotSet(this);
-            _state = events.Aggregate(_state, (state, evt) => ApplyEvent(state, evt, evt.Version));
+            _state = events.Aggregate(_state, ApplyEvent);
         }
         catch (Exception e)
         {
@@ -127,7 +127,7 @@ public class AggregateT<TInfo,TState> : IAggregate
         return ID.Id();
     }
 
-    public async Task<Feedback> ExecuteAsync(ICmd cmd)
+    public async Task<Feedback> ExecuteAsync(ICmdB cmd)
     {
         var feedback = Feedback.New(cmd.AggregateID.Id());
         try
@@ -140,7 +140,7 @@ public class AggregateT<TInfo,TState> : IAggregate
             feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state );
             if (!feedback.IsSuccess) 
                 return feedback;
-            IEnumerable<IEvt> events = ((dynamic)fTry).Raise((dynamic)cmd, (dynamic)_state);
+            IEnumerable<IEvtB> events = ((dynamic)fTry).Raise((dynamic)cmd, (dynamic)_state);
             foreach (var @event in events)
                 await RaiseEvent(@event);
             feedback.SetPayload(_state);
@@ -158,13 +158,13 @@ public class AggregateT<TInfo,TState> : IAggregate
         return ID;
     }
 
-    private async Task RaiseEvent(IEvt evt)
+    private async Task RaiseEvent(IEvtB evt)
     {
         evt.SetVersion(Version + 1);
         // if (Version >= evt.Version) 
         //     return;
         evt.SetTimeStamp(DateTime.UtcNow);
-        _state = ApplyEvent(_state, evt, evt.Version);
+        _state = ApplyEvent(_state, evt);
 //        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
         await _exchange.Publish(TopicAtt.Get(evt), evt);
@@ -172,7 +172,7 @@ public class AggregateT<TInfo,TState> : IAggregate
     }
 
 
-    private TState ApplyEvent(TState state, IEvt evt, long version)
+    private TState ApplyEvent(TState state, IEvtB evt)
     {
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId)))
             return _state;
@@ -186,7 +186,3 @@ public class AggregateT<TInfo,TState> : IAggregate
         return newState;
     }
 }
-
-
-public interface IAggregateInfoB
-{}

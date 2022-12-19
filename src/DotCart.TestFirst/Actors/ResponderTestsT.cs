@@ -11,7 +11,7 @@ namespace DotCart.TestFirst.Actors;
 public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     where TResponder : IResponder
     where THope : IHope
-    where TCmd : ICmd
+    where TCmd : ICmdB
 {
     private TResponder _responder;
 

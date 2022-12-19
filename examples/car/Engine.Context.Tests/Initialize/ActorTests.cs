@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Initialize;
 
 public class ActorTests : EffectsTests<
-    Behavior.Initialize.Evt,
+    Behavior.Initialize.IEvt,
     Contract.Initialize.Fact,
     IModelStore<Behavior.Engine>>
 {

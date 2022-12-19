@@ -32,6 +32,7 @@ public static class AppVerbs
     public static string Stopping = "STOPPING".AsVerb();
     public static string Activating = "ACTIVATING".AsVerb();
     public static string Deactivating = "DEACTIVATING".AsVerb();
+    public static readonly string Projecting = "PROJECTING".AsVerb();
 }
 
 public static class AppErrors

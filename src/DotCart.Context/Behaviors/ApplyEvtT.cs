@@ -6,7 +6,7 @@ using DotCart.Core;
 namespace DotCart.Context.Behaviors;
 
 public class ApplyEvtT<TState, TEvt> : IApply<TState,TEvt>
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TState : IState
 {
     private readonly Evt2State<TState, TEvt> _evt2State;

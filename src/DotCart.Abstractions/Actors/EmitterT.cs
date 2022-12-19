@@ -12,7 +12,7 @@ public interface IEmitterB : IActor
 }
 
 public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TFact : IFact
 {
     private readonly Evt2Fact<TFact, TEvt> _evt2Fact;

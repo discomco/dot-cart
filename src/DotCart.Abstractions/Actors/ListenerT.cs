@@ -6,7 +6,7 @@ namespace DotCart.Abstractions.Actors;
 
 public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
     where TFact : IFact
-    where TCmd : ICmd
+    where TCmd : ICmdB
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly IListenerDriverT<TFact> _driver;

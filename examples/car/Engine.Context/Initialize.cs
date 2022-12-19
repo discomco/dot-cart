@@ -41,12 +41,12 @@ public static class Initialize
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Behavior.Engine>,
             Behavior.Engine,
-            Behavior.Initialize.Evt>,
+            Behavior.Initialize.IEvt>,
         IToRedisDoc
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.Initialize.Evt> evt2State) : base(exchange,
+            Evt2State<Behavior.Engine, Behavior.Initialize.IEvt> evt2State) : base(exchange,
             modelStore,
             evt2State)
         {

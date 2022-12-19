@@ -36,7 +36,7 @@ internal class TestHelper : ITestHelper
 
     public string GetEmbeddedResourceLocation(string filename)
     {
-        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().CodeBase);
+        var codeBaseUrl = new Uri(Assembly.GetCallingAssembly().CodeBase);
         var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
         var dirPath = Path.GetDirectoryName(codeBasePath);
         return Path.Combine(dirPath, filename);
@@ -44,8 +44,8 @@ internal class TestHelper : ITestHelper
 
     public string GetEmbeddedResourceText(string resourceName)
     {
-        var names = Assembly.GetExecutingAssembly().GetManifestResourceNames();
-        using var sIn = Assembly.GetExecutingAssembly().GetManifestResourceStream(resourceName);
+        var names = Assembly.GetCallingAssembly().GetManifestResourceNames();
+        using var sIn = Assembly.GetCallingAssembly().GetManifestResourceStream(resourceName);
         var s = StreamToString(sIn);
         return s;
     }
@@ -81,7 +81,7 @@ internal class TestHelper : ITestHelper
 
     private static string GetDirPath()
     {
-        var codeBaseUrl = new Uri(Assembly.GetExecutingAssembly().Location ?? string.Empty);
+        var codeBaseUrl = new Uri(Assembly.GetCallingAssembly().Location ?? string.Empty);
         var codeBasePath = Uri.UnescapeDataString(codeBaseUrl.AbsolutePath);
         var dirPath = Path.GetDirectoryName(codeBasePath);
         return dirPath ?? string.Empty;

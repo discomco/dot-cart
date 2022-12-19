@@ -44,10 +44,12 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer
 
     public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        Log.Information(msg is IEvt evt
-            ? $"[{Name}] ~> {evt.Topic} @ {evt.AggregateId}"
-            : $"[{Name}] ~> {msg.GetType().Name}");
-        await _exchange.Publish(((IEvt)msg).Topic, (IEvt)msg, cancellationToken);
+        if (msg is IEvtB evt)
+        {
+            Log.Information($"{AppVerbs.Projecting} {evt.Topic} ~> {evt.AggregateId}");
+            evt.SetIsCommitted(true);
+            await _exchange.Publish(evt.Topic, evt, cancellationToken);            
+        }
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
@@ -65,7 +67,7 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer
         return Task.Run(() =>
         {
             _projectorDriver.SetActor(this);
-            var started = "STARTED".AsVerb();
+            var started = AppFacts.Started;
             Log.Information($"{started} [Projector<{GroupNameAtt.Get<TInfo>()}-{IDPrefixAtt.Get<TInfo>()}>]");
             return _projectorDriver.StartStreamingAsync(cancellationToken);
         }, cancellationToken);

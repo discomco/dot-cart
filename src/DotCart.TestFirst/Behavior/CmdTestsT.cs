@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Behavior;
 
 public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
-    where TCmd : ICmd
+    where TCmd : ICmdB
     where TID : IID
     where TPayload : IPayload
 {

@@ -9,7 +9,7 @@ public interface IApply
 }
 
 public interface IApply<TState, in TEvt> : IApply
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TState : IState
 {
     TState Apply(TState state, TEvt evt);

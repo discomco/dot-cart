@@ -1,13 +1,22 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
+using Engine.Behavior;
 
 namespace Engine.TestUtils;
 
 public static class Initialize
 {
-    public static readonly EvtCtorT<Behavior.Initialize.Evt, Contract.Schema.EngineID>
+    public static readonly EvtCtorT<Event, Contract.Schema.EngineID>
         EvtCtor =
-            _ => Behavior.Initialize.Evt.New(Schema.IDCtor(), PayloadCtor());
+            _ => Behavior.Initialize.NewEvt(
+                Schema.IDCtor(),
+                PayloadCtor(),
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(),
+                    Schema.IDCtor().Id()
+                )
+            );
 
     public static readonly PayloadCtorT<
             Contract.Initialize.Payload>
@@ -22,7 +31,10 @@ public static class Initialize
             Contract.Schema.EngineID,
             Contract.Initialize.Payload>
         CmdCtor =
-            (_, _) => Behavior.Initialize.Cmd.New(PayloadCtor());
+            (_, _) => Behavior.Initialize.Cmd.New(
+                Schema.IDCtor(),
+                PayloadCtor()
+            );
 
     public static readonly HopeCtorT<
             Contract.Initialize.Hope,

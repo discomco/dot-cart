@@ -10,9 +10,9 @@ namespace DotCart.Context.Behaviors;
 public static partial class Inject
 {
     public static IServiceCollection AddBaseBehavior<TInfo, TState, TCmd, TEvt>(this IServiceCollection services)
-        where TCmd : ICmd
+        where TCmd : ICmdB
         where TState : IState
-        where TEvt : IEvt
+        where TEvt : IEvtB
         where TInfo : IAggregateInfoB
     {
         return services

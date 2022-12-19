@@ -6,11 +6,11 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static class SerializationHelper
 {
-    public static IEvt Deserialize(string eventType, byte[] data)
+    public static IEvtB Deserialize(string eventType, byte[] data)
     {
         try
         {
-            var res = (IEvt)Activator.CreateInstance(Type.GetType(eventType));
+            var res = (IEvtB)Activator.CreateInstance(Type.GetType(eventType));
             res.SetData(data);
 
             // var settings = new JsonSerializerSettings
@@ -41,7 +41,7 @@ public static class SerializationHelper
         }
     }
 
-    public static byte[] Serialize(IEvt @event)
+    public static byte[] Serialize(IEvtB @event)
     {
         return Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(@event));
         //return Encoding.UTF8.GetBytes(JsonSerializer.Serialize(@event));

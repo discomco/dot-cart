@@ -3,6 +3,6 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Context.Behaviors;
 
-public delegate IEnumerable<IEvt> RaiseFuncT<in TState,in TCmd >(TCmd cmd, TState state)
+public delegate IEnumerable<IEvtB> RaiseFuncT<in TState,in TCmd >(TCmd cmd, TState state)
     where TState: IState
-    where TCmd : ICmd;
+    where TCmd : ICmdB;

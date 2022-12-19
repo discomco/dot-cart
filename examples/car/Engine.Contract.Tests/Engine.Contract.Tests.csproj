@@ -28,7 +28,6 @@
         <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
         <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
         <ProjectReference Include="..\Engine.TestUtils\Engine.TestUtils.csproj" />
-        <ProjectReference Include="..\Engine.Utils\Engine.TestUtils.csproj" />
     </ItemGroup>
 
     <ItemGroup>

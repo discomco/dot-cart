@@ -17,7 +17,7 @@ public abstract class ProjectionTestsT<
     TEvt> : IoCTests
     where TProjection : IActor<TSpoke>
     where TState : IState
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TSpoke : ISpokeT<TSpoke>
     where TReadModelStore : IModelStore<TState>
 

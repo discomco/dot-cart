@@ -1,15 +1,17 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
 
-public delegate IEnumerable<ICmd> ScenarioGenerator<in TID>(TID ID)
+public delegate IEnumerable<ICmdB> ScenarioGenerator<in TID>(TID ID)
     where TID : IID;
 
-public delegate IEnumerable<IEvt> EventStreamGenerator<in TID>(TID ID)
+public delegate IEnumerable<IEvtB> EventStreamGenerator<in TID>(TID ID)
     where TID : IID;
+
 
 public static partial class Inject
 {
@@ -28,34 +30,40 @@ public static partial class Inject
 
 public static class ScenariosAndStreams
 {
-    public static IEnumerable<IEvt> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
+    
+    
+    
+    
+    
+    public static IEnumerable<IEvtB> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initEvt = Behavior.Initialize.Evt.New(ID, initPayload);
+        var initEvt = Behavior.Initialize.NewEvt(ID, initPayload, Schema.MetaCtor(ID.Id()) );
         initEvt.SetVersion(0);
         // AND
         var startPayload = Contract.Start.Payload.New;
-        var startEvt = Behavior.Start.Evt.New(ID, startPayload);
+        var startEvt = Behavior.Start.NewEvt(ID, startPayload, Schema.MetaCtor(ID.Id()));
         startEvt.SetVersion(1);
         // AND
         var revs = RandomRevs(ID);
-        var res = new List<IEvt> { initEvt, startEvt };
+        var res = new List<IEvtB> { initEvt, startEvt };
         res.AddRange(revs);
         // WHEN
         return res;
     }
 
-    private static IEnumerable<IEvt> RandomRevs(ID ID)
+    private static IEnumerable<IEvtB> RandomRevs(ID ID)
     {
-        var res = new List<IEvt>();
+        var res = new List<IEvtB>();
         var counter = Random.Shared.Next(4, 15);
         for (var i = 0; i < counter; i++)
         {
             var delta = Random.Shared.Next(-10, 10);
             var changeRpmPld = Contract.ChangeRpm.Payload.New(delta);
-            var changeRpmEvt = Behavior.ChangeRpm.Evt.New(
+            var changeRpmEvt = Behavior.ChangeRpm.NewEvt(
                 ID,
-                changeRpmPld);
+                changeRpmPld,
+                Schema.MetaCtor(ID.Id()));
             changeRpmEvt.SetVersion(i + 2);
             res.Add(changeRpmEvt);
         }
@@ -63,16 +71,16 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    public static IEnumerable<ICmd> InitializeScenario(ID ID)
+    public static IEnumerable<ICmdB> InitializeScenario(ID ID)
     {
         var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initializeCmd = Behavior.Initialize.Cmd.New(initializePayload);
+        var initializeCmd = Behavior.Initialize.Cmd.New(Schema.IDCtor(), initializePayload);
         initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }
 
     public static async Task<IEnumerable<IFeedback>> RunScenario(IAggregate aggregate,
-        IEnumerable<ICmd> scenario)
+        IEnumerable<ICmdB> scenario)
     {
         var accu = new List<IFeedback>();
         foreach (var command in scenario)

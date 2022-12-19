@@ -2,13 +2,12 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
 
-public interface ICmd
+public interface ICmdB
 {
     IID AggregateID { get; }
-//    string Topic { get; }
 }
 
-public interface ICmd<out TPayload> : ICmd
+public interface ICmdT<out TPayload> : ICmdB
     where TPayload : IPayload
 
 {

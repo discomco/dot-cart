@@ -15,9 +15,9 @@ public interface ITry
 // }
 
 public interface ITry<in TCmd, in TState> : ITry
-    where TCmd : ICmd
+    where TCmd : ICmdB
     where TState : IState
 {
     IFeedback Verify(TCmd cmd, TState state);
-    IEnumerable<IEvt> Raise(TCmd cmd, TState state);
+    IEnumerable<IEvtB> Raise(TCmd cmd, TState state);
 }

@@ -9,7 +9,7 @@ public interface IHope<TPayload> : IHope
 {
 }
 
-public abstract record HopeT<TPayload>(string AggId, TPayload Payload) 
+public abstract record HopeT<TPayload>(string AggId, TPayload Payload)
     where TPayload : IPayload
 {
     public string AggId { get; } = AggId;

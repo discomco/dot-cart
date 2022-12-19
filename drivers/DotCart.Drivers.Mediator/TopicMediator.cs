@@ -13,6 +13,6 @@ public static partial class Inject
     }
 }
 
-internal sealed class TopicMediator : TopicPubSub<IEvt>, ITopicMediator
+internal sealed class TopicMediator : TopicPubSub<IEvtB>, ITopicMediator
 {
 }

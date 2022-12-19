@@ -4,18 +4,17 @@ using DotCart.Abstractions.Schema;
 namespace DotCart.Abstractions;
 
 public delegate TCmd Evt2Cmd<out TCmd, in TEvt>(TEvt Evt)
-    where TEvt : IEvt
-    where TCmd : ICmd;
+    where TEvt : IEvtB
+    where TCmd : ICmdB;
 
 public delegate TCmd Fact2Cmd<out TCmd, in TFact>(TFact fact)
     where TFact : IFact
-    where TCmd : ICmd;
+    where TCmd : ICmdB;
 
 public delegate TState Evt2State<TState, in TEvt>(TState state, TEvt evt)
     where TState : IState
-    where TEvt : IEvt;
+    where TEvt : IEvtB;
 
 public delegate TFact Evt2Fact<out TFact, in TEvt>(TEvt evt)
     where TFact : IFact
-    where TEvt : IEvt;
-
+    where TEvt : IEvtB;

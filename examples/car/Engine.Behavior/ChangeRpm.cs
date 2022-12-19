@@ -25,7 +25,7 @@ public static class ChangeRpm
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, Evt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc);
@@ -36,12 +36,19 @@ public static class ChangeRpm
             (cmd, state) =>
             {
                 var res = new List<Event>();
-                var rpmChanged = Evt.New(cmd.AggregateID, cmd.Payload);
+                var rpmChanged = NewEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
                 res.Add(rpmChanged);
                 var newPower = state.Power + cmd.Payload.Delta;
                 if (newPower > 0)
                     return res;
-                var stopped = Stop.Evt.New(cmd.AggregateID, Contract.Stop.Payload.New());
+                var stopped = Stop.NewEvt(
+                    cmd.AggregateID,
+                    Contract.Stop.Payload.New(),
+                    EventMeta.New(
+                        NameAtt.Get<IEngineAggregateInfo>(),
+                        cmd.AggregateID.Id()
+                    )
+                );
                 res.Add(stopped);
                 return res;
             };
@@ -63,7 +70,7 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2State<Engine, Evt>
+    private static readonly Evt2State<Engine, IEvt>
         _evt2State =
             (state, evt) =>
             {
@@ -71,37 +78,57 @@ public static class ChangeRpm
                 return state;
             };
 
-    private static readonly Evt2Fact<Contract.ChangeRpm.Fact, Evt>
+    private static readonly Evt2Fact<Contract.ChangeRpm.Fact, IEvt>
         _evt2Fact =
             evt => Contract.ChangeRpm.Fact.New(
-                evt.AggregateID.Id(),
+                evt.AggregateId,
                 evt.GetPayload<Contract.ChangeRpm.Payload>());
 
     private static readonly Hope2Cmd<Cmd, Contract.ChangeRpm.Hope>
         _hope2Cmd =
-            hope => Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+            hope => Cmd.New(
+                hope.AggId.IDFromIdString(),
+                hope.Payload,
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(),
+                    hope.AggId)
+            );
 
-    public record EvtMeta(string AggregateType, string AggregateId)
-        : EventMeta(AggregateType, AggregateId);
     [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload)
-        : CmdT<Contract.ChangeRpm.Payload>(AggregateID, Payload)
+    public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload, EventMeta Meta)
+        : CmdT<Contract.ChangeRpm.Payload, EventMeta>(AggregateID, Payload, Meta)
     {
-        public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload)
+        public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload, EventMeta meta)
         {
-            return new Cmd(aggregateID, payload);
+            return new Cmd(aggregateID, payload, meta);
         }
     }
+
     [Topic(Topics.Evt_v1)]
-    public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)
-        : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(AggregateID, TopicAtt.Get<Evt>(), Payload, Meta)
+    public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
     {
-        public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
-        {
-            var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), engineID.Id());
-            return new Evt(engineID, payload, meta);
-        }
     }
+
+    public static Event NewEvt(IID aggregateID, Contract.ChangeRpm.Payload payload, EventMeta meta)
+    {
+        return Event.New(
+            aggregateID,
+            TopicAtt.Get<IEvt>(),
+            payload.ToBytes(),
+            meta.ToBytes()
+        );
+    }
+
+    // public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)
+    //     : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(AggregateID, TopicAtt.Get<Evt>(), Payload, Meta)
+    // {
+    //     public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
+    //     {
+    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), engineID.Id());
+    //         return new Evt(engineID, payload, meta);
+    //     }
+    // }
+
     public class Exception : System.Exception
     {
         public Exception()
@@ -125,6 +152,7 @@ public static class ChangeRpm
             return new Exception(msg);
         }
     }
+
     public static class Topics
     {
         public const string Cmd_v1 = "engine:change_rpm:v1";

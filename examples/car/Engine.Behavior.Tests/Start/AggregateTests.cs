@@ -12,9 +12,9 @@ public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Engine,
     TryCmdT<Behavior.Start.Cmd, Engine>,
-    ApplyEvtT<Engine,Behavior.Start.Evt>,
+    ApplyEvtT<Engine,Behavior.Start.IEvt>,
     Behavior.Start.Cmd,
-    Behavior.Start.Evt
+    Behavior.Start.IEvt
 >
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

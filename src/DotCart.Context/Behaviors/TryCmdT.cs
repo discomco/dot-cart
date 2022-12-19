@@ -6,7 +6,7 @@ using DotCart.Core;
 namespace DotCart.Context.Behaviors;
 
 public class TryCmdT<TCmd, TState> : ITry<TCmd, TState> 
-    where TCmd : ICmd 
+    where TCmd : ICmdB 
     where TState : IState
 {
     private readonly SpecFuncT<TState, TCmd> _specify;
@@ -29,7 +29,7 @@ public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
         return _specify(cmd, state);
     }
 
-    public IEnumerable<IEvt> Raise(TCmd cmd, TState state)
+    public IEnumerable<IEvtB> Raise(TCmd cmd, TState state)
     {
         return _raise(cmd, state);
     }

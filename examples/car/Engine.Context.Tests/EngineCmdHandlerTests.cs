@@ -15,9 +15,9 @@ namespace Engine.Context.Tests;
 
 public abstract class
     EngineCmdHandlerTests<TCmd, TEvt, TPayload> : CmdHandlerTestsT<Schema.EngineID, Behavior.Engine, TCmd, TEvt, TPayload>
-    where TCmd : ICmd
+    where TCmd : ICmdB
     where TPayload : IPayload
-    where TEvt : IEvt
+    where TEvt : IEvtB
 {
     public EngineCmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)

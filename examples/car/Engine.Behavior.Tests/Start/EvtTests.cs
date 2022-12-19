@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Start;
 
 [Topic(Behavior.Start.Topics.Evt_v1)]
-public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Start.Evt, Contract.Start.Payload>
+public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Start.IEvt, Contract.Start.Payload>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

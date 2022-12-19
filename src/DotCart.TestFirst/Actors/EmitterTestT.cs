@@ -9,7 +9,7 @@ namespace DotCart.TestFirst.Actors;
 
 public abstract class EmitterTestT<TEmitter, TEvt, TFact> : IoCTests
     where TEmitter : IEmitterB
-    where TEvt : IEvt
+    where TEvt : IEvtB
     where TFact : IFact
 {
     protected TEmitter _emitter;
