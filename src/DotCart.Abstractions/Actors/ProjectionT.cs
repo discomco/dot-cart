@@ -26,15 +26,16 @@ public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
 ///     The Type of the Driver this Projection uses.
 ///     This type depends on the supporting backing service to which the Projection Projects its State.
 /// </typeparam>
-/// <typeparam name="TState">The type of the document that is being projected to.</typeparam>
+/// <typeparam name="TDoc">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<TDriver, TState, TEvt>
-    where TDriver : IModelStore<TState>
-    where TState : IState
+public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TDriver, TDoc, TEvt>
+    where TDriver : IModelStore<TDoc>
+    where TDoc : IState
     where TEvt : IEvtB
 {
-    private readonly Evt2State<TState, TEvt> _evt2State;
+    private readonly Evt2State<TDoc, TEvt> _evt2State;
     private readonly TDriver _modelStore;
+    private readonly StateCtorT<TDoc> _newDoc;
 
     private readonly object _subMutex = new();
 
@@ -43,10 +44,12 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<
     protected ProjectionT(
         IExchange exchange,
         TDriver modelStore,
-        Evt2State<TState, TEvt> evt2State) : base(exchange)
+        Evt2State<TDoc, TEvt> evt2State,
+        StateCtorT<TDoc> newDoc) : base(exchange)
     {
         _modelStore = modelStore;
         _evt2State = evt2State;
+        _newDoc = newDoc;
     }
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
@@ -62,9 +65,10 @@ public abstract class ProjectionT<TDriver, TState, TEvt> : ActorB, IProjectionT<
     private async Task Handler(IEvtB evt, CancellationToken cancellationToken = default)
     {
         Log.Information($"PROJECTION::[{GetType().Name}] ~> [{evt.Topic}] => [{evt.AggregateId}] ");
-        var state = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false);
-        state = _evt2State(state, (Event)evt);
-        await _modelStore.SetAsync(evt.AggregateId, state, cancellationToken).ConfigureAwait(false);
+        var doc = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false)
+                  ?? _newDoc();
+        doc = _evt2State(doc, (Event)evt);
+        await _modelStore.SetAsync(evt.AggregateId, doc, cancellationToken).ConfigureAwait(false);
     }
 
     protected override Task StartActingAsync(CancellationToken cancellationToken)

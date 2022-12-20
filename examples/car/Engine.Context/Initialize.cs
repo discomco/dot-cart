@@ -1,5 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -44,11 +45,12 @@ public static class Initialize
             Behavior.Initialize.IEvt>,
         IToRedisDoc
     {
-        public ToRedisDoc(IExchange exchange,
+        public ToRedisDoc(
+            IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.Initialize.IEvt> evt2State) : base(exchange,
-            modelStore,
-            evt2State)
+            Evt2State<Behavior.Engine, Behavior.Initialize.IEvt> evt2State,
+            StateCtorT<Behavior.Engine> newDoc)
+            : base(exchange, modelStore, evt2State, newDoc)
         {
         }
     }

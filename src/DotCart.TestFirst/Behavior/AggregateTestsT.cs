@@ -19,10 +19,10 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
+    protected Evt2State<TState, TEvt> _evt2State;
     protected TID _ID;
     protected IDCtorT<TID> _newID;
     protected StateCtorT<TState>? _newState;
-    protected Evt2State<TState,TEvt> _evt2State;
 
     protected AggregateTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)

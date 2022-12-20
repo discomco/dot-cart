@@ -1,12 +1,8 @@
 using System.Text.Json.Serialization;
 using Ardalis.GuardClauses;
-using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Behaviors;
 using DotCart.Core;
-using DotCart.Drivers.Mediator;
-using DotCart.Drivers.Serilog;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,7 +10,6 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
-    
     public static IServiceCollection AddStateCtor(this IServiceCollection services)
     {
         return services
@@ -28,9 +23,9 @@ public static partial class Inject
             .AddInitializeBehavior()
             .AddStartBehavior()
             .AddChangeRpmBehavior()
-            .AddStopBehavior();
+            .AddStopBehavior()
+            .AddChangeDetailsBehavior();
     }
-
 }
 
 public static class Guards
@@ -57,7 +52,6 @@ public static class Guards
         return guard;
     }
 }
-
 
 [DbName("3")]
 public record Engine : IState
@@ -99,11 +93,9 @@ public record Engine : IState
     }
 }
 
-
 [Name("engine:aggregate:v1")]
-public interface IEngineAggregateInfo: IAggregateInfoB
+public interface IEngineAggregateInfo : IAggregateInfoB
 {
-    
 }
 
 // public class Aggregate : AggregateT<Engine>

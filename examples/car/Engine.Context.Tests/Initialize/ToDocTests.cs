@@ -8,7 +8,6 @@ namespace Engine.Context.Tests.Initialize;
 
 public class ToDocTests : ProjectionTestsT<
     Context.Initialize.Spoke,
-    IModelStore<Behavior.Engine>,
     Context.Initialize.ToRedisDoc,
     Behavior.Engine,
     Behavior.Initialize.IEvt>

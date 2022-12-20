@@ -3,15 +3,13 @@ namespace DotCart.Core;
 [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface)]
 public class AggregateAttribute : Attribute
 {
-    public string Name { get; set; }
-
     public AggregateAttribute(string name)
     {
         Name = name;
     }
-    
-}
 
+    public string Name { get; set; }
+}
 
 public static class AggregateAtt
 {

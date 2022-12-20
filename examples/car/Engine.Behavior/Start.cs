@@ -13,32 +13,7 @@ namespace Engine.Behavior;
 
 public static class Start
 {
-    public static IServiceCollection AddStartMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _hope2Cmd);
-    }
-
-    public static IServiceCollection AddStartBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _evt2Cmd)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc);
-    }
-
-
-    public static class Topics
-    {
-        public const string Cmd_v1 = "engine:start:v1";
-        public const string Evt_v1 = "engine:started:v1";
-    }
+    public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
 
 
     private static readonly Evt2Fact<Contract.Start.Fact, IEvt>
@@ -59,10 +34,6 @@ public static class Start
                 return state;
             };
 
-    public static Evt2Cmd<Cmd, Initialize.IEvt> _evt2Cmd =>
-        evt =>
-            Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
-
     private static readonly SpecFuncT<Engine, Cmd>
         _specFunc =
             (_, state) =>
@@ -76,6 +47,7 @@ public static class Start
                 {
                     fbk.SetError(e.AsError());
                 }
+
                 return fbk;
             };
 
@@ -91,11 +63,42 @@ public static class Start
 
 
     public static readonly EvtCtorT<IEvt, Contract.Start.Payload, EventMeta>
-        _newEvt = 
-            (id, payload, meta) => Event.New(id, 
-                TopicAtt.Get<IEvt>(), 
-                payload.ToBytes(), 
-                meta.ToBytes());  
+        _newEvt =
+            (id, payload, meta) => Event.New(id,
+                TopicAtt.Get<IEvt>(),
+                payload.ToBytes(),
+                meta.ToBytes());
+
+    public static Evt2Cmd<Cmd, Initialize.IEvt> _initialized2Start =>
+        evt =>
+            Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
+
+    public static IServiceCollection AddStartMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
+    public static IServiceCollection AddStartBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _initialized2Start)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
+    }
+
+
+    public static class Topics
+    {
+        public const string Cmd_v1 = "engine:start:v1";
+        public const string Evt_v1 = "engine:started:v1";
+    }
 
     public class Exception : System.Exception
     {
@@ -121,9 +124,6 @@ public static class Start
         }
     }
 
-
-    public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
-
     [Name(OnInitialized_v1)]
     public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>
     {
@@ -142,19 +142,17 @@ public static class Start
         public static Cmd New(IID aggregateID, Contract.Start.Payload payload)
         {
             return new Cmd(
-                aggregateID, 
-                payload, 
+                aggregateID,
+                payload,
                 EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(), 
+                    NameAtt.Get<IEngineAggregateInfo>(),
                     aggregateID.Id()));
         }
     }
 
-   
+
     [Topic(Topics.Evt_v1)]
     public interface IEvt : IEvtT<Contract.Start.Payload>
-    {}
-    
-
- 
+    {
+    }
 }

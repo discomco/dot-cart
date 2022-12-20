@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.ChangeDetails;
 
-public class PayloadTests: PayloadTestsT<Contract.ChangeDetails.Payload>
+public class PayloadTests : PayloadTestsT<Contract.ChangeDetails.Payload>
 {
     public PayloadTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -13,12 +13,10 @@ public class PayloadTests: PayloadTestsT<Contract.ChangeDetails.Payload>
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

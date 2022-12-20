@@ -8,7 +8,7 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregateT<TInfo,TState> : IAggregate
+public class AggregateT<TInfo, TState> : IAggregate
     where TState : IState
     where TInfo : IAggregateInfoB
 {
@@ -18,13 +18,13 @@ public class AggregateT<TInfo,TState> : IAggregate
     private readonly object execMutex = new();
     public ICollection<IEvtB> _appliedEvents = new LinkedList<IEvtB>();
     private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
+    private ulong _nextVersion;
     protected TState _state;
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
     private bool _withAppliedEvents = false;
-    private ulong _nextVersion;
 
     public AggregateT(
-        IExchange exchange, 
+        IExchange exchange,
         StateCtorT<TState> newState)
     {
         _exchange = exchange;
@@ -137,8 +137,8 @@ public class AggregateT<TInfo,TState> : IAggregate
             SetID(cmd.AggregateID);
             Guard.Against.BehaviorIDNotSet(this);
             var fTry = _tryFuncs[TopicAtt.Get(cmd)];
-            feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state );
-            if (!feedback.IsSuccess) 
+            feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state);
+            if (!feedback.IsSuccess)
                 return feedback;
             IEnumerable<IEvtB> events = ((dynamic)fTry).Raise((dynamic)cmd, (dynamic)_state);
             foreach (var @event in events)

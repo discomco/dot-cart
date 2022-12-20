@@ -8,4 +8,4 @@ public delegate Event EvtCtorT<
     in TMeta>(IID ID, TPayload payload, TMeta meta)
     where TIEvt : IEvtT<TPayload>
     where TPayload : IPayload
-    where TMeta: IEventMeta;
+    where TMeta : IEventMeta;

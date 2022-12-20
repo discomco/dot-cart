@@ -8,8 +8,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0"/>
-        <PackageReference Include="xunit" Version="2.4.2"/>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+        <PackageReference Include="xunit" Version="2.4.2" />
         <PackageReference Include="xunit.runner.visualstudio" Version="2.4.5">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -21,19 +21,19 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
-        <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
-        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
-        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>
-        <ProjectReference Include="..\Engine.TestUtils\Engine.TestUtils.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+        <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
+        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj" />
+        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
+        <ProjectReference Include="..\Engine.TestUtils\Engine.TestUtils.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <None Remove=".env"/>
+        <None Remove=".env" />
     </ItemGroup>
 
     <ItemGroup>
-        <EmbeddedResource Include=".env"/>
+        <EmbeddedResource Include=".env" />
     </ItemGroup>
 
 </Project>

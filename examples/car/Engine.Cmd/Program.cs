@@ -1,4 +1,3 @@
-using DotCart.Core;
 using Engine.Context;
 using Serilog;
 using Inject = DotCart.Drivers.Serilog.Inject;

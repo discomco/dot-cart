@@ -7,12 +7,12 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy 
-    where TEvt : IEvtB 
-    where TCmd : ICmdB 
+public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
+    where TEvt : IEvtB
+    where TCmd : ICmdB
 {
     private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
-    
+
     protected IAggregate? Aggregate;
 
     protected AggregatePolicyT
@@ -33,7 +33,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
 
     private Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken)
     {
-        if (evt.IsCommitted) 
+        if (evt.IsCommitted)
             return Task.CompletedTask;
         return Task.Run(async () =>
         {

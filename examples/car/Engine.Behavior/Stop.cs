@@ -14,24 +14,6 @@ namespace Engine.Behavior;
 
 public static class Stop
 {
-    public static IServiceCollection AddStopBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc);
-    }
-
-    public static IServiceCollection AddStopMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _hope2Cmd);
-    }
-
-
     private static readonly Evt2State<Engine, IEvt>
         _evt2State =
             (state, _) =>
@@ -73,6 +55,30 @@ public static class Stop
                 };
             };
 
+    public static EvtCtorT<IEvt, Contract.Stop.Payload, EventMeta>
+        _newEvt =
+            (id, payload, meta) => Event.New(id,
+                TopicAtt.Get<IEvt>(),
+                payload.ToBytes(),
+                meta.ToBytes());
+
+    public static IServiceCollection AddStopBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
+    }
+
+    public static IServiceCollection AddStopMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.Stop.Payload Payload, EventMeta Meta)
@@ -83,20 +89,12 @@ public static class Stop
             return new Cmd(ID, payload, EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()));
         }
     }
-    
-    
 
-    
+
     [Topic(Topics.Evt_v1)]
-    public interface IEvt: IEvtT<Contract.Stop.Payload>
-    {}
-    
-    public static EvtCtorT<IEvt, Contract.Stop.Payload, EventMeta>
-        _newEvt = 
-            (id, payload, meta) => Event.New(id, 
-                TopicAtt.Get<IEvt>(), 
-                payload.ToBytes(), 
-                meta.ToBytes());  
+    public interface IEvt : IEvtT<Contract.Stop.Payload>
+    {
+    }
 
 
     public class Exception : System.Exception

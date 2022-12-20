@@ -5,7 +5,6 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
-using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -17,31 +16,19 @@ public static partial class Inject
 
 public static class ChangeDetails
 {
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, ChangeDetails.Cmd, ChangeDetails.IEvt>()
-            .AddTransient<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _initialized2Cmd);
-    }
+    public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
-    private static readonly Evt2Cmd<Cmd, Behavior.Initialize.IEvt>
+    private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
         _initialized2Cmd =
             evt =>
             {
                 var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
-                return Behavior.ChangeDetails.Cmd.New(
+                return Cmd.New(
                     evt.AggregateID,
-                    Contract.ChangeDetails.Payload.New(details), 
+                    Contract.ChangeDetails.Payload.New(details),
                     evt.GetMeta<EventMeta>());
             };
-
 
     private static readonly Evt2State<Engine, IEvt>
         _evt2State =
@@ -73,7 +60,7 @@ public static class ChangeDetails
             (id, payload, meta) => Event.New(id,
                 TopicAtt.Get<IEvt>(),
                 payload.ToBytes(),
-                meta.ToBytes());  
+                meta.ToBytes());
 
     private static readonly RaiseFuncT<Engine, Cmd>
         _raiseFunc =
@@ -84,6 +71,23 @@ public static class ChangeDetails
                     _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
+    
+     
+
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _newEvt)
+            .AddTransient(_ => _initialized2Cmd);
+    }
+
+    
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload, EventMeta Meta)
@@ -91,7 +95,9 @@ public static class ChangeDetails
             Payload, Meta)
     {
         public static Cmd New(IID engineId, Contract.ChangeDetails.Payload payload, EventMeta meta)
-            => new(engineId, payload, meta);
+        {
+            return new(engineId, payload, meta);
+        }
     }
 
     public static class Topics
@@ -105,11 +111,8 @@ public static class ChangeDetails
     {
     }
 
-    public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
-    
-    
     [Name(OnInitialized_v1)]
-    public class OnInitialized : AggregatePolicyT<Behavior.Initialize.IEvt, Behavior.ChangeDetails.Cmd>
+    public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>
     {
         public OnInitialized(IExchange exchange, Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd) : base(exchange, evt2Cmd)
         {

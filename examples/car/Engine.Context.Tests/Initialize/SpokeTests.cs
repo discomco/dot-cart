@@ -2,7 +2,6 @@ using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.TestFirst.Delivery;
 using DotCart.TestKit;
-using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -27,7 +26,6 @@ public class SpokeTests : SpokeTestsT<Context.Initialize.Spoke>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddInitializeSpoke();
     }
 }

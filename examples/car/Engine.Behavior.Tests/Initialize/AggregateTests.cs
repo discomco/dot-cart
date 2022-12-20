@@ -1,5 +1,4 @@
 using DotCart.Context.Behaviors;
-using DotCart.TestFirst;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -11,8 +10,8 @@ namespace Engine.Behavior.Tests.Initialize;
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Engine,
-    TryCmdT<Behavior.Initialize.Cmd,Engine>,
-    ApplyEvtT<Engine,Behavior.Initialize.IEvt>,
+    TryCmdT<Behavior.Initialize.Cmd, Engine>,
+    ApplyEvtT<Engine, Behavior.Initialize.IEvt>,
     Behavior.Initialize.Cmd,
     Behavior.Initialize.IEvt
 >

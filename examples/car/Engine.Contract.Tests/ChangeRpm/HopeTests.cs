@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace Engine.Contract.Tests.ChangeRpm;
 
 [Topic(Contract.ChangeRpm.Topics.Hope_v1)]
-public class HopeTests: HopeTestsT<Contract.Schema.EngineID, Contract.ChangeRpm.Hope, Contract.ChangeRpm.Payload>
+public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.ChangeRpm.Hope, Contract.ChangeRpm.Payload>
 {
     public HopeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -15,7 +15,6 @@ public class HopeTests: HopeTestsT<Contract.Schema.EngineID, Contract.ChangeRpm.
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

@@ -8,7 +8,8 @@ public static class Inject
     {
         return services
             .AddInitializeSpoke()
-            .AddChangeRpmSpoke();
-        // .AddStartSpoke();
+            .AddChangeDetailsSpoke()
+            .AddChangeRpmSpoke()
+            .AddStartSpoke();
     }
 }

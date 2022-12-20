@@ -7,7 +7,6 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.Start;
 
-
 [Topic(Behavior.Start.Topics.Cmd_v1)]
 public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.Start.Cmd, Contract.Start.Payload>
 {
@@ -17,12 +16,10 @@ public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.Start.Cmd, Contract.
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

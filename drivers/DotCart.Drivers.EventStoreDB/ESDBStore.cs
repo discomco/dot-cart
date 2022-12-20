@@ -114,7 +114,7 @@ public class ESDBStore : IEventStore
         if (state == ReadState.StreamNotFound)
             return res;
         await foreach (var evt in readResult)
-            res.Add( evt.Event.ToEvent());
+            res.Add(evt.Event.ToEvent());
         return res;
     }
 

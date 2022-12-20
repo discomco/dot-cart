@@ -8,7 +8,6 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Start;
 
 public class ResponderTests : ResponderTestsT<
-    IResponderT<Contract.Start.Hope, Behavior.Start.Cmd>,
     Contract.Start.Hope,
     Behavior.Start.Cmd>
 {

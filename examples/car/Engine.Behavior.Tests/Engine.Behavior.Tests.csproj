@@ -33,8 +33,4 @@
         <ProjectReference Include="..\Engine.TestUtils\Engine.TestUtils.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="ChangeDetails\AggregateTests.cs" />
-    </ItemGroup>
-
 </Project>

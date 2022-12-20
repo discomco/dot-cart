@@ -4,10 +4,10 @@ using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.ChangeRpm;
+namespace Engine.Context.Tests.ChangeDetails;
 
-[Name(Context.ChangeRpm.Spoke_v1)]
-public class SpokeTests : SpokeTestsT<Context.ChangeRpm.Spoke>
+[Name(Context.ChangeDetails.Spoke_v1)]
+public class SpokeTests : SpokeTestsT<Context.ChangeDetails.Spoke>
 {
     public SpokeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -15,15 +15,17 @@ public class SpokeTests : SpokeTestsT<Context.ChangeRpm.Spoke>
 
     protected override void Initialize()
     {
+        
     }
 
     protected override void SetTestEnvironment()
     {
+        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddChangeRpmSpoke();
+            .AddChangeDetailsSpoke();
     }
 }

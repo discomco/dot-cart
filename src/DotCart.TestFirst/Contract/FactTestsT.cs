@@ -5,20 +5,20 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-public abstract class FactTestsT<TID,TFact,TPayload> : IoCTests
-where TID: IID
-where TFact: IFact<TPayload>
-where TPayload: IPayload
+public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
+    where TID : IID
+    where TFact : IFact<TPayload>
+    where TPayload : IPayload
 {
+    protected FactCtorT<TFact, TPayload> _newFact;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
-    protected FactCtorT<TFact,TPayload> _newFact;
 
     public FactTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
-    
+
     [Fact]
     public void ShouldResolveIDCtor()
     {

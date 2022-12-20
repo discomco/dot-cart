@@ -51,7 +51,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregat
         Assert.NotNull(_agg);
         // WHEN
         var details = Schema.Details.New("New Engine");
-        var cmd = Behavior.Initialize.Cmd.New( TestUtils.Schema.IDCtor(), Contract.Initialize.Payload.New(details));
+        var cmd = Behavior.Initialize.Cmd.New(TestUtils.Schema.IDCtor(), Contract.Initialize.Payload.New(details));
         _agg.SetID(cmd.AggregateID);
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = (Engine)feedback.Payload;
@@ -67,7 +67,6 @@ public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregat
     }
 
 
-    
     // TODO: Debug this ShouldExecuteStartCmd
     [Fact]
     public async Task ShouldExecuteStartCmd()

@@ -17,12 +17,10 @@ public class EvtTests : EvtTestsT<Schema.EngineID, Behavior.ChangeRpm.IEvt, Cont
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

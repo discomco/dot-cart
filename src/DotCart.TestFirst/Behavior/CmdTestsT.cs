@@ -2,7 +2,6 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
@@ -17,7 +16,8 @@ public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
     protected PayloadCtorT<TPayload> _newPayload;
 
     public CmdTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    { }
+    {
+    }
 
     [Fact]
     public async Task ShouldResolveIDCtor()
@@ -30,8 +30,7 @@ public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
         Assert.NotNull(_newID);
     }
 
-    
-    
+
     [Fact]
     public async Task ShouldResolveCmdCtor()
     {
@@ -66,6 +65,4 @@ public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
         // THEN
         Assert.Equal(expectedTopic, cmdTopic);
     }
-
-
 }

@@ -1,7 +1,5 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
-using Engine.Behavior;
 
 namespace Engine.TestUtils;
 
@@ -31,6 +29,6 @@ public static class Start
             (_, _) => Contract.Start.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
     public static readonly EvtCtorT<Behavior.Start.IEvt, Contract.Start.Payload, EventMeta>
-        EvtCtor = 
+        EvtCtor =
             (_, _, _) => Behavior.Start._newEvt(Schema.IDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 }

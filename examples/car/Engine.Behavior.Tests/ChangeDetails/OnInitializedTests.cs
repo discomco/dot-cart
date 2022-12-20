@@ -9,8 +9,8 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 [Name(Behavior.ChangeDetails.OnInitialized_v1)]
 public class OnInitializedTests
     : PolicyTestsT<
-        Behavior.ChangeDetails.OnInitialized, 
-        Behavior.Initialize.IEvt, 
+        Behavior.ChangeDetails.OnInitialized,
+        Behavior.Initialize.IEvt,
         Behavior.ChangeDetails.Cmd>
 {
     public OnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -19,12 +19,10 @@ public class OnInitializedTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

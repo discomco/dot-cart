@@ -7,10 +7,10 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
-        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
-        <ProjectReference Include="..\..\..\src\DotCart.Drivers.Default\DotCart.Drivers.Default.csproj" />
-        <ProjectReference Include="..\Engine.Behavior\Engine.Behavior.csproj" />
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Drivers.Default\DotCart.Drivers.Default.csproj"/>
+        <ProjectReference Include="..\Engine.Behavior\Engine.Behavior.csproj"/>
     </ItemGroup>
 
 

@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 [Topic(Behavior.Stop.Topics.Evt_v1)]
-public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Stop.IEvt, Contract.Stop.Payload, EventMeta> 
+public class EvtTests : EvtTestsT<Schema.EngineID, Behavior.Stop.IEvt, Contract.Stop.Payload, EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -17,12 +17,10 @@ public class EvtTests: EvtTestsT<Schema.EngineID, Behavior.Stop.IEvt, Contract.S
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

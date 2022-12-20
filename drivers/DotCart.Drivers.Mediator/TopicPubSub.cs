@@ -16,7 +16,7 @@ internal abstract class TopicPubSub<TMsg> : ITopicPubSub<TMsg> where TMsg : IMsg
     private object _pubMutex = new();
 
     public Dictionary<string, List<object>> Handlers =>
-        handlers.Value 
+        handlers.Value
         ?? (handlers.Value = new Dictionary<string, List<object>>());
 
     public void Subscribe(string topic, Action<TMsg> handler)

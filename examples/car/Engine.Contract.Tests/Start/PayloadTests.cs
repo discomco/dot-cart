@@ -13,12 +13,10 @@ public class PayloadTests : PayloadTestsT<Contract.Start.Payload>
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -26,5 +24,4 @@ public class PayloadTests : PayloadTestsT<Contract.Start.Payload>
         services
             .AddTransient(_ => TestUtils.Start.PayloadCtor);
     }
-   
 }

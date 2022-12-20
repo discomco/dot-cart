@@ -32,7 +32,4 @@ public static class TagAtt
         return AttributeHelper.GetConstFieldAttributeValue<T, string, TagAttribute>(
             fieldName, y => y.Id);
     }
-    
-    
-    
 }

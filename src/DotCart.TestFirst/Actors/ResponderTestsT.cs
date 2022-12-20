@@ -8,17 +8,17 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
-    where TResponder : IResponder
+public abstract class ResponderTestsT<THope, TCmd> : IoCTests
+//    where TIResponder : IResponder
     where THope : IHope
     where TCmd : ICmdB
 {
-    private TResponder _responder;
+    private IResponderT<THope,TCmd> _responder;
 
     public ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public async Task ShouldResolveHope2Cmd()
     {
@@ -37,12 +37,11 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
     [Fact]
     public async Task ShouldResolveResponder()
     {
-        
         // GIVEN
         Assert.NotNull(TestEnv);
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
         // WHEN
-        _responder = TestEnv.ResolveRequired<TResponder>();
+        _responder = TestEnv.ResolveRequired<IResponderT<THope,TCmd>>();
         // THEN
         Assert.NotNull(_responder);
     }
@@ -56,7 +55,7 @@ public abstract class ResponderTestsT<TResponder, THope, TCmd> : IoCTests
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
 
         // WHEN
-        _responder = TestEnv.ResolveRequired<TResponder>();
+        _responder = TestEnv.ResolveRequired<IResponderT<THope,TCmd>>();
         try
         {
             Assert.NotNull(_responder);

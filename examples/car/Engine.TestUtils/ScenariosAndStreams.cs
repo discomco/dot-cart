@@ -1,7 +1,5 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Behaviors;
-using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
@@ -11,7 +9,6 @@ public delegate IEnumerable<ICmdB> ScenarioGenerator<in TID>(TID ID)
 
 public delegate IEnumerable<IEvtB> EventStreamGenerator<in TID>(TID ID)
     where TID : IID;
-
 
 public static partial class Inject
 {
@@ -30,15 +27,10 @@ public static partial class Inject
 
 public static class ScenariosAndStreams
 {
-    
-    
-    
- 
-    
     public static IEnumerable<IEvtB> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initEvt = Behavior.Initialize._newEvt(ID, initPayload, Schema.MetaCtor(ID.Id()) );
+        var initEvt = Behavior.Initialize._newEvt(ID, initPayload, Schema.MetaCtor(ID.Id()));
         initEvt.SetVersion(0);
         // AND
         var startPayload = Contract.Start.Payload.New;

@@ -15,7 +15,7 @@ public static class ChangeRpm
             (id, _) => Behavior.ChangeRpm.Cmd.New(id, PayloadCtor(), EventMeta.New(
                 NameAtt.Get<IEngineAggregateInfo>(),
                 id.Id()
-            ) );
+            ));
 
     public static readonly PayloadCtorT<
             Contract.ChangeRpm.Payload>
@@ -35,9 +35,9 @@ public static class ChangeRpm
             (_, _) => Contract.ChangeRpm.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
 
     public static readonly EvtCtorT<Behavior.ChangeRpm.IEvt, Contract.ChangeRpm.Payload, EventMeta>
-        EvtCtor  = 
+        EvtCtor =
             (_, _, _) => Behavior.ChangeRpm._newEvt(
-                Schema.IDCtor(), 
+                Schema.IDCtor(),
                 PayloadCtor(),
                 Schema.MetaCtor(null));
 }

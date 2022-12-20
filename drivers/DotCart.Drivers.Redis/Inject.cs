@@ -49,7 +49,7 @@ public static class Inject
             });
     }
 
-    public static IServiceCollection AddSingletonRedisDb<TModel>(this IServiceCollection services) 
+    public static IServiceCollection AddSingletonRedisDb<TModel>(this IServiceCollection services)
         where TModel : IState
     {
         return services
@@ -59,7 +59,7 @@ public static class Inject
             .AddSingleton<IRedisDb, RedisDb>();
     }
 
-    public static IServiceCollection AddTransientRedisDb<TModel>(this IServiceCollection services) 
+    public static IServiceCollection AddTransientRedisDb<TModel>(this IServiceCollection services)
         where TModel : IState
     {
         return services

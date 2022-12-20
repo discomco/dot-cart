@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.ChangeRpm;
 
 [Topic(Behavior.ChangeRpm.Topics.Cmd_v1)]
-public class CmdTests: CmdTestsT<Schema.EngineID, Behavior.ChangeRpm.Cmd, Contract.ChangeRpm.Payload>
+public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.ChangeRpm.Cmd, Contract.ChangeRpm.Payload>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -16,12 +16,10 @@ public class CmdTests: CmdTestsT<Schema.EngineID, Behavior.ChangeRpm.Cmd, Contra
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

@@ -7,16 +7,20 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests 
-    where TPolicy: IAggregatePolicy 
-    where TEvt : IEvtB 
+public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
+    where TPolicy : IAggregatePolicy
+    where TEvt : IEvtB
     where TCmd : ICmdB
 {
-    protected IAggregatePolicy _policy;
+    protected Evt2Cmd<TCmd, TEvt> _evt2Cmd;
     protected IExchange _exchange;
-    protected Evt2Cmd<TCmd,TEvt> _evt2Cmd;
+    protected IAggregatePolicy _policy;
 
-   
+
+    protected PolicyTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    {
+    }
+
 
     [Fact]
     public async Task ShouldResolveEvt2Cmd()
@@ -28,7 +32,7 @@ public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests
         // THEN
         Assert.NotNull(_evt2Cmd);
     }
-    
+
     [Fact]
     public async Task ShouldHaveName()
     {
@@ -39,7 +43,7 @@ public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests
         // THEN
         Assert.NotNull(name);
     }
-    
+
     [Fact]
     public async Task ShouldPolicyHaveName()
     {
@@ -50,14 +54,7 @@ public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests
         // THEN
         Assert.NotNull(name);
     }
-    
-    
-    
-    
-    
-    
-    
-    
+
 
     [Fact]
     public async Task ShouldResolveExchange()
@@ -69,8 +66,8 @@ public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests
         // THEN
         Assert.NotNull(_exchange);
     }
-    
-    
+
+
     [Fact]
     public async Task ShouldResolvePolicy()
     {
@@ -81,10 +78,5 @@ public abstract class PolicyTestsT<TPolicy, TEvt,TCmd> : IoCTests
             .First(x => NameAtt.Get(x) == NameAtt.Get<TPolicy>());
         // THEN
         Assert.NotNull(_policy);
-    }
-
-
-    protected PolicyTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    {
     }
 }

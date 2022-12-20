@@ -10,12 +10,9 @@ public static class AttributeHelper
         where TAttribute : Attribute
     {
         var fieldInfo = typeof(T).GetField(fieldName, BindingFlags.Public | BindingFlags.Static);
-        if (fieldInfo == null)
-        {
-            return default;
-        }
-        return fieldInfo.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() is TAttribute att 
-            ? valueSelector(att) 
+        if (fieldInfo == null) return default;
+        return fieldInfo.GetCustomAttributes(typeof(TAttribute), true).FirstOrDefault() is TAttribute att
+            ? valueSelector(att)
             : default;
     }
 }

@@ -11,7 +11,6 @@ namespace DotCart.TestFirst.Actors;
 
 public abstract class ProjectionTestsT<
     TSpoke,
-    TReadModelStore,
     TProjection,
     TState,
     TEvt> : IoCTests
@@ -19,8 +18,6 @@ public abstract class ProjectionTestsT<
     where TState : IState
     where TEvt : IEvtB
     where TSpoke : ISpokeT<TSpoke>
-    where TReadModelStore : IModelStore<TState>
-
 {
     private Evt2State<TState, TEvt> _evt2State;
 
@@ -104,7 +101,7 @@ public abstract class ProjectionTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var rms = TestEnv.ResolveRequired<TReadModelStore>();
+        var rms = TestEnv.ResolveRequired<IModelStore<TState>>();
         // THEN
         Assert.NotNull(rms);
     }

@@ -17,8 +17,7 @@ public abstract class FullBehaviorTestsT<TAggregate> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        
+
         // THEN
     }
-
 }

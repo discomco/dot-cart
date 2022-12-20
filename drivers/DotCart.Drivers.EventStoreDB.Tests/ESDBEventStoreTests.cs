@@ -10,7 +10,6 @@ using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
 using DotCart.TestKit.Behavior;
 using DotCart.TestKit.Schema;
-using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -22,9 +21,9 @@ public class ESDBEventStoreTests : IoCTests
     private IAggregateBuilder? _aggregateBuilder;
     private ICmdHandler? _cmdHandler;
     private IEventStore? _eventStore;
+    private IExchange _exchange;
     private StateCtorT<TheDoc> _newDoc;
     private IDCtorT<TheID> _newID;
-    private IExchange _exchange;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

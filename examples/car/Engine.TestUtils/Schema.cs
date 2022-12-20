@@ -11,8 +11,8 @@ public static class Schema
             Contract.Schema.EngineID>
         IDCtor =
             _ => Contract.Schema.EngineID.New("E63E3CAD-0CAE-4F77-B3CE-808FB087032D");
-    
-    public static readonly MetaCtor 
-        MetaCtor = 
-            _ => EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), IDCtor().Id()); 
+
+    public static readonly MetaCtor
+        MetaCtor =
+            _ => EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), IDCtor().Id());
 }

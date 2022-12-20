@@ -14,7 +14,8 @@ using Schema = Engine.Contract.Schema;
 namespace Engine.Context.Tests;
 
 public abstract class
-    EngineCmdHandlerTests<TCmd, TEvt, TPayload> : CmdHandlerTestsT<Schema.EngineID, Behavior.Engine, TCmd, TEvt, TPayload>
+    EngineCmdHandlerTests<TCmd, TEvt, TPayload> : CmdHandlerTestsT<Schema.EngineID, Behavior.Engine, TCmd, TEvt,
+        TPayload>
     where TCmd : ICmdB
     where TPayload : IPayload
     where TEvt : IEvtB
@@ -28,7 +29,7 @@ public abstract class
     {
         services
             .AddESDBStore()
-            .AddBaseBehavior<IEngineAggregateInfo, Behavior.Engine, TCmd, TEvt> ()
+            .AddBaseBehavior<IEngineAggregateInfo, Behavior.Engine, TCmd, TEvt>()
             .AddCmdHandler()
             .AddTestIDCtor()
             .AddStateCtor();

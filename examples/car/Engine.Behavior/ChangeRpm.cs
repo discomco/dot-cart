@@ -6,31 +6,12 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
-using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    public static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _hope2Cmd);
-    }
-
-    public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc);
-    }
-
     private static readonly RaiseFuncT<Engine, Cmd>
         _raiseFunc =
             (cmd, state) =>
@@ -94,6 +75,33 @@ public static class ChangeRpm
                     hope.AggId)
             );
 
+    public static EvtCtorT<IEvt, Contract.ChangeRpm.Payload, EventMeta>
+        _newEvt =
+            (id, payload, meta) => Event.New(
+                id,
+                TopicAtt.Get<IEvt>(),
+                payload.ToBytes(),
+                meta.ToBytes()
+            );
+
+    public static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
+    public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc);
+    }
+
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload, EventMeta Meta)
         : CmdT<Contract.ChangeRpm.Payload, EventMeta>(AggregateID, Payload, Meta)
@@ -108,15 +116,6 @@ public static class ChangeRpm
     public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
     {
     }
-
-    public static EvtCtorT<IEvt, Contract.ChangeRpm.Payload, EventMeta>
-        _newEvt =
-            (id, payload, meta) => Event.New(
-                id,
-                TopicAtt.Get<IEvt>(),
-                payload.ToBytes(),
-                meta.ToBytes()
-            );
 
 
 // public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)

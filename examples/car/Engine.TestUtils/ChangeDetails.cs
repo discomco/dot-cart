@@ -38,7 +38,7 @@ public static class ChangeDetails
             );
 
     public static readonly EvtCtorT<Behavior.ChangeDetails.IEvt, Contract.ChangeDetails.Payload, EventMeta>
-        EvtCtor = 
+        EvtCtor =
             (_, _, _) => Behavior.ChangeDetails._newEvt(Schema.IDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 
 

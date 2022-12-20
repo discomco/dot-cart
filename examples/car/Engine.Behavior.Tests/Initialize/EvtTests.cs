@@ -10,8 +10,8 @@ namespace Engine.Behavior.Tests.Initialize;
 
 [Topic(Behavior.Initialize.Topics.Evt_v1)]
 public class EvtTests : EvtTestsT<
-    Schema.EngineID, 
-    Behavior.Initialize.IEvt, 
+    Schema.EngineID,
+    Behavior.Initialize.IEvt,
     Contract.Initialize.Payload, EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -20,12 +20,10 @@ public class EvtTests : EvtTestsT<
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

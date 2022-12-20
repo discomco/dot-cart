@@ -17,25 +17,6 @@ public static partial class Inject
 
 public static class Initialize
 {
-    public static IServiceCollection AddInitializeMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _hope2Cmd);
-    }
-
-    public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _newEvt);
-    }
-
     public static readonly EvtCtorT<IEvt, Contract.Initialize.Payload, EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
@@ -62,7 +43,8 @@ public static class Initialize
         _evt2State =
             (state, evt) =>
             {
-                if (evt == null) return state;
+                if (evt == null)
+                    return state;
                 if (evt.GetPayload<Contract.Initialize.Payload>() == null) return state;
                 state.Id = evt.AggregateId;
                 state.Details = evt.GetPayload<Contract.Initialize.Payload>().Details;
@@ -112,6 +94,25 @@ public static class Initialize
                     _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
+
+    public static IServiceCollection AddInitializeMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
+    public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _newEvt);
+    }
 
     public class Exception : System.Exception
     {

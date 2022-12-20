@@ -13,7 +13,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCT
     where TState : IState
     where TID : IID
     where TCmd : ICmdB
-    where TEvt: IEvtB
+    where TEvt : IEvtB
     where TPayload : IPayload
 {
     protected static IDCtorT<TID> _newID;

@@ -1,5 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -12,17 +13,16 @@ namespace Engine.Context;
 
 public static class ChangeRpm
 {
-    public const string ToRedisDocProjectionName = "engine:changed_rpm:to_redis_doc";
+    public const string ToRedisDoc_v1 = "engine:changed_rpm:to_redis_doc:v1";
 
 
-    public const string SpokeName = "engine:change_rpm:spoke";
+    public const string Spoke_v1 = "engine:change_rpm:spoke:v1";
 
     public static IServiceCollection AddChangeRpmSpoke(this IServiceCollection services)
     {
         return services
             .AddEngineBehavior()
             .AddChangeRpmMappers()
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<Spoke>()
             .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
             .AddHostedService(provider =>
@@ -31,11 +31,12 @@ public static class ChangeRpm
                 return spokeBuilder.Build();
             })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
+            .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>();
     }
 
 
-    [Name(ToRedisDocProjectionName)]
+    [Name(ToRedisDoc_v1)]
     [DbName("3")]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
@@ -44,9 +45,9 @@ public static class ChangeRpm
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.ChangeRpm.IEvt> evt2State) : base(exchange,
-            modelStore,
-            evt2State)
+            Evt2State<Behavior.Engine, Behavior.ChangeRpm.IEvt> evt2State,
+            StateCtorT<Behavior.Engine> newDoc)
+            : base(exchange, modelStore, evt2State, newDoc)
         {
         }
     }
@@ -61,7 +62,7 @@ public static class ChangeRpm
     }
 
 
-    [Name(SpokeName)]
+    [Name(Spoke_v1)]
     public class Spoke : SpokeT<Spoke>
     {
         public Spoke(

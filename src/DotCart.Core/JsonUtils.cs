@@ -4,7 +4,6 @@ namespace DotCart.Core;
 
 public static class JsonUtils
 {
-
     public static bool IsJson(this string source)
     {
         if (source == null)
@@ -49,7 +48,7 @@ public static class JsonUtils
     public static T FromJson<T>(this string json)
     {
         return string.IsNullOrWhiteSpace(json)
-            ? default(T)
+            ? default
             : JsonSerializer.Deserialize<T>(json);
     }
 

@@ -1,15 +1,13 @@
-using DotCart.Abstractions.Actors;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.ChangeRpm;
+namespace Engine.Context.Tests.ChangeDetails;
 
-public class ResponderTests : ResponderTestsT<
-    Contract.ChangeRpm.Hope,
-    Behavior.ChangeRpm.Cmd>
+public class ResponderTests
+    : ResponderTestsT<Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>
 {
     private IEncodedConnection _bus;
 
@@ -19,19 +17,20 @@ public class ResponderTests : ResponderTestsT<
 
     protected override void Initialize()
     {
+        
     }
 
     protected override void SetTestEnvironment()
     {
+        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddChangeRpmSpoke();
+            .AddChangeDetailsSpoke();
     }
 
-    [Fact]
     public override async Task ShouldResolveConnection()
     {
         // GIVEN

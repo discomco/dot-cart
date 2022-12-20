@@ -5,23 +5,25 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public class TryCmdT<TCmd, TState> : ITry<TCmd, TState> 
-    where TCmd : ICmdB 
+public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
+    where TCmd : ICmdB
     where TState : IState
 {
-    private readonly SpecFuncT<TState, TCmd> _specify;
     private readonly RaiseFuncT<TState, TCmd> _raise;
+    private readonly SpecFuncT<TState, TCmd> _specify;
     protected IAggregate Aggregate;
-    public string CmdType => TopicAtt.Get<TCmd>();
-    public void SetAggregate(IAggregate aggregate)
-    {
-        Aggregate = aggregate;
-    }
 
     public TryCmdT(SpecFuncT<TState, TCmd> specify, RaiseFuncT<TState, TCmd> raise)
     {
         _specify = specify;
         _raise = raise;
+    }
+
+    public string CmdType => TopicAtt.Get<TCmd>();
+
+    public void SetAggregate(IAggregate aggregate)
+    {
+        Aggregate = aggregate;
     }
 
     public IFeedback Verify(TCmd cmd, TState state)

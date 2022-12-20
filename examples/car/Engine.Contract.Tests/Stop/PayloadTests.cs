@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Stop;
 
-public class PayloadTests: PayloadTestsT<Contract.Stop.Payload>
+public class PayloadTests : PayloadTestsT<Contract.Stop.Payload>
 {
     public PayloadTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -13,12 +13,10 @@ public class PayloadTests: PayloadTestsT<Contract.Stop.Payload>
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetTestEnvironment()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -26,5 +24,4 @@ public class PayloadTests: PayloadTestsT<Contract.Stop.Payload>
         services
             .AddTransient(_ => TestUtils.Stop.PayloadCtor);
     }
-   
 }
