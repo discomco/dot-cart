@@ -35,8 +35,7 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
             try
             {
                 await ConnectAsync(cancellationToken);
-                var responding = "RESPONDING".AsVerb();
-                _logMessage = $"NATS{responding} Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
+                _logMessage = $"NATS{AppVerbs.Responding} Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
                 _subscription = _bus.SubscribeAsync(
@@ -44,19 +43,16 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
                     async (sender, args) =>
                     {
                         var hope = (THope)args.ReceivedObject;
-                        var received = "RECEIVED".AsFact();
-                        Log.Debug($"NATS{received} Req {args.Subject} ~> {hope.AggId}");
+                        Log.Debug($"{AppFacts.Received} NATS.Req {args.Subject} ~> {hope.AggId}");
                         var msg = await Call(hope, cancellationToken);
                         var rsp = (Feedback)msg;
                         args.Message.Respond(rsp.ToBytes());
-                        // _bus.Publish(args.Reply, rsp);
-                        var responded = "RESPONDED".AsFact();
-                        Log.Debug($"NATS{responded} Rsp {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
+                        Log.Debug($"NATS{AppFacts.Responded} NATS.Rsp {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
                     });
             }
             catch (Exception e)
             {
-                _logMessage = $"::EXCEPTION {e.Message}";
+                _logMessage = $"{e.InnerAndOuter().AsError()}";
                 Log.Fatal(_logMessage);
                 throw;
             }

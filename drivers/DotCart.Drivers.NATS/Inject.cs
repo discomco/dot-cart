@@ -15,7 +15,7 @@ public static class Inject
 {
     public static IServiceCollection AddCoreNATS(this IServiceCollection services)
     {
-        services?
+        services
             //    .AddKubernetes();
             // var container = services.BuildServiceProvider(); 
             // var k8sFact = container.GetService<IKubernetesFactory>();
