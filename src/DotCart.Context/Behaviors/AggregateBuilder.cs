@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,9 +33,24 @@ internal class AggregateBuilder : IAggregateBuilder
         IEnumerable<IApply> applies)
     {
         _aggregate = aggregate;
-        _policies = policies;
+        _policies = Distinct(policies);
         _tries = tries;
         _applies = applies;
+    }
+
+    
+    // TODO: Factor this out. Should be taken care of at injection time.
+    private IEnumerable<IAggregatePolicy> Distinct(IEnumerable<IAggregatePolicy> policies)
+    {
+        var result = ImmutableList<IAggregatePolicy>.Empty;
+        var known = new List<string>();
+        foreach (var policy in policies)
+        {
+            if (known.Contains(policy.Name)) continue;
+            known.Add(policy.Name);
+            result = result.Add(policy);
+        }
+        return result;
     }
 
     public IAggregate Build()

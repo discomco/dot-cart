@@ -7,19 +7,30 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.Mediator;
 
+
+
+
 [Name("dotcart:exchange")]
 internal class Exchange : ActiveComponent, IExchange
 {
-    private ImmutableDictionary<string, List<IActor>> _topics = ImmutableDictionary<string, List<IActor>>.Empty;
+    
+    private readonly object _subMutex = new();
+    private ImmutableDictionary<string, ImmutableList<IActor>> _topics = ImmutableDictionary<string, ImmutableList<IActor>>.Empty;
 
     public void Subscribe(string topic, IActor consumer)
     {
-        if (!_topics.ContainsKey(topic))
-            _topics = _topics.Add(topic, new List<IActor>());
-        var lst = _topics[topic];
-        lst.Add(consumer);
-        _topics = _topics.SetItem(topic, lst);
+        lock (_subMutex)
+        {
+            if (!_topics.ContainsKey(topic))
+                _topics = _topics.Add(topic, ImmutableList<IActor>.Empty);
+            var lst = _topics[topic];
+            lst = lst.All(a => a.Name != consumer.Name) 
+                ? lst.Add(consumer) 
+                : lst;
+            _topics = _topics.SetItem(topic, lst);
+        }
     }
+
 
     public void Unsubscribe(string topic, IActor consumer)
     {

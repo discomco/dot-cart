@@ -8,6 +8,7 @@ using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Engine.Behavior;
 
@@ -86,7 +87,7 @@ public static class Start
         return services
             .AddStateCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient<IAggregatePolicy, OnInitialized>()
+            .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _initialized2Start)
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)

@@ -12,18 +12,30 @@ public static class Inject
         return services
             .AddSingletonExchange()
             .AddMemProjector()
-            .AddTransient<ISpokeT<Spoke>, Spoke>()
-            .AddTransient<ISpokeBuilder<ISpokeT<Spoke>>, SpokeBuilder>()
-            .AddTransient<IActor<Spoke>, Consumer2>()
+            .AddTransient<TheSpoke>()
+            .AddTransient<ISpokeBuilder<TheSpoke>, TheSpokeBuilder>()
+            .AddTransient<IActor<TheSpoke>, Consumer2>()
             .AddTransient<IConsumer2, Consumer2>()
-            .AddTransient<IActor<Spoke>, Consumer1>()
+            .AddTransient<IActor<TheSpoke>, Consumer1>()
             .AddTransient<IConsumer1, Consumer1>()
-            .AddTransient<IActor<Spoke>, Producer>()
+            .AddTransient<IActor<TheSpoke>, Producer>()
             .AddTransient<IProducer, Producer>()
+           
+            .AddTransient<INamedConsumer, NamedConsumer1>()
+            .AddTransient<IActor<TheSpoke>, NamedConsumer1>()
+            .AddTransient<INamedConsumer, NamedConsumer2>()
+            .AddTransient<IActor<TheSpoke>, NamedConsumer2>()
+            
+            // We add some duplicate consumers
+            .AddTransient<INamedConsumer, NamedConsumer1>()
+            .AddTransient<IActor<TheSpoke>, NamedConsumer1>()
+            .AddTransient<INamedConsumer, NamedConsumer2>()
+            .AddTransient<IActor<TheSpoke>, NamedConsumer2>()
+            
             .AddHostedService(provider =>
             {
-                var builder = provider.GetRequiredService<ISpokeBuilder<ISpokeT<Spoke>>>();
-                return (Spoke)builder.Build();
+                var builder = provider.GetRequiredService<ISpokeBuilder<TheSpoke>>();
+                return builder.Build();
             });
     }
 }

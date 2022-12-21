@@ -27,17 +27,21 @@ public static class LogFormatExtensions
 
 public static class AppVerbs
 {
-    public static string Connecting = "CONNECTING".AsVerb();
-    public static string Starting = "STARTING".AsVerb();
-    public static string Stopping = "STOPPING".AsVerb();
-    public static string Activating = "ACTIVATING".AsVerb();
-    public static string Deactivating = "DEACTIVATING".AsVerb();
+    public static readonly string Connecting = "CONNECTING".AsVerb();
+    public static readonly string Starting = "STARTING".AsVerb();
+    public static readonly string Stopping = "STOPPING".AsVerb();
+    public static readonly string Activating = "ACTIVATING".AsVerb();
+    public static readonly string Deactivating = "DEACTIVATING".AsVerb();
     public static readonly string Projecting = "PROJECTING".AsVerb();
+    public static readonly string Waiting1s = "WAIT_1S".AsVerb();
+    public static readonly string Running = "RUNNING".AsVerb();
+    public static readonly string Subscribing = "SUBSCRIBING".AsVerb();
+    
 }
 
 public static class AppErrors
 {
-    public static string Error = "ERROR".AsError();
+    public static readonly string Error = "ERROR".AsError();
 }
 
 public static class AppFacts

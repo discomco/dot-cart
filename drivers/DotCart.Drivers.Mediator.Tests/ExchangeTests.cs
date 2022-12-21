@@ -14,8 +14,8 @@ public class ExchangeTests : ActorTestsT<IExchange>
     private IConsumer2 _consumer2;
     private IProducer _producer;
     private IProjector _projector;
-    private ISpokeT<Spoke> _spoke;
-    private ISpokeBuilder<ISpokeT<Spoke>> _spokeBuilder;
+    private TheSpoke _spoke;
+    private ISpokeBuilder<TheSpoke> _spokeBuilder;
     private IHostedService _spokeHost;
 
     public ExchangeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -28,7 +28,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var host = TestEnv.ResolveHosted<Spoke>();
+        var host = TestEnv.ResolveHosted<TheSpoke>();
         // THEN
         Assert.NotNull(host);
     }
@@ -72,7 +72,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<ISpokeT<Spoke>>>();
+        _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<TheSpoke>>();
         // THEN
         Assert.NotNull(_spokeBuilder);
     }
@@ -83,7 +83,7 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _spoke = TestEnv.ResolveRequired<ISpokeT<Spoke>>();
+        _spoke = TestEnv.ResolveRequired<TheSpoke>();
         // THEN
         Assert.NotNull(_spoke);
     }
@@ -94,44 +94,51 @@ public class ExchangeTests : ActorTestsT<IExchange>
         // GIVEN
         Assert.NotNull(_spokeBuilder);
         // WHEN
-        var spoke = _spokeBuilder.Build();
+        _spoke = _spokeBuilder.Build();
         // THEN
         Assert.NotNull(_spoke);
     }
 
-    // [Fact]
-    // public async Task ShouldActivateSpoke()
-    // {
-    //     var ts = new CancellationTokenSource();
-    //     // GIVEN
-    //     Assert.NotNull(TestEnv);
-    //     var host = TestEnv.ResolveHosted<Spoke>();
-    //     Assert.NotNull(host);
-    //     var executor = TestEnv.ResolveRequired<IHostExecutor>();
-    //     Assert.NotNull(executor);
-    //     // WHEN
-    //     await executor.StartAsync(ts.Token);
-    //     // THEN
-    //     // WHEN
-    //     Thread.Sleep(50);
-    //
-    //     Assert.True(_consumer1.Status.HasFlag(ComponentStatus.Active));
-    //     Assert.True(_consumer2.Status.HasFlag(ComponentStatus.Active));
-    //     Assert.True(_producer.Status.HasFlag(ComponentStatus.Active));
-    //
-    //
-    //     await Task.Run(async () =>
-    //     {
-    //         await Task.Delay(3, ts.Token);
-    //         ts.Cancel(); // THEN
-    //     }, ts.Token);
-    //
-    //     Thread.Sleep(2);
-    //
-    //     Assert.False(_producer.Status.HasFlag(ComponentStatus.Active));
-    //     Assert.False(_consumer1.Status.HasFlag(ComponentStatus.Active));
-    //     Assert.False(_consumer2.Status.HasFlag(ComponentStatus.Active));
-    // }
+    [Fact]
+    public async Task ShouldActivateSpoke()
+    {
+        var ts = new CancellationTokenSource();
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        var host = TestEnv.ResolveHosted<TheSpoke>();
+        Assert.NotNull(host);
+        var executor = TestEnv.ResolveRequired<IHostExecutor>();
+        Assert.NotNull(executor);
+        
+        // WHEN
+        await executor.StartAsync(ts.Token).ConfigureAwait(false);
+        _spoke = executor.Services.ToArray()[0] as TheSpoke;
+        Assert.NotNull(_spoke);
+        // THEN
+        
+        // WHEN
+        await Task.Run(async () =>
+        {
+            Assert.Same(_spoke,executor.Services.ToArray()[0]);
+            while (_spoke.Status != ComponentStatus.Active)
+            {
+                Thread.Sleep(1);
+            }
+            return Task.CompletedTask;
+        }, ts.Token)
+            .ConfigureAwait(false);
+    
+        Assert.Equal(ComponentStatus.Active,_spoke.Status);
+    
+        await Task.Run(async () =>
+        {
+            await Task.Delay(3, ts.Token).ConfigureAwait(false);
+            ts.Cancel(); // THEN
+            executor.StopAsync(ts.Token);
+        }, ts.Token).ConfigureAwait(false);
+        Thread.Sleep(2000);
+        Assert.NotEqual(ComponentStatus.Active, _spoke.Status);
+    }
 
     [Fact]
     public void ShouldResolveProjector()
@@ -152,9 +159,25 @@ public class ExchangeTests : ActorTestsT<IExchange>
         _consumer1 = TestEnv.ResolveRequired<IConsumer1>();
         _consumer2 = TestEnv.ResolveRequired<IConsumer2>();
 
-        _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<ISpokeT<Spoke>>>();
-        _spoke = TestEnv.ResolveRequired<ISpokeT<Spoke>>();
+        _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<TheSpoke>>();
+        
+        _spoke = TestEnv.ResolveRequired<TheSpoke>();
+        
         _projector = TestEnv.Resolve<IProjector>();
+    }
+
+
+    [Fact]
+    public async Task ShouldAcceptOnlyOneConsumerOfAConcreteType()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        
+        
+        Assert.NotNull(_spoke);
+        // WHEN
+        
+        // THEN
     }
 
     protected override void SetTestEnvironment()

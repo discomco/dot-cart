@@ -6,22 +6,15 @@ using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-[Name("Consumer2")]
-public class Consumer2 : ActorB, IActor<TheSpoke>, IConsumer2
+[Name("NamedConsumer2")]
+public class NamedConsumer2 : ActorB, IActor<TheSpoke>, INamedConsumer
 {
-    public Consumer2(IExchange exchange) : base(exchange)
+    public NamedConsumer2(IExchange exchange) : base(exchange)
     {
+        _exchange = exchange;
     }
 
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return (Task<IMsg>)Task.CompletedTask;
-    }
+    private readonly IExchange _exchange;
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
@@ -45,8 +38,16 @@ public class Consumer2 : ActorB, IActor<TheSpoke>, IConsumer2
             _exchange.Unsubscribe(TopicAtt.Get<TheMsg>(), this);
         }, cancellationToken);
     }
-}
 
-public interface IConsumer2 : IActor
-{
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)Task.CompletedTask;
+    }
+
+
 }

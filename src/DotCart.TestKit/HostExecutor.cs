@@ -17,17 +17,20 @@ public interface IHostExecutor
 {
     Task StartAsync(CancellationToken token = default);
     Task StopAsync(CancellationToken token = default);
+    
+    IEnumerable<IHostedService> Services { get; }
 }
 
 public class HostExecutor : IHostExecutor
 {
     private readonly ILogger _logger;
-    private readonly IEnumerable<IHostedService> _services;
+
+    public IEnumerable<IHostedService> Services { get; }
 
     public HostExecutor(ILogger logger, IEnumerable<IHostedService> services)
     {
         _logger = logger;
-        _services = services;
+        Services = services;
     }
 
     public Task StartAsync(CancellationToken token)
@@ -63,7 +66,7 @@ public class HostExecutor : IHostExecutor
     {
         List<Exception> exceptions = null;
 
-        foreach (var service in _services)
+        foreach (var service in Services)
             try
             {
                 callback(service);

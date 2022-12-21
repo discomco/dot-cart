@@ -6,11 +6,13 @@ using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public interface IConsumer1
+public interface IConsumer1 : IActor
 {
+    
 }
 
-public class Consumer1 : ActorB, IActor<Spoke>, IConsumer1
+[Name("Consumer1")]
+public class Consumer1 : ActorB, IActor<TheSpoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)
     {

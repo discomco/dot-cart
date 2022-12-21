@@ -40,12 +40,19 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     public override async Task StartAsync(CancellationToken cancellationToken)
     {
-        var starting = "STARTING".AsVerb();
-        Log.Information($"{starting} Spoke:[{NameAtt.Get<TSpoke>()}]");
-        await ActivateExchangeAsync(cancellationToken).ConfigureAwait(false);
-        await ActivateActors(cancellationToken).ConfigureAwait(false);
-        StartProjectorAsync(cancellationToken).ConfigureAwait(false);
-        base.StartAsync(cancellationToken).ConfigureAwait(false);
+        try
+        {
+            Log.Information($"{AppVerbs.Starting} Spoke:[{NameAtt.Get<TSpoke>()}]");
+            await ActivateExchangeAsync(cancellationToken).ConfigureAwait(false);
+            await ActivateActors(cancellationToken).ConfigureAwait(false);
+            StartProjectorAsync(cancellationToken).ConfigureAwait(false);
+            base.StartAsync(cancellationToken).ConfigureAwait(false);
+        }
+        catch (Exception e)
+        {
+            Log.Fatal($"{AppErrors.Error} => {e.InnerAndOuter()}");
+            throw;
+        }
     }
 
 
@@ -56,12 +63,10 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
             {
                 while (actor.Value.Status != ComponentStatus.Active)
                 {
-                    var starting = "STARTING".AsVerb();
-                    Log.Information($"{starting} [{NameAtt.Get(this)}]");
+                    Log.Information($"{AppVerbs.Starting} [{NameAtt.Get(this)}]");
                     actor.Value.Activate(cancellationToken).ConfigureAwait(false);
                     await Task.Delay(20, cancellationToken).ConfigureAwait(false);
                 }
-
                 _allActorsUp = ScanActors();
             }
     }
@@ -75,19 +80,17 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     {
         while (_exchange.Status != ComponentStatus.Active)
         {
-            var activating = "ACTIVATING".AsVerb();
-            Log.Information($"{activating} [{NameAtt.Get(_exchange)}]");
+            Log.Information($"{AppVerbs.Activating} [{NameAtt.Get(_exchange)}]");
             _exchange.Activate(cancellationToken).ConfigureAwait(false);
             if (_exchange.Status != ComponentStatus.Active)
             {
-                var waiting = "WAIT_1S".AsVerb();
-                Log.Information($"{waiting} [{NameAtt.Get(_exchange)}]...");
-                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+                Log.Information($"{AppVerbs.Waiting1s} [{NameAtt.Get(_exchange)}]...");
+                Thread.Sleep(1);
+//                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                var started = "STARTED".AsFact();
-                Log.Information($"{started} [{NameAtt.Get(_exchange)}]");
+                Log.Information($"{AppFacts.Started} [{NameAtt.Get(_exchange)}]");
             }
         }
     }
@@ -122,15 +125,17 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
         return Task.Run(async () =>
         {
             Status = ComponentStatus.Active;
-            Log.Debug($"::RUNNING:: Spoke: [{NameAtt.Get<TSpoke>()}");
-            while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1000);
+            Log.Debug($"{AppVerbs.Running} Spoke: [{NameAtt.Get<TSpoke>()}");
+            while (!stoppingToken.IsCancellationRequested) 
+                Thread.Sleep(1000);
+            return Task.CompletedTask;
         }, stoppingToken);
     }
 
     public override Task StopAsync(CancellationToken cancellationToken)
     {
         Status = ComponentStatus.Inactive;
-        Log.Debug($"::STOPPED:: Spoke: [{NameAtt.Get<TSpoke>()}");
+        Log.Debug($"{AppFacts.Stopped} Spoke: [{NameAtt.Get<TSpoke>()}");
         return base.StopAsync(cancellationToken);
     }
 }

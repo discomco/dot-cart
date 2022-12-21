@@ -6,6 +6,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 
 namespace Engine.Behavior;
@@ -16,6 +17,21 @@ public static partial class Inject
 
 public static class ChangeDetails
 {
+
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddSingleton<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _newEvt)
+            .AddTransient(_ => _initialized2Cmd);
+    }
+
+    
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
@@ -55,7 +71,10 @@ public static class ChangeDetails
             return fbk;
         };
 
-    public static EvtCtorT<IEvt, Contract.ChangeDetails.Payload, EventMeta>
+    public static readonly EvtCtorT<
+            IEvt, 
+            Contract.ChangeDetails.Payload, 
+            EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
                 TopicAtt.Get<IEvt>(),
@@ -74,18 +93,6 @@ public static class ChangeDetails
     
      
 
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddTransient<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _initialized2Cmd);
-    }
 
     
 

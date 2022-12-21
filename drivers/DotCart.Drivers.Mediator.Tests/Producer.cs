@@ -5,7 +5,8 @@ using DotCart.TestKit.Schema;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public class Producer : ActorB, IActor<Spoke>, IProducer
+[Name("Producer")]
+public class Producer : ActorB, IActor<TheSpoke>, IProducer
 {
     public Producer(IExchange exchange) : base(exchange)
     {
