@@ -101,10 +101,11 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Make Scripts Executable
+        run: chmod +x ./cid
       - name: Verify NATS connection
-        run: curl http://nats:8222
-#      - name: Make Scripts Executable
-#        run: chmod +x ./cid
+        run: ./cid/check_nats.sh nats
+
 #      - name: Install dependencies
 #        run: dotnet restore
 #      - name: Test Packages
