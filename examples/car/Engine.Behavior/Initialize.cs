@@ -17,13 +17,28 @@ public static partial class Inject
 
 public static class Initialize
 {
-    public static readonly EvtCtorT<IEvt, Contract.Initialize.Payload, EventMeta>
+    public static readonly EvtCtorT<
+            IEvt, 
+            Contract.Initialize.Payload, 
+            EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
                 TopicAtt.Get<IEvt>(),
                 payload.ToBytes(),
                 meta.ToBytes()
             );
+
+    public static readonly CommandCtorT<
+            ICmd, 
+            Contract.Initialize.Payload, 
+            EventMeta>
+        _newCmd =
+            (id, payload, meta) => Command.New(id,
+                TopicAtt.Get<ICmd>(),
+                payload.ToBytes(),
+                meta.ToBytes()
+            );
+
 
     private static readonly Evt2Fact<
             Contract.Initialize.Fact,
@@ -71,19 +86,6 @@ public static class Initialize
 
                 return fbk;
             };
-
-
-    // public static Event NewEvt(
-    //     IID aggregateID,
-    //     Contract.Initialize.Payload payload,
-    //     EventMeta meta)
-    // {
-    //     return Event.New(aggregateID,
-    //         TopicAtt.Get<IEvt>(),
-    //         payload.ToBytes(),
-    //         meta.ToBytes()
-    //     );
-    // }
 
     private static readonly RaiseFuncT<Engine, Cmd>
         _raiseFunc =
@@ -138,31 +140,15 @@ public static class Initialize
         }
     }
 
-    // public record EvtMeta(string AggregateType, string AggregateId)
-    //     : EventMeta(AggregateType, AggregateId);
-
-
     [Topic(Topics.Evt_v1)]
     public interface IEvt : IEvtT<Contract.Initialize.Payload>
     {
     }
 
-
-    // public record Evt(IID AggregateID,
-    //     Contract.Initialize.Payload Payload,
-    //     EvtMeta Meta) : EvtT<
-    //     Contract.Initialize.Payload,
-    //     EvtMeta>(AggregateID,
-    //     TopicAtt.Get<Evt>(),
-    //     Payload,
-    //     Meta)
-    // {
-    //     public static Evt New(IID aggregateID, Contract.Initialize.Payload payload)
-    //     {
-    //         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), aggregateID.Id());
-    //         return new Evt(aggregateID, payload, meta);
-    //     }
-    // }
+    [Topic(Topics.Cmd_v1)]
+    public interface ICmd : ICmdT<Contract.Initialize.Payload>
+    {
+    }
 
 
     [Topic(Topics.Cmd_v1)]

@@ -2,6 +2,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
 
+
 public delegate Event EvtCtorT<
     TIEvt,
     in TPayload,
@@ -9,3 +10,4 @@ public delegate Event EvtCtorT<
     where TIEvt : IEvtT<TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta;
+

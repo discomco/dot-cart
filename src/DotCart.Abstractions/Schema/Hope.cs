@@ -1,17 +1,14 @@
 namespace DotCart.Abstractions.Schema;
 
-public interface IHope : IDto
+public interface IHopeB : IDto
 {
 }
 
-public interface IHope<TPayload> : IHope
+public interface IHopeT<TPayload> : IHopeB
     where TPayload : IPayload
 {
 }
 
-public abstract record HopeT<TPayload>(string AggId, TPayload Payload)
-    where TPayload : IPayload
-{
-    public string AggId { get; } = AggId;
-    public TPayload Payload { get; } = Payload;
-}
+public abstract record HopeT<TPayload>(string AggId, TPayload Payload) 
+    : Dto<TPayload>(AggId, Payload)
+    where TPayload : IPayload;

@@ -18,7 +18,7 @@ public class ActorTests : EffectsTests<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

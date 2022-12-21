@@ -32,7 +32,7 @@ public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<TheID, TheDoc>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

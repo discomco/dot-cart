@@ -127,7 +127,7 @@ public class ESDBProjectorTests : IoCTests
         _executor = TestEnv.ResolveRequired<IHostExecutor>();
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
         DotEnv.FromEmbedded();
     }

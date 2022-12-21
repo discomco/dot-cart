@@ -8,18 +8,6 @@ public static class EventConst
     public const long NewAggregateVersion = -1;
 }
 
-// public abstract record EvtT<TPayload, TMeta>
-//     (IID AggregateID,
-//         string EventType,
-//         TPayload Payload,
-//         TMeta Meta)
-//     : Event(AggregateID.Id(),
-//         EventType,
-//         Payload.ToBytes(),
-//         Meta.ToBytes()), IEvtT<TPayload, TMeta>
-//     where TPayload : IPayload
-//     where TMeta : IEventMeta;
-
 public record Event(
     string AggregateId,
     string EventType,

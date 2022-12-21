@@ -19,7 +19,7 @@ public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.Initialize.Cmd, Cont
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

@@ -18,7 +18,7 @@ public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.ChangeDetails.Cmd, C
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

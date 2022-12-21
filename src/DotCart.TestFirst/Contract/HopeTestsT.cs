@@ -7,7 +7,7 @@ namespace DotCart.TestFirst.Contract;
 
 public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
     where TID : IID
-    where THope : IHope<TPayload>
+    where THope : IHopeT<TPayload>
     where TPayload : IPayload
 
 {

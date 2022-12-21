@@ -12,7 +12,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Initialize.Cmd, Be
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

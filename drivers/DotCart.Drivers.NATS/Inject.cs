@@ -44,7 +44,7 @@ public static class Inject
 
 
     public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services)
-        where TCmd : ICmdB where THope : IHope
+        where TCmd : ICmdB where THope : IHopeB
     {
         return services
             .AddCoreNATS()
@@ -54,7 +54,7 @@ public static class Inject
 
     public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services)
         where TCmd : ICmdB
-        where THope : IHope
+        where THope : IHopeB
     {
         return services
             .AddCoreNATS()

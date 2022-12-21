@@ -14,7 +14,7 @@ public abstract class EffectsTests<
     TFact,
     TReadModelStore> : IoCTests
     where TEvt : IEvtB
-    where TFact : IFact
+    where TFact : IFactB
 
 {
     protected IAggregate _aggregate;

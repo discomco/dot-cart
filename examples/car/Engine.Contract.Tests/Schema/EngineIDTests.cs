@@ -17,7 +17,7 @@ public class EngineIDTests : IDTestsT<Contract.Schema.EngineID>
         _newID = TestEnv.ResolveRequired<IDCtorT<Contract.Schema.EngineID>>();
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

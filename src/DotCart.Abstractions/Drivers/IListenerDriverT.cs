@@ -9,7 +9,7 @@ public interface IListenerDriver : IDriver
 }
 
 public interface IListenerDriverT<TFact> : IListenerDriver
-    where TFact : IFact
+    where TFact : IFactB
 {
     Task<TFact> CreateFactAsync(object source, CancellationToken cancellationToken = default);
 }

@@ -65,7 +65,7 @@ public class InjectFunctionsTests : IoCTests
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

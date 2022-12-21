@@ -16,7 +16,7 @@ public class FactTests : FactTestsT<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

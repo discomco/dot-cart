@@ -141,7 +141,7 @@ public class ESDBEventStoreTests : IoCTests
         _aggregate = _aggregateBuilder.Build();
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
         DotEnv.FromEmbedded();
     }

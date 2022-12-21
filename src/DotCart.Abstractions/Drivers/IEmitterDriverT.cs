@@ -7,7 +7,7 @@ public interface IEmitterDriver : IDriver
 }
 
 public interface IEmitterDriverT<in TFact, TTarget> : IEmitterDriver
-    where TFact : IFact
+    where TFact : IFactB
     where TTarget : class
 {
     Task EmitAsync(TFact fact, CancellationToken cancellationToken = default);

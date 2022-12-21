@@ -129,7 +129,7 @@ public class ReqRspDriverTests : IoCTests
         // _responderActor = TestEnv.ResolveRequired<ITheResponder>();
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

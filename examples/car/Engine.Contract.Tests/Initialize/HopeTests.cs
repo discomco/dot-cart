@@ -14,7 +14,7 @@ public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Initializ
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

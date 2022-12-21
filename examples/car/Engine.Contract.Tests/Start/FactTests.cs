@@ -13,7 +13,7 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.Start.Fac
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

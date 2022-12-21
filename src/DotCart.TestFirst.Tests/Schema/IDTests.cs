@@ -12,7 +12,7 @@ public class IDTests : IDTestsT<TheID>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

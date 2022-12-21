@@ -17,7 +17,7 @@ public class SpokeTests : SpokeTestsT<Context.Start.Spoke>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

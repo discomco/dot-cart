@@ -4,12 +4,12 @@ using DotCart.Core;
 namespace Throttle.Client.Increase;
 
 [Topic(Topics.Hope)]
-public interface IHope : IHope<Payload>
+public interface IHope : IHopeT<Payload>
 {
 }
 
 [Topic(Topics.Fact)]
-public interface IFact : IFact<Payload>
+public interface IFact : IFactT<Payload>
 {
 }
 

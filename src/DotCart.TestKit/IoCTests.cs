@@ -11,7 +11,7 @@ public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
     {
         TestEnv = testEnv;
         TestHelper = TestEnv.ResolveRequired<ITestHelper>();
-        SetTestEnvironment();
+        SetEnVars();
         testEnv.Services
             .AddBaseTestEnv();
         InjectDependencies(testEnv.Services);
@@ -24,11 +24,11 @@ public abstract class IoCTests : OutputTests, IClassFixture<IoCTestContainer>
 
     public override void Dispose()
     {
-        TestEnv?.Dispose();
+        TestEnv.Dispose();
         base.Dispose();
     }
 
     protected abstract void Initialize();
-    protected abstract void SetTestEnvironment();
+    protected abstract void SetEnVars();
     protected abstract void InjectDependencies(IServiceCollection services);
 }

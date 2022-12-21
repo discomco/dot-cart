@@ -18,7 +18,7 @@ public class SpokeTests : SpokeTestsT<Context.Initialize.Spoke>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
         DotEnv.FromEmbedded();
     }

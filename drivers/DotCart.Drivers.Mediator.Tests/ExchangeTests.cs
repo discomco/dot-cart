@@ -158,29 +158,13 @@ public class ExchangeTests : ActorTestsT<IExchange>
         _producer = TestEnv.ResolveRequired<IProducer>();
         _consumer1 = TestEnv.ResolveRequired<IConsumer1>();
         _consumer2 = TestEnv.ResolveRequired<IConsumer2>();
-
         _spokeBuilder = TestEnv.ResolveRequired<ISpokeBuilder<TheSpoke>>();
-        
-        _spoke = TestEnv.ResolveRequired<TheSpoke>();
-        
+        _spoke = _spokeBuilder.Build();
         _projector = TestEnv.Resolve<IProjector>();
     }
 
 
-    [Fact]
-    public async Task ShouldAcceptOnlyOneConsumerOfAConcreteType()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        
-        
-        Assert.NotNull(_spoke);
-        // WHEN
-        
-        // THEN
-    }
-
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

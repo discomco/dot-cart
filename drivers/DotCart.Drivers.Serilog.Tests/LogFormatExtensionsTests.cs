@@ -25,7 +25,7 @@ public class LogConstantsTests : IoCTests
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

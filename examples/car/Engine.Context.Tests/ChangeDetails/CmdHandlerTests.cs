@@ -18,7 +18,7 @@ public class CmdHandlerTests
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
         
     }

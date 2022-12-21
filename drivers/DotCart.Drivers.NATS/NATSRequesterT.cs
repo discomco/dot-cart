@@ -6,7 +6,7 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHope
+public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHopeB
 {
     private readonly IEncodedConnection _bus;
 

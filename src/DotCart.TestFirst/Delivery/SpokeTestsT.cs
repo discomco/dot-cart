@@ -97,16 +97,16 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // WHEN
         var _executor = TestEnv.ResolveRequired<IHostExecutor>();
         Assert.NotNull(_executor);
+        _spoke = (TSpoke)_executor.Services.ToArray()[0];
         // THEN
-        _executor.StartAsync(cts.Token);
+        await _executor.StartAsync(cts.Token);
         var isStarted = false;
         await Task.Run(() =>
         {
-            Thread.Sleep(500);
-            while (!cts.IsCancellationRequested)
+            while (!cts.IsCancellationRequested && _spoke.Status != ComponentStatus.Active)
             {
                 Thread.Sleep(1);
-                isStarted = _spoke.Status == ComponentStatus.Inactive;
+                isStarted = _spoke.Status == ComponentStatus.Active;
             }
         }, cts.Token);
         Assert.True(isStarted);

@@ -8,7 +8,7 @@ public delegate TCmd Evt2Cmd<out TCmd, in TEvt>(Event Evt)
     where TCmd : ICmdB;
 
 public delegate TCmd Fact2Cmd<out TCmd, in TFact>(TFact fact)
-    where TFact : IFact
+    where TFact : IFactB
     where TCmd : ICmdB;
 
 public delegate TState Evt2State<TState, in TEvt>(TState state, Event evt)
@@ -16,5 +16,5 @@ public delegate TState Evt2State<TState, in TEvt>(TState state, Event evt)
     where TEvt : IEvtB;
 
 public delegate TFact Evt2Fact<out TFact, in TEvt>(Event evt)
-    where TFact : IFact
+    where TFact : IFactB
     where TEvt : IEvtB;

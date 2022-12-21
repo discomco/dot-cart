@@ -7,7 +7,7 @@ using Serilog;
 namespace DotCart.Drivers.NATS;
 
 public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
-    where THope : IHope
+    where THope : IHopeB
 {
     private readonly IEncodedConnection _bus;
     private CancellationTokenSource _cts;

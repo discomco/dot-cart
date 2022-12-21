@@ -9,7 +9,7 @@ using Serilog;
 namespace DotCart.Drivers.RabbitMQ;
 
 public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFact>
-    where TFact : IFact
+    where TFact : IFactB
 {
     private readonly IConnectionFactory _connFact;
     private IModel _channel;

@@ -112,7 +112,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregat
         _newID = TestEnv.ResolveRequired<IDCtorT<Schema.EngineID>>();
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

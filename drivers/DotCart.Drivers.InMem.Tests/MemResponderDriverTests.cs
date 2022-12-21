@@ -14,7 +14,7 @@ public class MemResponderDriverTests : IoCTests
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

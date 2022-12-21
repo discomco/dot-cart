@@ -15,7 +15,7 @@ public class PayloadTests : PayloadTestsT<Contract.Stop.Payload>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

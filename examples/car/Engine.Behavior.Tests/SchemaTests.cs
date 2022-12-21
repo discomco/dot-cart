@@ -12,7 +12,7 @@ public class SchemaTests : SchemaTests<Schema.EngineID, Engine>
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

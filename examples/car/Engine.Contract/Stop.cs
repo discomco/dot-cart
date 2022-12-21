@@ -21,7 +21,7 @@ public static class Stop
     }
 
     [Topic(Topics.Fact_v1)]
-    public interface IFact : IFact<Payload>
+    public interface IFact : IFactT<Payload>
     {
     }
 
@@ -36,7 +36,7 @@ public static class Stop
     }
 
     [Topic(Topics.Hope_v1)]
-    public interface IHope : IHope<Payload>
+    public interface IHope : IHopeT<Payload>
     {
     }
 

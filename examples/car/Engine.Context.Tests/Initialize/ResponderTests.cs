@@ -21,7 +21,7 @@ public class ResponderTests : ResponderTestsT<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

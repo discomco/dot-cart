@@ -14,7 +14,7 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDet
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

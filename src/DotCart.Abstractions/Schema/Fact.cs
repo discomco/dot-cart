@@ -1,13 +1,14 @@
 namespace DotCart.Abstractions.Schema;
 
-public interface IFact : IDto
+public interface IFactB : IDto
 {
 }
 
-public interface IFact<TPayload> : IFact
+public interface IFactT<TPayload> : IFactB
     where TPayload : IPayload
 {
 }
 
-public abstract record FactT<TPayload>(string AggId, TPayload Payload) : IFact<TPayload>
+public abstract record FactT<TPayload>(string AggId, TPayload Payload) 
+    : Dto<TPayload>(AggId, Payload), IFactT<TPayload>
     where TPayload : IPayload;

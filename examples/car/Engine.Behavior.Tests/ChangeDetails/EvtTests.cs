@@ -20,7 +20,7 @@ public class EvtTests : EvtTestsT<Schema.EngineID, Behavior.ChangeDetails.IEvt, 
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

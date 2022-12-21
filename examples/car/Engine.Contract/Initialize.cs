@@ -23,7 +23,7 @@ public static class Initialize
     }
 
     [Topic(Topics.Hope_v1)]
-    public interface IHope : IHope<Payload>
+    public interface IHope : IHopeT<Payload>
     {
     }
 
@@ -37,7 +37,7 @@ public static class Initialize
     }
 
     [Topic(Topics.Fact_v1)]
-    public interface IFact : IFact<Payload>
+    public interface IFact : IFactT<Payload>
     {
     }
 

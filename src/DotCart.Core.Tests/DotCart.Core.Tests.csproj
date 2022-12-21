@@ -27,6 +27,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
+        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 
 </Project>

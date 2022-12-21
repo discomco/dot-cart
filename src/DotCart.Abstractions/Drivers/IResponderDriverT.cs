@@ -9,6 +9,6 @@ public interface IResponderDriver : IDriver
 }
 
 public interface IResponderDriverT<THope> : IResponderDriver
-    where THope : IHope
+    where THope : IHopeB
 {
 }

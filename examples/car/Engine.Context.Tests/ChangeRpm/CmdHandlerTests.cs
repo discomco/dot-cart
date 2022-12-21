@@ -14,7 +14,7 @@ public class CmdHandlerTests : EngineCmdHandlerTests<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

@@ -20,7 +20,7 @@ public class ToDocTests : ProjectionTestsT<
         
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
         
     }

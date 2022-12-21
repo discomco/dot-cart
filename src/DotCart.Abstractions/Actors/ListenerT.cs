@@ -5,7 +5,7 @@ using DotCart.Abstractions.Schema;
 namespace DotCart.Abstractions.Actors;
 
 public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
-    where TFact : IFact
+    where TFact : IFactB
     where TCmd : ICmdB
 {
     private readonly ICmdHandler _cmdHandler;

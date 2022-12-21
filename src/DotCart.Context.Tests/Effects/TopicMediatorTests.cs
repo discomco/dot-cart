@@ -19,7 +19,7 @@ public class TopicMediatorTests : IoCTests
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

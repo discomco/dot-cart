@@ -7,7 +7,7 @@ namespace DotCart.TestFirst.Contract;
 
 public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
     where TID : IID
-    where TFact : IFact<TPayload>
+    where TFact : IFactT<TPayload>
     where TPayload : IPayload
 {
     protected FactCtorT<TFact, TPayload> _newFact;

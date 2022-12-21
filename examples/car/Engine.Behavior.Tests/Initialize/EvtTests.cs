@@ -22,7 +22,7 @@ public class EvtTests : EvtTestsT<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

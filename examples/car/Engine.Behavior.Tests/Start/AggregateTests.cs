@@ -20,7 +20,7 @@ public class AggregateTests : AggregateTestsT<
     {
     }
 
-    protected override void SetTestEnvironment()
+    protected override void SetEnVars()
     {
     }
 

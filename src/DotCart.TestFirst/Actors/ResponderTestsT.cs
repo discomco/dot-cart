@@ -10,7 +10,7 @@ namespace DotCart.TestFirst.Actors;
 
 public abstract class ResponderTestsT<THope, TCmd> : IoCTests
 //    where TIResponder : IResponder
-    where THope : IHope
+    where THope : IHopeB
     where TCmd : ICmdB
 {
     private IResponderT<THope,TCmd> _responder;

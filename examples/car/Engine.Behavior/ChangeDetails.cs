@@ -91,10 +91,6 @@ public static class ChangeDetails
                 };
             };
     
-     
-
-
-    
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload, EventMeta Meta)
@@ -114,9 +110,7 @@ public static class ChangeDetails
     }
 
     [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.ChangeDetails.Payload>
-    {
-    }
+    public interface IEvt : IEvtT<Contract.ChangeDetails.Payload> {}
 
     [Name(OnInitialized_v1)]
     public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>

@@ -23,7 +23,7 @@ public static class ChangeDetails
 
     [Topic(Topics.Hope_v1)]
     public record Hope(string AggId, Payload Payload)
-        : HopeT<Payload>(AggId, Payload), IHope<Payload>
+        : HopeT<Payload>(AggId, Payload), IHopeT<Payload>
     {
         public static Hope New(string aggId, Payload payload)
         {
