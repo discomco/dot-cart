@@ -105,8 +105,7 @@ jobs:
         run: chmod +x ./cid
       - name: Verify NATS connection
         run: ./cid/check_nats.sh nats
-
-#      - name: Install dependencies
-#        run: dotnet restore
-#      - name: Test Packages
-#        run: dotnet test --no-restore --verbosity minimal
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Test Packages
+        run: dotnet test --no-restore --verbosity minimal --logger trx --results-directory ./TST-RES
