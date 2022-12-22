@@ -13,7 +13,7 @@ namespace Engine.Context;
 
 public static class ChangeRpm
 {
-    public const string ToRedisDoc_v1 = "engine:changed_rpm:to_redis_doc:v1";
+    public const string ToRedisDoc_v1 = Behavior.ChangeRpm.Topics.Evt_v1 +  ":to_redis_doc";
 
 
     public const string Spoke_v1 = "engine:change_rpm:spoke:v1";
@@ -31,7 +31,7 @@ public static class ChangeRpm
 
 
     [Name(ToRedisDoc_v1)]
-    [DbName("3")]
+    [DbName(Constants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,

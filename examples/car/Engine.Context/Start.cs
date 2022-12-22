@@ -13,9 +13,9 @@ namespace Engine.Context;
 
 public static class Start
 {
-    public const string ToRedisDocName_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_doc";
+    public const string ToRedisDoc_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_doc";
 
-    public const string SpokeName = "engine:start:spoke";
+    public const string Spoke_v1 = "engine:start:spoke:v1";
 
     public static IServiceCollection AddStartSpoke(this IServiceCollection services)
     {
@@ -32,7 +32,8 @@ public static class Start
     {
     }
 
-    [Name(ToRedisDocName_v1)]
+    [Name(ToRedisDoc_v1)]
+    [DbName(Constants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,
@@ -47,7 +48,7 @@ public static class Start
         }
     }
 
-    [Name(SpokeName)]
+    [Name(Spoke_v1)]
     public class Spoke : SpokeT<Spoke>
     {
         public Spoke(

@@ -1,4 +1,5 @@
 using DotCart.TestFirst.Actors;
+using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -6,11 +7,10 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Start;
 
-public class ResponderTests : ResponderTestsT<
+public class ResponderTests : NATSResponderTestsT<
     Contract.Start.Hope,
     Behavior.Start.Cmd>
 {
-    private IEncodedConnection _bus;
 
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -30,14 +30,5 @@ public class ResponderTests : ResponderTestsT<
             .AddStartSpoke();
     }
 
-    [Fact]
-    public override async Task ShouldResolveConnection()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _bus = TestEnv.ResolveRequired<IEncodedConnection>();
-        // THEN
-        Assert.NotNull(_bus);
-    }
+ 
 }

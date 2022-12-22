@@ -85,7 +85,18 @@ public abstract class ProjectionTestsT<
     }
 
     [Fact]
-    public async void ShouldSpokeHaveNameAttribute()
+    public async Task ShouldHaveDbNameAttribute()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN 
+        var dbName = DbNameAtt.Get<TProjection>();
+        // THEN
+        Assert.NotEmpty(dbName);
+    }
+
+    [Fact]
+    public async Task ShouldSpokeHaveNameAttribute()
     {
         // GIVEN
         Assert.NotNull(TestEnv);

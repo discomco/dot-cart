@@ -24,6 +24,8 @@ public static class Inject
             // else
             .AddNatsClient(options =>
             {
+                options.AllowReconnect = true;
+                options.MaxReconnect = 10;
                 options.User = Config.User;
                 options.Password = Config.Password;
                 options.Servers = new[]

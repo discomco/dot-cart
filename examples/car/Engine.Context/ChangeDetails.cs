@@ -24,7 +24,7 @@ public static class ChangeDetails
     public const string Spoke_v1 = "engine:change_details:spoke:v1";
 
 
-    public const string ToRedisDoc_v1 = "engine:details_changed:to_redis_doc:v1";
+    public const string ToRedisDoc_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc";
 
     private static readonly Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope>
         _hope2Cmd =
@@ -65,13 +65,16 @@ public static class ChangeDetails
     [Name(Spoke_v1)]
     public class Spoke : SpokeT<Spoke>
     {
-        public Spoke(IExchange exchange, IProjector projector) : base(exchange, projector)
+        public Spoke(
+            IExchange exchange,
+            IProjector projector)
+            : base(exchange, projector)
         {
         }
     }
 
     [Name(ToRedisDoc_v1)]
-    [DbName("3")]
+    [DbName(Constants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Behavior.Engine>,
         Behavior.Engine,

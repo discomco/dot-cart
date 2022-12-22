@@ -55,7 +55,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
     }
 
     [Fact]
-    public void ShouldResolveActors()
+    public Task ShouldResolveActors()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -64,6 +64,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // THEN
         Assert.NotNull(_actors);
         Assert.NotEmpty(_actors);
+        return Task.CompletedTask;
     }
 
     [Fact]
@@ -88,7 +89,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
     }
 
     [Fact]
-    public async Task ShouldStartSpoke()
+    public void ShouldStartSpoke()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -99,16 +100,16 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         Assert.NotNull(_executor);
         _spoke = (TSpoke)_executor.Services.ToArray()[0];
         // THEN
-        await _executor.StartAsync(cts.Token);
+        _executor.StartAsync(cts.Token).Wait(cts.Token);
         var isStarted = false;
-        await Task.Run(() =>
+        Task.Run(() =>
         {
             while (!cts.IsCancellationRequested && _spoke.Status != ComponentStatus.Active)
             {
                 Thread.Sleep(1);
                 isStarted = _spoke.Status == ComponentStatus.Active;
             }
-        }, cts.Token);
+        }, cts.Token).Wait(cts.Token);
         Assert.True(isStarted);
     }
 

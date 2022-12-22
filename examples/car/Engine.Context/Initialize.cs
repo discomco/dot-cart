@@ -13,7 +13,7 @@ namespace Engine.Context;
 
 public static class Initialize
 {
-    public const string ToRedisDocName = "engine:initialized:to_redis_doc:v1";
+    public const string ToRedisDoc_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_doc";
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
@@ -32,7 +32,8 @@ public static class Initialize
     {
     }
 
-    [Name(ToRedisDocName)]
+    [Name(ToRedisDoc_v1)]
+    [DbName(Constants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Behavior.Engine>,
             Behavior.Engine,
