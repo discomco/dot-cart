@@ -15,12 +15,10 @@ public class SpokeTests : SpokeTestsT<Context.ChangeDetails.Spoke>
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

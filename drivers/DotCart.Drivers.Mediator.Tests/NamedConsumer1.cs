@@ -11,6 +11,21 @@ public class NamedConsumer1 : ActorB, IActor<TheSpoke>, INamedConsumer
 {
     private readonly IExchange _exchange;
 
+    public NamedConsumer1(IExchange exchange) : base(exchange)
+    {
+        _exchange = exchange;
+    }
+
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)Task.CompletedTask;
+    }
+
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
@@ -32,20 +47,5 @@ public class NamedConsumer1 : ActorB, IActor<TheSpoke>, INamedConsumer
             Log.Information($"{Name} is unsubscribing from {_exchange.GetType()}");
             _exchange.Unsubscribe(TopicAtt.Get<TheMsg>(), this);
         }, cancellationToken);
-    }
-
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return (Task<IMsg>)Task.CompletedTask;
-    }
-
-    public NamedConsumer1(IExchange exchange) : base(exchange)
-    {
-        _exchange = exchange;
     }
 }

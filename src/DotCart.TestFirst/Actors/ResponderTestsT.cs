@@ -13,7 +13,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
     where THope : IHopeB
     where TCmd : ICmdB
 {
-    private IResponderT<THope,TCmd> _responder;
+    private IResponderT<THope, TCmd> _responder;
 
     public ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -41,7 +41,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
         Assert.NotNull(TestEnv);
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
         // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<THope,TCmd>>();
+        _responder = TestEnv.ResolveRequired<IResponderT<THope, TCmd>>();
         // THEN
         Assert.NotNull(_responder);
     }
@@ -55,7 +55,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
 
         // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<THope,TCmd>>();
+        _responder = TestEnv.ResolveRequired<IResponderT<THope, TCmd>>();
         try
         {
             Assert.NotNull(_responder);

@@ -7,7 +7,6 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-
 public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
     where TPolicy : IAggregatePolicy
     where TEvt : IEvtB

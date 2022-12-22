@@ -109,27 +109,24 @@ public class ExchangeTests : ActorTestsT<IExchange>
         Assert.NotNull(host);
         var executor = TestEnv.ResolveRequired<IHostExecutor>();
         Assert.NotNull(executor);
-        
+
         // WHEN
         await executor.StartAsync(ts.Token).ConfigureAwait(false);
         _spoke = executor.Services.ToArray()[0] as TheSpoke;
         Assert.NotNull(_spoke);
         // THEN
-        
+
         // WHEN
         await Task.Run(async () =>
-        {
-            Assert.Same(_spoke,executor.Services.ToArray()[0]);
-            while (_spoke.Status != ComponentStatus.Active)
             {
-                Thread.Sleep(1);
-            }
-            return Task.CompletedTask;
-        }, ts.Token)
+                Assert.Same(_spoke, executor.Services.ToArray()[0]);
+                while (_spoke.Status != ComponentStatus.Active) Thread.Sleep(1);
+                return Task.CompletedTask;
+            }, ts.Token)
             .ConfigureAwait(false);
-    
-        Assert.Equal(ComponentStatus.Active,_spoke.Status);
-    
+
+        Assert.Equal(ComponentStatus.Active, _spoke.Status);
+
         await Task.Run(async () =>
         {
             await Task.Delay(3, ts.Token).ConfigureAwait(false);

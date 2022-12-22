@@ -9,13 +9,13 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
     </ItemGroup>
 
 
     <ItemGroup>
-        <PackageReference Include="Crayon" Version="2.0.69" />
+        <PackageReference Include="Crayon" Version="2.0.69"/>
     </ItemGroup>
 
 

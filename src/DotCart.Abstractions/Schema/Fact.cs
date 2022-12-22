@@ -9,6 +9,6 @@ public interface IFactT<TPayload> : IFactB
 {
 }
 
-public abstract record FactT<TPayload>(string AggId, TPayload Payload) 
+public abstract record FactT<TPayload>(string AggId, TPayload Payload)
     : Dto<TPayload>(AggId, Payload), IFactT<TPayload>
     where TPayload : IPayload;

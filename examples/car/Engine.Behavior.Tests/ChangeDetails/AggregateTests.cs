@@ -1,5 +1,4 @@
 using DotCart.Context.Behaviors;
-using DotCart.TestFirst;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -9,11 +8,11 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.ChangeDetails;
 
 public class AggregateTests : AggregateTestsT<
-    Schema.EngineID, 
-    Engine, 
+    Schema.EngineID,
+    Engine,
     TryCmdT<Behavior.ChangeDetails.Cmd, Engine>,
     ApplyEvtT<Engine, Behavior.ChangeDetails.IEvt>,
-    Behavior.ChangeDetails.Cmd, 
+    Behavior.ChangeDetails.Cmd,
     Behavior.ChangeDetails.IEvt>
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -22,7 +21,6 @@ public class AggregateTests : AggregateTestsT<
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

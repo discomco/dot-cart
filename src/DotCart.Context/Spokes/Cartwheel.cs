@@ -1,10 +1,8 @@
 using DotCart.Abstractions.Actors;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
 namespace DotCart.Context.Spokes;
-
 
 public class Cartwheel : BackgroundService
 {

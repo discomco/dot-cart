@@ -8,7 +8,6 @@ namespace DotCart.Drivers.Mediator.Tests;
 
 public interface IConsumer1 : IActor
 {
-    
 }
 
 [Name("Consumer1")]

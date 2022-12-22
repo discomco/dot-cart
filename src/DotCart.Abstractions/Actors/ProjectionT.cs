@@ -36,6 +36,7 @@ public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TD
     private readonly Evt2State<TDoc, TEvt> _evt2State;
     private readonly TDriver _modelStore;
     private readonly StateCtorT<TDoc> _newDoc;
+
     protected ProjectionT(
         IExchange exchange,
         TDriver modelStore,

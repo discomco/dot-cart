@@ -9,12 +9,22 @@ namespace DotCart.Drivers.Mediator.Tests;
 [Name("NamedConsumer2")]
 public class NamedConsumer2 : ActorB, IActor<TheSpoke>, INamedConsumer
 {
+    private readonly IExchange _exchange;
+
     public NamedConsumer2(IExchange exchange) : base(exchange)
     {
         _exchange = exchange;
     }
 
-    private readonly IExchange _exchange;
+    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return Task.CompletedTask;
+    }
+
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)Task.CompletedTask;
+    }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
@@ -38,16 +48,4 @@ public class NamedConsumer2 : ActorB, IActor<TheSpoke>, INamedConsumer
             _exchange.Unsubscribe(TopicAtt.Get<TheMsg>(), this);
         }, cancellationToken);
     }
-
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return Task.CompletedTask;
-    }
-
-    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
-    {
-        return (Task<IMsg>)Task.CompletedTask;
-    }
-
-
 }

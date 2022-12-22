@@ -23,18 +23,10 @@ public static class Start
             .AddEngineBehavior()
             .AddStartMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddHostedSpokeT<Spoke,SpokeBuilder>()
-            // .AddTransient<Spoke>()
-            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            // .AddHostedService(provider =>
-            // {
-            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-            //     return spokeBuilder.Build();
-            // })
+            .AddHostedSpokeT<Spoke>()
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddSpokedNATSResponder<Spoke, Contract.Start.Hope, Behavior.Start.Cmd>();
     }
-
 
     public interface IToRedisDoc : IActor<Spoke>
     {
@@ -42,24 +34,15 @@ public static class Start
 
     [Name(ToRedisDocName_v1)]
     public class ToRedisDoc : ProjectionT<
-            IRedisStore<Behavior.Engine>,
-            Behavior.Engine, Behavior.Start.IEvt>,
-        IToRedisDoc
+        IRedisStore<Behavior.Engine>,
+        Behavior.Engine,
+        Behavior.Start.IEvt>, IToRedisDoc
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Behavior.Engine> modelStore,
             Evt2State<Behavior.Engine, Behavior.Start.IEvt> evt2State,
             StateCtorT<Behavior.Engine> newDoc)
             : base(exchange, modelStore, evt2State, newDoc)
-        {
-        }
-    }
-
-    public class SpokeBuilder : SpokeBuilderT<Spoke>
-    {
-        public SpokeBuilder(
-            Spoke spoke,
-            IEnumerable<IActor<Spoke>> actors) : base(spoke, actors)
         {
         }
     }

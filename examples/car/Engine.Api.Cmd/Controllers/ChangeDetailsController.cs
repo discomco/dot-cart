@@ -7,14 +7,14 @@ namespace Engine.Api.Cmd.Controllers;
 
 [ApiController]
 [Route("/api/[controller]")]
-public class ChangeDetailsController: ControllerBase
+public class ChangeDetailsController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<ChangeDetails.Cmd, Contract.ChangeDetails.Hope> _hope2Cmd;
 
     public ChangeDetailsController(
         ICmdHandler cmdHandler,
-        Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope> hope2Cmd)
+        Hope2Cmd<ChangeDetails.Cmd, Contract.ChangeDetails.Hope> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
@@ -34,8 +34,7 @@ public class ChangeDetailsController: ControllerBase
         {
             feedback.SetError(e.AsError());
         }
+
         return BadRequest(feedback);
     }
-    
-    
 }

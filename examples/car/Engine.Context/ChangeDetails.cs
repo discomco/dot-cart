@@ -14,30 +14,17 @@ namespace Engine.Context;
 
 public static class ChangeDetails
 {
-    public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
-    {
-        return services
-            .AddEngineBehavior()
-            .AddChangeDetailsMappers()
-            .AddHostedSpokeT<Spoke, SpokeBuilder>()
-            // .AddTransient<Spoke>()
-            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            // .AddHostedService(provider =>
-            // {
-            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-            //     return spokeBuilder.Build();
-            // })
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
-            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>();
-    }
+    // public class SpokeBuilder : SpokeBuilderT<Spoke>
+    // {
+    //     public SpokeBuilder(Spoke spoke, IEnumerable<IActor<Spoke>> actors) : base(spoke, actors)
+    //     {
+    //     }
+    // }
 
-    public static IServiceCollection AddChangeDetailsMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _hope2Cmd);
-    }
+    public const string Spoke_v1 = "engine:change_details:spoke:v1";
+
+
+    public const string ToRedisDoc_v1 = "engine:details_changed:to_redis_doc:v1";
 
     private static readonly Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope>
         _hope2Cmd =
@@ -57,16 +44,24 @@ public static class ChangeDetails
                 evt.GetPayload<Contract.ChangeDetails.Payload>()
             );
 
-
-    public class SpokeBuilder : SpokeBuilderT<Spoke>
+    public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
     {
-        public SpokeBuilder(Spoke spoke, IEnumerable<IActor<Spoke>> actors) : base(spoke, actors)
-        {
-        }
+        return services
+            .AddEngineBehavior()
+            .AddChangeDetailsMappers()
+            .AddHostedSpokeT<Spoke>()
+            .AddTransient<IActor<Spoke>, ToRedisDoc>()
+            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
+            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>();
     }
 
-    public const string Spoke_v1 = "engine:change_details:spoke:v1";
-    
+    public static IServiceCollection AddChangeDetailsMappers(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _hope2Cmd);
+    }
+
     [Name(Spoke_v1)]
     public class Spoke : SpokeT<Spoke>
     {
@@ -75,14 +70,11 @@ public static class ChangeDetails
         }
     }
 
-
-    public const string ToRedisDoc_v1 = "engine:details_changed:to_redis_doc:v1";
-    
     [Name(ToRedisDoc_v1)]
     [DbName("3")]
     public class ToRedisDoc : ProjectionT<
-        IRedisStore<Behavior.Engine>, 
-        Behavior.Engine, 
+        IRedisStore<Behavior.Engine>,
+        Behavior.Engine,
         Behavior.ChangeDetails.IEvt>, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,

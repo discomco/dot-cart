@@ -23,14 +23,7 @@ public static class ChangeRpm
         return services
             .AddEngineBehavior()
             .AddChangeRpmMappers()
-            .AddHostedSpokeT<Spoke,SpokeBuilder>()
-            // .AddTransient<Spoke>()
-            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            // .AddHostedService(provider =>
-            // {
-            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-            //     return spokeBuilder.Build();
-            // })
+            .AddHostedSpokeT<Spoke>()
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>();
@@ -49,15 +42,6 @@ public static class ChangeRpm
             Evt2State<Behavior.Engine, Behavior.ChangeRpm.IEvt> evt2State,
             StateCtorT<Behavior.Engine> newDoc)
             : base(exchange, modelStore, evt2State, newDoc)
-        {
-        }
-    }
-
-    public class SpokeBuilder : SpokeBuilderT<Spoke>
-    {
-        public SpokeBuilder(
-            Spoke spoke,
-            IEnumerable<IActor<Spoke>> actors) : base(spoke, actors)
         {
         }
     }

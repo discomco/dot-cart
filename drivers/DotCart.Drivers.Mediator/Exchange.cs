@@ -10,9 +10,10 @@ namespace DotCart.Drivers.Mediator;
 [Name("dotcart:exchange:v1")]
 internal class Exchange : ActiveComponent, IExchange
 {
-    
     private readonly object _subMutex = new();
-    private ImmutableDictionary<string, ImmutableList<IActor>> _topics = ImmutableDictionary<string, ImmutableList<IActor>>.Empty;
+
+    private ImmutableDictionary<string, ImmutableList<IActor>> _topics =
+        ImmutableDictionary<string, ImmutableList<IActor>>.Empty;
 
     public void Subscribe(string topic, IActor consumer)
     {
@@ -21,8 +22,8 @@ internal class Exchange : ActiveComponent, IExchange
             if (!_topics.ContainsKey(topic))
                 _topics = _topics.Add(topic, ImmutableList<IActor>.Empty);
             var lst = _topics[topic];
-            lst = lst.All(a => a.Name != consumer.Name) 
-                ? lst.Add(consumer) 
+            lst = lst.All(a => a.Name != consumer.Name)
+                ? lst.Add(consumer)
                 : lst;
             _topics = _topics.SetItem(topic, lst);
         }

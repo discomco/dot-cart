@@ -20,18 +20,16 @@ public static class Inject
             .AddTransient<IConsumer1, Consumer1>()
             .AddTransient<IActor<TheSpoke>, Producer>()
             .AddTransient<IProducer, Producer>()
-           
             .AddTransient<INamedConsumer, NamedConsumer1>()
             .AddTransient<IActor<TheSpoke>, NamedConsumer1>()
             .AddTransient<INamedConsumer, NamedConsumer2>()
             .AddTransient<IActor<TheSpoke>, NamedConsumer2>()
-            
+
             // We add some duplicate consumers
             .AddTransient<INamedConsumer, NamedConsumer1>()
             .AddTransient<IActor<TheSpoke>, NamedConsumer1>()
             .AddTransient<INamedConsumer, NamedConsumer2>()
             .AddTransient<IActor<TheSpoke>, NamedConsumer2>()
-            
             .AddHostedService(provider =>
             {
                 var builder = provider.GetRequiredService<ISpokeBuilder<TheSpoke>>();

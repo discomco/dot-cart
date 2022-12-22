@@ -23,7 +23,7 @@ public class SpokeBuilderT<TSpoke> : ISpokeBuilder<TSpoke>
     }
 }
 
-public interface ISpokeBuilder<out TSpoke> : ISpokeBuilderB 
+public interface ISpokeBuilder<out TSpoke> : ISpokeBuilderB
     where TSpoke : ISpokeT<TSpoke>
 {
     TSpoke Build();

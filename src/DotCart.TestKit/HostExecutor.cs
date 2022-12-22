@@ -15,23 +15,22 @@ public static partial class Inject
 
 public interface IHostExecutor
 {
+    IEnumerable<IHostedService> Services { get; }
     Task StartAsync(CancellationToken token = default);
     Task StopAsync(CancellationToken token = default);
-    
-    IEnumerable<IHostedService> Services { get; }
 }
 
 public class HostExecutor : IHostExecutor
 {
     private readonly ILogger _logger;
 
-    public IEnumerable<IHostedService> Services { get; }
-
     public HostExecutor(ILogger logger, IEnumerable<IHostedService> services)
     {
         _logger = logger;
         Services = services;
     }
+
+    public IEnumerable<IHostedService> Services { get; }
 
     public Task StartAsync(CancellationToken token)
     {

@@ -21,16 +21,9 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeMappers()
-            .AddHostedSpokeT<Spoke, SpokeBuilder>()
+            .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>()
-            // .AddTransient<Spoke>()
-            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            // .AddHostedService(provider =>
-            // {
-            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-            //     return spokeBuilder.Build();
-            // })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>();
     }
 
@@ -57,21 +50,9 @@ public static class Initialize
     }
 
 
-    public class SpokeBuilder : SpokeBuilderT<Spoke>
-    {
-        public SpokeBuilder(
-            Spoke spoke,
-            IEnumerable<IActor<Spoke>> actors) : base(
-            spoke,
-            actors)
-        {
-        }
-    }
-
     public interface ISpoke : ISpokeT<Spoke>
     {
     }
-
 
     [Name(SpokeName)]
     public class Spoke : SpokeT<Spoke>, ISpoke

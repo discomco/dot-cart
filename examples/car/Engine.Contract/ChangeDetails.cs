@@ -27,7 +27,7 @@ public static class ChangeDetails
     {
         public static Hope New(string aggId, Payload payload)
         {
-            return new(aggId, payload);
+            return new Hope(aggId, payload);
         }
     }
 
@@ -37,7 +37,7 @@ public static class ChangeDetails
     {
         public static Fact New(string aggId, Payload payload)
         {
-            return new(aggId, payload);
+            return new Fact(aggId, payload);
         }
     }
 }

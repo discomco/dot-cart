@@ -52,13 +52,14 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
             Log.Information($"{AppVerbs.Enforcing} [{NameAtt.Get(this)}] on {evt.Topic}");
             Aggregate.SetID(evt.AggregateId.IDFromIdString());
             var cmd = _evt2Cmd((Event)evt, Aggregate.GetState());
-            if(cmd != null) 
+            if (cmd != null)
                 feedback = await Aggregate.ExecuteAsync(cmd);
         }
         catch (Exception e)
         {
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 

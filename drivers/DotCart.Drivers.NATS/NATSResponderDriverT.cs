@@ -47,7 +47,8 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
                         var msg = await Call(hope, cancellationToken);
                         var rsp = (Feedback)msg;
                         args.Message.Respond(rsp.ToBytes());
-                        Log.Debug($"NATS{AppFacts.Responded} NATS.Rsp {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
+                        Log.Debug(
+                            $"NATS{AppFacts.Responded} NATS.Rsp {args.Reply} ~> Id: {rsp.AggId}, {rsp.IsSuccess} ");
                     });
             }
             catch (Exception e)

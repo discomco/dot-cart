@@ -38,7 +38,15 @@ internal class AggregateBuilder : IAggregateBuilder
         _applies = applies;
     }
 
-    
+    public IAggregate Build()
+    {
+        _aggregate.InjectPolicies(_policies);
+        _aggregate.InjectTryFuncs(_tries);
+        _aggregate.InjectApplyFuncs(_applies);
+        return _aggregate;
+    }
+
+
     // TODO: Factor this out. Should be taken care of at injection time.
     private IEnumerable<IAggregatePolicy> Distinct(IEnumerable<IAggregatePolicy> policies)
     {
@@ -50,14 +58,7 @@ internal class AggregateBuilder : IAggregateBuilder
             known.Add(policy.Name);
             result = result.Add(policy);
         }
-        return result;
-    }
 
-    public IAggregate Build()
-    {
-        _aggregate.InjectPolicies(_policies);
-        _aggregate.InjectTryFuncs(_tries);
-        _aggregate.InjectApplyFuncs(_applies);
-        return _aggregate;
+        return result;
     }
 }

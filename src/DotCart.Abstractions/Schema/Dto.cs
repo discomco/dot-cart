@@ -2,8 +2,8 @@
 
 public abstract record Dto<TPayload>(string AggId, TPayload Payload) : IDto
 {
-    public string AggId { get; set; } = AggId;
     public TPayload Payload { get; } = Payload;
+    public string AggId { get; set; } = AggId;
 }
 
 public interface IDto : IMsg

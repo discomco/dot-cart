@@ -2,7 +2,6 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
 
-
 public delegate Event EvtCtorT<
     TIEvt,
     in TPayload,

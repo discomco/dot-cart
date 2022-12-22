@@ -6,7 +6,6 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 
 namespace Engine.Behavior;
@@ -17,27 +16,12 @@ public static partial class Inject
 
 public static class ChangeDetails
 {
-
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
-            .AddSingleton<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _initialized2Cmd);
-    }
-
-    
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
     private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
         _initialized2Cmd =
-            (evt,_) =>
+            (evt, _) =>
             {
                 var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
                 return Cmd.New(
@@ -72,8 +56,8 @@ public static class ChangeDetails
         };
 
     public static readonly EvtCtorT<
-            IEvt, 
-            Contract.ChangeDetails.Payload, 
+            IEvt,
+            Contract.ChangeDetails.Payload,
             EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
@@ -90,7 +74,20 @@ public static class ChangeDetails
                     _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
-    
+
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddStateCtor()
+            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddSingleton<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _specFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _newEvt)
+            .AddTransient(_ => _initialized2Cmd);
+    }
+
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload, EventMeta Meta)
@@ -99,7 +96,7 @@ public static class ChangeDetails
     {
         public static Cmd New(IID engineId, Contract.ChangeDetails.Payload payload, EventMeta meta)
         {
-            return new(engineId, payload, meta);
+            return new Cmd(engineId, payload, meta);
         }
     }
 
@@ -110,7 +107,9 @@ public static class ChangeDetails
     }
 
     [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.ChangeDetails.Payload> {}
+    public interface IEvt : IEvtT<Contract.ChangeDetails.Payload>
+    {
+    }
 
     [Name(OnInitialized_v1)]
     public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>

@@ -18,8 +18,8 @@ public static partial class Inject
 public static class Initialize
 {
     public static readonly EvtCtorT<
-            IEvt, 
-            Contract.Initialize.Payload, 
+            IEvt,
+            Contract.Initialize.Payload,
             EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
@@ -29,8 +29,8 @@ public static class Initialize
             );
 
     public static readonly CommandCtorT<
-            ICmd, 
-            Contract.Initialize.Payload, 
+            ICmd,
+            Contract.Initialize.Payload,
             EventMeta>
         _newCmd =
             (id, payload, meta) => Command.New(id,

@@ -1,4 +1,3 @@
-using DotCart.Abstractions.Actors;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;

@@ -67,6 +67,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
                     actor.Value.Activate(cancellationToken).ConfigureAwait(false);
                     await Task.Delay(20, cancellationToken).ConfigureAwait(false);
                 }
+
                 _allActorsUp = ScanActors();
             }
     }
@@ -126,7 +127,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
         {
             Status = ComponentStatus.Active;
             Log.Debug($"{AppVerbs.Running} Spoke: [{NameAtt.Get<TSpoke>()}");
-            while (!stoppingToken.IsCancellationRequested) 
+            while (!stoppingToken.IsCancellationRequested)
                 Thread.Sleep(1000);
             return Task.CompletedTask;
         }, stoppingToken);

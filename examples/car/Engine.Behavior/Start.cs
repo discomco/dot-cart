@@ -8,7 +8,6 @@ using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Engine.Behavior;
 
@@ -71,7 +70,7 @@ public static class Start
                 meta.ToBytes());
 
     public static Evt2Cmd<Cmd, Initialize.IEvt> _initialized2Start =>
-        (evt,_) =>
+        (evt, _) =>
             Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
     public static IServiceCollection AddStartMappers(this IServiceCollection services)

@@ -21,7 +21,7 @@ public interface IStringUtils
     TestFtor TestFtor { get; }
 }
 
-static class Funcs
+internal static class Funcs
 {
     public static readonly TestFtor
         _myFunc =
@@ -36,6 +36,11 @@ static class Funcs
 public class FuncDITests : IoCTests
 {
     private IFuncDI _funcDI;
+
+
+    public FuncDITests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    {
+    }
 
     [Fact]
     public async Task ShouldResolveFuncDI()
@@ -82,20 +87,12 @@ public class FuncDITests : IoCTests
                 Thread.Sleep(1);
             }
         }, cts.Token);
-        while (!cts.Token.IsCancellationRequested)
-        {
-            Task.WaitAll(task1, task2);
-        }
+        while (!cts.Token.IsCancellationRequested) Task.WaitAll(task1, task2);
     }
 
 
     [Fact]
     public async Task ShouldCreateNewFuncDI()
-    {
-    }
-
-
-    public FuncDITests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

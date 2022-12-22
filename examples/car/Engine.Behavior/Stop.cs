@@ -17,12 +17,12 @@ public static class Stop
     public const string OnZeroPower_v1 = "engine:on_zero_power:stop:v1";
 
 
-    private static readonly Evt2Fact<Contract.Stop.Fact, Behavior.Stop.IEvt>
+    private static readonly Evt2Fact<Contract.Stop.Fact, IEvt>
         _evt2Fact =
             evt => Contract.Stop.Fact.New(
-                evt.AggregateId, 
+                evt.AggregateId,
                 evt.GetPayload<Contract.Stop.Payload>()
-                ); 
+            );
 
     private static readonly Evt2State<Engine, IEvt>
         _evt2State =
@@ -72,14 +72,14 @@ public static class Stop
                 payload.ToBytes(),
                 meta.ToBytes());
 
-    public static readonly Evt2Cmd<Cmd, Behavior.ChangeRpm.IEvt>
+    public static readonly Evt2Cmd<Cmd, ChangeRpm.IEvt>
         _onZeroPowerStop =
             (evt, state) =>
             {
                 var eng = (Engine)state;
                 var pld = evt.GetPayload<Contract.ChangeRpm.Payload>();
-                return eng.Power + pld.Delta <= 0 
-                    ? Cmd.New(evt.AggregateID, Contract.Stop.Payload.New()) 
+                return eng.Power + pld.Delta <= 0
+                    ? Cmd.New(evt.AggregateID, Contract.Stop.Payload.New())
                     : null;
             };
 
@@ -102,7 +102,7 @@ public static class Stop
             .AddTransient(_ => _hope2Cmd)
             .AddTransient(_ => _evt2Fact);
     }
-    
+
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.Stop.Payload Payload, EventMeta Meta)
@@ -147,11 +147,11 @@ public static class Stop
     }
 
     [Name(OnZeroPower_v1)]
-    public class OnZeroPowerStop : AggregatePolicyT<Behavior.ChangeRpm.IEvt, Behavior.Stop.Cmd>
+    public class OnZeroPowerStop : AggregatePolicyT<ChangeRpm.IEvt, Cmd>
     {
         public OnZeroPowerStop(
-            IExchange exchange, 
-            Evt2Cmd<Cmd, ChangeRpm.IEvt> evt2Cmd) 
+            IExchange exchange,
+            Evt2Cmd<Cmd, ChangeRpm.IEvt> evt2Cmd)
             : base(exchange, evt2Cmd)
         {
         }
