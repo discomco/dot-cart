@@ -96,7 +96,7 @@ public static class ChangeRpm
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
     {
         return services
-            .AddStateCtor()
+            .AddRootDocCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)

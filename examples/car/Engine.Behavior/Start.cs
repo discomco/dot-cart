@@ -84,7 +84,7 @@ public static class Start
     public static IServiceCollection AddStartBehavior(this IServiceCollection services)
     {
         return services
-            .AddStateCtor()
+            .AddRootDocCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _initialized2Start)

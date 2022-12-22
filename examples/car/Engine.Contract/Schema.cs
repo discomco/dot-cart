@@ -7,18 +7,22 @@ namespace Engine.Contract;
 
 public static class Schema
 {
-    public static IServiceCollection AddRootIDCtor(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => RootIDCtor);
-    }
+    
+    public static readonly IDCtorT<EngineID>
+        RootIDCtor =
+            _ => new EngineID();
 
-    public static IServiceCollection AddListIDCtor(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => ListIDCtor);
-    }
+    public static readonly IDCtorT<EngineListID>
+        ListIDCtor =
+            _ => new EngineListID();
+    
+    public static readonly StateCtorT<Engine> 
+        RootCtor = 
+            () => new Engine();
 
+    public static readonly StateCtorT<EngineList>
+        ListCtor = 
+            () => new EngineList(new List<EngineListItem>());
 
     [Flags]
     public enum EngineStatus
@@ -30,14 +34,6 @@ public static class Schema
         Overheated = 8
     }
 
-
-    public static readonly IDCtorT<EngineID>
-        RootIDCtor =
-            _ => new EngineID();
-
-    public static readonly IDCtorT<EngineListID>
-        ListIDCtor =
-            _ => new EngineListID();
 
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
@@ -60,7 +56,6 @@ public static class Schema
     [DbName(Constants.DocRedisDbName)]
     public record Engine : IState
     {
-        public static readonly StateCtorT<Engine> Ctor = () => new Engine();
 
         public Engine()
         {

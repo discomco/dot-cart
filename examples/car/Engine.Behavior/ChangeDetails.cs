@@ -79,7 +79,7 @@ public static class ChangeDetails
     public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
     {
         return services
-            .AddStateCtor()
+            .AddRootDocCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _specFunc)

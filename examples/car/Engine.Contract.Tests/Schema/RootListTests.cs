@@ -1,24 +1,24 @@
 using DotCart.TestFirst;
 using DotCart.TestKit;
-using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Behavior.Tests;
+namespace Engine.Contract.Tests.Schema;
 
-public class SchemaTests : SchemaTests<Schema.EngineID, Schema.Engine>
+public class RootListTests : SchemaTests<Contract.Schema.EngineListID, Contract.Schema.EngineList>
 {
-    public SchemaTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RootListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
     protected override void SetEnVars()
     {
+        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStateCtor();
+            .AddRootListCtor();
     }
 }

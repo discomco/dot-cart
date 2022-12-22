@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
 using DotCart.TestKit.Schema;
@@ -6,6 +7,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Tests.Schema;
 
+
+[IDPrefix(TestConstants.TheIDPrefix)]
 public class IDTests : IDTestsT<TheID>
 {
     public IDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

@@ -101,7 +101,6 @@ public abstract class SchemaTests<TID, TState> : IoCTests
         Assert.NotNull(eng);
     }
 
-
     protected override void Initialize()
     {
         NewId = TestEnv.ResolveRequired<IDCtorT<TID>>();

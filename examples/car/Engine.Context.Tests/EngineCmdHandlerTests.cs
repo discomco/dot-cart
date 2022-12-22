@@ -6,6 +6,7 @@ using DotCart.Drivers.EventStoreDB;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Behavior;
+using Engine.Contract;
 using Engine.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -32,6 +33,6 @@ public abstract class
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, TCmd, TEvt>()
             .AddCmdHandler()
             .AddTestIDCtor()
-            .AddStateCtor();
+            .AddRootDocCtor();
     }
 }

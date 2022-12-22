@@ -9,13 +9,6 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddStateCtor(this IServiceCollection services)
-    {
-        return services
-            .AddRootIDCtor()
-            .AddSingleton(Schema.Engine.Ctor);
-    }
-
     public static IServiceCollection AddEngineBehavior(this IServiceCollection services)
     {
         return services
