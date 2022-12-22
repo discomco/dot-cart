@@ -37,7 +37,7 @@ public static class ChangeDetails
 
     private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
         _initialized2Cmd =
-            evt =>
+            (evt,_) =>
             {
                 var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
                 return Cmd.New(

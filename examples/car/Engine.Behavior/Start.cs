@@ -71,7 +71,7 @@ public static class Start
                 meta.ToBytes());
 
     public static Evt2Cmd<Cmd, Initialize.IEvt> _initialized2Start =>
-        evt =>
+        (evt,_) =>
             Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
     public static IServiceCollection AddStartMappers(this IServiceCollection services)

@@ -44,12 +44,22 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         }, cancellationToken);
     }
 
-    private Task<Feedback> EnforceAsync(IEvtB evt)
+    private async Task<Feedback> EnforceAsync(IEvtB evt)
     {
-        Log.Information($"Enforcing [{NameAtt.Get(this)}] on {evt.Topic}");
-        var cmd = _evt2Cmd((Event)evt);
-        Aggregate.SetID(evt.AggregateId.IDFromIdString());
-        return Aggregate.ExecuteAsync(cmd);
+        var feedback = Feedback.New(evt.AggregateId);
+        try
+        {
+            Log.Information($"{AppVerbs.Enforcing} [{NameAtt.Get(this)}] on {evt.Topic}");
+            Aggregate.SetID(evt.AggregateId.IDFromIdString());
+            var cmd = _evt2Cmd((Event)evt, Aggregate.GetState());
+            if(cmd != null) 
+                feedback = await Aggregate.ExecuteAsync(cmd);
+        }
+        catch (Exception e)
+        {
+            feedback.SetError(e.AsError());
+        }
+        return feedback;
     }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)

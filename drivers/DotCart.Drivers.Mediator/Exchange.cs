@@ -7,10 +7,7 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.Mediator;
 
-
-
-
-[Name("dotcart:exchange")]
+[Name("dotcart:exchange:v1")]
 internal class Exchange : ActiveComponent, IExchange
 {
     
@@ -62,8 +59,7 @@ internal class Exchange : ActiveComponent, IExchange
     public void Dispose()
     {
         _topics.Clear();
-        var stopped = AppFacts.Stopped;
-        Log.Information($"{stopped} [{GetType().Name}]");
+        Log.Information($"{AppFacts.Stopped} [{GetType().Name}]");
     }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)

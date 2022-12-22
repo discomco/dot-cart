@@ -21,15 +21,16 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeMappers()
+            .AddHostedSpokeT<Spoke, SpokeBuilder>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>()
-            .AddTransient<Spoke>()
-            .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            .AddHostedService(provider =>
-            {
-                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-                return spokeBuilder.Build();
-            })
+            // .AddTransient<Spoke>()
+            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            // .AddHostedService(provider =>
+            // {
+            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+            //     return spokeBuilder.Build();
+            // })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>();
     }
 

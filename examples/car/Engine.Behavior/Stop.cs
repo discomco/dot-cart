@@ -14,6 +14,16 @@ namespace Engine.Behavior;
 
 public static class Stop
 {
+    public const string OnZeroPower_v1 = "engine:on_zero_power:stop:v1";
+
+
+    private static readonly Evt2Fact<Contract.Stop.Fact, Behavior.Stop.IEvt>
+        _evt2Fact =
+            evt => Contract.Stop.Fact.New(
+                evt.AggregateId, 
+                evt.GetPayload<Contract.Stop.Payload>()
+                ); 
+
     private static readonly Evt2State<Engine, IEvt>
         _evt2State =
             (state, _) =>
@@ -55,30 +65,44 @@ public static class Stop
                 };
             };
 
-    public static EvtCtorT<IEvt, Contract.Stop.Payload, EventMeta>
+    public static readonly EvtCtorT<IEvt, Contract.Stop.Payload, EventMeta>
         _newEvt =
             (id, payload, meta) => Event.New(id,
                 TopicAtt.Get<IEvt>(),
                 payload.ToBytes(),
                 meta.ToBytes());
 
+    public static readonly Evt2Cmd<Cmd, Behavior.ChangeRpm.IEvt>
+        _onZeroPowerStop =
+            (evt, state) =>
+            {
+                var eng = (Engine)state;
+                var pld = evt.GetPayload<Contract.ChangeRpm.Payload>();
+                return eng.Power + pld.Delta <= 0 
+                    ? Cmd.New(evt.AggregateID, Contract.Stop.Payload.New()) 
+                    : null;
+            };
+
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
             .AddStateCtor()
             .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc);
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _onZeroPowerStop);
     }
 
     public static IServiceCollection AddStopMappers(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _hope2Cmd);
+            .AddTransient(_ => _hope2Cmd)
+            .AddTransient(_ => _evt2Fact);
     }
-
+    
 
     [Topic(Topics.Cmd_v1)]
     public record Cmd(IID AggregateID, Contract.Stop.Payload Payload, EventMeta Meta)
@@ -120,5 +144,16 @@ public static class Stop
     {
         public const string Evt_v1 = "engine:stopped:v1";
         public const string Cmd_v1 = "engine:stop:v1";
+    }
+
+    [Name(OnZeroPower_v1)]
+    public class OnZeroPowerStop : AggregatePolicyT<Behavior.ChangeRpm.IEvt, Behavior.Stop.Cmd>
+    {
+        public OnZeroPowerStop(
+            IExchange exchange, 
+            Evt2Cmd<Cmd, ChangeRpm.IEvt> evt2Cmd) 
+            : base(exchange, evt2Cmd)
+        {
+        }
     }
 }

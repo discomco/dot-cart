@@ -19,6 +19,8 @@ public record Feedback(string AggId) : IFeedback
     public IEnumerable<string> Infos { get; } = Array.Empty<string>();
     public bool IsSuccess => ErrState.IsSuccessful;
 
+    public string AggId { get; set; } = AggId;
+
     public void SetError(Error error)
     {
         ErrState.Errors.Add(error.Code.ToString(), error);

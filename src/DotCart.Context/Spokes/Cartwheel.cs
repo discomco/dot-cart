@@ -5,14 +5,6 @@ using Serilog;
 
 namespace DotCart.Context.Spokes;
 
-public static class Inject
-{
-    public static IServiceCollection AddActorHost(this IServiceCollection services)
-    {
-        return services
-            .AddHostedService<Cartwheel>();
-    }
-}
 
 public class Cartwheel : BackgroundService
 {

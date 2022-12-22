@@ -23,13 +23,14 @@ public static class Start
             .AddEngineBehavior()
             .AddStartMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddTransient<Spoke>()
-            .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            .AddHostedService(provider =>
-            {
-                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-                return spokeBuilder.Build();
-            })
+            .AddHostedSpokeT<Spoke,SpokeBuilder>()
+            // .AddTransient<Spoke>()
+            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            // .AddHostedService(provider =>
+            // {
+            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+            //     return spokeBuilder.Build();
+            // })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddSpokedNATSResponder<Spoke, Contract.Start.Hope, Behavior.Start.Cmd>();
     }

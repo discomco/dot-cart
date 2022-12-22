@@ -19,18 +19,17 @@ public static class ChangeDetails
         return services
             .AddEngineBehavior()
             .AddChangeDetailsMappers()
-            .AddTransient<Spoke>()
-            .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            .AddHostedService(provider =>
-            {
-                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-                return spokeBuilder.Build();
-            })
+            .AddHostedSpokeT<Spoke, SpokeBuilder>()
+            // .AddTransient<Spoke>()
+            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            // .AddHostedService(provider =>
+            // {
+            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+            //     return spokeBuilder.Build();
+            // })
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>();
-
-
     }
 
     public static IServiceCollection AddChangeDetailsMappers(this IServiceCollection services)

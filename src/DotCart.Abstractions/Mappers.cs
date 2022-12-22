@@ -3,7 +3,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions;
 
-public delegate TCmd Evt2Cmd<out TCmd, in TEvt>(Event Evt)
+public delegate TCmd Evt2Cmd<out TCmd, in TEvt>(Event Evt, IState state)
     where TEvt : IEvtB
     where TCmd : ICmdB;
 

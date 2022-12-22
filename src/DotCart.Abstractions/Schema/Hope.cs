@@ -9,6 +9,6 @@ public interface IHopeT<TPayload> : IHopeB
 {
 }
 
-public abstract record HopeT<TPayload>(string AggId, TPayload Payload) 
+public abstract record HopeT<TPayload>(string AggId, TPayload Payload)
     : Dto<TPayload>(AggId, Payload)
     where TPayload : IPayload;

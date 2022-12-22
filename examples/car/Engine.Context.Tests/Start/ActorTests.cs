@@ -27,8 +27,6 @@ public class ActorTests : EffectsTests<
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddTransient(_ => A.Fake<IModelStore<Behavior.Engine>>())
-            .AddCmdHandler()
-            .AddEngineBehavior()
             .AddStartSpoke();
     }
 }

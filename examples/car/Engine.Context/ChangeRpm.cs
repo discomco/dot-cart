@@ -23,13 +23,14 @@ public static class ChangeRpm
         return services
             .AddEngineBehavior()
             .AddChangeRpmMappers()
-            .AddTransient<Spoke>()
-            .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
-            .AddHostedService(provider =>
-            {
-                var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
-                return spokeBuilder.Build();
-            })
+            .AddHostedSpokeT<Spoke,SpokeBuilder>()
+            // .AddTransient<Spoke>()
+            // .AddSingleton<ISpokeBuilder<Spoke>, SpokeBuilder>()
+            // .AddHostedService(provider =>
+            // {
+            //     var spokeBuilder = provider.GetRequiredService<ISpokeBuilder<Spoke>>();
+            //     return spokeBuilder.Build();
+            // })
             .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>();

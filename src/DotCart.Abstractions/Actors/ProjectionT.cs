@@ -36,11 +36,6 @@ public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TD
     private readonly Evt2State<TDoc, TEvt> _evt2State;
     private readonly TDriver _modelStore;
     private readonly StateCtorT<TDoc> _newDoc;
-
-    private readonly object _subMutex = new();
-
-    private readonly object _unsubMutex = new();
-
     protected ProjectionT(
         IExchange exchange,
         TDriver modelStore,
@@ -64,7 +59,8 @@ public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TD
 
     private async Task Handler(IEvtB evt, CancellationToken cancellationToken = default)
     {
-        Log.Information($"PROJECTION::[{GetType().Name}] ~> [{evt.Topic}] => [{evt.AggregateId}] ");
+        if (!evt.IsCommitted) return;
+        Log.Information($"{AppVerbs.Projecting} [{evt.AggregateId}::{evt.Topic}] ~> [{GetType().Name}]");
         var doc = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
         doc = _evt2State(doc, (Event)evt);
@@ -75,8 +71,7 @@ public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TD
     {
         return Run(() =>
         {
-            var subscribed = AppFacts.Subscribed;
-            Log.Information($"{subscribed} {TopicAtt.Get<TEvt>()}  ~> [{GetType().Name}]");
+            Log.Information($"{AppFacts.Subscribed} {TopicAtt.Get<TEvt>()}  ~> [{GetType().Name}]");
             _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
             return CompletedTask;
         }, cancellationToken);
