@@ -5,7 +5,7 @@ using Engine.Contract;
 namespace Engine.Context;
 
 [GroupName("engine-sub")]
-[IDPrefix(Schema.EngineIDPrefix)]
+[IDPrefix(IDConstants.EngineIDPrefix)]
 public interface IEngineSubscriptionInfo : ISubscriptionInfo
 {
 }
