@@ -12,7 +12,7 @@ public static partial class Inject
     public static IServiceCollection AddStateCtor(this IServiceCollection services)
     {
         return services
-            .AddIDCtor()
+            .AddRootIDCtor()
             .AddSingleton(Schema.Engine.Ctor);
     }
 

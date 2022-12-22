@@ -20,7 +20,7 @@ public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Stop.Hope
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddIDCtor()
+            .AddRootIDCtor()
             .AddTransient(_ => TestUtils.Stop.PayloadCtor)
             .AddTransient(_ => TestUtils.Stop.HopeCtor);
     }

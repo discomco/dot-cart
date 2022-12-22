@@ -1,5 +1,7 @@
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Engine.Contract;
+using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
@@ -12,6 +14,33 @@ public abstract class IDTestsT<TID> : IoCTests where TID : IID
     public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
+
+    [Fact]
+    public Task ShouldTestHaveIDPrefix()
+    {
+        // GIVEN
+        Assert.NotNull(this);
+        // WHEN
+        var idPrefix = IDPrefixAtt.Get(this);
+        // THEN
+        Assert.NotEmpty(idPrefix);
+        return Task.CompletedTask;
+    }
+
+
+    [Fact]
+    public Task ShouldHaveIDPrefixID()
+    {
+        // GIVEN
+        Assert.NotNull(this);
+        var expected = IDPrefixAtt.Get(this);
+        // WHEN
+        var actual = IDPrefixAtt.Get<TID>();
+        // THEN
+        Assert.Equal(expected,actual);
+        return Task.CompletedTask;
+    }
+    
 
     [Fact]
     public void ShouldResolveIDCtor()

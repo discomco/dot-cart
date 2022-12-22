@@ -1,11 +1,25 @@
 using System.Text.Json.Serialization;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Contract;
 
 public static class Schema
 {
+    public static IServiceCollection AddRootIDCtor(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => RootIDCtor);
+    }
+
+    public static IServiceCollection AddListIDCtor(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => ListIDCtor);
+    }
+
+
     [Flags]
     public enum EngineStatus
     {
@@ -16,14 +30,14 @@ public static class Schema
         Overheated = 8
     }
 
-    public const string EngineListIDValue = "EE1129A0-605E-4FFD-835C-EB91B2C06174";
-    public const string EngineListIDPrefix = "engine-lst";
-
-    public const string EngineIDPrefix = "engine";
 
     public static readonly IDCtorT<EngineID>
-        IDCtor =
+        RootIDCtor =
             _ => new EngineID();
+
+    public static readonly IDCtorT<EngineListID>
+        ListIDCtor =
+            _ => new EngineListID();
 
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
@@ -86,10 +100,10 @@ public static class Schema
 
     public record EngineListItem(string EngineId, string Name, EngineStatus Status, int Power);
 
-    [IDPrefix(EngineListIDPrefix)]
+    [IDPrefix(IDConstants.EngineListIDPrefix)]
     public record EngineListID : ID
     {
-        public EngineListID() : base(EngineListIDPrefix, EngineListIDValue)
+        public EngineListID() : base(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
         {
         }
     }
@@ -100,7 +114,7 @@ public static class Schema
         public List<EngineListItem> Items { get; } = Items;
     }
 
-    [IDPrefix(EngineIDPrefix)]
+    [IDPrefix(IDConstants.EngineIDPrefix)]
     public record EngineID : ID
     {
         public EngineID(string value = "") : base(IDPrefixAtt.Get<EngineID>(), value)

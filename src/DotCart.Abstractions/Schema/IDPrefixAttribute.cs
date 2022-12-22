@@ -25,11 +25,11 @@ public static class IDPrefixAtt
         return att.Prefix;
     }
 
-    public static string Get(IID id)
+    public static string Get(object obj)
     {
         var prefixAttributes =
-            (IDPrefixAttribute[])id.GetType().GetCustomAttributes(typeof(IDPrefixAttribute), true);
-        Guard.Against.AttributeNotDefined("IDPrefix", prefixAttributes, $"{id.GetType()}");
+            (IDPrefixAttribute[])obj.GetType().GetCustomAttributes(typeof(IDPrefixAttribute), true);
+        Guard.Against.AttributeNotDefined("IDPrefix", prefixAttributes, $"{obj.GetType()}");
         var att = prefixAttributes[0];
         return att.Prefix;
     }

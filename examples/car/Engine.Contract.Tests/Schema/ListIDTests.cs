@@ -6,24 +6,21 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Schema;
 
-public class EngineIDTests : IDTestsT<Contract.Schema.EngineID>
+[IDPrefix(IDConstants.EngineListIDPrefix)]
+public class ListIDTests : IDTestsT<Contract.Schema.EngineListID>
 {
-    public EngineIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ListIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
-    }
-
-    protected override void Initialize()
-    {
-        _newID = TestEnv.ResolveRequired<IDCtorT<Contract.Schema.EngineID>>();
     }
 
     protected override void SetEnVars()
     {
+        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddIDCtor();
+            .AddListIDCtor();
     }
 }
