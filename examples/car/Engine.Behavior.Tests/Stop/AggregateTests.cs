@@ -9,9 +9,9 @@ namespace Engine.Behavior.Tests.Stop;
 
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
-    Engine,
-    TryCmdT<Behavior.Stop.Cmd, Engine>,
-    ApplyEvtT<Engine, Behavior.Stop.IEvt>,
+    Schema.Engine,
+    TryCmdT<Behavior.Stop.Cmd, Schema.Engine>,
+    ApplyEvtT<Schema.Engine, Behavior.Stop.IEvt>,
     Behavior.Stop.Cmd,
     Behavior.Stop.IEvt
 >

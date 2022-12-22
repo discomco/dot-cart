@@ -6,13 +6,14 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    private static readonly RaiseFuncT<Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Cmd>
         _raiseFunc =
             (cmd, state) =>
             {
@@ -34,7 +35,7 @@ public static class ChangeRpm
                 return res;
             };
 
-    private static readonly SpecFuncT<Engine, Cmd>
+    private static readonly SpecFuncT<Schema.Engine, Cmd>
         _specFunc =
             (cmd, state) =>
             {
@@ -51,7 +52,7 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2State<Engine, IEvt>
+    private static readonly Evt2State<Schema.Engine, IEvt>
         _evt2State =
             (state, evt) =>
             {
@@ -96,7 +97,7 @@ public static class ChangeRpm
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc);

@@ -5,9 +5,9 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
-public class ResponderTests 
+public class ResponderTests
     : NATSResponderTestsT<
-        Contract.Stop.Hope, 
+        Contract.Stop.Hope,
         Behavior.Stop.Cmd>
 {
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -16,12 +16,10 @@ public class ResponderTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

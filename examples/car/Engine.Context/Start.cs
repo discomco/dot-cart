@@ -7,7 +7,9 @@ using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
+using Constants = Engine.Contract.Constants;
 
 namespace Engine.Context;
 
@@ -24,7 +26,7 @@ public static class Start
             .AddStartMappers()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddHostedSpokeT<Spoke>()
-            .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
             .AddSpokedNATSResponder<Spoke, Contract.Start.Hope, Behavior.Start.Cmd>();
     }
 
@@ -35,14 +37,14 @@ public static class Start
     [Name(ToRedisDoc_v1)]
     [DbName(Constants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
-        IRedisStore<Behavior.Engine>,
-        Behavior.Engine,
+        IRedisStore<Schema.Engine>,
+        Schema.Engine,
         Behavior.Start.IEvt>, IToRedisDoc
     {
         public ToRedisDoc(IExchange exchange,
-            IRedisStore<Behavior.Engine> modelStore,
-            Evt2State<Behavior.Engine, Behavior.Start.IEvt> evt2State,
-            StateCtorT<Behavior.Engine> newDoc)
+            IRedisStore<Schema.Engine> modelStore,
+            Evt2State<Schema.Engine, Behavior.Start.IEvt> evt2State,
+            StateCtorT<Schema.Engine> newDoc)
             : base(exchange, modelStore, evt2State, newDoc)
         {
         }

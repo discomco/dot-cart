@@ -1,18 +1,15 @@
-using DotCart.TestFirst.Actors;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
-using NATS.Client;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class ResponderTests 
+public class ResponderTests
     : NATSResponderTestsT<
         Contract.Initialize.Hope,
         Behavior.Initialize.Cmd>
 {
- 
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
@@ -28,10 +25,8 @@ public class ResponderTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            // .AddDefaultDrivers<Behavior.Engine, IEngineSubscriptionInfo>()
+            // .AddDefaultDrivers<Contract.Schema.Engine, IEngineSubscriptionInfo>()
             // .AddSingleton(_ => A.Fake<IAggregateStore>())
             .AddInitializeSpoke();
     }
-
- 
 }

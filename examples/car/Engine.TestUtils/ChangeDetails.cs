@@ -42,17 +42,17 @@ public static class ChangeDetails
             (_, _, _) => Behavior.ChangeDetails._newEvt(Schema.IDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 
 
-    [Tag(StateTags.Invalid)] public static readonly StateCtorT<Behavior.Engine>
+    [Tag(StateTags.Invalid)] public static readonly StateCtorT<Contract.Schema.Engine>
         InvalidEngineCtor =
-            () => Behavior.Engine.New(
+            () => Contract.Schema.Engine.New(
                 Schema.IDCtor().Id(),
                 Contract.Schema.EngineStatus.Unknown,
                 Contract.Schema.Details.New("Invalid Test Engine",
                     $"This is an INVALID Engine for ChangeDetails because state is [{Contract.Schema.EngineStatus.Unknown}]"));
 
-    [Tag(StateTags.Valid)] public static readonly StateCtorT<Behavior.Engine>
+    [Tag(StateTags.Valid)] public static readonly StateCtorT<Contract.Schema.Engine>
         ValidEngineCtor =
-            () => Behavior.Engine.New(
+            () => Contract.Schema.Engine.New(
                 Schema.IDCtor().Id(),
                 Contract.Schema.EngineStatus.Initialized,
                 Contract.Schema.Details.New("Valid Test Engine",

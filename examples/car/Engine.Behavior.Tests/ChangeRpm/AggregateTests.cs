@@ -9,9 +9,9 @@ namespace Engine.Behavior.Tests.ChangeRpm;
 
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
-    Engine,
-    TryCmdT<Behavior.ChangeRpm.Cmd, Engine>,
-    ApplyEvtT<Engine, Behavior.ChangeRpm.IEvt>,
+    Schema.Engine,
+    TryCmdT<Behavior.ChangeRpm.Cmd, Schema.Engine>,
+    ApplyEvtT<Schema.Engine, Behavior.ChangeRpm.IEvt>,
     Behavior.ChangeRpm.Cmd,
     Behavior.ChangeRpm.IEvt>
 {

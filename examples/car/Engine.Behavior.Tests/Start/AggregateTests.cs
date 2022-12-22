@@ -9,9 +9,9 @@ namespace Engine.Behavior.Tests.Start;
 
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
-    Engine,
-    TryCmdT<Behavior.Start.Cmd, Engine>,
-    ApplyEvtT<Engine, Behavior.Start.IEvt>,
+    Schema.Engine,
+    TryCmdT<Behavior.Start.Cmd, Schema.Engine>,
+    ApplyEvtT<Schema.Engine, Behavior.Start.IEvt>,
     Behavior.Start.Cmd,
     Behavior.Start.IEvt
 >

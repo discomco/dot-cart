@@ -9,9 +9,9 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
-    Engine,
-    TryCmdT<Behavior.ChangeDetails.Cmd, Engine>,
-    ApplyEvtT<Engine, Behavior.ChangeDetails.IEvt>,
+    Schema.Engine,
+    TryCmdT<Behavior.ChangeDetails.Cmd, Schema.Engine>,
+    ApplyEvtT<Schema.Engine, Behavior.ChangeDetails.IEvt>,
     Behavior.ChangeDetails.Cmd,
     Behavior.ChangeDetails.IEvt>
 {

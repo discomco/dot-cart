@@ -9,7 +9,7 @@ public class EventFeeder : ActorB, IEventFeeder, IProducer
 {
     private readonly IEventStore _eventStore;
     private readonly IDCtorT<Contract.Schema.EngineID> _newId;
-    private readonly StateCtorT<Behavior.Engine> _newState;
+    private readonly StateCtorT<Contract.Schema.Engine> _newState;
     private readonly EventStreamGenerator<Contract.Schema.EngineID> _newStream;
 
     public EventFeeder(
@@ -17,7 +17,7 @@ public class EventFeeder : ActorB, IEventFeeder, IProducer
         IEventStore eventStore,
         EventStreamGenerator<Contract.Schema.EngineID> newStream,
         IDCtorT<Contract.Schema.EngineID> newID,
-        StateCtorT<Behavior.Engine> newState) : base(exchange)
+        StateCtorT<Contract.Schema.Engine> newState) : base(exchange)
     {
         _eventStore = eventStore;
         _newStream = newStream;

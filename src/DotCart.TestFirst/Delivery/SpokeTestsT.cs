@@ -94,7 +94,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         _spoke = TestEnv.ResolveHosted<TSpoke>();
-        var cts = new CancellationTokenSource(2_000);
+        var cts = new CancellationTokenSource(60_000);
         // WHEN
         var _executor = TestEnv.ResolveRequired<IHostExecutor>();
         Assert.NotNull(_executor);

@@ -6,7 +6,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests;
 
-public class SchemaTests : SchemaTests<Schema.EngineID, Engine>
+public class SchemaTests : SchemaTests<Schema.EngineID, Schema.Engine>
 {
     public SchemaTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

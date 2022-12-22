@@ -26,7 +26,7 @@ public static class Start
             hope =>
                 Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly Evt2State<Engine, IEvt>
+    private static readonly Evt2State<Schema.Engine, IEvt>
         _evt2State =
             (state, _) =>
             {
@@ -34,7 +34,7 @@ public static class Start
                 return state;
             };
 
-    private static readonly SpecFuncT<Engine, Cmd>
+    private static readonly SpecFuncT<Schema.Engine, Cmd>
         _specFunc =
             (_, state) =>
             {
@@ -51,7 +51,7 @@ public static class Start
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Cmd>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -85,7 +85,7 @@ public static class Start
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _initialized2Start)
             .AddTransient(_ => _evt2State)

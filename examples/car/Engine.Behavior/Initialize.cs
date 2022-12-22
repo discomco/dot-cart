@@ -53,7 +53,7 @@ public static class Initialize
             hope => Cmd.New(Schema.EngineID.New(), hope.Payload);
 
     private static readonly Evt2State<
-            Engine,
+            Schema.Engine,
             IEvt>
         _evt2State =
             (state, evt) =>
@@ -68,7 +68,7 @@ public static class Initialize
             };
 
     private static readonly SpecFuncT<
-            Engine,
+            Schema.Engine,
             Cmd>
         _specFunc =
             (cmd, state) =>
@@ -87,7 +87,7 @@ public static class Initialize
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Cmd>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -109,7 +109,7 @@ public static class Initialize
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc)

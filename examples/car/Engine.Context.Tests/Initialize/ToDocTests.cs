@@ -1,5 +1,6 @@
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -8,7 +9,7 @@ namespace Engine.Context.Tests.Initialize;
 public class ToDocTests : ProjectionTestsT<
     Context.Initialize.Spoke,
     Context.Initialize.ToRedisDoc,
-    Behavior.Engine,
+    Schema.Engine,
     Behavior.Initialize.IEvt>
 {
     public ToDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

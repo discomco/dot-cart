@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.TestFirst;
 using DotCart.TestKit;
+using Engine.Contract;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -10,7 +11,7 @@ namespace Engine.Context.Tests.Start;
 public class ActorTests : EffectsTests<
     Behavior.Start.IEvt,
     Contract.Start.Fact,
-    IModelStore<Behavior.Engine>>
+    IModelStore<Schema.Engine>>
 {
     public ActorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -24,7 +25,7 @@ public class ActorTests : EffectsTests<
     {
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
-            .AddTransient(_ => A.Fake<IModelStore<Behavior.Engine>>())
+            .AddTransient(_ => A.Fake<IModelStore<Schema.Engine>>())
             .AddStartSpoke();
     }
 }

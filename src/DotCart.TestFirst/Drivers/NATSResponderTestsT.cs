@@ -5,11 +5,10 @@ using DotCart.TestKit;
 using NATS.Client;
 using Xunit.Abstractions;
 
-
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class NATSResponderTestsT<THope,TCmd> : ResponderTestsT<THope,TCmd> 
-    where TCmd : ICmdB 
+public abstract class NATSResponderTestsT<THope, TCmd> : ResponderTestsT<THope, TCmd>
+    where TCmd : ICmdB
     where THope : IHopeB
 {
     protected IEncodedConnection _bus;
@@ -17,7 +16,7 @@ public abstract class NATSResponderTestsT<THope,TCmd> : ResponderTestsT<THope,TC
     public NATSResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public override async Task ShouldResolveConnection()
     {

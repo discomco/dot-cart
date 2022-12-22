@@ -24,7 +24,7 @@ public static class Stop
                 evt.GetPayload<Contract.Stop.Payload>()
             );
 
-    private static readonly Evt2State<Engine, IEvt>
+    private static readonly Evt2State<Schema.Engine, IEvt>
         _evt2State =
             (state, _) =>
             {
@@ -37,7 +37,7 @@ public static class Stop
             hope =>
                 Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly SpecFuncT<Engine, Cmd>
+    private static readonly SpecFuncT<Schema.Engine, Cmd>
         _specFunc =
             (cmd, state) =>
             {
@@ -55,7 +55,7 @@ public static class Stop
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Cmd>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -76,7 +76,7 @@ public static class Stop
         _onZeroPowerStop =
             (evt, state) =>
             {
-                var eng = (Engine)state;
+                var eng = (Schema.Engine)state;
                 var pld = evt.GetPayload<Contract.ChangeRpm.Payload>();
                 return eng.Power + pld.Delta <= 0
                     ? Cmd.New(evt.AggregateID, Contract.Stop.Payload.New())
@@ -87,7 +87,7 @@ public static class Stop
     {
         return services
             .AddStateCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
             .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
