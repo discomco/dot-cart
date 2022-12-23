@@ -33,6 +33,6 @@ public abstract class
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, TCmd, TEvt>()
             .AddCmdHandler()
             .AddTestIDCtor()
-            .AddRootDocCtor();
+            .AddRootDocCtors();
     }
 }

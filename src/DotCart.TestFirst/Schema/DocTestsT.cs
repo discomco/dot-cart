@@ -3,9 +3,9 @@ using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Schema;
 
-public abstract class SchemaTests<TID, TState> : IoCTests
+public abstract class DocTestsT<TID, TState> : IoCTests
     where TID : IID
     where TState : IState
 {
@@ -14,7 +14,7 @@ public abstract class SchemaTests<TID, TState> : IoCTests
     protected IDCtorT<TID> NewId;
     protected StateCtorT<TState> NewState;
 
-    protected SchemaTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected DocTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

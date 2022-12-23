@@ -9,7 +9,7 @@ public static class Initialize
         EvtCtor =
             (_, _, _) =>
                 Behavior.Initialize._newEvt(
-                    Schema.IDCtor(),
+                    Schema.DocIDCtor(),
                     PayloadCtor(),
                     Schema.MetaCtor(null)
                 );
@@ -29,7 +29,7 @@ public static class Initialize
             Contract.Initialize.Payload>
         CmdCtor =
             (_, _) => Behavior.Initialize.Cmd.New(
-                Schema.IDCtor(),
+                Schema.DocIDCtor(),
                 PayloadCtor()
             );
 
@@ -43,5 +43,5 @@ public static class Initialize
             Contract.Initialize.Fact,
             Contract.Initialize.Payload>
         FactCtor =
-            (_, _) => Contract.Initialize.Fact.New(Schema.IDCtor().Id(), PayloadCtor());
+            (_, _) => Contract.Initialize.Fact.New(Schema.DocIDCtor().Id(), PayloadCtor());
 }

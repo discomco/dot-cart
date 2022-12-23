@@ -55,7 +55,7 @@ public static class Initialize
     private static readonly Evt2State<
             Schema.Engine,
             IEvt>
-        _evt2State =
+        _evt2Doc =
             (state, evt) =>
             {
                 if (evt == null)
@@ -66,6 +66,22 @@ public static class Initialize
                 state.Status = Schema.EngineStatus.Initialized;
                 return state;
             };
+
+    private static readonly Evt2State<
+            Schema.EngineList,
+            IEvt>
+        _evt2List =
+            (state, evt) =>
+            {
+                if (state.Items.Any(x => x.Key == evt.AggregateId)) 
+                    return state;
+                state.Items = state.Items.Add(evt.AggregateId, Schema.EngineListItem.New(
+                    evt.AggregateId,
+                    evt.GetPayload<Contract.Initialize.Payload>().Details.Name,
+                    Schema.EngineStatus.Initialized,
+                    0));  
+                return state;
+            }; 
 
     private static readonly SpecFuncT<
             Schema.Engine,
@@ -101,16 +117,24 @@ public static class Initialize
     {
         return services
             .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2State)
             .AddTransient(_ => _hope2Cmd);
+    }
+
+    public static IServiceCollection AddInitializePFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2List);
     }
 
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
-            .AddRootDocCtor()
+            .AddRootDocCtors()
+            .AddRootListCtors()
+            .AddInitializeMappers()
+            .AddInitializePFuncs()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2State)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _newEvt);

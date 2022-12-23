@@ -15,7 +15,9 @@ namespace Engine.Context;
 
 public static class Initialize
 {
-    public const string ToRedisDoc_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_doc";
+    public const string ToRedisDoc_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_list:v1";
+    
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
@@ -25,8 +27,10 @@ public static class Initialize
             .AddInitializeMappers()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, ToRedisList>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Hope, Behavior.Initialize.Cmd>()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>();
+            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>();
     }
 
 
@@ -63,6 +67,24 @@ public static class Initialize
         public Spoke(
             IExchange exchange,
             IProjector projector) : base(exchange, projector)
+        {
+        }
+    }
+
+
+    [Name(ToRedisList_v1)]
+    [DbName(Constants.ListRedisDbName)]
+    public class ToRedisList: ProjectionT<
+        IRedisStore<Schema.EngineList>,
+        Schema.EngineList,
+        Behavior.Initialize.IEvt>, IActor<Spoke>
+    {
+        public ToRedisList(
+            IExchange exchange,
+            IRedisStore<Schema.EngineList> modelStore,
+            Evt2State<Schema.EngineList, Behavior.Initialize.IEvt> evt2State,
+            StateCtorT<Schema.EngineList> newDoc) 
+            : base(exchange, modelStore, evt2State, newDoc)
         {
         }
     }

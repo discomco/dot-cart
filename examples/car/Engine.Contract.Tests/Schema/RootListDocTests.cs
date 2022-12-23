@@ -1,4 +1,4 @@
-using DotCart.Abstractions.Schema;
+using DotCart.TestFirst;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,10 +6,13 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Schema;
 
-[IDPrefix(IDConstants.EngineListIDPrefix)]
-public class ListIDTests : IDTestsT<Contract.Schema.EngineListID>
+public class RootListDocTests : ListDocTestsT<
+    Contract.Schema.EngineListID, 
+    Contract.Schema.EngineList, 
+    Contract.Schema.EngineID, 
+    Contract.Schema.EngineListItem>
 {
-    public ListIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RootListDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -21,6 +24,6 @@ public class ListIDTests : IDTestsT<Contract.Schema.EngineListID>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddListIDCtor();
+            .AddRootListCtors();
     }
 }

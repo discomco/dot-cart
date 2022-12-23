@@ -1,13 +1,21 @@
+using System.Collections.Immutable;
 using System.Text.Json.Serialization;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.Contract;
 
 public static class Schema
 {
-    
+
+    public static readonly ValueObjectCtorT<EngineListItem>
+        EngineListItemCtor =
+            () => new EngineListItem(); 
+
+    public static readonly ValueObjectCtorT<Details>
+        DetailsCtor = 
+            () => new Details();
+
     public static readonly IDCtorT<EngineID>
         RootIDCtor =
             _ => new EngineID();
@@ -22,7 +30,7 @@ public static class Schema
 
     public static readonly StateCtorT<EngineList>
         ListCtor = 
-            () => new EngineList(new List<EngineListItem>());
+            () => new EngineList(ImmutableDictionary<string, EngineListItem>.Empty);
 
     [Flags]
     public enum EngineStatus
@@ -93,20 +101,43 @@ public static class Schema
     }
 
 
-    public record EngineListItem(string EngineId, string Name, EngineStatus Status, int Power);
-
-    [IDPrefix(IDConstants.EngineListIDPrefix)]
-    public record EngineListID : ID
+    public record EngineListItem : IValueObject, IEntityT<EngineID>
     {
-        public EngineListID() : base(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
+        public string EngineId { get; set; }
+        public string Name { get; set;}
+        public EngineStatus Status  { get; set; }
+        public int Power { get; set; }
+
+        public static EngineListItem New(string aggId, string name, EngineStatus status, int power)
         {
+            return new EngineListItem
+            {
+                EngineId = aggId,
+                Name = name,
+                Status = status,
+                Power = power
+            };
         }
     }
 
-    public record EngineList(List<EngineListItem> Items) : IState
+    [IDPrefix(IDConstants.EngineListIDPrefix)]
+    public record EngineListID() : ID(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
+    {
+        public static EngineListID New() 
+            => new();
+
+    }
+
+    [DbName(Constants.ListRedisDbName)]
+    public record EngineList(ImmutableDictionary<string,EngineListItem> Items) : IListState
     {
         public EngineListID ID { get; set; } = new();
-        public List<EngineListItem> Items { get; } = Items;
+        public ImmutableDictionary<string,EngineListItem> Items { get; set; } = Items;
+
+        public static EngineList New()
+        {
+            return new EngineList(ImmutableDictionary<string, EngineListItem>.Empty);
+        }
     }
 
     [IDPrefix(IDConstants.EngineIDPrefix)]
@@ -124,7 +155,7 @@ public static class Schema
         }
     }
 
-    public record Details
+    public record Details : IValueObject
     {
         public string Name { get; set; }
         public string Description { get; set; }

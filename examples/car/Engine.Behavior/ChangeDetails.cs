@@ -13,10 +13,35 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
+
 }
 
 public static class ChangeDetails
 {
+
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddRootDocCtors()
+            .AddRootListCtors()
+            .AddChangeDetailsPFuncs()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddSingleton<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _guardFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _newEvt)
+            .AddTransient(_ => _initialized2Cmd);
+    }
+
+    public static IServiceCollection AddChangeDetailsPFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2List);
+    }
+
+    
+    
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
@@ -32,15 +57,26 @@ public static class ChangeDetails
             };
 
     private static readonly Evt2State<Schema.Engine, IEvt>
-        _evt2State =
+        _evt2Doc =
             (state, evt) =>
             {
                 state.Details = evt.GetPayload<Contract.ChangeDetails.Payload>().Details;
                 return state;
             };
 
+    private static readonly Evt2State<Schema.EngineList, IEvt>
+        _evt2List =
+            (state, evt) =>
+            {
+                if (state.Items.All(x => x.Value.EngineId != evt.AggregateId)) return state;
+                // var item = state.Items.FirstOrDefault(x => x.Key == evt.AggregateId);
+                // item.Value.Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
+                state.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
+                return state;
+            }; 
+
     private static readonly SpecFuncT<Schema.Engine, Cmd>
-        _specFunc = (cmd, state) =>
+        _guardFunc = (cmd, state) =>
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
             try
@@ -76,18 +112,6 @@ public static class ChangeDetails
                 };
             };
 
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddRootDocCtor()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddSingleton<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _specFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _initialized2Cmd);
-    }
 
 
     [Topic(Topics.Cmd_v1)]

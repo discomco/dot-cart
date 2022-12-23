@@ -22,24 +22,24 @@ public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
 ///     A Projection is an active Unit of Effect (Reactor) that is defined
 ///     by the TState that it projects the TEvt to.
 /// </summary>
-/// <typeparam name="TDriver">
+/// <typeparam name="TStore">
 ///     The Type of the Driver this Projection uses.
 ///     This type depends on the supporting backing service to which the Projection Projects its State.
 /// </typeparam>
 /// <typeparam name="TDoc">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TDriver, TDoc, TEvt> : ActorB, IProjectionT<TDriver, TDoc, TEvt>
-    where TDriver : IModelStore<TDoc>
+public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TStore, TDoc, TEvt>
+    where TStore : IModelStore<TDoc>
     where TDoc : IState
     where TEvt : IEvtB
 {
     private readonly Evt2State<TDoc, TEvt> _evt2State;
-    private readonly TDriver _modelStore;
+    private readonly TStore _modelStore;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
-        TDriver modelStore,
+        TStore modelStore,
         Evt2State<TDoc, TEvt> evt2State,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {

@@ -10,14 +10,14 @@ public static partial class Inject
     public static IServiceCollection AddTestIDCtor(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => Schema.IDCtor);
+            .AddTransient(_ => Schema.DocIDCtor);
     }
 
 
     public static IServiceCollection AddEventFeeder(this IServiceCollection services)
     {
         return services
-            .AddRootDocCtor()
+            .AddRootDocCtors()
             .AddInitializeWithChangeRpmEvents()
             .AddTransient<IActor, EventFeeder>();
     }

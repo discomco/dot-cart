@@ -66,7 +66,7 @@ public static class ScenariosAndStreams
     public static IEnumerable<ICmdB> InitializeScenario(ID ID)
     {
         var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initializeCmd = Behavior.Initialize.Cmd.New(Schema.IDCtor(), initializePayload);
+        var initializeCmd = Behavior.Initialize.Cmd.New(Schema.DocIDCtor(), initializePayload);
         initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }

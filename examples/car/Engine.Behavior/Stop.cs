@@ -86,7 +86,7 @@ public static class Stop
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
-            .AddRootDocCtor()
+            .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
             .AddTransient(_ => _evt2State)

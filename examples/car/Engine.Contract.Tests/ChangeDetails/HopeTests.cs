@@ -23,6 +23,6 @@ public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.ChangeDet
         services
             .AddTransient(_ => TestUtils.ChangeDetails.HopeCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

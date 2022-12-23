@@ -28,6 +28,6 @@ public class EvtTests : EvtTestsT<Schema.EngineID, Behavior.Start.IEvt, Contract
         services
             .AddTransient(_ => TestUtils.Start.EvtCtor)
             .AddTransient(_ => TestUtils.Start.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

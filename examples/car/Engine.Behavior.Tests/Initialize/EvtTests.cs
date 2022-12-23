@@ -31,6 +31,6 @@ public class EvtTests : EvtTestsT<
         services
             .AddTransient(_ => TestUtils.Initialize.EvtCtor)
             .AddTransient(_ => TestUtils.Initialize.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

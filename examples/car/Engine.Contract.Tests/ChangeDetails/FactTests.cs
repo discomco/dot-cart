@@ -23,6 +23,6 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDet
         services
             .AddTransient(_ => TestUtils.ChangeDetails.FactCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

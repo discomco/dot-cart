@@ -1,6 +1,6 @@
 namespace DotCart.Abstractions.Behavior;
 
-public delegate EventMeta MetaCtor(string id);
+public delegate TMeta MetaCtorT<out TMeta>(string id);
 
 public record EventMeta(string AggregateType, string AggregateId) : IEventMeta
 {

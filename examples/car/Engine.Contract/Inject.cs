@@ -4,17 +4,19 @@ namespace Engine.Contract;
 
 public static class Inject
 {
-    public static IServiceCollection AddRootDocCtor(this IServiceCollection services)
+    public static IServiceCollection AddRootDocCtors(this IServiceCollection services)
     {
         return services
             .AddRootIDCtor()
-            .AddSingleton(Schema.RootCtor);
+            .AddSingleton(Schema.RootCtor)
+            .AddSingleton(Schema.DetailsCtor);
     }
 
-    public static IServiceCollection AddRootListCtor(this IServiceCollection services)
+    public static IServiceCollection AddRootListCtors(this IServiceCollection services)
     {
         return services
             .AddListIDCtor()
+            .AddSingleton(Schema.EngineListItemCtor)
             .AddSingleton(Schema.ListCtor);
     }
     

@@ -20,7 +20,7 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.Stop.Fact
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient(_ => TestUtils.Schema.IDCtor)
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor)
             .AddTransient(_ => TestUtils.Stop.PayloadCtor)
             .AddTransient(_ => TestUtils.Stop.FactCtor);
     }

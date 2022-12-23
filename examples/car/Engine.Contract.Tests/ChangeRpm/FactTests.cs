@@ -25,6 +25,6 @@ public class FactTests : FactTestsT<
         services
             .AddTransient(_ => TestUtils.ChangeRpm.FactCtor)
             .AddTransient(_ => TestUtils.ChangeRpm.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

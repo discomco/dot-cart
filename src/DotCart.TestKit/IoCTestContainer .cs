@@ -49,6 +49,9 @@ public class IoCTestContainer : IDisposable
         where TActor : IActor<TSpoke>
     {
         IEnumerable<IActor<TSpoke>?> actors = ResolveAll<IActor<TSpoke>>();
-        return actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));
+        var res = actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));
+        if (res==null)
+            throw new InvalidOperationException("Actor of type [" + typeof(TActor) + "] was not found. Please register it.");
+        return res;
     }
 }

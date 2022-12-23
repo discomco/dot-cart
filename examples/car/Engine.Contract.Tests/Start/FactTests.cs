@@ -22,6 +22,6 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.Start.Fac
         services
             .AddTransient(_ => TestUtils.Start.FactCtor)
             .AddTransient(_ => TestUtils.Start.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

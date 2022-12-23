@@ -16,17 +16,12 @@ namespace Engine.Context;
 
 public static class ChangeDetails
 {
-    // public class SpokeBuilder : SpokeBuilderT<Spoke>
-    // {
-    //     public SpokeBuilder(Spoke spoke, IEnumerable<IActor<Spoke>> actors) : base(spoke, actors)
-    //     {
-    //     }
-    // }
-
     public const string Spoke_v1 = "engine:change_details:spoke:v1";
 
 
-    public const string ToRedisDoc_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc";
+    public const string ToRedisDoc_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
+    
 
     private static readonly Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope>
         _hope2Cmd =
@@ -53,7 +48,9 @@ public static class ChangeDetails
             .AddChangeDetailsMappers()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, ToRedisList>()
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>();
     }
 
@@ -89,6 +86,24 @@ public static class ChangeDetails
             modelStore,
             evt2State,
             newDoc)
+        {
+        }
+    }
+
+    [DbName(Constants.ListRedisDbName)]
+    [Name(ToRedisList_v1)]
+    public class ToRedisList : ProjectionT<
+        IRedisStore<Schema.EngineList>, 
+        Schema.EngineList, 
+        Behavior.ChangeDetails.IEvt>, IActor<Spoke>
+    {
+        public ToRedisList(
+            IExchange exchange, 
+            IRedisStore<Schema.EngineList> modelStore, 
+            Evt2State<Schema.EngineList, 
+                Behavior.ChangeDetails.IEvt> evt2State, 
+            StateCtorT<Schema.EngineList> newDoc) 
+            : base(exchange, modelStore, evt2State, newDoc)
         {
         }
     }

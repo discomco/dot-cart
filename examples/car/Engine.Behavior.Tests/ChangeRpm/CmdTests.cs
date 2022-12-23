@@ -27,6 +27,6 @@ public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.ChangeRpm.Cmd, Contr
         services
             .AddTransient(_ => TestUtils.ChangeRpm.CmdCtor)
             .AddTransient(_ => TestUtils.ChangeRpm.PayloadCtor)
-            .AddTransient(_ => TestUtils.Schema.IDCtor);
+            .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }
