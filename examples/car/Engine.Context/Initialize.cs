@@ -17,7 +17,6 @@ public static class Initialize
 {
     public const string ToRedisDoc_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Behavior.Initialize.Topics.Evt_v1 + ":to_redis_list:v1";
-    
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
@@ -49,9 +48,9 @@ public static class Initialize
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.Initialize.IEvt> evt2State,
+            Evt2State<Schema.Engine, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2State, newDoc)
+            : base(exchange, modelStore, evt2Doc, newDoc)
         {
         }
     }
@@ -74,6 +73,7 @@ public static class Initialize
 
     [Name(ToRedisList_v1)]
     [DbName(Constants.ListRedisDbName)]
+    [DocId(IDConstants.EngineListId)]
     public class ToRedisList: ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
@@ -82,9 +82,9 @@ public static class Initialize
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> modelStore,
-            Evt2State<Schema.EngineList, Behavior.Initialize.IEvt> evt2State,
+            Evt2State<Schema.EngineList, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) 
-            : base(exchange, modelStore, evt2State, newDoc)
+            : base(exchange, modelStore, evt2Doc, newDoc)
         {
         }
     }

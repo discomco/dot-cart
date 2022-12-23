@@ -33,18 +33,18 @@ public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TSt
     where TDoc : IState
     where TEvt : IEvtB
 {
-    private readonly Evt2State<TDoc, TEvt> _evt2State;
+    private readonly Evt2State<TDoc, TEvt> _evt2Doc;
     private readonly TStore _modelStore;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
         TStore modelStore,
-        Evt2State<TDoc, TEvt> evt2State,
+        Evt2State<TDoc, TEvt> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
         _modelStore = modelStore;
-        _evt2State = evt2State;
+        _evt2Doc = evt2Doc;
         _newDoc = newDoc;
     }
 
@@ -62,10 +62,23 @@ public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TSt
     {
         if (!evt.IsCommitted) return;
         Log.Information($"{AppVerbs.Projecting} [{evt.AggregateId}::{evt.Topic}] ~> [{GetType().Name}]");
-        var doc = await _modelStore.GetByIdAsync(evt.AggregateId, cancellationToken).ConfigureAwait(false)
+        var docId = GetDocId(evt);
+        var doc = await _modelStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
-        doc = _evt2State(doc, (Event)evt);
-        await _modelStore.SetAsync(evt.AggregateId, doc, cancellationToken).ConfigureAwait(false);
+        doc = _evt2Doc(doc, (Event)evt);
+        await _modelStore.SetAsync(docId, doc, cancellationToken).ConfigureAwait(false);
+    }
+
+    private string GetDocId(IEvtB evt)
+    {
+        try
+        {
+            return DocIdAtt.Get(this);
+        }
+        catch (Exception)
+        {
+            return evt.AggregateId;    
+        }
     }
 
     protected override Task StartActingAsync(CancellationToken cancellationToken)

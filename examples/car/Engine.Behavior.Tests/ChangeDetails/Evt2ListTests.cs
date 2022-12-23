@@ -15,8 +15,7 @@ public class Evt2ListTests
         Contract.ChangeDetails.Payload, 
         EventMeta>
 {
-
-    
+  
 
 
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -34,7 +33,7 @@ public class Evt2ListTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddChangeDetailsPFuncs()
+            .AddChangeDetailsProjectionFuncs()
             .AddListIDCtor()
             .AddTransient(_ => TestUtils.Schema.FilledListCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.PayloadCtor)

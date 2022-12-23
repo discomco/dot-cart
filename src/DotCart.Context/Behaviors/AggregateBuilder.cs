@@ -46,7 +46,6 @@ internal class AggregateBuilder : IAggregateBuilder
         return _aggregate;
     }
 
-
     // TODO: Factor this out. Should be taken care of at injection time.
     private IEnumerable<IAggregatePolicy> Distinct(IEnumerable<IAggregatePolicy> policies)
     {

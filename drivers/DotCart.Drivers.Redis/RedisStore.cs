@@ -4,18 +4,16 @@ using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public class RedisStore<TState> : IRedisStore<TState> where TState : IState
+public class RedisStore<TDoc> : IRedisStore<TDoc> where TDoc : IState
 {
     private readonly object _delMutex = new();
-    private readonly IRedisDb _redisDb;
+    private readonly IRedisDbT<TDoc> _redisDb;
 
     private readonly object _setMutex = new();
 
     private object _getMutex = new();
 
-    public RedisStore(
-        IRedisDb redisDb
-    )
+    public RedisStore(IRedisDbT<TDoc> redisDb)
     {
         _redisDb = redisDb;
     }
@@ -31,9 +29,9 @@ public class RedisStore<TState> : IRedisStore<TState> where TState : IState
         _redisDb.Dispose();
     }
 
-    public Task<TState> SetAsync(string id, TState doc, CancellationToken cancellationToken = default)
+    public Task<TDoc> SetAsync(string id, TDoc doc, CancellationToken cancellationToken = default)
     {
-        return Task.Run<TState>(() =>
+        return Task.Run<TDoc>(() =>
         {
             lock (_setMutex)
             {
@@ -44,7 +42,7 @@ public class RedisStore<TState> : IRedisStore<TState> where TState : IState
     }
 
 
-    public Task<TState> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public Task<TDoc> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {
@@ -53,7 +51,7 @@ public class RedisStore<TState> : IRedisStore<TState> where TState : IState
                 var res = _redisDb.Database.StringGetDelete(new RedisKey(id));
                 if (res.IsNullOrEmpty) return default;
                 var json = res.ToString();
-                return json.FromJson<TState>();
+                return json.FromJson<TDoc>();
             }
         }, cancellationToken);
     }
@@ -65,16 +63,16 @@ public class RedisStore<TState> : IRedisStore<TState> where TState : IState
             , cancellationToken);
     }
 
-    public Task<TState?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
+    public Task<TDoc?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        return Task.Run<TState>(() =>
+        return Task.Run<TDoc>(() =>
         {
             lock (_setMutex)
             {
                 var redisValue = _redisDb.Database.StringGet(new RedisKey(id));
                 var json = redisValue.ToString();
                 return redisValue.HasValue
-                    ? json.FromJson<TState>()
+                    ? json.FromJson<TDoc>()
                     : default;
             }
         }, cancellationToken);

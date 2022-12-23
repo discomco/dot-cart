@@ -81,10 +81,10 @@ public static class ChangeDetails
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.ChangeDetails.IEvt> evt2State,
+            Evt2State<Schema.Engine, Behavior.ChangeDetails.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc) : base(exchange,
             modelStore,
-            evt2State,
+            evt2Doc,
             newDoc)
         {
         }
@@ -92,6 +92,7 @@ public static class ChangeDetails
 
     [DbName(Constants.ListRedisDbName)]
     [Name(ToRedisList_v1)]
+    [DocId(IDConstants.EngineListId)]
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>, 
         Schema.EngineList, 
@@ -101,9 +102,9 @@ public static class ChangeDetails
             IExchange exchange, 
             IRedisStore<Schema.EngineList> modelStore, 
             Evt2State<Schema.EngineList, 
-                Behavior.ChangeDetails.IEvt> evt2State, 
+                Behavior.ChangeDetails.IEvt> evt2Doc, 
             StateCtorT<Schema.EngineList> newDoc) 
-            : base(exchange, modelStore, evt2State, newDoc)
+            : base(exchange, modelStore, evt2Doc, newDoc)
         {
         }
     }

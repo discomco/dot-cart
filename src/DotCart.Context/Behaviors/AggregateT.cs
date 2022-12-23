@@ -165,10 +165,8 @@ public class AggregateT<TInfo, TState> : IAggregate
         //     return;
         evt.SetTimeStamp(DateTime.UtcNow);
         _state = ApplyEvent(_state, evt);
-//        _state = ApplyEvent(_state, evt, ++Version);
         _uncommittedEvents.Add(evt);
         await _exchange.Publish(evt.Topic, evt);
-        //await _mediator.PublishAsync(evt.Topic, evt);
     }
 
 
@@ -177,9 +175,6 @@ public class AggregateT<TInfo, TState> : IAggregate
         if (_uncommittedEvents.Any(x => Equals(x.EventId, evt.EventId)))
             return _state;
         Version = evt.Version;
-//        evt.Version = version;
-//        Version = evt.Version;
-        // evt.Version = Version;
         var applyFunc = _applyFuncs[evt.Topic];
         var newState = ((dynamic)applyFunc).Apply(state, (dynamic)evt);
         _appliedEvents.Add(evt);

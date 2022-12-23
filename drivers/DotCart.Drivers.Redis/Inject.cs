@@ -8,8 +8,8 @@ namespace DotCart.Drivers.Redis;
 
 public static class Inject
 {
-    public static IServiceCollection AddRedis<TModel>(this IServiceCollection services)
-        where TModel : IState
+    public static IServiceCollection AddRedis<TDoc>(this IServiceCollection services)
+        where TDoc : IState
     {
         return services
             .AddTransient(p =>
@@ -19,54 +19,53 @@ public static class Inject
                 opts.Password = Config.Password;
                 opts.User = Config.User;
                 opts.AllowAdmin = Config.AllowAdmin;
-                opts.DefaultDatabase = Convert.ToInt32(DbNameAtt.Get<TModel>());
                 return opts;
             })
-            .AddTransient<IRedisConnectionFactory, RedisConnectionFactory>();
+            .AddSingleton<IRedisConnectionFactory<TDoc>, RedisConnectionFactory<TDoc>>();
     }
 
-    public static IServiceCollection AddSingletonRedisConnection<TModel>(this IServiceCollection services)
-        where TModel : IState
+    public static IServiceCollection AddSingletonRedisConnection<TDoc>(this IServiceCollection services)
+        where TDoc : IState
     {
         return services
-            .AddRedis<TModel>()
+            .AddRedis<TDoc>()
             .AddSingleton(p =>
             {
-                var fact = p.GetRequiredService<IRedisConnectionFactory>();
+                var fact = p.GetRequiredService<IRedisConnectionFactory<TDoc>>();
                 return fact.Connect();
             });
     }
 
-    public static IServiceCollection AddTransientRedisConnection<TModel>(this IServiceCollection services)
-        where TModel : IState
+    public static IServiceCollection AddTransientRedisConnection<TDoc>(this IServiceCollection services)
+        where TDoc : IState
     {
         return services
-            .AddRedis<TModel>()
+            .AddRedis<TDoc>()
             .AddTransient(p =>
             {
-                var fact = p.GetRequiredService<IRedisConnectionFactory>();
+                var fact = p.GetRequiredService<IRedisConnectionFactory<TDoc>>();
                 return fact.Connect();
             });
     }
 
-    public static IServiceCollection AddSingletonRedisDb<TModel>(this IServiceCollection services)
-        where TModel : IState
+    public static IServiceCollection AddSingletonRedisDb<TDoc>(this IServiceCollection services)
+        where TDoc : IState
     {
         return services
-            .AddSingletonRedisConnection<TModel>()
-            .AddTransient<IModelStore<TModel>, RedisStore<TModel>>()
-            .AddTransient<IRedisStore<TModel>, RedisStore<TModel>>()
-            .AddSingleton<IRedisDb, RedisDb>();
+            .AddSingletonRedisConnection<TDoc>()
+            .AddTransient<IModelStore<TDoc>, RedisStore<TDoc>>()
+            .AddTransient<IRedisStore<TDoc>, RedisStore<TDoc>>()
+            .AddSingleton<IRedisDbT<TDoc>, RedisDbT<TDoc>>();
     }
 
-    public static IServiceCollection AddTransientRedisDb<TModel>(this IServiceCollection services)
-        where TModel : IState
+    public static IServiceCollection AddTransientRedisDb<TDoc>(this IServiceCollection services)
+        where TDoc : IState
     {
         return services
-            .AddTransientRedisConnection<TModel>()
-            .AddTransient<IRedisStore<TModel>, RedisStore<TModel>>()
-            .AddTransient<IModelStore<TModel>, RedisStore<TModel>>()
-            .AddTransient<IRedisDb, RedisDb>();
+            .AddTransientRedisConnection<TDoc>()
+            .AddTransient<IRedisStore<TDoc>, RedisStore<TDoc>>()
+            .AddTransient<IModelStore<TDoc>, RedisStore<TDoc>>()
+            .AddTransient<IRedisDbT<TDoc>, RedisDbT<TDoc>>();
     }
 }
 

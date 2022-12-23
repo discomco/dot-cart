@@ -32,7 +32,7 @@ public class Evt2ListTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddInitializePFuncs()
+            .AddInitializeProjectionFuncs()
             .AddListIDCtor()
             .AddTransient(_ => TestUtils.Schema.EmptyListCtor)
             .AddTransient(_ => TestUtils.Initialize.PayloadCtor)

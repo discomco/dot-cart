@@ -1,3 +1,4 @@
+using DotCart.Core;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -6,7 +7,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class ToListTests : ProjectionTestsT<
+[DocId(IDConstants.EngineListId)]
+public class ToListTests : ListProjectionTestsT<
     Context.Initialize.Spoke, 
     Context.Initialize.ToRedisList, 
     Schema.EngineList, 

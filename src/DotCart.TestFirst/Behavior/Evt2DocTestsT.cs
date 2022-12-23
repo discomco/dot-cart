@@ -6,7 +6,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class Evt2DocTestsT<TIEvt, TDocID, TDoc, TPayload, TMeta> : IoCTests
+public abstract class Evt2DocTestsT<
+    TIEvt, 
+    TDocID, 
+    TDoc, 
+    TPayload, 
+    TMeta> : IoCTests
     where TIEvt : IEvtT<TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta

@@ -29,8 +29,9 @@ public static class Schema
             () => new Engine();
 
     public static readonly StateCtorT<EngineList>
-        ListCtor = 
-            () => new EngineList(ImmutableDictionary<string, EngineListItem>.Empty);
+        ListCtor =
+            EngineList.New; 
+
 
     [Flags]
     public enum EngineStatus
@@ -120,18 +121,18 @@ public static class Schema
         }
     }
 
+    
     [IDPrefix(IDConstants.EngineListIDPrefix)]
     public record EngineListID() : ID(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
     {
         public static EngineListID New() 
             => new();
-
     }
 
     [DbName(Constants.ListRedisDbName)]
     public record EngineList(ImmutableDictionary<string,EngineListItem> Items) : IListState
     {
-        public EngineListID ID { get; set; } = new();
+        // public EngineListID ID { get; set; } = new();
         public ImmutableDictionary<string,EngineListItem> Items { get; set; } = Items;
 
         public static EngineList New()

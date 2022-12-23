@@ -120,7 +120,7 @@ public static class Initialize
             .AddTransient(_ => _hope2Cmd);
     }
 
-    public static IServiceCollection AddInitializePFuncs(this IServiceCollection services)
+    public static IServiceCollection AddInitializeProjectionFuncs(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2Doc)
@@ -132,8 +132,7 @@ public static class Initialize
         return services
             .AddRootDocCtors()
             .AddRootListCtors()
-            .AddInitializeMappers()
-            .AddInitializePFuncs()
+            .AddInitializeProjectionFuncs()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc)

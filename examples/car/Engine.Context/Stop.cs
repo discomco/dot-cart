@@ -57,9 +57,9 @@ public static class Stop
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.Stop.IEvt> evt2State,
+            Evt2State<Schema.Engine, Behavior.Stop.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2State, newDoc)
+            : base(exchange, modelStore, evt2Doc, newDoc)
         {
         }
     }

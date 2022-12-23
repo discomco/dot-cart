@@ -42,4 +42,12 @@ public static class Schema
     public static readonly StateCtorT<Contract.Schema.EngineList>
         EmptyListCtor =
             Contract.Schema.EngineList.New;
+
+    public static readonly ValueObjectCtorT<Contract.Schema.Details> 
+        OldDetailsCtor = () => Contract.Schema.Details.New("engine #309", "Some Old Engine");
+
+    public static readonly StateCtorT<Contract.Schema.Engine>
+        DocCtor = () =>
+            Contract.Schema.Engine.New(DocIDCtor().Id(), Contract.Schema.EngineStatus.Initialized, OldDetailsCtor());
+
 }

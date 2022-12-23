@@ -24,7 +24,7 @@ public static class ChangeDetails
         return services
             .AddRootDocCtors()
             .AddRootListCtors()
-            .AddChangeDetailsPFuncs()
+            .AddChangeDetailsProjectionFuncs()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _guardFunc)
@@ -33,13 +33,12 @@ public static class ChangeDetails
             .AddTransient(_ => _initialized2Cmd);
     }
 
-    public static IServiceCollection AddChangeDetailsPFuncs(this IServiceCollection services)
+    public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _evt2List);
     }
-
     
     
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
@@ -60,8 +59,9 @@ public static class ChangeDetails
         _evt2Doc =
             (state, evt) =>
             {
-                state.Details = evt.GetPayload<Contract.ChangeDetails.Payload>().Details;
-                return state;
+                var newState = state with { };
+                newState.Details = evt.GetPayload<Contract.ChangeDetails.Payload>().Details;
+                return newState;
             };
 
     private static readonly Evt2State<Schema.EngineList, IEvt>

@@ -8,7 +8,7 @@ namespace DotCart.Drivers.Redis;
 /// </summary>
 public abstract class RedisObject
 {
-    private RedisDb _db;
+    private IRedisDb _db;
 
     private string _keyName;
     private ISimpleRedisDb RedisMulti;
@@ -18,7 +18,7 @@ public abstract class RedisObject
         BaseKeyName = keyName;
     }
 
-    public RedisDb Db
+    public IRedisDb Db
     {
         get
         {

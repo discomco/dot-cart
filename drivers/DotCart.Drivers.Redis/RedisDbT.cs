@@ -1,9 +1,10 @@
 ﻿using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public interface ISimpleRedisDb
+public interface ISimpleRedisDb 
 {
     public string KeyNameSpace { get; }
     IDatabaseAsync DB { get; }
@@ -11,11 +12,11 @@ public interface ISimpleRedisDb
 
 public interface IRedisDb : ISimpleRedisDb, IClose, IDisposable, IAsyncDisposable, ICloseAsync
 {
+    T GetKey<T>(string keyName) where T : RedisObject;
     IDatabase Database { get; }
     IList<string> TrackedKeys { get; }
     IList<RedisObject> TrackedObjects { get; }
     T AddToContainer<T>(T obj) where T : RedisObject;
-    T GetKey<T>(string keyName) where T : RedisObject;
     RedisObject GetKey(Type keyType, string keyName);
     KeyTemplate<T> GetKeyTemplate<T>(string keyNamePattern) where T : RedisObject;
     RedisTransactionDb CreateTransaction(object state = null);
@@ -23,18 +24,27 @@ public interface IRedisDb : ISimpleRedisDb, IClose, IDisposable, IAsyncDisposabl
     Task DeleteTrackedKeys();
 }
 
-public class RedisDb : IRedisDb
+public interface IRedisDbT<TDoc> :  IRedisDb
+    where TDoc : IState
+{
+
+}
+
+public class RedisDbT<TDoc> : IRedisDbT<TDoc> 
+    where TDoc : IState
 {
     private readonly IConnectionMultiplexer _connection;
     private readonly Dictionary<string, RedisObject> _trackedObjects = new();
+    private readonly IRedisConnectionFactory<TDoc> _connFact;
     private readonly bool _trackObjects;
 
-    public RedisDb(IConnectionMultiplexer cn, string keyNameSpace = "", bool trackObjects = true)
+    public RedisDbT(IRedisConnectionFactory<TDoc> connFact, string keyNameSpace = "", bool trackObjects = true)
     {
-        _connection = cn;
-        Database = cn.GetDatabase();
-        KeyNameSpace = keyNameSpace ?? "";
+        KeyNameSpace = keyNameSpace;
+        _connFact = connFact;
         _trackObjects = trackObjects;
+        _connection = _connFact.Connect();
+        Database = _connection.GetDatabase();
     }
 
     public IDatabase Database { get; }
@@ -117,7 +127,6 @@ public class RedisDb : IRedisDb
         if (_trackObjects)
             if (_trackedObjects.TryGetValue(fullKeyName, out obj))
                 return obj;
-
         var instance = Activator.CreateInstance(keyType, keyName) as RedisObject;
         AddToContainer(instance);
         return instance;

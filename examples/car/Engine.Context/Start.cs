@@ -43,9 +43,9 @@ public static class Start
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.Start.IEvt> evt2State,
+            Evt2State<Schema.Engine, Behavior.Start.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2State, newDoc)
+            : base(exchange, modelStore, evt2Doc, newDoc)
         {
         }
     }

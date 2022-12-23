@@ -9,8 +9,7 @@ namespace DotCart.Drivers.Redis.Tests;
 
 internal class MyRedisStore : RedisStore<TheDoc>
 {
-    public MyRedisStore(
-        IRedisDb redisDb) : base(redisDb)
+    public MyRedisStore(IRedisDbT<TheDoc> redisDb) : base(redisDb)
     {
     }
 }
