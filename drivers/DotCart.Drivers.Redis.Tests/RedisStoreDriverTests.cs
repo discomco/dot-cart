@@ -21,7 +21,7 @@ internal static class Inject
         return services
             .AddTransient(_ => TheDoc.Rand)
             .AddTransient(_ => TheID.Ctor)
-            .AddTransient<IModelStore<TheDoc>, MyRedisStore>();
+            .AddTransient<IDocStore<TheDoc>, MyRedisStore>();
     }
 }
 

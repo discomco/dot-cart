@@ -26,13 +26,27 @@ public static class Start
             hope =>
                 Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly Evt2State<Schema.Engine, IEvt>
-        _evt2State =
-            (state, _) =>
+    private static readonly Evt2Doc<Schema.Engine, IEvt>
+        _evt2Doc =
+            (doc, _) =>
             {
-                state.Status = state.Status.SetFlag(Schema.EngineStatus.Started);
-                return state;
+                var newDoc = doc with { };
+                newDoc.Status = newDoc.Status.SetFlag(Schema.EngineStatus.Started);
+                return newDoc;
             };
+
+    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+        _evt2List =
+            (doc, evt) =>
+            {
+                if (doc.Items.All(it => it.Key != evt.AggregateId)) 
+                    return doc;
+                var newDoc = doc with { };
+                newDoc.Items[evt.AggregateId].Status =
+                    newDoc.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Started);
+                return newDoc;
+            };
+
 
     private static readonly SpecFuncT<Schema.Engine, Cmd>
         _specFunc =
@@ -73,11 +87,11 @@ public static class Start
         (evt, _) =>
             Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
-    public static IServiceCollection AddStartMappers(this IServiceCollection services)
+    public static IServiceCollection AddStartACLFuncs(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _hope2Cmd);
     }
 
@@ -88,9 +102,16 @@ public static class Start
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddSingleton<IAggregatePolicy, OnInitialized>()
             .AddTransient(_ => _initialized2Start)
-            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc);
+    }
+
+    public static IServiceCollection AddStartProjectionFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2List);
     }
 
 

@@ -55,7 +55,7 @@ public static class ChangeDetails
                     evt.GetMeta<EventMeta>());
             };
 
-    private static readonly Evt2State<Schema.Engine, IEvt>
+    private static readonly Evt2Doc<Schema.Engine, IEvt>
         _evt2Doc =
             (state, evt) =>
             {
@@ -64,7 +64,7 @@ public static class ChangeDetails
                 return newState;
             };
 
-    private static readonly Evt2State<Schema.EngineList, IEvt>
+    private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
             (state, evt) =>
             {

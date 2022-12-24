@@ -19,7 +19,7 @@ public abstract class ProjectionTestsT<
     where TEvt : IEvtB
     where TSpoke : ISpokeT<TSpoke>
 {
-    private Evt2State<TState, TEvt> _evt2State;
+    private Evt2Doc<TState, TEvt> _evt2State;
 
     private IExchange _exchange;
     private IActor<TSpoke>? _projection;
@@ -47,7 +47,7 @@ public abstract class ProjectionTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TEvt>>();
         // THEN
         Assert.NotNull(_evt2State);
     }
@@ -113,7 +113,7 @@ public abstract class ProjectionTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var rms = TestEnv.ResolveRequired<IModelStore<TState>>();
+        var rms = TestEnv.ResolveRequired<IDocStore<TState>>();
         // THEN
         Assert.NotNull(rms);
     }

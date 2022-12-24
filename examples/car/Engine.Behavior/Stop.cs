@@ -24,7 +24,7 @@ public static class Stop
                 evt.GetPayload<Contract.Stop.Payload>()
             );
 
-    private static readonly Evt2State<Schema.Engine, IEvt>
+    private static readonly Evt2Doc<Schema.Engine, IEvt>
         _evt2State =
             (state, _) =>
             {

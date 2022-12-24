@@ -53,7 +53,7 @@ public static class Inject
     {
         return services
             .AddSingletonRedisConnection<TDoc>()
-            .AddTransient<IModelStore<TDoc>, RedisStore<TDoc>>()
+            .AddTransient<IDocStore<TDoc>, RedisStore<TDoc>>()
             .AddTransient<IRedisStore<TDoc>, RedisStore<TDoc>>()
             .AddSingleton<IRedisDbT<TDoc>, RedisDbT<TDoc>>();
     }
@@ -64,11 +64,12 @@ public static class Inject
         return services
             .AddTransientRedisConnection<TDoc>()
             .AddTransient<IRedisStore<TDoc>, RedisStore<TDoc>>()
-            .AddTransient<IModelStore<TDoc>, RedisStore<TDoc>>()
+            .AddTransient<IDocStore<TDoc>, RedisStore<TDoc>>()
             .AddTransient<IRedisDbT<TDoc>, RedisDbT<TDoc>>();
     }
 }
 
-public interface IRedisStore<TModel> : IModelStore<TModel> where TModel : IState
+public interface IRedisStore<TDoc> 
+    : IDocStore<TDoc> where TDoc : IState
 {
 }

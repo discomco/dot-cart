@@ -21,7 +21,7 @@ public class ESDBProjectorTests : IoCTests
     private IExchange? _exchange;
     private IHostExecutor? _executor;
     private ILogger? _logger;
-    private IModelStore<TheDoc>? _memStore;
+    private IDocStore<TheDoc>? _memStore;
     private SubscriptionFilterOptions? _subOptions;
 
     public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

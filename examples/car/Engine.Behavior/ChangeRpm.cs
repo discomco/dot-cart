@@ -52,7 +52,7 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2State<Schema.Engine, IEvt>
+    private static readonly Evt2Doc<Schema.Engine, IEvt>
         _evt2State =
             (state, evt) =>
             {

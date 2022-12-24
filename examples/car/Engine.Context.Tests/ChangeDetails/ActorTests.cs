@@ -11,7 +11,7 @@ namespace Engine.Context.Tests.ChangeDetails;
 public class ActorTests : EffectsTests<
     Behavior.ChangeDetails.IEvt,
     Contract.ChangeDetails.Fact,
-    IModelStore<Schema.Engine>>
+    IDocStore<Schema.Engine>>
 {
     public ActorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -25,7 +25,7 @@ public class ActorTests : EffectsTests<
     {
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
-            .AddTransient(_ => A.Fake<IModelStore<Schema.Engine>>())
+            .AddTransient(_ => A.Fake<IDocStore<Schema.Engine>>())
             .AddChangeDetailsSpoke();
     }
 }

@@ -9,7 +9,6 @@ using DotCart.Drivers.Redis;
 using Engine.Behavior;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
-using Constants = Engine.Contract.Constants;
 
 namespace Engine.Context;
 
@@ -33,22 +32,19 @@ public static class Initialize
     }
 
 
-    public interface IToRedisDoc : IActor<Spoke>
-    {
-    }
 
     [Name(ToRedisDoc_v1)]
-    [DbName(Constants.DocRedisDbName)]
+    [DbName(DbConstants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
             Behavior.Initialize.IEvt>,
-        IToRedisDoc
+         IActor<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.Initialize.IEvt> evt2Doc,
+            Evt2Doc<Schema.Engine, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, modelStore, evt2Doc, newDoc)
         {
@@ -72,7 +68,7 @@ public static class Initialize
 
 
     [Name(ToRedisList_v1)]
-    [DbName(Constants.ListRedisDbName)]
+    [DbName(DbConstants.ListRedisDbName)]
     [DocId(IDConstants.EngineListId)]
     public class ToRedisList: ProjectionT<
         IRedisStore<Schema.EngineList>,
@@ -82,7 +78,7 @@ public static class Initialize
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> modelStore,
-            Evt2State<Schema.EngineList, Behavior.Initialize.IEvt> evt2Doc,
+            Evt2Doc<Schema.EngineList, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) 
             : base(exchange, modelStore, evt2Doc, newDoc)
         {

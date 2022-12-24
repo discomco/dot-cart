@@ -11,8 +11,8 @@ public delegate TCmd Fact2Cmd<out TCmd, in TFact>(TFact fact)
     where TFact : IFactB
     where TCmd : ICmdB;
 
-public delegate TState Evt2State<TState, in TEvt>(TState state, Event evt)
-    where TState : IState
+public delegate TDoc Evt2Doc<TDoc, in TEvt>(TDoc doc, Event evt)
+    where TDoc : IState
     where TEvt : IEvtB;
 
 public delegate TFact Evt2Fact<out TFact, in TEvt>(Event evt)

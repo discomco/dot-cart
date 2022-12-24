@@ -10,7 +10,6 @@ using DotCart.Drivers.Redis;
 using Engine.Behavior;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
-using Constants = Engine.Contract.Constants;
 
 namespace Engine.Context;
 
@@ -73,7 +72,7 @@ public static class ChangeDetails
     }
 
     [Name(ToRedisDoc_v1)]
-    [DbName(Constants.DocRedisDbName)]
+    [DbName(DbConstants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
@@ -81,7 +80,7 @@ public static class ChangeDetails
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> modelStore,
-            Evt2State<Schema.Engine, Behavior.ChangeDetails.IEvt> evt2Doc,
+            Evt2Doc<Schema.Engine, Behavior.ChangeDetails.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc) : base(exchange,
             modelStore,
             evt2Doc,
@@ -90,7 +89,7 @@ public static class ChangeDetails
         }
     }
 
-    [DbName(Constants.ListRedisDbName)]
+    [DbName(DbConstants.ListRedisDbName)]
     [Name(ToRedisList_v1)]
     [DocId(IDConstants.EngineListId)]
     public class ToRedisList : ProjectionT<
@@ -101,7 +100,7 @@ public static class ChangeDetails
         public ToRedisList(
             IExchange exchange, 
             IRedisStore<Schema.EngineList> modelStore, 
-            Evt2State<Schema.EngineList, 
+            Evt2Doc<Schema.EngineList, 
                 Behavior.ChangeDetails.IEvt> evt2Doc, 
             StateCtorT<Schema.EngineList> newDoc) 
             : base(exchange, modelStore, evt2Doc, newDoc)

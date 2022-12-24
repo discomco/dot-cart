@@ -14,11 +14,11 @@ public static partial class Inject
         where TState : IState
     {
         return services
-            .AddSingleton<IModelStore<TState>, MemStore<TState>>();
+            .AddSingleton<IDocStore<TState>, MemStore<TState>>();
     }
 }
 
-public class MemStore<TState> : IModelStore<TState> where TState : IState
+public class MemStore<TState> : IDocStore<TState> where TState : IState
 {
     private readonly object delMutex = new();
     private readonly object existMutex = new();

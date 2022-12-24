@@ -6,6 +6,15 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
+
+/// <summary>
+/// Evt2DocTestsT is intended to provide a base for testing functions that project an Event onto a certain Document
+/// </summary>
+/// <typeparam name="TIEvt">The Injection Discriminator (Injector) that uniquely identifies the event</typeparam>
+/// <typeparam name="TDocID">The ID Type for the Document</typeparam>
+/// <typeparam name="TDoc">The Document Type</typeparam>
+/// <typeparam name="TPayload">The Payload type for the Spoke</typeparam>
+/// <typeparam name="TMeta">The Metadata Type</typeparam>
 public abstract class Evt2DocTestsT<
     TIEvt, 
     TDocID, 
@@ -21,7 +30,7 @@ public abstract class Evt2DocTestsT<
     protected EvtCtorT<TIEvt,TPayload,TMeta> _evtCtor;
     protected StateCtorT<TDoc> _docCtor;
     public IDCtorT<TDocID> _idCtor;
-    protected Evt2State<TDoc,TIEvt> _evt2Doc;
+    protected Evt2Doc<TDoc,TIEvt> _evt2Doc;
     protected PayloadCtorT<TPayload> _payloadCtor;
     protected MetaCtorT<TMeta> _metaCtor;
 
@@ -70,7 +79,7 @@ public abstract class Evt2DocTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2Doc = TestEnv.ResolveRequired <Evt2State<TDoc, TIEvt>>();
+        _evt2Doc = TestEnv.ResolveRequired <Evt2Doc<TDoc, TIEvt>>();
         // THEN
         Assert.NotNull(_evt2Doc);
     }
@@ -102,7 +111,7 @@ public abstract class Evt2DocTestsT<
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        _evt2Doc = TestEnv.ResolveRequired <Evt2State<TDoc, TIEvt>>();
+        _evt2Doc = TestEnv.ResolveRequired <Evt2Doc<TDoc, TIEvt>>();
         Assert.NotNull(_evt2Doc);
         _docCtor = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
         Assert.NotNull(_docCtor);

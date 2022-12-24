@@ -19,7 +19,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
-    protected Evt2State<TState, TEvt> _evt2State;
+    protected Evt2Doc<TState, TEvt> _evt2State;
     protected TID _ID;
     protected IDCtorT<TID> _newID;
     protected StateCtorT<TState>? _newState;
@@ -135,7 +135,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2State = TestEnv.ResolveRequired<Evt2State<TState, TEvt>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TEvt>>();
         // THEN
         Assert.NotNull(_evt2State);
     }

@@ -52,7 +52,7 @@ public static class Initialize
         _hope2Cmd =
             hope => Cmd.New(Schema.EngineID.New(), hope.Payload);
 
-    private static readonly Evt2State<
+    private static readonly Evt2Doc<
             Schema.Engine,
             IEvt>
         _evt2Doc =
@@ -67,7 +67,7 @@ public static class Initialize
                 return state;
             };
 
-    private static readonly Evt2State<
+    private static readonly Evt2Doc<
             Schema.EngineList,
             IEvt>
         _evt2List =

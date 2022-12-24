@@ -12,35 +12,36 @@ public interface IProjectionB : IActor
 }
 
 public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
-    where TDriver : IModelStore<TState>
+    where TDriver : IDocStore<TState>
     where TState : IState
     where TEvt : IEvtB
 {
 }
 
 /// <summary>
-///     A Projection is an active Unit of Effect (Reactor) that is defined
-///     by the TState that it projects the TEvt to.
+///     A Projection is an active Unit of Effect (Actor) that is defined
+///     by the TStore and the TDoc that it projects the TEvt to.
 /// </summary>
-/// <typeparam name="TStore">
-///     The Type of the Driver this Projection uses.
+/// <typeparam name="TIStore">
+///     The Type of the Store this Actor projects to
 ///     This type depends on the supporting backing service to which the Projection Projects its State.
 /// </typeparam>
 /// <typeparam name="TDoc">The type of the document that is being projected to.</typeparam>
-/// <typeparam name="TEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TStore, TDoc, TEvt>
-    where TStore : IModelStore<TDoc>
+/// <typeparam name="TIEvt">The type of the Event that is being projected</typeparam>
+public abstract class ProjectionT<TIStore, TDoc, TIEvt>
+    : ActorB, IProjectionT<TIStore, TDoc, TIEvt>
+    where TIStore : IDocStore<TDoc>
     where TDoc : IState
-    where TEvt : IEvtB
+    where TIEvt : IEvtB
 {
-    private readonly Evt2State<TDoc, TEvt> _evt2Doc;
-    private readonly TStore _modelStore;
+    private readonly Evt2Doc<TDoc, TIEvt> _evt2Doc;
+    private readonly TIStore _modelStore;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
-        TStore modelStore,
-        Evt2State<TDoc, TEvt> evt2Doc,
+        TIStore modelStore,
+        Evt2Doc<TDoc, TIEvt> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
         _modelStore = modelStore;
@@ -77,7 +78,7 @@ public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TSt
         }
         catch (Exception)
         {
-            return evt.AggregateId;    
+            return evt.AggregateId;
         }
     }
 
@@ -85,8 +86,8 @@ public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TSt
     {
         return Run(() =>
         {
-            Log.Information($"{AppFacts.Subscribed} {TopicAtt.Get<TEvt>()}  ~> [{GetType().Name}]");
-            _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
+            Log.Information($"{AppFacts.Subscribed} {TopicAtt.Get<TIEvt>()}  ~> [{GetType().Name}]");
+            _exchange.Subscribe(TopicAtt.Get<TIEvt>(), this);
             return CompletedTask;
         }, cancellationToken);
     }
@@ -95,7 +96,7 @@ public abstract class ProjectionT<TStore, TDoc, TEvt> : ActorB, IProjectionT<TSt
     {
         return Run(() =>
         {
-            _exchange.Unsubscribe(TopicAtt.Get<TEvt>(), this);
+            _exchange.Unsubscribe(TopicAtt.Get<TIEvt>(), this);
             return CompletedTask;
         }, cancellationToken);
     }

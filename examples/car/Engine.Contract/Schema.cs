@@ -62,7 +62,7 @@ public static class Schema
         return (value & flag) != 0;
     }
 
-    [DbName(Constants.DocRedisDbName)]
+    [DbName(DbConstants.DocRedisDbName)]
     public record Engine : IState
     {
 
@@ -129,7 +129,7 @@ public static class Schema
             => new();
     }
 
-    [DbName(Constants.ListRedisDbName)]
+    [DbName(DbConstants.ListRedisDbName)]
     public record EngineList(ImmutableDictionary<string,EngineListItem> Items) : IListState
     {
         // public EngineListID ID { get; set; } = new();
