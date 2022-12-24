@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -53,11 +54,30 @@ public static class ChangeRpm
             };
 
     private static readonly Evt2Doc<Schema.Engine, IEvt>
-        _evt2State =
-            (state, evt) =>
+        _evt2Doc =
+            (doc, evt) =>
             {
-                state.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-                return state;
+                var newDoc = doc with { };
+                newDoc.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+                return newDoc;
+            };
+
+   
+    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+        _evt2List =
+            (doc, evt) =>
+            {
+                if (doc.Items.All(item => item.Key != evt.AggregateId)) 
+                    return doc;
+                var newItem = doc.Items[evt.AggregateId] with { };
+                newItem.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+                var newDoc = doc with
+                {
+                    Items = ImmutableDictionary.CreateRange(doc.Items)
+                };
+                newDoc.Items = newDoc.Items.Remove(evt.AggregateId);
+                newDoc.Items = newDoc.Items.Add(evt.AggregateId, newItem);
+                return newDoc;
             };
 
     private static readonly Evt2Fact<Contract.ChangeRpm.Fact, IEvt>
@@ -85,12 +105,21 @@ public static class ChangeRpm
                 meta.ToBytes()
             );
 
-    public static IServiceCollection AddChangeRpmMappers(this IServiceCollection services)
+    public static IServiceCollection AddChangeRpmACLFuncs(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _evt2Fact)
             .AddTransient(_ => _hope2Cmd);
+    }
+
+
+    public static IServiceCollection AddChangeRpmProjectionFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2List);
+
     }
 
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
@@ -98,7 +127,7 @@ public static class ChangeRpm
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc);
     }
@@ -117,17 +146,6 @@ public static class ChangeRpm
     public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
     {
     }
-
-
-// public record Evt(IID AggregateID, Contract.ChangeRpm.Payload Payload, EvtMeta Meta)
-//     : EvtT<Contract.ChangeRpm.Payload, EvtMeta>(AggregateID, TopicAtt.Get<Evt>(), Payload, Meta)
-// {
-//     public static Evt New(IID engineID, Contract.ChangeRpm.Payload payload)
-//     {
-//         var meta = new EvtMeta(NameAtt.Get<IEngineAggregateInfo>(), engineID.Id());
-//         return new Evt(engineID, payload, meta);
-//     }
-// }
 
     public class Exception : System.Exception
     {

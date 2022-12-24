@@ -102,7 +102,7 @@ public static class Schema
     }
 
 
-    public record EngineListItem : IValueObject, IEntityT<EngineID>
+    public record EngineListItem : IValueObject, IEntityT<EngineID>, IState
     {
         public string EngineId { get; set; }
         public string Name { get; set;}

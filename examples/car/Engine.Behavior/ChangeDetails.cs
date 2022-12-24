@@ -57,22 +57,22 @@ public static class ChangeDetails
 
     private static readonly Evt2Doc<Schema.Engine, IEvt>
         _evt2Doc =
-            (state, evt) =>
+            (doc, evt) =>
             {
-                var newState = state with { };
-                newState.Details = evt.GetPayload<Contract.ChangeDetails.Payload>().Details;
-                return newState;
+                var newDoc = doc with { };
+                newDoc.Details = evt.GetPayload<Contract.ChangeDetails.Payload>().Details;
+                return newDoc;
             };
 
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
-            (state, evt) =>
+            (doc, evt) =>
             {
-                if (state.Items.All(x => x.Value.EngineId != evt.AggregateId)) return state;
-                // var item = state.Items.FirstOrDefault(x => x.Key == evt.AggregateId);
-                // item.Value.Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
-                state.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
-                return state;
+                if (doc.Items.All(x => x.Key != evt.AggregateId)) 
+                    return doc;
+                var newDoc = doc with { };
+                newDoc.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
+                return newDoc;
             }; 
 
     private static readonly SpecFuncT<Schema.Engine, Cmd>

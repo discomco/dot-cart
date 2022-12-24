@@ -23,7 +23,7 @@ public static class ChangeRpm
     {
         return services
             .AddEngineBehavior()
-            .AddChangeRpmMappers()
+            .AddChangeRpmACLFuncs()
             .AddHostedSpokeT<Spoke>()
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
