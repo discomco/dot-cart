@@ -41,9 +41,5 @@ public class Evt2ListTests
             .AddTransient(_ => TestUtils.ChangeDetails.EvtCtor);
     }
 
-    protected override bool IsValidProjection(Schema.EngineList oldDoc, Schema.EngineList newDoc, Event evt)
-    {
-        return oldDoc.Items.Count == newDoc.Items.Count
-               && newDoc.Items[evt.AggregateId].Name == evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
-    }
+    
 }

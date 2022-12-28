@@ -143,7 +143,7 @@ public class ESDBEventStoreTests : IoCTests
 
     protected override void SetEnVars()
     {
-        DotEnv.FromEmbedded();
+        //DotEnv.FromEmbedded();
     }
 
     protected override void InjectDependencies(IServiceCollection services)

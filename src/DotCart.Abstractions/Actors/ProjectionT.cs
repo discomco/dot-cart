@@ -35,16 +35,16 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
     where TIEvt : IEvtB
 {
     private readonly Evt2Doc<TDoc, TIEvt> _evt2Doc;
-    private readonly TIStore _modelStore;
+    private readonly TIStore _docStore;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
-        TIStore modelStore,
+        TIStore docStore,
         Evt2Doc<TDoc, TIEvt> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
-        _modelStore = modelStore;
+        _docStore = docStore;
         _evt2Doc = evt2Doc;
         _newDoc = newDoc;
     }
@@ -64,10 +64,13 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
         if (!evt.IsCommitted) return;
         Log.Information($"{AppVerbs.Projecting} [{evt.AggregateId}::{evt.Topic}] ~> [{GetType().Name}]");
         var docId = GetDocId(evt);
-        var doc = await _modelStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
+        var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
         doc = _evt2Doc(doc, (Event)evt);
-        await _modelStore.SetAsync(docId, doc, cancellationToken).ConfigureAwait(false);
+        
+        // TODO: Call ProjectionValidationFunc here
+        
+        await _docStore.SetAsync(docId, doc, cancellationToken).ConfigureAwait(false);
     }
 
     private string GetDocId(IEvtB evt)

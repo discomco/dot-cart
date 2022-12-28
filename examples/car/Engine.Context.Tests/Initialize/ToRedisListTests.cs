@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Initialize;
 
 [DocId(IDConstants.EngineListId)]
-public class ToListTests : ListProjectionTestsT<
+public class ToRedisListTests : ListProjectionTestsT<
     Context.Initialize.Spoke, 
     Context.Initialize.ToRedisList, 
     Schema.EngineList, 
     Behavior.Initialize.IEvt>
 {
-    public ToListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

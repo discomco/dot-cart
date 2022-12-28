@@ -37,7 +37,9 @@ public static class ChangeDetails
     {
         return services
             .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _evt2List);
+            .AddTransient(_ => _evt2DocVal)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal);
     }
     
     
@@ -64,6 +66,17 @@ public static class ChangeDetails
                 return newDoc;
             };
 
+    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+        _evt2DocVal =
+            (input, output, evt) =>
+            {
+                var pld = evt.GetPayload<Contract.ChangeDetails.Payload>();
+                return output.Details.Name == pld.Details.Name
+                       && output.Details.Description == pld.Details.Description
+                       && (input.Details.Name != output.Details.Name
+                           || input.Details.Description != output.Details.Description);
+            };
+
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
             (doc, evt) =>
@@ -73,9 +86,14 @@ public static class ChangeDetails
                 var newDoc = doc with { };
                 newDoc.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
                 return newDoc;
-            }; 
+            };
 
-    private static readonly SpecFuncT<Schema.Engine, Cmd>
+    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+        _evt2ListVal =
+            (_, output, evt) => 
+                output.Items[evt.AggregateId].Name == evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
+
+    private static readonly GuardFuncT<Schema.Engine, Cmd>
         _guardFunc = (cmd, state) =>
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());

@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -35,20 +36,41 @@ public static class Start
                 return newDoc;
             };
 
+    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+        _evt2DocVal =
+            (input, output, _) 
+                => !input.Status.HasFlagFast(Schema.EngineStatus.Started) 
+                   && output.Status.HasFlagFast(Schema.EngineStatus.Started)
+                   && !output.Status.HasFlagFast(Schema.EngineStatus.Stopped);
+
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
-            (doc, evt) =>
+            (lst, evt) =>
             {
-                if (doc.Items.All(it => it.Key != evt.AggregateId)) 
-                    return doc;
-                var newDoc = doc with { };
-                newDoc.Items[evt.AggregateId].Status =
-                    newDoc.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Started);
-                return newDoc;
+                if (lst.Items.All(it => it.Key != evt.AggregateId))
+                    return lst;
+                var newLst = lst with
+                {
+                    Items = ImmutableDictionary.CreateRange(lst.Items)
+                };
+                newLst.Items[evt.AggregateId].Status
+                    = newLst.Items[evt.AggregateId].Status.UnsetFlag(Schema.EngineStatus.Stopped);
+                newLst.Items[evt.AggregateId].Status
+                    = newLst.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Started);
+                return newLst;
+            };
+
+    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+        _evt2ListVal =
+            (input, output, evt) =>
+            {
+                return output.Items.Any(it => it.Key == evt.AggregateId)
+                       && output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Started)
+                       && !output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Stopped);
             };
 
 
-    private static readonly SpecFuncT<Schema.Engine, Cmd>
+    private static readonly GuardFuncT<Schema.Engine, Cmd>
         _specFunc =
             (_, state) =>
             {
@@ -111,7 +133,9 @@ public static class Start
     {
         return services
             .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _evt2List);
+            .AddTransient(_ => _evt2DocVal)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal);
     }
 
 

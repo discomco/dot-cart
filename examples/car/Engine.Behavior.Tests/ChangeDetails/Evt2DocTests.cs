@@ -41,9 +41,4 @@ public class Evt2DocTests
             .AddChangeDetailsProjectionFuncs();
     }
 
-    protected override bool IsValidProjection(Schema.Engine oldDoc, Schema.Engine newDoc, Event evt)
-    {
-        return oldDoc.Details.Name != newDoc.Details.Name
-               || oldDoc.Details.Description != newDoc.Details.Description;
-    }
 }

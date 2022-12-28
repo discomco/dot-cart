@@ -26,7 +26,7 @@ public static class Stop
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddEngineBehavior()
-            .AddStopMappers();
+            .AddStopACLFuncs();
     }
 
     [Name(Spoke_v1)]
@@ -55,10 +55,10 @@ public static class Stop
     {
         public ToRedisDoc(
             IExchange exchange,
-            IRedisStore<Schema.Engine> modelStore,
+            IRedisStore<Schema.Engine> docStore,
             Evt2Doc<Schema.Engine, Behavior.Stop.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2Doc, newDoc)
+            : base(exchange, docStore, evt2Doc, newDoc)
         {
         }
     }

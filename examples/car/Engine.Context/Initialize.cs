@@ -43,10 +43,10 @@ public static class Initialize
     {
         public ToRedisDoc(
             IExchange exchange,
-            IRedisStore<Schema.Engine> modelStore,
+            IRedisStore<Schema.Engine> docStore,
             Evt2Doc<Schema.Engine, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2Doc, newDoc)
+            : base(exchange, docStore, evt2Doc, newDoc)
         {
         }
     }
@@ -77,10 +77,10 @@ public static class Initialize
     {
         public ToRedisList(
             IExchange exchange,
-            IRedisStore<Schema.EngineList> modelStore,
+            IRedisStore<Schema.EngineList> docStore,
             Evt2Doc<Schema.EngineList, Behavior.Initialize.IEvt> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) 
-            : base(exchange, modelStore, evt2Doc, newDoc)
+            : base(exchange, docStore, evt2Doc, newDoc)
         {
         }
     }

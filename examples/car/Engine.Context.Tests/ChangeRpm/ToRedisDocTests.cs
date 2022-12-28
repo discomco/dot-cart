@@ -4,15 +4,15 @@ using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Stop;
+namespace Engine.Context.Tests.ChangeRpm;
 
-public class ToDocTests : ProjectionTestsT<
-    Context.Stop.Spoke,
-    Context.Stop.ToRedisDoc,
+public class ToRedisDocTests : ProjectionTestsT<
+    Context.ChangeRpm.Spoke,
+    Context.ChangeRpm.ToRedisDoc,
     Schema.Engine,
-    Behavior.Stop.IEvt>
+    Behavior.ChangeRpm.IEvt>
 {
-    public ToDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -27,6 +27,6 @@ public class ToDocTests : ProjectionTestsT<
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStopSpoke();
+            .AddChangeRpmSpoke();
     }
 }

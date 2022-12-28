@@ -37,7 +37,15 @@ public static class FlagExtensions
 
     public static int UnsetFlag(this int flags, int flag)
     {
-        return flags ^ flag;
+        if (flags.HasFlagFast(flag))
+            return flags ^ flag;
+        return flags;
+    }
+
+
+    public static bool HasFlagFast(this int flags, int flag)
+    {
+        return (flag & flags) != 0;
     }
 
     public static int UnsetFlags(this int flags, params int[] oldFlags)

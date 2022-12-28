@@ -10,10 +10,10 @@ public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
     where TState : IState
 {
     private readonly RaiseFuncT<TState, TCmd> _raise;
-    private readonly SpecFuncT<TState, TCmd> _specify;
+    private readonly GuardFuncT<TState, TCmd> _specify;
     protected IAggregate Aggregate;
 
-    public TryCmdT(SpecFuncT<TState, TCmd> specify, RaiseFuncT<TState, TCmd> raise)
+    public TryCmdT(GuardFuncT<TState, TCmd> specify, RaiseFuncT<TState, TCmd> raise)
     {
         _specify = specify;
         _raise = raise;

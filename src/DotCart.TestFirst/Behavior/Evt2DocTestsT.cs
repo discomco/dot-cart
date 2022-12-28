@@ -33,6 +33,7 @@ public abstract class Evt2DocTestsT<
     protected Evt2Doc<TDoc,TIEvt> _evt2Doc;
     protected PayloadCtorT<TPayload> _payloadCtor;
     protected MetaCtorT<TMeta> _metaCtor;
+    protected Evt2DocValidator<TDoc,TIEvt> _evt2DocVal;
 
     protected Evt2DocTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -44,8 +45,7 @@ public abstract class Evt2DocTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evtCtor = TestEnv
-            .ResolveRequired<EvtCtorT<TIEvt, TPayload, TMeta>>();
+        _evtCtor = TestEnv.ResolveRequired<EvtCtorT<TIEvt, TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_evtCtor);
     }
@@ -59,6 +59,17 @@ public abstract class Evt2DocTestsT<
         _docCtor = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
         // THEN
         Assert.NotNull(_docCtor);
+    }
+
+    [Fact]
+    public void ShouldResolveProjectionValidatorFunction()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TIEvt>>();
+        // THEN
+        Assert.NotNull(_evt2DocVal);
     }
 
 
@@ -107,7 +118,7 @@ public abstract class Evt2DocTestsT<
     }
 
     [Fact]
-    public void ShouldExecuteEvt2DocFunc()
+    public Task ShouldExecuteEvt2DocFunc()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -129,8 +140,11 @@ public abstract class Evt2DocTestsT<
         var evt = _evtCtor(ID, payload, meta);
         var oldDoc = _docCtor();
         var newDoc = _evt2Doc(oldDoc, evt);
-        Assert.True(IsValidProjection(oldDoc, newDoc, evt));
+        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TIEvt>>();
+        Assert.NotNull(_evt2DocVal);
+        var isValid = _evt2DocVal(oldDoc, newDoc, evt); 
+        Assert.True(isValid);
+        return Task.CompletedTask;
     }
-    protected abstract bool IsValidProjection(TDoc oldDoc, TDoc newDoc, Event evt);
-
+ 
 }

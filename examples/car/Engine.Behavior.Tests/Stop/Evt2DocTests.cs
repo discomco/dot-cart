@@ -5,14 +5,15 @@ using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Behavior.Tests.Start;
+namespace Engine.Behavior.Tests.Stop;
 
 public class Evt2DocTests
-    : Evt2DocTestsT<
-        Behavior.Start.IEvt,
-        Schema.EngineID,
-        Schema.Engine,
-        Contract.Start.Payload, EventMeta>
+: Evt2DocTestsT<
+    Behavior.Stop.IEvt, 
+    Schema.EngineID, 
+    Schema.Engine, 
+    Contract.Stop.Payload, 
+    EventMeta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -31,13 +32,11 @@ public class Evt2DocTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient(_ => TestUtils.Schema.MetaCtor)
+            .AddTransient(_ => TestUtils.Stop.EvtCtor)
+            .AddTransient(_ => TestUtils.Stop.PayloadCtor)
             .AddTransient(_ => TestUtils.Schema.DocIDCtor)
-            .AddTransient(_ => TestUtils.Start.PayloadCtor)
-            .AddTransient(_ => TestUtils.Start.EvtCtor)
-            .AddTransient(_ => TestUtils.Start.DocCtor)
-            .AddStartProjectionFuncs();
+            .AddTransient(_ => TestUtils.Schema.DocCtor)
+            .AddTransient(_ => TestUtils.Schema.MetaCtor)
+            .AddStopProjectionFuncs();
     }
-
-
 }

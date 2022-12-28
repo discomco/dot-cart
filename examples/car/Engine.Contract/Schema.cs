@@ -43,18 +43,26 @@ public static class Schema
         Overheated = 8
     }
 
+    
+    private static object _setFlagMutex = new();
 
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
     {
-        var newStatus = ((int)status).SetFlag((int)flag);
-        return (EngineStatus)newStatus;
+        lock (_setFlagMutex)
+        {
+            var newStatus = ((int)status).SetFlag((int)flag);
+            return (EngineStatus)newStatus;
+        }
     }
 
     public static EngineStatus UnsetFlag(this EngineStatus status, EngineStatus flag)
     {
-        ((int)status).UnsetFlag((int)flag);
-        return status;
+        lock (_setFlagMutex)
+        {
+            var newStatus = ((int)status).UnsetFlag((int)flag);
+            return (EngineStatus)newStatus;
+        }
     }
 
     public static bool HasFlagFast(this EngineStatus value, EngineStatus flag)

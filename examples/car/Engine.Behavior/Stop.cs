@@ -1,3 +1,4 @@
+using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -7,6 +8,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Contract;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -25,11 +27,37 @@ public static class Stop
             );
 
     private static readonly Evt2Doc<Schema.Engine, IEvt>
-        _evt2State =
-            (state, _) =>
+        _evt2Doc =
+            (doc, _) =>
             {
-                state.Status = (Schema.EngineStatus)((int)state.Status).UnsetFlag((int)Schema.EngineStatus.Started);
-                return state;
+                var newDoc = doc with { };
+                newDoc.Status = newDoc.Status.UnsetFlag(Schema.EngineStatus.Started);
+                newDoc.Status = newDoc.Status.SetFlag(Schema.EngineStatus.Stopped);
+                return newDoc;
+            };
+
+    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+        _evt2DocVal =
+            (_, output, _) 
+                => output.Status.HasFlagFast(Schema.EngineStatus.Stopped) 
+                   && !output.Status.HasFlagFast(Schema.EngineStatus.Started);
+
+    
+    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+        _evt2List =
+            (lst, evt) =>
+            {
+                if (lst.Items.All(it => it.Key != evt.AggregateId)) 
+                    return lst;
+                var newList = lst with
+                {
+                    Items = ImmutableDictionary.CreateRange(lst.Items)
+                };
+                newList.Items[evt.AggregateId].Status 
+                    = newList.Items[evt.AggregateId].Status.UnsetFlag(Schema.EngineStatus.Started);
+                newList.Items[evt.AggregateId].Status 
+                    = newList.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Stopped);
+                return newList;
             };
 
     private static readonly Hope2Cmd<Cmd, Contract.Stop.Hope>
@@ -37,8 +65,8 @@ public static class Stop
             hope =>
                 Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
 
-    private static readonly SpecFuncT<Schema.Engine, Cmd>
-        _specFunc =
+    private static readonly GuardFuncT<Schema.Engine, Cmd>
+        _guardFunc =
             (cmd, state) =>
             {
                 var fbk = Feedback.New(cmd.AggregateID.Id());
@@ -72,7 +100,7 @@ public static class Stop
                 payload.ToBytes(),
                 meta.ToBytes());
 
-    public static readonly Evt2Cmd<Cmd, ChangeRpm.IEvt>
+    private static readonly Evt2Cmd<Cmd, ChangeRpm.IEvt>
         _onZeroPowerStop =
             (evt, state) =>
             {
@@ -83,22 +111,41 @@ public static class Stop
                     : null;
             };
 
+    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+        _evt2ListVal =
+            (_, output, evt) =>
+            {
+                if (output.Items.All(item => item.Key != evt.AggregateId))
+                    return false;
+                return output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Stopped)
+                       && !output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Started);
+            };
+
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
             .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
-            .AddTransient(_ => _evt2State)
-            .AddTransient(_ => _specFunc)
+            .AddStopProjectionFuncs()
+            .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _onZeroPowerStop);
     }
 
-    public static IServiceCollection AddStopMappers(this IServiceCollection services)
+    public static IServiceCollection AddStopProjectionFuncs(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => _evt2State)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal)
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2DocVal);
+    }
+
+    public static IServiceCollection AddStopACLFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _hope2Cmd)
             .AddTransient(_ => _evt2Fact);
     }

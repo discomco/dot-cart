@@ -35,4 +35,24 @@ public static class Stop
                 PayloadCtor(),
                 Schema.MetaCtor(null)
             );
+    public static readonly Contract.Schema.EngineListItem
+        StartedEngineListItem =
+            Contract.Schema.EngineListItem.New(
+                Schema.DocIDCtor().Id(),
+                "A Started Engine",
+                Contract.Schema.EngineStatus.Started,
+                0);
+
+    
+    public static readonly StateCtorT<Contract.Schema.EngineList>
+        StartedListCtor =
+            () =>
+            {
+                var lst = Contract.Schema.EngineList.New();
+                lst.Items = lst.Items.Add(
+                    StartedEngineListItem.EngineId, 
+                    StartedEngineListItem);
+                return lst;
+            };
+
 }

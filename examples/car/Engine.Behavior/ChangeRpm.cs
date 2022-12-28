@@ -36,8 +36,8 @@ public static class ChangeRpm
                 return res;
             };
 
-    private static readonly SpecFuncT<Schema.Engine, Cmd>
-        _specFunc =
+    private static readonly GuardFuncT<Schema.Engine, Cmd>
+        _guardFunc =
             (cmd, state) =>
             {
                 var fbk = Feedback.New(cmd.AggregateID.Id());
@@ -62,7 +62,12 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-   
+    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+        _evt2DocVal =
+            (input, output, evt)
+                => output.Power == input.Power + evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+
+
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
             (doc, evt) =>
@@ -79,6 +84,19 @@ public static class ChangeRpm
                 newDoc.Items = newDoc.Items.Add(evt.AggregateId, newItem);
                 return newDoc;
             };
+
+    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+        _evt2ListVal =
+            (input, output, evt) =>
+            {
+                if (output.Items.All(item => item.Key != evt.AggregateId))
+                    return false;
+                if (input.Items.All(item => item.Key != evt.AggregateId))
+                    return false;
+                var d = evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+                return output.Items[evt.AggregateId].Power - input.Items[evt.AggregateId].Power == d;
+            };
+            
 
     private static readonly Evt2Fact<Contract.ChangeRpm.Fact, IEvt>
         _evt2Fact =
@@ -118,7 +136,9 @@ public static class ChangeRpm
     {
         return services
             .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _evt2List);
+            .AddTransient(_ => _evt2DocVal)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal);
 
     }
 
@@ -127,8 +147,8 @@ public static class ChangeRpm
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _specFunc)
+            .AddChangeRpmProjectionFuncs()
+            .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc);
     }
 

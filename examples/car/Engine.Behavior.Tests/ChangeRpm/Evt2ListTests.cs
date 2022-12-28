@@ -40,13 +40,5 @@ public class Evt2ListTests
             .AddChangeRpmProjectionFuncs();
     }
 
-    protected override bool IsValidProjection(Schema.EngineList oldDoc, Schema.EngineList newDoc, Event evt)
-    {
-        if (newDoc.Items.All(item => item.Key != evt.AggregateId)) 
-            return false;
-        if (oldDoc.Items.All(item => item.Key != evt.AggregateId)) 
-            return false;
-        var d = evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-        return newDoc.Items[evt.AggregateId].Power - oldDoc.Items[evt.AggregateId].Power == d;
-    }
+
 }

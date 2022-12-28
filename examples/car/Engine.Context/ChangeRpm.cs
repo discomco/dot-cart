@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
@@ -14,7 +15,8 @@ namespace Engine.Context;
 
 public static class ChangeRpm
 {
-    public const string ToRedisDoc_v1 = Behavior.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc";
+    public const string ToRedisDoc_v1 = Behavior.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1 = Behavior.ChangeRpm.Topics.Evt_v1 + ":to_redis_list:v1";
 
 
     public const string Spoke_v1 = "engine:change_rpm:spoke:v1";
@@ -26,7 +28,9 @@ public static class ChangeRpm
             .AddChangeRpmACLFuncs()
             .AddHostedSpokeT<Spoke>()
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
+            .AddTransient<IActor<Spoke>, ToRedisList>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Hope, Behavior.ChangeRpm.Cmd>();
     }
 
@@ -39,10 +43,10 @@ public static class ChangeRpm
         Behavior.ChangeRpm.IEvt>, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
-            IRedisStore<Schema.Engine> modelStore,
+            IRedisStore<Schema.Engine> docStore,
             Evt2Doc<Schema.Engine, Behavior.ChangeRpm.IEvt> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, modelStore, evt2Doc, newDoc)
+            : base(exchange, docStore, evt2Doc, newDoc)
         {
         }
     }
@@ -54,6 +58,24 @@ public static class ChangeRpm
         public Spoke(
             IExchange exchange,
             IProjector projector) : base(exchange, projector)
+        {
+        }
+    }
+
+    [DocId(IDConstants.EngineListId)]
+    [DbName(DbConstants.ListRedisDbName)]
+    [Name(ToRedisList_v1)]
+    public class ToRedisList : ProjectionT<
+        IRedisStore<Schema.EngineList>,
+        Schema.EngineList,
+        Behavior.ChangeRpm.IEvt>, IActor<Spoke>
+    {
+        public ToRedisList(
+            IExchange exchange, 
+            IRedisStore<Schema.EngineList> docStore, 
+            Evt2Doc<Schema.EngineList, 
+                Behavior.ChangeRpm.IEvt> evt2Doc, 
+            StateCtorT<Schema.EngineList> newDoc) : base(exchange, docStore, evt2Doc, newDoc)
         {
         }
     }

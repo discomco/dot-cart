@@ -5,17 +5,17 @@ using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Start;
+namespace Engine.Context.Tests.ChangeDetails;
+
 
 [DocId(IDConstants.EngineListId)]
-public class ToListTests 
-    : ListProjectionTestsT<
-        Context.Start.Spoke, 
-        Context.Start.ToRedisList, 
-        Schema.EngineList,
-        Behavior.Start.IEvt> 
+public class ToRedisListTests : ListProjectionTestsT<
+    Context.ChangeDetails.Spoke, 
+    Context.ChangeDetails.ToRedisList,
+    Schema.EngineList,
+    Behavior.ChangeDetails.IEvt>
 {
-    public ToListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -32,6 +32,6 @@ public class ToListTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddStartSpoke();
+            .AddChangeDetailsSpoke();
     }
 }

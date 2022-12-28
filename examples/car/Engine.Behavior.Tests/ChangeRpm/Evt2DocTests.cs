@@ -38,8 +38,4 @@ public class Evt2DocTests
             .AddTransient(_ => TestUtils.Schema.MetaCtor);
     }
 
-    protected override bool IsValidProjection(Schema.Engine oldDoc, Schema.Engine newDoc, Event evt)
-    {
-        return newDoc.Power == oldDoc.Power + evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-    }
 }

@@ -19,7 +19,6 @@ public class SpokeTests : SpokeTestsT<Context.Initialize.Spoke>
 
     protected override void SetEnVars()
     {
-        DotEnv.FromEmbedded();
     }
 
     protected override void InjectDependencies(IServiceCollection services)

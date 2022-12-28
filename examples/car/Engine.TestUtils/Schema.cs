@@ -21,12 +21,13 @@ public static class Schema
         MetaCtor =
             _ => EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
 
-    public static readonly Contract.Schema.EngineListItem DefaultEngineListItem =
-        Contract.Schema.EngineListItem.New(
-            DocIDCtor().Id(), 
-            "A Fine Engine", 
-            Contract.Schema.EngineStatus.Unknown, 
-            0);
+    public static readonly Contract.Schema.EngineListItem
+        UnknownEngineListItem =
+            Contract.Schema.EngineListItem.New(
+                DocIDCtor().Id(),
+                "A Fine Engine",
+                Contract.Schema.EngineStatus.Unknown,
+                0);
 
     public static readonly StateCtorT<Contract.Schema.EngineList>
         FilledListCtor =
@@ -34,20 +35,19 @@ public static class Schema
             {
                 var lst = Contract.Schema.EngineList.New();
                 lst.Items = lst.Items.Add(
-                    DefaultEngineListItem.EngineId, 
-                    DefaultEngineListItem);
+                    UnknownEngineListItem.EngineId,
+                    UnknownEngineListItem);
                 return lst;
             };
-    
+
     public static readonly StateCtorT<Contract.Schema.EngineList>
         EmptyListCtor =
             Contract.Schema.EngineList.New;
 
-    public static readonly ValueObjectCtorT<Contract.Schema.Details> 
+    public static readonly ValueObjectCtorT<Contract.Schema.Details>
         OldDetailsCtor = () => Contract.Schema.Details.New("engine #309", "Some Old Engine");
 
     public static readonly StateCtorT<Contract.Schema.Engine>
         DocCtor = () =>
             Contract.Schema.Engine.New(DocIDCtor().Id(), Contract.Schema.EngineStatus.Initialized, OldDetailsCtor());
-
 }

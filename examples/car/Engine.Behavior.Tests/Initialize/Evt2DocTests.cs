@@ -38,9 +38,4 @@ public class Evt2DocTests
             .AddRootDocCtors()
             .AddInitializeProjectionFuncs();
     }
-
-    protected override bool IsValidProjection(Schema.Engine oldDoc, Schema.Engine newDoc, Event evt)
-    {
-        return newDoc.Status.HasFlagFast(Schema.EngineStatus.Initialized);
-    }
 }

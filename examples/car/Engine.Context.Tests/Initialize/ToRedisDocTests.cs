@@ -6,13 +6,13 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class ToDocTests : ProjectionTestsT<
+public class ToRedisDocTests : ProjectionTestsT<
     Context.Initialize.Spoke,
     Context.Initialize.ToRedisDoc,
     Schema.Engine,
     Behavior.Initialize.IEvt>
 {
-    public ToDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

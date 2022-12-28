@@ -30,7 +30,7 @@ public abstract class ProjectionTestsT<
 
 
     // TODO : REACTIVATE THIS AFTER THE INTERVIEW
-//    [Fact]
+    [Fact]
     public void ShouldResolveProjection()
     {
         // GIVEN
