@@ -30,7 +30,7 @@ public static class ChangeDetails
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _initialized2Cmd);
+            .AddTransient(_ => _onInitialized);
     }
 
     public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
@@ -47,7 +47,7 @@ public static class ChangeDetails
 
 
     private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
-        _initialized2Cmd =
+        _onInitialized =
             (evt, _) =>
             {
                 var details = evt.GetPayload<Contract.Initialize.Payload>().Details;

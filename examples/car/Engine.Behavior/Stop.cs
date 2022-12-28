@@ -101,7 +101,7 @@ public static class Stop
                 meta.ToBytes());
 
     private static readonly Evt2Cmd<Cmd, ChangeRpm.IEvt>
-        _onZeroPowerStop =
+        _onZeroPower =
             (evt, state) =>
             {
                 var eng = (Schema.Engine)state;
@@ -130,7 +130,7 @@ public static class Stop
             .AddStopProjectionFuncs()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _onZeroPowerStop);
+            .AddTransient(_ => _onZeroPower);
     }
 
     public static IServiceCollection AddStopProjectionFuncs(this IServiceCollection services)
