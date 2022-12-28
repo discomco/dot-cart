@@ -14,12 +14,10 @@ public class RootListItemTests : EntityTestsT<Contract.Schema.EngineID, Contract
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

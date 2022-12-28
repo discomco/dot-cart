@@ -32,10 +32,10 @@ public static class Start
         EvtCtor =
             (_, _, _) => Behavior.Start._newEvt(Schema.DocIDCtor(), PayloadCtor(), Schema.MetaCtor(null));
 
-    public static readonly StateCtorT<Contract.Schema.Engine> 
-        DocCtor = 
+    public static readonly StateCtorT<Contract.Schema.Engine>
+        DocCtor =
             () => Contract.Schema.Engine.New(
-                Schema.DocIDCtor().Id(), 
-                Contract.Schema.EngineStatus.Initialized, 
-                Contract.Schema.Details.New("Engine #32","An Initialized Engine")); 
+                Schema.DocIDCtor().Id(),
+                Contract.Schema.EngineStatus.Initialized,
+                Contract.Schema.Details.New("Engine #32", "An Initialized Engine"));
 }

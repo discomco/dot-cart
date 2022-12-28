@@ -7,10 +7,9 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeDetails;
 
-
 [DocId(IDConstants.EngineListId)]
 public class ToRedisListTests : ListProjectionTestsT<
-    Context.ChangeDetails.Spoke, 
+    Context.ChangeDetails.Spoke,
     Context.ChangeDetails.ToRedisList,
     Schema.EngineList,
     Behavior.ChangeDetails.IEvt>
@@ -21,12 +20,10 @@ public class ToRedisListTests : ListProjectionTestsT<
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

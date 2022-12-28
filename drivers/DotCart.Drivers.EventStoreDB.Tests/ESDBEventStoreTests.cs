@@ -4,7 +4,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Behaviors;
-using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;

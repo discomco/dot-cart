@@ -34,8 +34,8 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
     where TDoc : IState
     where TIEvt : IEvtB
 {
-    private readonly Evt2Doc<TDoc, TIEvt> _evt2Doc;
     private readonly TIStore _docStore;
+    private readonly Evt2Doc<TDoc, TIEvt> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
@@ -67,9 +67,9 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
         var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
         doc = _evt2Doc(doc, (Event)evt);
-        
+
         // TODO: Call ProjectionValidationFunc here
-        
+
         await _docStore.SetAsync(docId, doc, cancellationToken).ConfigureAwait(false);
     }
 

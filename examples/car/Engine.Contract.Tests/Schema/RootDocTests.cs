@@ -1,4 +1,3 @@
-using DotCart.TestFirst;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;

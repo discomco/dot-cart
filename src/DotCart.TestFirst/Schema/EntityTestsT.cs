@@ -27,7 +27,7 @@ public abstract class EntityTestsT<TID, TEntity> : IoCTests
         Assert.NotNull(_idCtor);
     }
 
-    
+
     [Fact]
     public async Task ShouldBeSerializableEntity()
     {
@@ -40,10 +40,7 @@ public abstract class EntityTestsT<TID, TEntity> : IoCTests
         // THEN 
         Assert.NotNull(json);
         var props = typeof(TEntity).GetProperties(BindingFlags.Public);
-        foreach (var info in props)
-        {
-            Assert.Contains(info.Name, json);
-        }
+        foreach (var info in props) Assert.Contains(info.Name, json);
     }
 
 
@@ -63,6 +60,4 @@ public abstract class EntityTestsT<TID, TEntity> : IoCTests
     }
 
     protected abstract TEntity CreateEntity(IDCtorT<TID> idCtor);
-
-
 }

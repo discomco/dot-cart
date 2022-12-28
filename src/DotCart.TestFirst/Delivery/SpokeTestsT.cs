@@ -88,7 +88,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         Assert.Null(_caught);
     }
 
-   // [Fact]
+    // [Fact]
     public void ShouldStartSpoke()
     {
         // GIVEN

@@ -37,5 +37,4 @@ public class Evt2DocTests
             .AddTransient(_ => TestUtils.Schema.DocCtor)
             .AddTransient(_ => TestUtils.Schema.MetaCtor);
     }
-
 }

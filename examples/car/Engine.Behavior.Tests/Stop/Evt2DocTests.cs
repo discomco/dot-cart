@@ -8,12 +8,12 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 public class Evt2DocTests
-: Evt2DocTestsT<
-    Behavior.Stop.IEvt, 
-    Schema.EngineID, 
-    Schema.Engine, 
-    Contract.Stop.Payload, 
-    EventMeta>
+    : Evt2DocTestsT<
+        Behavior.Stop.IEvt,
+        Schema.EngineID,
+        Schema.Engine,
+        Contract.Stop.Payload,
+        EventMeta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,12 +21,10 @@ public class Evt2DocTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

@@ -69,7 +69,7 @@ public static class Initialize
 
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
         _evt2DocVal =
-            (_, output, evt) => output.Id == evt.AggregateId 
+            (_, output, evt) => output.Id == evt.AggregateId
                                 && output.Status.HasFlagFast(Schema.EngineStatus.Initialized);
 
     private static readonly Evt2Doc<
@@ -83,15 +83,16 @@ public static class Initialize
                     list.Items[evt.AggregateId].Status = Schema.EngineStatus.Initialized;
                     return list;
                 }
+
                 var newList = list with
                 {
-                    Items = ImmutableDictionary<string, Schema.EngineListItem>.Empty.AddRange(list.Items),
+                    Items = ImmutableDictionary<string, Schema.EngineListItem>.Empty.AddRange(list.Items)
                 };
                 newList.Items = list.Items.Add(evt.AggregateId, Schema.EngineListItem.New(
                     evt.AggregateId,
                     evt.GetPayload<Contract.Initialize.Payload>().Details.Name,
                     Schema.EngineStatus.Initialized,
-                    0));  
+                    0));
                 return newList;
             };
 
@@ -102,7 +103,7 @@ public static class Initialize
             (input, output, evt) =>
             {
                 var result =
-                    !input.Items.Any() 
+                    !input.Items.Any()
                     || input.Items.All(item => item.Key != evt.AggregateId);
                 result = result
                          && output.Items.Any(item => item.Key == evt.AggregateId)

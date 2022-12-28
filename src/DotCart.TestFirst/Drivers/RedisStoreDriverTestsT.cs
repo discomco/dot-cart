@@ -2,14 +2,13 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.Redis;
 using DotCart.TestKit;
-using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests 
-    where TDoc : IState 
+public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
+    where TDoc : IState
     where TID : IID
 {
     protected IConnectionMultiplexer _connection;
@@ -152,8 +151,6 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
         Assert.Equal(getDoc, doc);
         await _redisStore.DeleteAsync(ID.Id()).ConfigureAwait(false);
     }
-    
-    
 
 
     protected override void Initialize()
@@ -164,6 +161,4 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         _newState = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
     }
-
-
 }

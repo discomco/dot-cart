@@ -7,12 +7,12 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.Initialize;
 
-public class Evt2ListTests 
+public class Evt2ListTests
     : Evt2DocTestsT<
-        Behavior.Initialize.IEvt, 
-        Schema.EngineListID, 
-        Schema.EngineList, 
-        Contract.Initialize.Payload, 
+        Behavior.Initialize.IEvt,
+        Schema.EngineListID,
+        Schema.EngineList,
+        Contract.Initialize.Payload,
         EventMeta>
 {
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -21,12 +21,10 @@ public class Evt2ListTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -39,5 +37,4 @@ public class Evt2ListTests
             .AddTransient(_ => TestUtils.Schema.MetaCtor)
             .AddTransient(_ => TestUtils.Initialize.EvtCtor);
     }
-
 }

@@ -7,32 +7,6 @@ namespace Engine.Contract;
 
 public static class Schema
 {
-
-    public static readonly ValueObjectCtorT<EngineListItem>
-        EngineListItemCtor =
-            () => new EngineListItem(); 
-
-    public static readonly ValueObjectCtorT<Details>
-        DetailsCtor = 
-            () => new Details();
-
-    public static readonly IDCtorT<EngineID>
-        RootIDCtor =
-            _ => new EngineID();
-
-    public static readonly IDCtorT<EngineListID>
-        ListIDCtor =
-            _ => new EngineListID();
-    
-    public static readonly StateCtorT<Engine> 
-        RootCtor = 
-            () => new Engine();
-
-    public static readonly StateCtorT<EngineList>
-        ListCtor =
-            EngineList.New; 
-
-
     [Flags]
     public enum EngineStatus
     {
@@ -43,8 +17,32 @@ public static class Schema
         Overheated = 8
     }
 
-    
-    private static object _setFlagMutex = new();
+    public static readonly ValueObjectCtorT<EngineListItem>
+        EngineListItemCtor =
+            () => new EngineListItem();
+
+    public static readonly ValueObjectCtorT<Details>
+        DetailsCtor =
+            () => new Details();
+
+    public static readonly IDCtorT<EngineID>
+        RootIDCtor =
+            _ => new EngineID();
+
+    public static readonly IDCtorT<EngineListID>
+        ListIDCtor =
+            _ => new EngineListID();
+
+    public static readonly StateCtorT<Engine>
+        RootCtor =
+            () => new Engine();
+
+    public static readonly StateCtorT<EngineList>
+        ListCtor =
+            EngineList.New;
+
+
+    private static readonly object _setFlagMutex = new();
 
 
     public static EngineStatus SetFlag(this EngineStatus status, EngineStatus flag)
@@ -73,7 +71,6 @@ public static class Schema
     [DbName(DbConstants.DocRedisDbName)]
     public record Engine : IState
     {
-
         public Engine()
         {
             Details = new Details();
@@ -113,8 +110,8 @@ public static class Schema
     public record EngineListItem : IValueObject, IEntityT<EngineID>, IState
     {
         public string EngineId { get; set; }
-        public string Name { get; set;}
-        public EngineStatus Status  { get; set; }
+        public string Name { get; set; }
+        public EngineStatus Status { get; set; }
         public int Power { get; set; }
 
         public static EngineListItem New(string aggId, string name, EngineStatus status, int power)
@@ -129,19 +126,21 @@ public static class Schema
         }
     }
 
-    
+
     [IDPrefix(IDConstants.EngineListIDPrefix)]
     public record EngineListID() : ID(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
     {
-        public static EngineListID New() 
-            => new();
+        public static EngineListID New()
+        {
+            return new();
+        }
     }
 
     [DbName(DbConstants.ListRedisDbName)]
-    public record EngineList(ImmutableDictionary<string,EngineListItem> Items) : IListState
+    public record EngineList(ImmutableDictionary<string, EngineListItem> Items) : IListState
     {
         // public EngineListID ID { get; set; } = new();
-        public ImmutableDictionary<string,EngineListItem> Items { get; set; } = Items;
+        public ImmutableDictionary<string, EngineListItem> Items { get; set; } = Items;
 
         public static EngineList New()
         {

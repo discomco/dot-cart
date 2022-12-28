@@ -24,6 +24,7 @@ public class OnZeroPowerTests : PolicyTestsT<Behavior.Stop.OnZeroPowerStop, Beha
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+                
             .AddStopBehavior();
     }
 }

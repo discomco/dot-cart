@@ -21,18 +21,18 @@ public static class ChangeRpm
                 var res = new List<Event>();
                 var rpmChanged = _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
                 res.Add(rpmChanged);
-                var newPower = state.Power + cmd.Payload.Delta;
-                if (newPower > 0)
-                    return res;
-                var stopped = Stop._newEvt(
-                    cmd.AggregateID,
-                    Contract.Stop.Payload.New(),
-                    EventMeta.New(
-                        NameAtt.Get<IEngineAggregateInfo>(),
-                        cmd.AggregateID.Id()
-                    )
-                );
-                res.Add(stopped);
+                // var newPower = state.Power + cmd.Payload.Delta;
+                // if (newPower > 0)
+                //     return res;
+                // var stopped = Stop._newEvt(
+                //     cmd.AggregateID,
+                //     Contract.Stop.Payload.New(),
+                //     EventMeta.New(
+                //         NameAtt.Get<IEngineAggregateInfo>(),
+                //         cmd.AggregateID.Id()
+                //     )
+                // );
+                // res.Add(stopped);
                 return res;
             };
 
@@ -72,7 +72,7 @@ public static class ChangeRpm
         _evt2List =
             (doc, evt) =>
             {
-                if (doc.Items.All(item => item.Key != evt.AggregateId)) 
+                if (doc.Items.All(item => item.Key != evt.AggregateId))
                     return doc;
                 var newItem = doc.Items[evt.AggregateId] with { };
                 newItem.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
@@ -96,7 +96,7 @@ public static class ChangeRpm
                 var d = evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
                 return output.Items[evt.AggregateId].Power - input.Items[evt.AggregateId].Power == d;
             };
-            
+
 
     private static readonly Evt2Fact<Contract.ChangeRpm.Fact, IEvt>
         _evt2Fact =
@@ -139,7 +139,6 @@ public static class ChangeRpm
             .AddTransient(_ => _evt2DocVal)
             .AddTransient(_ => _evt2List)
             .AddTransient(_ => _evt2ListVal);
-
     }
 
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)

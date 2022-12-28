@@ -6,14 +6,14 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class ValueObjectTestsT<TValueObject> : IoCTests 
-    where TValueObject: IValueObject
+public abstract class ValueObjectTestsT<TValueObject> : IoCTests
+    where TValueObject : IValueObject
 {
+    private ValueObjectCtorT<TValueObject> _ctor;
+
     protected ValueObjectTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-
-    private ValueObjectCtorT<TValueObject> _ctor;
 
     [Fact]
     public void ShouldResolveValueObjectCtor()
@@ -21,12 +21,13 @@ public abstract class ValueObjectTestsT<TValueObject> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _ctor = TestEnv.ResolveRequired<ValueObjectCtorT<TValueObject>>(); 
+        _ctor = TestEnv.ResolveRequired<ValueObjectCtorT<TValueObject>>();
         // THEN
         Assert.NotNull(_ctor);
     }
 
-    [Fact] public void ShouldDeserializeValueObject()
+    [Fact]
+    public void ShouldDeserializeValueObject()
     {
         // GIVEN
         var valueObject = CreateValueObject();
@@ -48,11 +49,6 @@ public abstract class ValueObjectTestsT<TValueObject> : IoCTests
         var serialized = valueObject.ToJson();
         // WHEN
         var pubProps = typeof(TValueObject).GetProperties(BindingFlags.Public);
-        foreach (var propertyInfo in pubProps)
-        {
-            Assert.Contains(propertyInfo.Name, serialized);
-        }
+        foreach (var propertyInfo in pubProps) Assert.Contains(propertyInfo.Name, serialized);
     }
-    
-    
 }

@@ -38,8 +38,8 @@ public static class Start
 
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
         _evt2DocVal =
-            (input, output, _) 
-                => !input.Status.HasFlagFast(Schema.EngineStatus.Started) 
+            (input, output, _)
+                => !input.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && output.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && !output.Status.HasFlagFast(Schema.EngineStatus.Stopped);
 

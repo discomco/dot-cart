@@ -32,14 +32,13 @@ public static class Initialize
     }
 
 
-
     [Name(ToRedisDoc_v1)]
     [DbName(DbConstants.DocRedisDbName)]
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
             Behavior.Initialize.IEvt>,
-         IActor<Spoke>
+        IActor<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
@@ -70,7 +69,7 @@ public static class Initialize
     [Name(ToRedisList_v1)]
     [DbName(DbConstants.ListRedisDbName)]
     [DocId(IDConstants.EngineListId)]
-    public class ToRedisList: ProjectionT<
+    public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
         Behavior.Initialize.IEvt>, IActor<Spoke>
@@ -79,7 +78,7 @@ public static class Initialize
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
             Evt2Doc<Schema.EngineList, Behavior.Initialize.IEvt> evt2Doc,
-            StateCtorT<Schema.EngineList> newDoc) 
+            StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

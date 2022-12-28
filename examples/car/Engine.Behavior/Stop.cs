@@ -8,7 +8,6 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using Engine.Contract;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -31,31 +30,32 @@ public static class Stop
             (doc, _) =>
             {
                 var newDoc = doc with { };
-                newDoc.Status = newDoc.Status.UnsetFlag(Schema.EngineStatus.Started);
-                newDoc.Status = newDoc.Status.SetFlag(Schema.EngineStatus.Stopped);
+                newDoc.Status = newDoc.Status
+                    .UnsetFlag(Schema.EngineStatus.Started)
+                    .SetFlag(Schema.EngineStatus.Stopped);
                 return newDoc;
             };
 
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
         _evt2DocVal =
-            (_, output, _) 
-                => output.Status.HasFlagFast(Schema.EngineStatus.Stopped) 
+            (_, output, _)
+                => output.Status.HasFlagFast(Schema.EngineStatus.Stopped)
                    && !output.Status.HasFlagFast(Schema.EngineStatus.Started);
 
-    
+
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
         _evt2List =
             (lst, evt) =>
             {
-                if (lst.Items.All(it => it.Key != evt.AggregateId)) 
+                if (lst.Items.All(it => it.Key != evt.AggregateId))
                     return lst;
                 var newList = lst with
                 {
                     Items = ImmutableDictionary.CreateRange(lst.Items)
                 };
-                newList.Items[evt.AggregateId].Status 
+                newList.Items[evt.AggregateId].Status
                     = newList.Items[evt.AggregateId].Status.UnsetFlag(Schema.EngineStatus.Started);
-                newList.Items[evt.AggregateId].Status 
+                newList.Items[evt.AggregateId].Status
                     = newList.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Stopped);
                 return newList;
             };
@@ -121,16 +121,22 @@ public static class Stop
                        && !output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Started);
             };
 
+    public static IServiceCollection AddStopPolicies(this IServiceCollection services)
+    {
+        return services
+            .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
+            .AddTransient(_ => _onZeroPower);
+    }
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
+            .AddStopPolicies()
             .AddStopProjectionFuncs()
+            .AddTransient(_ => _newEvt)
             .AddTransient(_ => _guardFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _onZeroPower);
+            .AddTransient(_ => _raiseFunc);
     }
 
     public static IServiceCollection AddStopProjectionFuncs(this IServiceCollection services)

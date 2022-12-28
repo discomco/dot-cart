@@ -16,7 +16,7 @@ public static class Start
 {
     public const string ToRedisDoc_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Behavior.Start.Topics.Evt_v1 + ":to_redis_list:v1";
-    
+
     public const string Spoke_v1 = "engine:start:spoke:v1";
 
     public static IServiceCollection AddStartSpoke(this IServiceCollection services)
@@ -66,10 +66,10 @@ public static class Start
     [DbName(DbConstants.ListRedisDbName)]
     [DocId(IDConstants.EngineListId)]
     [Name(ToRedisList_v1)]
-    public class ToRedisList 
+    public class ToRedisList
         : ProjectionT<
-            IRedisStore<Schema.EngineList>, 
-            Schema.EngineList, 
+            IRedisStore<Schema.EngineList>,
+            Schema.EngineList,
             Behavior.Start.IEvt>, IActor<Spoke>
     {
         public ToRedisList(IExchange exchange,

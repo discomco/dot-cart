@@ -11,7 +11,7 @@ public static class ChangeDetails
             Contract.ChangeDetails.Payload>
         PayloadCtor =
             () => Contract.ChangeDetails.Payload.New(Contract.Schema.Details.New("Engine #2", "A V8 Merlin engine."));
-    
+
     public static readonly PayloadCtorT<
             Contract.ChangeDetails.Payload>
         NewPayloadCtor =

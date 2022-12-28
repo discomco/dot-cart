@@ -8,8 +8,8 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Actors;
 
 public abstract class
-    ListProjectionTestsT<TSpoke,TProjection,TTargetDoc,TIEvt> 
-    : ProjectionTestsT<TSpoke,TProjection,TTargetDoc,TIEvt>
+    ListProjectionTestsT<TSpoke, TProjection, TTargetDoc, TIEvt>
+    : ProjectionTestsT<TSpoke, TProjection, TTargetDoc, TIEvt>
     where TSpoke : ISpokeT<TSpoke>
     where TProjection : IActor<TSpoke>
     where TTargetDoc : IState
@@ -29,7 +29,7 @@ public abstract class
         // THEN
         Assert.NotNull(docId);
     }
-    
+
     [Fact]
     public void ShouldTestHaveDocIdAttribute()
     {
@@ -40,7 +40,7 @@ public abstract class
         // THEN
         Assert.NotNull(expected);
     }
-    
+
     [Fact]
     public void ShouldTestAndTProjectionHaveSameAttribute()
     {
@@ -50,8 +50,6 @@ public abstract class
         var expected = DocIdAtt.Get(this);
         var actual = DocIdAtt.Get<TProjection>();
         // THEN
-        Assert.Equal(expected,actual);
+        Assert.Equal(expected, actual);
     }
-    
-    
 }

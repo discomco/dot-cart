@@ -20,12 +20,10 @@ public class Evt2DocTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -38,6 +36,4 @@ public class Evt2DocTests
             .AddTransient(_ => TestUtils.Start.DocCtor)
             .AddStartProjectionFuncs();
     }
-
-
 }

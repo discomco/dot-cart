@@ -9,4 +9,3 @@ public delegate Event EvtCtorT<
     where TIEvt : IEvtT<TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta;
-

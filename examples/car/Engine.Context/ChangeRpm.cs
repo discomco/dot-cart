@@ -1,4 +1,3 @@
-using System.Runtime.CompilerServices;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
@@ -71,10 +70,10 @@ public static class ChangeRpm
         Behavior.ChangeRpm.IEvt>, IActor<Spoke>
     {
         public ToRedisList(
-            IExchange exchange, 
-            IRedisStore<Schema.EngineList> docStore, 
-            Evt2Doc<Schema.EngineList, 
-                Behavior.ChangeRpm.IEvt> evt2Doc, 
+            IExchange exchange,
+            IRedisStore<Schema.EngineList> docStore,
+            Evt2Doc<Schema.EngineList,
+                Behavior.ChangeRpm.IEvt> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

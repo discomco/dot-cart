@@ -50,8 +50,9 @@ public class IoCTestContainer : IDisposable
     {
         IEnumerable<IActor<TSpoke>?> actors = ResolveAll<IActor<TSpoke>>();
         var res = actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));
-        if (res==null)
-            throw new InvalidOperationException("Actor of type [" + typeof(TActor) + "] was not found. Please register it.");
+        if (res == null)
+            throw new InvalidOperationException("Actor of type [" + typeof(TActor) +
+                                                "] was not found. Please register it.");
         return res;
     }
 }

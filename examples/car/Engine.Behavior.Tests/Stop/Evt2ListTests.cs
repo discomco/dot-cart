@@ -8,11 +8,11 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 public class Evt2ListTests
-: Evt2DocTestsT<Behavior.Stop.IEvt,
-    Schema.EngineListID,
-    Schema.EngineList,
-    Contract.Stop.Payload,
-    EventMeta>
+    : Evt2DocTestsT<Behavior.Stop.IEvt,
+        Schema.EngineListID,
+        Schema.EngineList,
+        Contract.Stop.Payload,
+        EventMeta>
 {
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -20,12 +20,10 @@ public class Evt2ListTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -38,6 +36,4 @@ public class Evt2ListTests
             .AddTransient(_ => TestUtils.Stop.StartedListCtor)
             .AddStopProjectionFuncs();
     }
-
-
 }

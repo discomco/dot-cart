@@ -9,9 +9,9 @@ namespace Engine.Context.Tests.Initialize;
 
 [DocId(IDConstants.EngineListId)]
 public class ToRedisListTests : ListProjectionTestsT<
-    Context.Initialize.Spoke, 
-    Context.Initialize.ToRedisList, 
-    Schema.EngineList, 
+    Context.Initialize.Spoke,
+    Context.Initialize.ToRedisList,
+    Schema.EngineList,
     Behavior.Initialize.IEvt>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -20,12 +20,10 @@ public class ToRedisListTests : ListProjectionTestsT<
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
- 
     }
 
     protected override void InjectDependencies(IServiceCollection services)

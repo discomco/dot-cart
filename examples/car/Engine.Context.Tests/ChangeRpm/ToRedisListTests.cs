@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeRpm;
 
 [DocId(IDConstants.EngineListId)]
-public class ToRedisListTests 
+public class ToRedisListTests
     : ListProjectionTestsT<Context.ChangeRpm.Spoke,
         Context.ChangeRpm.ToRedisList,
         Schema.EngineList,
@@ -20,12 +20,10 @@ public class ToRedisListTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

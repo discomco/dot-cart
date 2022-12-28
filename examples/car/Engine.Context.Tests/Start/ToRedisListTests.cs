@@ -8,12 +8,12 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Start;
 
 [DocId(IDConstants.EngineListId)]
-public class ToRedisListTests 
+public class ToRedisListTests
     : ListProjectionTestsT<
-        Context.Start.Spoke, 
-        Context.Start.ToRedisList, 
+        Context.Start.Spoke,
+        Context.Start.ToRedisList,
         Schema.EngineList,
-        Behavior.Start.IEvt> 
+        Behavior.Start.IEvt>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,12 +21,10 @@ public class ToRedisListTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

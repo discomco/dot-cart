@@ -20,7 +20,7 @@ public static class IRedisDbExtensions
     public static Task<long> KeyExists(this ISimpleRedisDb redisDb, IEnumerable<string> keyNames,
         bool useKeyNameSpace = true)
     {
-        if (redisDb == null) 
+        if (redisDb == null)
             throw new ArgumentNullException(nameof(redisDb));
         var keys = keyNames.Select(k => useKeyNameSpace ? $"{redisDb.KeyNameSpace}:{k}" : k).Cast<RedisKey>()
             .ToArray();

@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Mediator\DotCart.Drivers.Mediator.csproj" />
-        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Mediator\DotCart.Drivers.Mediator.csproj"/>
+        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
     </ItemGroup>
 
 

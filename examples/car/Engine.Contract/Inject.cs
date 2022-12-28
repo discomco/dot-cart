@@ -19,8 +19,7 @@ public static class Inject
             .AddSingleton(Schema.EngineListItemCtor)
             .AddSingleton(Schema.ListCtor);
     }
-    
-    
+
 
     public static IServiceCollection AddRootIDCtor(this IServiceCollection services)
     {

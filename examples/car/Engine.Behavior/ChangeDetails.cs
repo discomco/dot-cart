@@ -13,36 +13,10 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
-
 }
 
 public static class ChangeDetails
 {
-
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddRootDocCtors()
-            .AddRootListCtors()
-            .AddChangeDetailsProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddSingleton<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _guardFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _onInitialized);
-    }
-
-    public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _evt2DocVal)
-            .AddTransient(_ => _evt2List)
-            .AddTransient(_ => _evt2ListVal);
-    }
-    
-    
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
@@ -81,7 +55,7 @@ public static class ChangeDetails
         _evt2List =
             (doc, evt) =>
             {
-                if (doc.Items.All(x => x.Key != evt.AggregateId)) 
+                if (doc.Items.All(x => x.Key != evt.AggregateId))
                     return doc;
                 var newDoc = doc with { };
                 newDoc.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
@@ -90,7 +64,7 @@ public static class ChangeDetails
 
     private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
         _evt2ListVal =
-            (_, output, evt) => 
+            (_, output, evt) =>
                 output.Items[evt.AggregateId].Name == evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
 
     private static readonly GuardFuncT<Schema.Engine, Cmd>
@@ -130,6 +104,28 @@ public static class ChangeDetails
                 };
             };
 
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddRootDocCtors()
+            .AddRootListCtors()
+            .AddChangeDetailsProjectionFuncs()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddSingleton<IAggregatePolicy, OnInitialized>()
+            .AddTransient(_ => _guardFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _newEvt)
+            .AddTransient(_ => _onInitialized);
+    }
+
+    public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2DocVal)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal);
+    }
 
 
     [Topic(Topics.Cmd_v1)]

@@ -9,10 +9,10 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 
 public class Evt2DocTests
     : Evt2DocTestsT<
-        Behavior.ChangeDetails.IEvt, 
-        Schema.EngineID, 
-        Schema.Engine, 
-        Contract.ChangeDetails.Payload, 
+        Behavior.ChangeDetails.IEvt,
+        Schema.EngineID,
+        Schema.Engine,
+        Contract.ChangeDetails.Payload,
         EventMeta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -21,12 +21,10 @@ public class Evt2DocTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -40,5 +38,4 @@ public class Evt2DocTests
             .AddTransient(_ => TestUtils.Schema.DocIDCtor)
             .AddChangeDetailsProjectionFuncs();
     }
-
 }

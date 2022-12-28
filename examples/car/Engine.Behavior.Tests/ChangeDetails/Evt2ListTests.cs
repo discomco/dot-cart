@@ -7,17 +7,14 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.ChangeDetails;
 
-public class Evt2ListTests 
+public class Evt2ListTests
     : Evt2DocTestsT<
-        Behavior.ChangeDetails.IEvt, 
+        Behavior.ChangeDetails.IEvt,
         Schema.EngineListID,
-        Schema.EngineList, 
-        Contract.ChangeDetails.Payload, 
+        Schema.EngineList,
+        Contract.ChangeDetails.Payload,
         EventMeta>
 {
-  
-
-
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
@@ -40,6 +37,4 @@ public class Evt2ListTests
             .AddTransient(_ => TestUtils.Schema.MetaCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.EvtCtor);
     }
-
-    
 }

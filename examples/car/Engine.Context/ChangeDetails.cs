@@ -20,7 +20,7 @@ public static class ChangeDetails
 
     public const string ToRedisDoc_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
-    
+
 
     private static readonly Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope>
         _hope2Cmd =
@@ -93,16 +93,16 @@ public static class ChangeDetails
     [Name(ToRedisList_v1)]
     [DocId(IDConstants.EngineListId)]
     public class ToRedisList : ProjectionT<
-        IRedisStore<Schema.EngineList>, 
-        Schema.EngineList, 
+        IRedisStore<Schema.EngineList>,
+        Schema.EngineList,
         Behavior.ChangeDetails.IEvt>, IActor<Spoke>
     {
         public ToRedisList(
-            IExchange exchange, 
-            IRedisStore<Schema.EngineList> docStore, 
-            Evt2Doc<Schema.EngineList, 
-                Behavior.ChangeDetails.IEvt> evt2Doc, 
-            StateCtorT<Schema.EngineList> newDoc) 
+            IExchange exchange,
+            IRedisStore<Schema.EngineList> docStore,
+            Evt2Doc<Schema.EngineList,
+                Behavior.ChangeDetails.IEvt> evt2Doc,
+            StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

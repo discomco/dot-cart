@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
-using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;

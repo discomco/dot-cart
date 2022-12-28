@@ -1,6 +1,5 @@
 ﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
 
@@ -69,7 +68,7 @@ public static class Inject
     }
 }
 
-public interface IRedisStore<TDoc> 
+public interface IRedisStore<TDoc>
     : IDocStore<TDoc> where TDoc : IState
 {
 }

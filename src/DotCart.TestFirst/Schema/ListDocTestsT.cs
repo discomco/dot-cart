@@ -13,7 +13,4 @@ public abstract class ListDocTestsT<TListID, TList, TItemID, TItem> : DocTestsT<
     protected ListDocTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
-    
-    
 }

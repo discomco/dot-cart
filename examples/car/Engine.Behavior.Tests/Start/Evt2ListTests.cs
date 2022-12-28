@@ -7,12 +7,12 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.Start;
 
-public class Evt2ListTests : 
+public class Evt2ListTests :
     Evt2DocTestsT<
-        Behavior.Start.IEvt, 
-        Schema.EngineListID, 
-        Schema.EngineList, 
-        Contract.Start.Payload, 
+        Behavior.Start.IEvt,
+        Schema.EngineListID,
+        Schema.EngineList,
+        Contract.Start.Payload,
         EventMeta>
 {
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -21,7 +21,6 @@ public class Evt2ListTests :
 
     protected override void Initialize()
     {
- 
     }
 
     protected override void SetEnVars()
@@ -38,6 +37,4 @@ public class Evt2ListTests :
             .AddTransient(_ => TestUtils.Schema.ListIDCtor)
             .AddStartProjectionFuncs();
     }
-
-
 }

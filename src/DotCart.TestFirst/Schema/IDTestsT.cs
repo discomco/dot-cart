@@ -1,7 +1,5 @@
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
-using Engine.Contract;
-using Microsoft.AspNetCore.Mvc.TagHelpers.Cache;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
@@ -37,10 +35,10 @@ public abstract class IDTestsT<TID> : IoCTests where TID : IID
         // WHEN
         var actual = IDPrefixAtt.Get<TID>();
         // THEN
-        Assert.Equal(expected,actual);
+        Assert.Equal(expected, actual);
         return Task.CompletedTask;
     }
-    
+
 
     [Fact]
     public void ShouldResolveIDCtor()

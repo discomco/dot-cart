@@ -4,7 +4,7 @@
 ///     Can be used to easily create strongly-typed RedisObjects with a specified key name pattern.
 /// </summary>
 /// <typeparam name="T"></typeparam>
-public class KeyTemplate<T> 
+public class KeyTemplate<T>
     where T : RedisObject
 {
     private readonly IRedisDb _db;

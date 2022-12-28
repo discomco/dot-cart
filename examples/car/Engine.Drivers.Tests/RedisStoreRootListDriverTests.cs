@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Drivers.Tests;
 
-public class RedisStoreRootListDriverTests 
+public class RedisStoreRootListDriverTests
     : RedisStoreDriverTestsT<Schema.EngineListID, Schema.EngineList>
 
 {
@@ -18,7 +18,6 @@ public class RedisStoreRootListDriverTests
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -27,5 +26,4 @@ public class RedisStoreRootListDriverTests
             .AddRootListCtors()
             .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>();
     }
-    
 }

@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.ChangeRpm;
 
-public class Evt2ListTests 
+public class Evt2ListTests
     : Evt2DocTestsT<
         Behavior.ChangeRpm.IEvt,
         Schema.EngineListID,
@@ -21,12 +21,10 @@ public class Evt2ListTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -39,6 +37,4 @@ public class Evt2ListTests
             .AddTransient(_ => TestUtils.Schema.MetaCtor)
             .AddChangeRpmProjectionFuncs();
     }
-
-
 }

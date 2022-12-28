@@ -4,7 +4,7 @@ using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public interface ISimpleRedisDb 
+public interface ISimpleRedisDb
 {
     public string KeyNameSpace { get; }
     IDatabaseAsync DB { get; }
@@ -12,10 +12,10 @@ public interface ISimpleRedisDb
 
 public interface IRedisDb : ISimpleRedisDb, IClose, IDisposable, IAsyncDisposable, ICloseAsync
 {
-    T GetKey<T>(string keyName) where T : RedisObject;
     IDatabase Database { get; }
     IList<string> TrackedKeys { get; }
     IList<RedisObject> TrackedObjects { get; }
+    T GetKey<T>(string keyName) where T : RedisObject;
     T AddToContainer<T>(T obj) where T : RedisObject;
     RedisObject GetKey(Type keyType, string keyName);
     KeyTemplate<T> GetKeyTemplate<T>(string keyNamePattern) where T : RedisObject;
@@ -24,18 +24,17 @@ public interface IRedisDb : ISimpleRedisDb, IClose, IDisposable, IAsyncDisposabl
     Task DeleteTrackedKeys();
 }
 
-public interface IRedisDbT<TDoc> :  IRedisDb
+public interface IRedisDbT<TDoc> : IRedisDb
     where TDoc : IState
 {
-
 }
 
-public class RedisDbT<TDoc> : IRedisDbT<TDoc> 
+public class RedisDbT<TDoc> : IRedisDbT<TDoc>
     where TDoc : IState
 {
     private readonly IConnectionMultiplexer _connection;
-    private readonly Dictionary<string, RedisObject> _trackedObjects = new();
     private readonly IRedisConnectionFactory<TDoc> _connFact;
+    private readonly Dictionary<string, RedisObject> _trackedObjects = new();
     private readonly bool _trackObjects;
 
     public RedisDbT(IRedisConnectionFactory<TDoc> connFact, string keyNameSpace = "", bool trackObjects = true)

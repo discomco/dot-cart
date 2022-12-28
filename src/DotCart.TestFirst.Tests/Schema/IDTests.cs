@@ -7,7 +7,6 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Tests.Schema;
 
-
 [IDPrefix(TestConstants.TheIDPrefix)]
 public class IDTests : IDTestsT<TheID>
 {
