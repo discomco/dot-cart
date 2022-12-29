@@ -5,7 +5,7 @@ using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Behavior;
+namespace DotCart.TestFirst.Actors;
 
 public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
     where TPolicy : IAggregatePolicy
@@ -43,6 +43,8 @@ public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
         // THEN
         Assert.NotNull(name);
     }
+    
+    
 
     [Fact]
     public async Task ShouldPolicyHaveName()

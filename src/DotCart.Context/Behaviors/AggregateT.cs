@@ -6,28 +6,29 @@ using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Serilog;
 
+
 namespace DotCart.Context.Behaviors;
 
 public class AggregateT<TInfo, TState> : IAggregate
     where TState : IState
     where TInfo : IAggregateInfoB
 {
-    private readonly IExchange _exchange;
     private readonly ICollection<IEvtB> _uncommittedEvents = new LinkedList<IEvtB>();
-
     private readonly object execMutex = new();
     public ICollection<IEvtB> _appliedEvents = new LinkedList<IEvtB>();
     private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
     private ulong _nextVersion;
     protected TState _state;
+
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
+
+    private DuplicatesDictionary<string, IChoreography> _choreography = DuplicatesDictionary<string, IChoreography>.Empty;
+
     private bool _withAppliedEvents = false;
 
     public AggregateT(
-        IExchange exchange,
         StateCtorT<TState> newState)
     {
-        _exchange = exchange;
         _state = newState();
         Version = EventConst.NewAggregateVersion;
     }
@@ -36,6 +37,8 @@ public class AggregateT<TInfo, TState> : IAggregate
     {
         return _applyFuncs.ContainsKey(evtType);
     }
+    
+    
 
     public void InjectTryFuncs(IEnumerable<ITry> tryFuncs)
     {
@@ -62,10 +65,19 @@ public class AggregateT<TInfo, TState> : IAggregate
         return _tryFuncs.ContainsKey(cmdType);
     }
 
-    public void InjectPolicies(IEnumerable<IAggregatePolicy> aggregatePolicies)
+    public bool KnowsChoreography(string name)
     {
-        foreach (var policy in aggregatePolicies)
-            policy.SetBehavior(this);
+        return _choreography.ContainsKey(name);
+    }
+
+    public void InjectChoreography(IEnumerable<IChoreography> choreography)
+    {
+        foreach (var step in choreography)
+        {
+            if (KnowsChoreography(step.Name)) continue;
+            step.SetAggregate(this);
+            _choreography = _choreography.Add(step.Name, step);
+        }
     }
 
     public string GetName()
@@ -166,7 +178,17 @@ public class AggregateT<TInfo, TState> : IAggregate
         evt.SetTimeStamp(DateTime.UtcNow);
         _state = ApplyEvent(_state, evt);
         _uncommittedEvents.Add(evt);
-        await _exchange.Publish(evt.Topic, evt);
+//        await _exchange.Publish(evt.Topic, evt);
+        await WhenAsync(evt);
+    }
+
+    private async Task WhenAsync(IEvtB evt)
+    {
+        var steps = _choreography.Where(c => c.Value.Topic == evt.Topic);
+        foreach (var step in steps)
+        {
+            await step.Value.WhenAsync(evt);
+        }
     }
 
 

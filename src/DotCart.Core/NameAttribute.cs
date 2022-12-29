@@ -31,4 +31,9 @@ public static class NameAtt
         Guard.Against.AttributeNotDefined("Name", atts, obj.GetType().FullName);
         return atts[0].Name;
     }
+
+    public static string ChoreographyName<TEvt, TCmd>()
+    {
+        return $"should ({TopicAtt.Get<TCmd>()}) on ({TopicAtt.Get<TEvt>()})";
+    }
 }

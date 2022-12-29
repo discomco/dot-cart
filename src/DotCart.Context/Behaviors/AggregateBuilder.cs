@@ -23,41 +23,39 @@ internal class AggregateBuilder : IAggregateBuilder
 {
     private readonly IAggregate _aggregate;
     private readonly IEnumerable<IApply> _applies;
-    private readonly IEnumerable<IAggregatePolicy> _policies;
+    private readonly IEnumerable<IChoreography> _rules;
     private readonly IEnumerable<ITry> _tries;
 
     public AggregateBuilder(
         IAggregate aggregate,
-        IEnumerable<IAggregatePolicy> policies,
+        IEnumerable<IChoreography> choreography,
         IEnumerable<ITry> tries,
         IEnumerable<IApply> applies)
     {
         _aggregate = aggregate;
-        _policies = Distinct(policies);
+        _rules = Distinct(choreography);
         _tries = tries;
         _applies = applies;
     }
 
     public IAggregate Build()
     {
-        _aggregate.InjectPolicies(_policies);
+        _aggregate.InjectChoreography(_rules);
         _aggregate.InjectTryFuncs(_tries);
         _aggregate.InjectApplyFuncs(_applies);
         return _aggregate;
     }
 
-    // TODO: Factor this out. Should be taken care of at injection time.
-    private IEnumerable<IAggregatePolicy> Distinct(IEnumerable<IAggregatePolicy> policies)
+    private static IEnumerable<IChoreography> Distinct(IEnumerable<IChoreography> rules)
     {
-        var result = ImmutableList<IAggregatePolicy>.Empty;
+        var result = ImmutableList<IChoreography>.Empty;
         var known = new List<string>();
-        foreach (var policy in policies)
+        foreach (var rule in rules)
         {
-            if (known.Contains(policy.Name)) continue;
-            known.Add(policy.Name);
-            result = result.Add(policy);
+            if (known.Contains(rule.Name)) continue;
+            known.Add(rule.Name);
+            result = result.Add(rule);
         }
-
         return result;
     }
 }

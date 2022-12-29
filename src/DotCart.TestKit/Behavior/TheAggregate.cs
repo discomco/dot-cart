@@ -9,8 +9,8 @@ namespace DotCart.TestKit.Behavior;
 
 public class TheAggregate : AggregateT<ITheAggregateInfo, TheDoc>
 {
-    public TheAggregate(IExchange exchange, StateCtorT<TheDoc> newState)
-        : base(exchange, newState)
+    public TheAggregate(StateCtorT<TheDoc> newState)
+        : base(newState)
     {
     }
 }

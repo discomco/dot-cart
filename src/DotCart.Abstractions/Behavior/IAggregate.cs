@@ -21,7 +21,8 @@ public interface IAggregate
     IAggregate SetID(IID ID);
     string Id();
     string GetName();
-    void InjectPolicies(IEnumerable<IAggregatePolicy> policies);
+    void InjectChoreography(IEnumerable<IChoreography> choreography);
+    bool KnowsChoreography(string name);
     void Load(IEnumerable<IEvtB>? events);
     void ClearUncommittedEvents();
     IState GetState();

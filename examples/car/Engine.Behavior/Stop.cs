@@ -79,7 +79,6 @@ public static class Stop
                     Log.Debug(e.InnerAndOuter());
                     fbk.SetError(e.AsError());
                 }
-
                 return fbk;
             };
 
@@ -101,7 +100,7 @@ public static class Stop
                 meta.ToBytes());
 
     private static readonly Evt2Cmd<Cmd, ChangeRpm.IEvt>
-        _onZeroPower =
+        _shouldStopOnZeroPower =
             (evt, state) =>
             {
                 var eng = (Schema.Engine)state;
@@ -121,18 +120,12 @@ public static class Stop
                        && !output.Items[evt.AggregateId].Status.HasFlagFast(Schema.EngineStatus.Started);
             };
 
-    public static IServiceCollection AddStopPolicies(this IServiceCollection services)
-    {
-        return services
-            .AddTransient<IAggregatePolicy, OnZeroPowerStop>()
-            .AddTransient(_ => _onZeroPower);
-    }
     public static IServiceCollection AddStopBehavior(this IServiceCollection services)
     {
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddStopPolicies()
+            .AddChoreography(_shouldStopOnZeroPower)
             .AddStopProjectionFuncs()
             .AddTransient(_ => _newEvt)
             .AddTransient(_ => _guardFunc)
@@ -199,14 +192,14 @@ public static class Stop
         public const string Cmd_v1 = "engine:stop:v1";
     }
 
-    [Name(OnZeroPower_v1)]
-    public class OnZeroPowerStop : AggregatePolicyT<ChangeRpm.IEvt, Cmd>
-    {
-        public OnZeroPowerStop(
-            IExchange exchange,
-            Evt2Cmd<Cmd, ChangeRpm.IEvt> evt2Cmd)
-            : base(exchange, evt2Cmd)
-        {
-        }
-    }
+    // [Name(OnZeroPower_v1)]
+    // public class OnZeroPowerStop : AggregatePolicyT<ChangeRpm.IEvt, Cmd>
+    // {
+    //     public OnZeroPowerStop(
+    //         IExchange exchange,
+    //         Evt2Cmd<Cmd, ChangeRpm.IEvt> evt2Cmd)
+    //         : base(exchange, evt2Cmd)
+    //     {
+    //     }
+    // }
 }

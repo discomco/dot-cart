@@ -105,9 +105,10 @@ public static class Start
                 payload.ToBytes(),
                 meta.ToBytes());
 
-    public static Evt2Cmd<Cmd, Initialize.IEvt> _initialized2Start =>
-        (evt, _) =>
-            Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
+    private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
+        _shouldStartOnInitialized =
+            (evt, _) =>
+                Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
 
     public static IServiceCollection AddStartACLFuncs(this IServiceCollection services)
     {
@@ -122,8 +123,7 @@ public static class Start
         return services
             .AddRootDocCtors()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddSingleton<IAggregatePolicy, OnInitialized>()
-            .AddTransient(_ => _initialized2Start)
+            .AddChoreography(_shouldStartOnInitialized)
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _specFunc)
             .AddTransient(_ => _raiseFunc);
@@ -166,17 +166,6 @@ public static class Start
         public static Exception New(string message)
         {
             return new Exception(message);
-        }
-    }
-
-    [Name(OnInitialized_v1)]
-    public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>
-    {
-        public OnInitialized(
-            IExchange exchange,
-            Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd)
-            : base(exchange, evt2Cmd)
-        {
         }
     }
 

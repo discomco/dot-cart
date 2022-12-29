@@ -13,7 +13,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
 {
     private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
 
-    protected IAggregate? Aggregate;
+    private IAggregate? Aggregate;
 
     protected AggregatePolicyT
     (
@@ -26,22 +26,20 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
     }
 
 
-    public void SetBehavior(IAggregate aggregate)
+    public void SetAggregate(IAggregate aggregate)
     {
         Aggregate = aggregate;
     }
 
-    private Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken)
+    public string Topic => TopicAtt.Get<TEvt>();
+
+    public async Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken = default)
     {
         if (evt.IsCommitted)
-            return Task.CompletedTask;
-        return Task.Run(async () =>
-        {
-            var fbk = await EnforceAsync((dynamic)evt);
-            if (!fbk.IsSuccess)
-                Log.Error($"[{NameAtt.Get(this)}] Failed => {fbk.ErrState}");
-            return Task.CompletedTask;
-        }, cancellationToken);
+            return;
+        var fbk = await EnforceAsync((dynamic)evt);
+        if (!fbk.IsSuccess)
+            Log.Error($"{AppErrors.Error} [{GetType()} on {evt.Topic}] Failed => {fbk.ErrState}");
     }
 
     private async Task<Feedback> EnforceAsync(IEvtB evt)
@@ -59,7 +57,6 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         {
             feedback.SetError(e.AsError());
         }
-
         return feedback;
     }
 

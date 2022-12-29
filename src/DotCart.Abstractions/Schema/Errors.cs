@@ -4,7 +4,7 @@ using DotCart.Core;
 namespace DotCart.Abstractions.Schema;
 
 [Serializable]
-public sealed class Errors : DuplicatesList<string, Error>
+public sealed class Errors : DuplicatesDictionary<string, Error>
 {
     public void Add(string key, string message)
     {

@@ -21,7 +21,7 @@ public static class ChangeDetails
 
 
     private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
-        _onInitialized =
+        _shouldChangeDetailsOnInitialized =
             (evt, _) =>
             {
                 var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
@@ -111,11 +111,10 @@ public static class ChangeDetails
             .AddRootListCtors()
             .AddChangeDetailsProjectionFuncs()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddSingleton<IAggregatePolicy, OnInitialized>()
+            .AddChoreography(_shouldChangeDetailsOnInitialized)
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _newEvt)
-            .AddTransient(_ => _onInitialized);
+            .AddTransient(_ => _newEvt);
     }
 
     public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
@@ -150,11 +149,12 @@ public static class ChangeDetails
     {
     }
 
-    [Name(OnInitialized_v1)]
-    public class OnInitialized : AggregatePolicyT<Initialize.IEvt, Cmd>
-    {
-        public OnInitialized(IExchange exchange, Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd) : base(exchange, evt2Cmd)
-        {
-        }
-    }
+    // [Name(OnInitialized_v1)]
+    // public class OnInitialized : AggregateRuleT<Initialize.IEvt, Cmd>
+    // {
+    //     public OnInitialized(Evt2Cmd<Cmd, Initialize.IEvt> evt2Cmd) 
+    //         : base(evt2Cmd)
+    //     {
+    //     }
+    // }
 }

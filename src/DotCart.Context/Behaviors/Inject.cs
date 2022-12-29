@@ -1,3 +1,4 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
@@ -10,6 +11,16 @@ namespace DotCart.Context.Behaviors;
 
 public static partial class Inject
 {
+
+    public static IServiceCollection AddChoreography<TEvt, TCmd>(this IServiceCollection services, Evt2Cmd<TCmd,TEvt> evt2Cmd) 
+        where TEvt : IEvtB 
+        where TCmd : ICmdB
+    {
+        return services
+            .AddTransient<IChoreography, ChoreographyT<TEvt, TCmd>>()
+            .AddTransient(_ => evt2Cmd);
+    }
+    
     public static IServiceCollection AddBaseBehavior<TInfo, TState, TCmd, TEvt>(this IServiceCollection services)
         where TCmd : ICmdB
         where TState : IState
