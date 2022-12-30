@@ -25,10 +25,9 @@ public static class Stop
                 PayloadCtor());
 
     public static readonly FactCtorT<
-            Contract.Stop.Fact,
             Contract.Stop.Payload>
         FactCtor =
-            (_, _) => Contract.Stop.Fact.New(
+            (_, _) => FactT<Contract.Stop.Payload>.New(
                 Schema.DocIDCtor().Id(),
                 PayloadCtor());
 

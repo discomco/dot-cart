@@ -5,12 +5,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
+
+public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
     where TID : IID
-    where TFact : IFactT<TPayload>
     where TPayload : IPayload
 {
-    protected FactCtorT<TFact, TPayload> _newFact;
+    protected FactCtorT<TPayload> _newFact;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
@@ -39,7 +39,7 @@ public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
     public void ShouldResolveFactCtor()
     {
         Assert.NotNull(TestEnv);
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TFact, TPayload>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
         Assert.NotNull(_newFact);
     }
 
@@ -53,7 +53,7 @@ public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
         Assert.NotEmpty(aggId);
         var fact = _newFact(aggId, _newPayload());
         var serialized = fact.ToJson();
-        var desFact = serialized.FromJson<TFact>();
+        var desFact = serialized.FromJson<FactT<TPayload>>();
         Assert.Equal(fact, desFact);
     }
 
@@ -63,7 +63,7 @@ public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
         // GIVEN
         var expectedTopic = GetExpectedTopic();
         // WHEN
-        var foundTopic = TopicAtt.Get<TFact>();
+        var foundTopic = TopicAtt.Get<TIFact>();
         // THEN
         Assert.Equal(expectedTopic, foundTopic);
     }
@@ -78,6 +78,6 @@ public abstract class FactTestsT<TID, TFact, TPayload> : IoCTests
     {
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         _newPayload = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TFact, TPayload>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
     }
 }

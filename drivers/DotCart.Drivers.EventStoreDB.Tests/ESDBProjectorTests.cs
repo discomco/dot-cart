@@ -3,8 +3,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
-using DotCart.TestKit.Actors;
-using DotCart.TestKit.Schema;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -20,7 +18,7 @@ public class ESDBProjectorTests : IoCTests
     private IExchange? _exchange;
     private IHostExecutor? _executor;
     private ILogger? _logger;
-    private IDocStore<TheDoc>? _memStore;
+    private IDocStore<TheSchema.Doc>? _memStore;
     private SubscriptionFilterOptions? _subOptions;
 
     public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -136,7 +134,7 @@ public class ESDBProjectorTests : IoCTests
         services
             .AddSingletonExchange()
             .AddConfiguredESDBClients()
-            .AddSingletonESDBProjectorDriver<ITheSubscriptionInfo>()
+            .AddSingletonESDBProjectorDriver<TheActors.ISubscriptionInfo>()
             .AddESDBStore();
     }
 }

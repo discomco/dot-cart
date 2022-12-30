@@ -28,11 +28,9 @@ public static class ChangeRpm
         HopeCtor =
             (_, _) => Contract.ChangeRpm.Hope.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<
-            Contract.ChangeRpm.Fact,
-            Contract.ChangeRpm.Payload>
+    public static readonly FactCtorT<Contract.ChangeRpm.Payload>
         FactCtor =
-            (_, _) => Contract.ChangeRpm.Fact.New(Schema.DocIDCtor().Id(), PayloadCtor());
+            (_, _) => FactT<Contract.ChangeRpm.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
     public static readonly EvtCtorT<Behavior.ChangeRpm.IEvt, Contract.ChangeRpm.Payload, EventMeta>
         EvtCtor =

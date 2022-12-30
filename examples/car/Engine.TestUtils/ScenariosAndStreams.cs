@@ -44,7 +44,7 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    private static IEnumerable<IEvtB> RandomRevs(ID ID)
+    private static IEnumerable<IEvtB> RandomRevs(IDB ID)
     {
         var res = new List<IEvtB>();
         var counter = Random.Shared.Next(4, 15);
@@ -63,7 +63,7 @@ public static class ScenariosAndStreams
         return res;
     }
 
-    public static IEnumerable<ICmdB> InitializeScenario(ID ID)
+    public static IEnumerable<ICmdB> InitializeScenario(IDB ID)
     {
         var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
         var initializeCmd = Behavior.Initialize.Cmd.New(Schema.DocIDCtor(), initializePayload);

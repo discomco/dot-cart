@@ -16,31 +16,6 @@ public static partial class Inject
 
 public static class ChangeDetails
 {
-    
-    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
-    {
-        return services
-            .AddRootDocCtors()
-            .AddRootListCtors()
-            .AddChangeDetailsProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
-            .AddChoreography(_shouldChangeDetailsOnInitialized)
-            .AddTransient(_ => _guardFunc)
-            .AddTransient(_ => _raiseFunc)
-            .AddTransient(_ => _newEvt);
-    }
-
-    public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Doc)
-            .AddTransient(_ => _evt2DocVal)
-            .AddTransient(_ => _evt2List)
-            .AddTransient(_ => _evt2ListVal);
-    }
-   
-    
-    
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
@@ -104,6 +79,7 @@ public static class ChangeDetails
                 fbk.SetError(e.AsError());
                 Log.Error($"{AppErrors.Error} - {e.InnerAndOuter()}");
             }
+
             return fbk;
         };
 
@@ -124,10 +100,30 @@ public static class ChangeDetails
                 };
             };
 
+    public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
+    {
+        return services
+            .AddRootDocCtors()
+            .AddRootListCtors()
+            .AddChangeDetailsProjectionFuncs()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddChoreography(_shouldChangeDetailsOnInitialized)
+            .AddTransient(_ => _guardFunc)
+            .AddTransient(_ => _raiseFunc)
+            .AddTransient(_ => _newEvt);
+    }
+
+    public static IServiceCollection AddChangeDetailsProjectionFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Doc)
+            .AddTransient(_ => _evt2DocVal)
+            .AddTransient(_ => _evt2List)
+            .AddTransient(_ => _evt2ListVal);
+    }
 
 
     [Topic(Topics.Cmd_v1)]
-    
     public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload, EventMeta Meta)
         : CmdT<Contract.ChangeDetails.Payload, EventMeta>(AggregateID,
             Payload, Meta)
@@ -146,6 +142,6 @@ public static class ChangeDetails
 
     [Topic(Topics.Evt_v1)]
     public interface IEvt : IEvtT<Contract.ChangeDetails.Payload>
-    {}
-
+    {
+    }
 }

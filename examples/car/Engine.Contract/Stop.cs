@@ -25,15 +25,15 @@ public static class Stop
     {
     }
 
-    [Topic(Topics.Fact_v1)]
-    public record Fact(string AggId, Payload Payload)
-        : FactT<Payload>(AggId, Payload), IFact
-    {
-        public static Fact New(string aggId, Payload payload)
-        {
-            return new Fact(aggId, payload);
-        }
-    }
+    // [Topic(Topics.Fact_v1)]
+    // public record Fact(string AggId, Payload Payload)
+    //     : FactT<Payload>(AggId, Payload), IFact
+    // {
+    //     public static Fact New(string aggId, Payload payload)
+    //     {
+    //         return new Fact(aggId, payload);
+    //     }
+    // }
 
     [Topic(Topics.Hope_v1)]
     public interface IHope : IHopeT<Payload>

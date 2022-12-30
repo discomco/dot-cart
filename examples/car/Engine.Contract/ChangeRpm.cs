@@ -39,13 +39,13 @@ public static class ChangeRpm
     {
     }
 
-    [Topic(Topics.Fact_v1)]
-    public record Fact(string AggId, Payload Payload)
-        : FactT<Payload>(AggId, Payload), IFact
-    {
-        public static Fact New(string AggId, Payload payload)
-        {
-            return new Fact(AggId, payload);
-        }
-    }
+    // [Topic(Topics.Fact_v1)]
+    // public record Fact(string AggId, Payload Payload)
+    //     : FactT<Payload>(AggId, Payload), IFact
+    // {
+    //     public static Fact New(string AggId, Payload payload)
+    //     {
+    //         return new Fact(AggId, payload);
+    //     }
+    // }
 }

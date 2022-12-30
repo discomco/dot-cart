@@ -11,7 +11,6 @@ public static class Initialize
         public const string Hope_v1 = "engine.initialize.v1";
     }
 
-
     public record Payload(Schema.Details Details) : IPayload
     {
         public Schema.Details Details { get; } = Details;
@@ -41,12 +40,12 @@ public static class Initialize
     {
     }
 
-    [Topic(Topics.Fact_v1)]
-    public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
-    {
-        public static Fact New(string AggId, Payload payload)
-        {
-            return new Fact(AggId, payload);
-        }
-    }
+    // [Topic(Topics.Fact_v1)]
+    // public record Fact(string AggId, Payload Payload) : FactT<Payload>(AggId, Payload), IFact
+    // {
+    //     public static Fact New(string AggId, Payload payload)
+    //     {
+    //         return new Fact(AggId, payload);
+    //     }
+    // }
 }

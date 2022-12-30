@@ -12,7 +12,8 @@ public abstract record CmdT<TPayload, TMeta>(
     public TMeta Meta { get; } = Meta;
     public TPayload Payload { get; } = Payload;
     public IID AggregateID { get; private set; } = AggregateID;
-    public void SetID(ID aggregateID)
+
+    public void SetID(IDB aggregateID)
     {
         AggregateID = aggregateID;
     }

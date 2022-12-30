@@ -38,6 +38,7 @@ public static class AppVerbs
     public static readonly string Subscribing = "SUBSCRIBING".AsVerb();
     public static readonly string Responding = "RESPONDING".AsVerb();
     public static readonly string Enforcing = "ENFORCING".AsVerb();
+    public static readonly string Emitting = "EMITTING".AsVerb();
 }
 
 public static class AppErrors

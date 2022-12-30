@@ -14,7 +14,7 @@ public record Event(
     byte[] Data,
     byte[] MetaData) : IEvtB
 {
-    public IID AggregateID => ID.New(AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString());
+    public IID AggregateID => IDB.New(AggregateId.PrefixFromIdString(), AggregateId.ValueFromIdString());
     public string EventType { get; set; } = EventType;
 
     public string AggregateId { get; set; } = AggregateId;

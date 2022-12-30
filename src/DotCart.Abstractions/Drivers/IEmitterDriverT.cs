@@ -2,14 +2,13 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IEmitterDriver : IDriver
+public interface IEmitterDriverB : IDriver
 {
 }
 
-public interface IEmitterDriverT<in TFact, TTarget> : IEmitterDriver
-    where TFact : IFactB
-    where TTarget : class
+public interface IEmitterDriverT<TPayload, TDriverMsg> : IEmitterDriverB
+    where TDriverMsg : class 
+    where TPayload : IPayload
 {
-    Task EmitAsync(TFact fact, CancellationToken cancellationToken = default);
-    Task<TTarget> ToTarget(TFact fact, CancellationToken cancellationToken = default);
+    Task EmitAsync(FactT<TPayload> fact, CancellationToken cancellationToken = default);
 }

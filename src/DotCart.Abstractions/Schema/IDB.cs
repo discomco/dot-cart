@@ -8,9 +8,9 @@ public interface IID
     string Id();
 }
 
-public record ID : IID
+public record IDB : IID
 {
-    protected ID(string prefix, string value = "")
+    protected IDB(string prefix, string value = "")
     {
         if (value == string.Empty)
             value = GuidUtils.LowerCaseGuid;
@@ -29,7 +29,7 @@ public record ID : IID
 
     public static IID New(string prefix, string value = "")
     {
-        return new ID(prefix, value);
+        return new IDB(prefix, value);
     }
 }
 
@@ -49,7 +49,7 @@ public static class IDFuncs
         if (string.IsNullOrEmpty(idString) || !idString.Contains(PrefixSeparator))
             throw new ArgumentException($"idString must not be null or empty and must contain '{PrefixSeparator}' ");
         var parts = idString.Split(PrefixSeparator);
-        return ID.New(parts[0], parts[1]);
+        return IDB.New(parts[0], parts[1]);
     }
 
     public static string PrefixFromIdString(this string idString)

@@ -22,11 +22,9 @@ public static class Start
         HopeCtor =
             (_, _) => Contract.Start.Hope.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<
-            Contract.Start.Fact,
-            Contract.Start.Payload>
+    public static readonly FactCtorT<Contract.Start.Payload>
         FactCtor =
-            (_, _) => Contract.Start.Fact.New(Schema.DocIDCtor().Id(), PayloadCtor());
+            (_, _) => FactT<Contract.Start.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
     public static readonly EvtCtorT<Behavior.Start.IEvt, Contract.Start.Payload, EventMeta>
         EvtCtor =

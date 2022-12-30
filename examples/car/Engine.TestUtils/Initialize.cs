@@ -39,9 +39,9 @@ public static class Initialize
         HopeCtor =
             (_, _) => Contract.Initialize.Hope.New(PayloadCtor());
 
-    public static readonly FactCtorT<
-            Contract.Initialize.Fact,
-            Contract.Initialize.Payload>
+    public static readonly FactCtorT<Contract.Initialize.Payload>
         FactCtor =
-            (_, _) => Contract.Initialize.Fact.New(Schema.DocIDCtor().Id(), PayloadCtor());
+            (_, _) => FactT<Contract.Initialize.Payload>.New(
+                Schema.DocIDCtor().Id(), 
+                PayloadCtor());
 }

@@ -11,7 +11,7 @@ public static class Defaults
 {
     public static IServiceCollection AddDefaultDrivers<TDoc, TInfo>(this IServiceCollection services)
         where TDoc : IState
-        where TInfo : ISubscriptionInfo
+        where TInfo : ISubscriptionInfoB
     {
         return services
             .AddESDBStore()

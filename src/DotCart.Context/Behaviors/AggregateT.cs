@@ -22,12 +22,12 @@ internal class AggregateT<TInfo, TState> : IAggregate
     where TInfo : IAggregateInfoB
 {
     private readonly ICollection<IEvtB>
+        _appliedEvents = new LinkedList<IEvtB>();
+
+    private readonly ICollection<IEvtB>
         _uncommittedEvents = new LinkedList<IEvtB>();
 
     private readonly object execMutex = new();
-
-    private readonly ICollection<IEvtB>
-        _appliedEvents = new LinkedList<IEvtB>();
 
     private IImmutableDictionary<string, IApply>
         _applyFuncs = ImmutableDictionary<string, IApply>.Empty;

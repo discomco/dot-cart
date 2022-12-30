@@ -1,15 +1,14 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
-using DotCart.TestKit.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace DotCart.Drivers.Redis.Tests;
 
-internal class MyRedisStore : RedisStore<TheDoc>
+internal class MyRedisStore : RedisStore<TheSchema.Doc>
 {
-    public MyRedisStore(IRedisDbT<TheDoc> redisDb) : base(redisDb)
+    public MyRedisStore(IRedisDbT<TheSchema.Doc> redisDb) : base(redisDb)
     {
     }
 }
@@ -19,13 +18,13 @@ internal static class Inject
     public static IServiceCollection AddMyRedisStoreDriver(this IServiceCollection services)
     {
         return services
-            .AddTransient(_ => TheDoc.Rand)
-            .AddTransient(_ => TheID.Ctor)
-            .AddTransient<IDocStore<TheDoc>, MyRedisStore>();
+            .AddTransient(_ => TheSchema.Doc.Rand)
+            .AddTransient(_ => TheSchema.ID.Ctor)
+            .AddTransient<IDocStore<TheSchema.Doc>, MyRedisStore>();
     }
 }
 
-public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<TheID, TheDoc>
+public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<TheSchema.ID, TheSchema.Doc>
 {
     public MyRedisStoreDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -39,6 +38,6 @@ public class MyRedisStoreDriverTests : RedisStoreDriverTestsT<TheID, TheDoc>
     {
         services
             .AddMyRedisStoreDriver()
-            .AddSingletonRedisDb<TheDoc>();
+            .AddSingletonRedisDb<TheSchema.Doc>();
     }
 }

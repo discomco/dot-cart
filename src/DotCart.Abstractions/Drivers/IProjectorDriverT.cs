@@ -9,7 +9,7 @@ public interface IProjectorDriver : IDriver
 }
 
 public interface IProjectorDriverT<TInfo> : IProjectorDriver
-    where TInfo : ISubscriptionInfo
+    where TInfo : ISubscriptionInfoB
 {
     Task<IEvtB> CreateEventAsync(object source, CancellationToken cancellationToken = default);
 }

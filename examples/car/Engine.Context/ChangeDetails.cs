@@ -33,9 +33,9 @@ public static class ChangeDetails
                 )
             );
 
-    private static readonly Evt2Fact<Contract.ChangeDetails.Fact, Behavior.ChangeDetails.IEvt>
+    private static readonly Evt2Fact<FactT<Contract.ChangeDetails.Payload>, Behavior.ChangeDetails.IEvt>
         _evt2Fact =
-            evt => Contract.ChangeDetails.Fact.New(
+            evt => FactT<Contract.ChangeDetails.Payload>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeDetails.Payload>()
             );

@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.TestKit.Schema;
+using DotCart.TestKit;
 using Serilog;
 
 namespace DotCart.Drivers.Mediator.Tests;
@@ -36,7 +36,7 @@ public class NamedConsumer1 : ActorB, IActor<TheSpoke>, INamedConsumer
         return Task.Run(() =>
         {
             Log.Information($"{AppVerbs.Subscribing} [{NameAtt.Get(this)}] ~> [{_exchange.GetType()}]");
-            _exchange.Subscribe(TopicAtt.Get<TheMsg>(), this);
+            _exchange.Subscribe(TopicAtt.Get<TheSchema.Msg>(), this);
         }, cancellationToken);
     }
 
@@ -45,7 +45,7 @@ public class NamedConsumer1 : ActorB, IActor<TheSpoke>, INamedConsumer
         return Task.Run(() =>
         {
             Log.Information($"{Name} is unsubscribing from {_exchange.GetType()}");
-            _exchange.Unsubscribe(TopicAtt.Get<TheMsg>(), this);
+            _exchange.Unsubscribe(TopicAtt.Get<TheSchema.Msg>(), this);
         }, cancellationToken);
     }
 }

@@ -17,10 +17,13 @@ public static class Start
     public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
 
 
-    private static readonly Evt2Fact<Contract.Start.Fact, IEvt>
+    private static readonly Evt2Fact<FactT<Contract.Start.Payload>, IEvt>
         _evt2Fact =
             evt =>
-                Contract.Start.Fact.New(evt.AggregateId, evt.GetPayload<Contract.Start.Payload>());
+                FactT<Contract.Start.Payload>.New(
+                    evt.AggregateId,
+                    evt.GetPayload<Contract.Start.Payload>()
+                );
 
     private static readonly Hope2Cmd<Cmd, Contract.Start.Hope>
         _hope2Cmd =

@@ -4,8 +4,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
-using DotCart.TestKit.Behavior;
-using DotCart.TestKit.Schema;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -16,9 +14,9 @@ namespace DotCart.Drivers.NATS.Tests;
 public class ReqRspDriverTests : IoCTests
 {
     protected IEncodedConnection _encodedConnection;
-    protected IDCtorT<TheID> _newID;
-    protected IRequesterT<TheHope> _theRequester;
-    protected IResponderT<TheHope, TheCmd> _theResponder;
+    protected IDCtorT<TheSchema.ID> _newID;
+    protected IRequesterT<TheContract.Hope> _theRequester;
+    protected IResponderT<TheContract.Hope, TheBehavior.Cmd> _theResponder;
 
     public ReqRspDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -54,7 +52,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _theRequester = TestEnv.ResolveRequired<IRequesterT<TheHope>>();
+        _theRequester = TestEnv.ResolveRequired<IRequesterT<TheContract.Hope>>();
         // THEN
         Assert.NotNull(_theRequester);
     }
@@ -64,7 +62,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.ResolveRequired<IDCtorT<TheID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.ID>>();
         // THEN
         Assert.NotNull(_newID);
     }
@@ -75,7 +73,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _theResponder = TestEnv.ResolveRequired<IResponderT<TheHope, TheCmd>>();
+        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Hope, TheBehavior.Cmd>>();
         // THEN
         Assert.NotNull(_theResponder);
     }
@@ -88,7 +86,7 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(TestEnv);
         var cts = new CancellationTokenSource(100_000);
         // WHEN
-        _theResponder = TestEnv.ResolveRequired<IResponderT<TheHope, TheCmd>>();
+        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Hope, TheBehavior.Cmd>>();
         _theResponder.Activate(cts.Token);
         // THEN
         await Task.Delay(1000, cts.Token);
@@ -143,9 +141,10 @@ public class ReqRspDriverTests : IoCTests
             .AddTheIDCtor()
             // .AddSingleton<ITheResponder, TheResponder>()
             // .AddSingleton<IResponderT2<TheHope, TheCmd>, TheResponder>()
-            .AddTransient<IRequesterT<TheHope>, TheRequester>()
-            .AddTransient<IResponderDriverT<TheHope>, TheResponderDriver>()
-            .AddTransient<IResponderT<TheHope, TheCmd>, ResponderT<IResponderDriverT<TheHope>, TheHope, TheCmd>>()
+            .AddTransient<IRequesterT<TheContract.Hope>, TheRequester>()
+            .AddTransient<IResponderDriverT<TheContract.Hope>, TheResponderDriver>()
+            .AddTransient<IResponderT<TheContract.Hope, TheBehavior.Cmd>, ResponderT<
+                IResponderDriverT<TheContract.Hope>, TheContract.Hope, TheBehavior.Cmd>>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

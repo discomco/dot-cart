@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.TestFirst;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -10,7 +11,7 @@ namespace Engine.Context.Tests.Start;
 
 public class ActorTests : EffectsTests<
     Behavior.Start.IEvt,
-    Contract.Start.Fact,
+    FactT<Contract.Start.Payload>,
     IDocStore<Schema.Engine>>
 {
     public ActorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

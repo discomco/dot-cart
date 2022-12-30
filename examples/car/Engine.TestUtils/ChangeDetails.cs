@@ -24,11 +24,9 @@ public static class ChangeDetails
         HopeCtor =
             (_, _) => Contract.ChangeDetails.Hope.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<
-            Contract.ChangeDetails.Fact,
-            Contract.ChangeDetails.Payload>
+    public static readonly FactCtorT<Contract.ChangeDetails.Payload>
         FactCtor =
-            (_, _) => Contract.ChangeDetails.Fact.New(Schema.DocIDCtor().Id(), PayloadCtor());
+            (_, _) => FactT<Contract.ChangeDetails.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
     public static readonly CmdCtorT<Behavior.ChangeDetails.Cmd,
             Contract.Schema.EngineID,

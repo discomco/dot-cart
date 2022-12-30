@@ -18,12 +18,13 @@ public static class Stop
     public const string OnZeroPower_v1 = "engine:on_zero_power:stop:v1";
 
 
-    private static readonly Evt2Fact<Contract.Stop.Fact, IEvt>
+    private static readonly Evt2Fact<FactT<Contract.Stop.Payload>, IEvt>
         _evt2Fact =
-            evt => Contract.Stop.Fact.New(
-                evt.AggregateId,
-                evt.GetPayload<Contract.Stop.Payload>()
-            );
+            evt => FactT<Contract.Stop.Payload>
+                .New(
+                    evt.AggregateId,
+                    evt.GetPayload<Contract.Stop.Payload>()
+                );
 
     private static readonly Evt2Doc<Schema.Engine, IEvt>
         _evt2Doc =

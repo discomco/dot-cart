@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.TestKit.Schema;
+using DotCart.TestKit;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
@@ -34,7 +34,7 @@ public class Producer : ActorB, IActor<TheSpoke>, IProducer
             while (!cancellationToken.IsCancellationRequested)
             {
                 Task.Delay(2_000);
-                await _exchange.Publish(TopicAtt.Get<TheMsg>(), TheMsg.Random, cancellationToken);
+                await _exchange.Publish(TopicAtt.Get<TheSchema.Msg>(), TheSchema.Msg.Random, cancellationToken);
             }
         }, cancellationToken);
     }

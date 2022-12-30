@@ -41,10 +41,13 @@ public static class Initialize
             );
 
     private static readonly Evt2Fact<
-            Contract.Initialize.Fact,
+            FactT<Contract.Initialize.Payload>,
             IEvt>
         _evt2Fact =
-            evt => Contract.Initialize.Fact.New(evt.AggregateId, evt.GetPayload<Contract.Initialize.Payload>());
+            evt => FactT<Contract.Initialize.Payload>.New(
+                evt.AggregateId,
+                evt.GetPayload<Contract.Initialize.Payload>()
+            );
 
     private static readonly Hope2Cmd<
             Cmd,

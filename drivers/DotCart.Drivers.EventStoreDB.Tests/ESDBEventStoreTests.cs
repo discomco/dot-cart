@@ -7,8 +7,6 @@ using DotCart.Context.Behaviors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
-using DotCart.TestKit.Behavior;
-using DotCart.TestKit.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -21,8 +19,8 @@ public class ESDBEventStoreTests : IoCTests
     private ICmdHandler? _cmdHandler;
     private IEventStore? _eventStore;
     private IExchange _exchange;
-    private StateCtorT<TheDoc> _newDoc;
-    private IDCtorT<TheID> _newID;
+    private StateCtorT<TheSchema.Doc> _newDoc;
+    private IDCtorT<TheSchema.ID> _newID;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -107,7 +105,7 @@ public class ESDBEventStoreTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var ctor = TestEnv.ResolveRequired<StateCtorT<TheDoc>>();
+        var ctor = TestEnv.ResolveRequired<StateCtorT<TheSchema.Doc>>();
         // THEN
         Assert.NotNull(ctor);
     }
@@ -133,8 +131,8 @@ public class ESDBEventStoreTests : IoCTests
     protected override void Initialize()
     {
         _eventStore = TestEnv.ResolveRequired<IEventStore>();
-        _newDoc = TestEnv.ResolveRequired<StateCtorT<TheDoc>>();
-        _newID = TestEnv.ResolveRequired<IDCtorT<TheID>>();
+        _newDoc = TestEnv.ResolveRequired<StateCtorT<TheSchema.Doc>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.ID>>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();
@@ -149,9 +147,9 @@ public class ESDBEventStoreTests : IoCTests
     {
         services.AddCmdHandler()
 //            .AddTransient<IAggregate, TheAggregate>()
-            .AddAggregateBuilder<ITheAggregateInfo, TheDoc>()
-            .AddTransient(_ => TheDoc.Rand)
-            .AddTransient(_ => TheID.Ctor)
+            .AddAggregateBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
+            .AddTransient(_ => TheSchema.Doc.Rand)
+            .AddTransient(_ => TheSchema.ID.Ctor)
             .AddSingleton<IAggregateStore, ESDBStore>()
             .AddSingleton<IEventStore, ESDBStore>()
             .AddSingletonExchange()

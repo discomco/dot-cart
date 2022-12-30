@@ -128,7 +128,7 @@ public static class Schema
 
 
     [IDPrefix(IDConstants.EngineListIDPrefix)]
-    public record EngineListID() : ID(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
+    public record EngineListID() : IDB(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
     {
         public static EngineListID New()
         {
@@ -149,7 +149,7 @@ public static class Schema
     }
 
     [IDPrefix(IDConstants.EngineIDPrefix)]
-    public record EngineID : ID
+    public record EngineID : IDB
     {
         public EngineID(string value = "") : base(IDPrefixAtt.Get<EngineID>(), value)
         {

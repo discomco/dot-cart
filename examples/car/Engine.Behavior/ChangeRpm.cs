@@ -54,14 +54,6 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static int calcPower(int power, int delta)
-    {
-        var newPower = power + delta;
-        if (newPower <= 0) 
-            newPower = 0;
-        return newPower;
-    }
-
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
         _evt2DocVal =
             (input, output, evt) =>
@@ -101,9 +93,9 @@ public static class ChangeRpm
             };
 
 
-    private static readonly Evt2Fact<Contract.ChangeRpm.Fact, IEvt>
+    private static readonly Evt2Fact<FactT<Contract.ChangeRpm.Payload>, IEvt>
         _evt2Fact =
-            evt => Contract.ChangeRpm.Fact.New(
+            evt => FactT<Contract.ChangeRpm.Payload>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeRpm.Payload>());
 
@@ -125,6 +117,14 @@ public static class ChangeRpm
                 payload.ToBytes(),
                 meta.ToBytes()
             );
+
+    private static int calcPower(int power, int delta)
+    {
+        var newPower = power + delta;
+        if (newPower <= 0)
+            newPower = 0;
+        return newPower;
+    }
 
     public static IServiceCollection AddChangeRpmACLFuncs(this IServiceCollection services)
     {
