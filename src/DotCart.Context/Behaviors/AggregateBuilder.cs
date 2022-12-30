@@ -56,7 +56,6 @@ internal class AggregateBuilder : IAggregateBuilder
             known.Add(rule.Name);
             result = result.Add(rule);
         }
-
         return result;
     }
 }
