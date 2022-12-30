@@ -57,6 +57,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         {
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 

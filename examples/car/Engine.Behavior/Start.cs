@@ -32,7 +32,9 @@ public static class Start
             (doc, _) =>
             {
                 var newDoc = doc with { };
-                newDoc.Status = newDoc.Status.SetFlag(Schema.EngineStatus.Started);
+                newDoc.Status = newDoc.Status
+                    .UnsetFlag(Schema.EngineStatus.Stopped)
+                    .SetFlag(Schema.EngineStatus.Started);
                 return newDoc;
             };
 

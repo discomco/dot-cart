@@ -21,7 +21,7 @@ public static class Stop
             Contract.Stop.Payload>
         HopeCtor =
             (_, _) => Contract.Stop.Hope.New(
-                Schema.DocIDCtor().Id(), 
+                Schema.DocIDCtor().Id(),
                 PayloadCtor());
 
     public static readonly FactCtorT<
@@ -29,12 +29,12 @@ public static class Stop
             Contract.Stop.Payload>
         FactCtor =
             (_, _) => Contract.Stop.Fact.New(
-                Schema.DocIDCtor().Id(), 
+                Schema.DocIDCtor().Id(),
                 PayloadCtor());
 
     public static readonly EvtCtorT<
-            Behavior.Stop.IEvt, 
-            Contract.Stop.Payload, 
+            Behavior.Stop.IEvt,
+            Contract.Stop.Payload,
             EventMeta>
         EvtCtor =
             (_, _, _) => Behavior.Stop._newEvt(

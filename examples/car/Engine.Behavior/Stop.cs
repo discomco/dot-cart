@@ -53,10 +53,13 @@ public static class Stop
                 {
                     Items = ImmutableDictionary.CreateRange(lst.Items)
                 };
-                newList.Items[evt.AggregateId].Status
-                    = newList.Items[evt.AggregateId].Status.UnsetFlag(Schema.EngineStatus.Started);
-                newList.Items[evt.AggregateId].Status
-                    = newList.Items[evt.AggregateId].Status.SetFlag(Schema.EngineStatus.Stopped);
+                var newListItem = newList.Items[evt.AggregateId] with { };
+                newListItem.Status = newListItem.Status
+                    .UnsetFlag(Schema.EngineStatus.Started)
+                    .SetFlag(Schema.EngineStatus.Stopped);
+                newList.Items = newList.Items
+                    .Remove(evt.AggregateId)
+                    .Add(evt.AggregateId, newListItem);
                 return newList;
             };
 
@@ -72,13 +75,17 @@ public static class Stop
                 var fbk = Feedback.New(cmd.AggregateID.Id());
                 try
                 {
-                    Guard.Against.EngineNotStarted(state);
+                    Guard.Against
+                        .EngineNotInitialized(state)
+                        .EngineNotStarted(state)
+                        .EngineStopped(state);
                 }
                 catch (Exception e)
                 {
                     Log.Debug(e.InnerAndOuter());
                     fbk.SetError(e.AsError());
                 }
+
                 return fbk;
             };
 

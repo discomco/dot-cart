@@ -3,7 +3,6 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-
 public interface ITry
 {
     string CmdType { get; }

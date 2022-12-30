@@ -12,13 +12,13 @@ public class ChoreographyT<TEvt, TCmd> : IChoreography
 {
     private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
     private IAggregate _aggregate;
-    
-    
+
+
     public ChoreographyT(Evt2Cmd<TCmd, TEvt> evt2Cmd)
     {
         _evt2Cmd = evt2Cmd;
     }
-    
+
     public void SetAggregate(IAggregate aggregate)
     {
         _aggregate = aggregate;
@@ -42,6 +42,7 @@ public class ChoreographyT<TEvt, TCmd> : IChoreography
         {
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 }

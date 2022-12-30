@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Engine.Api.Cmd.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/engine/[controller]")]
 public class StopController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;

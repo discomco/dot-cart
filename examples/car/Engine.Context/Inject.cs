@@ -10,6 +10,7 @@ public static class Inject
             .AddInitializeSpoke()
             .AddChangeDetailsSpoke()
             .AddChangeRpmSpoke()
-            .AddStartSpoke();
+            .AddStartSpoke()
+            .AddStopSpoke();
     }
 }

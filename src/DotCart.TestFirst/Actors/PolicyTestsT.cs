@@ -43,8 +43,7 @@ public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
         // THEN
         Assert.NotNull(name);
     }
-    
-    
+
 
     [Fact]
     public async Task ShouldPolicyHaveName()

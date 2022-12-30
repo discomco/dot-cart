@@ -21,18 +21,6 @@ public static class ChangeRpm
                 var res = new List<Event>();
                 var rpmChanged = _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
                 res.Add(rpmChanged);
-                // var newPower = state.Power + cmd.Payload.Delta;
-                // if (newPower > 0)
-                //     return res;
-                // var stopped = Stop._newEvt(
-                //     cmd.AggregateID,
-                //     Contract.Stop.Payload.New(),
-                //     EventMeta.New(
-                //         NameAtt.Get<IEngineAggregateInfo>(),
-                //         cmd.AggregateID.Id()
-                //     )
-                // );
-                // res.Add(stopped);
                 return res;
             };
 
@@ -43,7 +31,10 @@ public static class ChangeRpm
                 var fbk = Feedback.New(cmd.AggregateID.Id());
                 try
                 {
-                    Guard.Against.EngineNotStarted(state);
+                    Guard.Against
+                        .EngineNotInitialized(state)
+                        .EngineNotStarted(state)
+                        .EngineStopped(state);
                 }
                 catch (Exception e)
                 {

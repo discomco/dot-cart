@@ -94,7 +94,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     }
 
     [Fact]
-    public void ShouldResolveAggregateBuilder()
+    public Task ShouldResolveAggregateBuilder()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -102,6 +102,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         var aggBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         // THEN
         Assert.NotNull(aggBuilder);
+        return Task.CompletedTask;
     }
 
 

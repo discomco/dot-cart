@@ -7,19 +7,19 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class ChoreographyTestsT<TEvt, TCmd> : IoCTests 
-    where TCmd : ICmdB 
+public abstract class ChoreographyTestsT<TEvt, TCmd> : IoCTests
+    where TCmd : ICmdB
     where TEvt : IEvtB
 {
-    private Evt2Cmd<TCmd,TEvt> _evt2Cmd;
-    private IChoreography _rule;
-    private IAggregateBuilder _aggBuilder;
     private IAggregate _agg;
+    private IAggregateBuilder _aggBuilder;
+    private Evt2Cmd<TCmd, TEvt> _evt2Cmd;
+    private IChoreography _rule;
 
     protected ChoreographyTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public async Task ShouldResolveEvt2Cmd()
     {
@@ -30,7 +30,7 @@ public abstract class ChoreographyTestsT<TEvt, TCmd> : IoCTests
         // THEN
         Assert.NotNull(_evt2Cmd);
     }
-    
+
     [Fact]
     public async Task ShouldResolveChoreography()
     {
@@ -38,7 +38,7 @@ public abstract class ChoreographyTestsT<TEvt, TCmd> : IoCTests
         Assert.NotNull(TestEnv);
         // WHEN
         _rule = TestEnv.ResolveAll<IChoreography>()
-            .First(x => x.Name == NameAtt.ChoreographyName<TEvt,TCmd>());
+            .First(x => x.Name == NameAtt.ChoreographyName<TEvt, TCmd>());
         // THEN
         Assert.NotNull(_rule);
     }
@@ -63,11 +63,8 @@ public abstract class ChoreographyTestsT<TEvt, TCmd> : IoCTests
         Assert.NotNull(_aggBuilder);
         // WHEN
         _agg = _aggBuilder.Build();
-        var isKnown = _agg.KnowsChoreography(NameAtt.ChoreographyName<TEvt,TCmd>());
+        var isKnown = _agg.KnowsChoreography(NameAtt.ChoreographyName<TEvt, TCmd>());
         // THEN
         Assert.True(isKnown);
     }
-    
-    
-
 }

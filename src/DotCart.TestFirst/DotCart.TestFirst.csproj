@@ -9,13 +9,13 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
-        <ProjectReference Include="..\..\examples\car\Engine.Behavior\Engine.Behavior.csproj" />
-        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj" />
-        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj" />
-        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
-        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
+        <ProjectReference Include="..\..\examples\car\Engine.Behavior\Engine.Behavior.csproj"/>
+        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
+        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj"/>
     </ItemGroup>
 
 

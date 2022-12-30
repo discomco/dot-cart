@@ -27,6 +27,8 @@ public static class FlagExtensions
 
     public static int SetFlag(this int flags, int flag)
     {
+        if (flags.HasFlagFast(flag))
+            return flags;
         return flags | flag;
     }
 

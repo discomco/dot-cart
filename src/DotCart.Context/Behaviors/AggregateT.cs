@@ -6,7 +6,6 @@ using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Serilog;
 
-
 namespace DotCart.Context.Behaviors;
 
 public class AggregateT<TInfo, TState> : IAggregate
@@ -17,12 +16,14 @@ public class AggregateT<TInfo, TState> : IAggregate
     private readonly object execMutex = new();
     public ICollection<IEvtB> _appliedEvents = new LinkedList<IEvtB>();
     private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
+
+    private DuplicatesDictionary<string, IChoreography> _choreography =
+        DuplicatesDictionary<string, IChoreography>.Empty;
+
     private ulong _nextVersion;
     protected TState _state;
 
     private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
-
-    private DuplicatesDictionary<string, IChoreography> _choreography = DuplicatesDictionary<string, IChoreography>.Empty;
 
     private bool _withAppliedEvents = false;
 
@@ -37,8 +38,7 @@ public class AggregateT<TInfo, TState> : IAggregate
     {
         return _applyFuncs.ContainsKey(evtType);
     }
-    
-    
+
 
     public void InjectTryFuncs(IEnumerable<ITry> tryFuncs)
     {
@@ -67,7 +67,7 @@ public class AggregateT<TInfo, TState> : IAggregate
 
     public bool KnowsChoreography(string name)
     {
-        return _choreography.ContainsKey(name);
+        return _choreography.Any(s => s.Key == name);
     }
 
     public void InjectChoreography(IEnumerable<IChoreography> choreography)
@@ -75,7 +75,7 @@ public class AggregateT<TInfo, TState> : IAggregate
         foreach (var step in choreography)
         {
             if (KnowsChoreography(step.Name)) continue;
-            step.SetAggregate(this);
+//            step.SetAggregate(this);
             _choreography = _choreography.Add(step.Name, step);
         }
     }
@@ -147,7 +147,6 @@ public class AggregateT<TInfo, TState> : IAggregate
             Guard.Against.Null(cmd);
             Guard.Against.Null(cmd.AggregateID);
             SetID(cmd.AggregateID);
-            Guard.Against.BehaviorIDNotSet(this);
             var fTry = _tryFuncs[TopicAtt.Get(cmd)];
             feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state);
             if (!feedback.IsSuccess)
@@ -187,6 +186,7 @@ public class AggregateT<TInfo, TState> : IAggregate
         var steps = _choreography.Where(c => c.Value.Topic == evt.Topic);
         foreach (var step in steps)
         {
+            step.Value.SetAggregate(this);
             await step.Value.WhenAsync(evt);
         }
     }

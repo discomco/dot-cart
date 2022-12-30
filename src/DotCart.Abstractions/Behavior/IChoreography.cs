@@ -4,8 +4,8 @@ namespace DotCart.Abstractions.Behavior;
 
 public interface IChoreography
 {
-    void SetAggregate(IAggregate aggregate);
     string Name { get; }
     string Topic { get; }
+    void SetAggregate(IAggregate aggregate);
     Task<Feedback> WhenAsync(IEvtB evt);
 }

@@ -132,7 +132,7 @@ public static class Schema
     {
         public static EngineListID New()
         {
-            return new();
+            return new EngineListID();
         }
     }
 

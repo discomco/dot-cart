@@ -58,13 +58,13 @@ public static class Initialize
         _evt2Doc =
             (state, evt) =>
             {
-                if (evt == null)
-                    return state;
+                if (evt == null) return state;
                 if (evt.GetPayload<Contract.Initialize.Payload>() == null) return state;
-                state.Id = evt.AggregateId;
-                state.Details = evt.GetPayload<Contract.Initialize.Payload>().Details;
-                state.Status = Schema.EngineStatus.Initialized;
-                return state;
+                var newState = state with { };
+                newState.Id = evt.AggregateId;
+                newState.Details = evt.GetPayload<Contract.Initialize.Payload>().Details;
+                newState.Status = Schema.EngineStatus.Initialized;
+                return newState;
             };
 
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
