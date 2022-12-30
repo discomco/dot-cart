@@ -10,10 +10,8 @@ public abstract record CmdT<TPayload, TMeta>(
     where TMeta : IEventMeta
 {
     public TMeta Meta { get; } = Meta;
-
     public TPayload Payload { get; } = Payload;
     public IID AggregateID { get; private set; } = AggregateID;
-
     public void SetID(ID aggregateID)
     {
         AggregateID = aggregateID;

@@ -49,14 +49,26 @@ public static class ChangeRpm
             (doc, evt) =>
             {
                 var newDoc = doc with { };
-                newDoc.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+                var newPower = calcPower(newDoc.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
+                newDoc.Power = newPower;
                 return newDoc;
             };
 
+    private static int calcPower(int power, int delta)
+    {
+        var newPower = power + delta;
+        if (newPower <= 0) 
+            newPower = 0;
+        return newPower;
+    }
+
     private static readonly Evt2DocValidator<Schema.Engine, IEvt>
         _evt2DocVal =
-            (input, output, evt)
-                => output.Power == input.Power + evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+            (input, output, evt) =>
+            {
+                var newPower = calcPower(input.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
+                return output.Power == newPower;
+            };
 
 
     private static readonly Evt2Doc<Schema.EngineList, IEvt>
@@ -66,7 +78,7 @@ public static class ChangeRpm
                 if (doc.Items.All(item => item.Key != evt.AggregateId))
                     return doc;
                 var newItem = doc.Items[evt.AggregateId] with { };
-                newItem.Power += evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
+                newItem.Power = calcPower(newItem.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
                 var newDoc = doc with
                 {
                     Items = ImmutableDictionary.CreateRange(doc.Items)
@@ -85,7 +97,7 @@ public static class ChangeRpm
                 if (input.Items.All(item => item.Key != evt.AggregateId))
                     return false;
                 var d = evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-                return output.Items[evt.AggregateId].Power - input.Items[evt.AggregateId].Power == d;
+                return output.Items[evt.AggregateId].Power == calcPower(input.Items[evt.AggregateId].Power, d);
             };
 
 
