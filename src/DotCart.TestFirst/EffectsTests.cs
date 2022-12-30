@@ -17,7 +17,6 @@ public abstract class EffectsTests<
     where TFact : IFactB
 
 {
-    protected IAggregate _aggregate;
     protected IAggregateBuilder _aggregateBuilder;
     protected ICmdHandler _cmdHandler;
     protected IExchange _exchange;
@@ -100,7 +99,6 @@ public abstract class EffectsTests<
     protected override void Initialize()
     {
         AggregateStore = TestEnv.ResolveRequired<IAggregateStore>();
-        _aggregate = TestEnv.ResolveRequired<IAggregate>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _exchange = TestEnv.ResolveRequired<IExchange>();

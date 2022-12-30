@@ -8,27 +8,43 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregateT<TInfo, TState> : IAggregate
+/// <summary>
+///     AggregateT
+///     <TInfo, TState>
+///         is an aggregation class for event sourced State management.
+///         Aggregates are composed of ITry, IApply and IChoreography functions and should never be instantiated directly.
+///         Construction of AggregateT classes should be done via the AggregateBuilder.Build() method.
+/// </summary>
+/// <typeparam name="TInfo">A Injection Discriminator that carries additional information about the Aggregate</typeparam>
+/// <typeparam name="TState"></typeparam>
+internal class AggregateT<TInfo, TState> : IAggregate
     where TState : IState
     where TInfo : IAggregateInfoB
 {
-    private readonly ICollection<IEvtB> _uncommittedEvents = new LinkedList<IEvtB>();
-    private readonly object execMutex = new();
-    public ICollection<IEvtB> _appliedEvents = new LinkedList<IEvtB>();
-    private IImmutableDictionary<string, IApply> _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
+    private readonly ICollection<IEvtB>
+        _uncommittedEvents = new LinkedList<IEvtB>();
 
-    private DuplicatesDictionary<string, IChoreography> _choreography =
-        DuplicatesDictionary<string, IChoreography>.Empty;
+    private readonly object execMutex = new();
+
+    private readonly ICollection<IEvtB>
+        _appliedEvents = new LinkedList<IEvtB>();
+
+    private IImmutableDictionary<string, IApply>
+        _applyFuncs = ImmutableDictionary<string, IApply>.Empty;
+
+    private IImmutableDictionary<string, IChoreography>
+        _choreography = ImmutableDictionary<string, IChoreography>.Empty;
 
     private ulong _nextVersion;
     protected TState _state;
 
-    private IImmutableDictionary<string, ITry> _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
+    private IImmutableDictionary<string, ITry>
+        _tryFuncs = ImmutableDictionary<string, ITry>.Empty;
+
 
     private bool _withAppliedEvents = false;
 
-    public AggregateT(
-        StateCtorT<TState> newState)
+    protected AggregateT(StateCtorT<TState> newState)
     {
         _state = newState();
         Version = EventConst.NewAggregateVersion;
@@ -42,22 +58,32 @@ public class AggregateT<TInfo, TState> : IAggregate
 
     public void InjectTryFuncs(IEnumerable<ITry> tryFuncs)
     {
-        foreach (var fTry in tryFuncs)
-        {
-            if (KnowsTry(fTry.CmdType)) continue;
-            fTry.SetAggregate(this);
-            _tryFuncs = _tryFuncs.Add(fTry.CmdType, fTry);
-        }
+        _tryFuncs =
+            tryFuncs
+                .DistinctBy(
+                    f => f.CmdType
+                )
+                .Select<ITry, KeyValuePair<string, ITry>>(
+                    x
+                        => new KeyValuePair<string, ITry>(
+                            x.CmdType,
+                            x.SetAggregate(this)
+                        )
+                )
+                .ToImmutableDictionary();
     }
 
     public void InjectApplyFuncs(IEnumerable<IApply> applyFuncs)
     {
-        foreach (var apply in applyFuncs)
-        {
-            if (KnowsApply(apply.EvtType)) continue;
-            apply.SetAggregate(this);
-            _applyFuncs = _applyFuncs.Add(apply.EvtType, apply);
-        }
+        _applyFuncs =
+            applyFuncs
+                .DistinctBy(f
+                    => f.EvtType
+                )
+                .Select<IApply, KeyValuePair<string, IApply>>(f
+                    => new KeyValuePair<string, IApply>(f.EvtType, f.SetAggregate(this))
+                )
+                .ToImmutableDictionary();
     }
 
     public bool KnowsTry(string cmdType)
@@ -72,12 +98,15 @@ public class AggregateT<TInfo, TState> : IAggregate
 
     public void InjectChoreography(IEnumerable<IChoreography> choreography)
     {
-        foreach (var step in choreography)
-        {
-            if (KnowsChoreography(step.Name)) continue;
-//            step.SetAggregate(this);
-            _choreography = _choreography.Add(step.Name, step);
-        }
+        _choreography =
+            choreography
+                .DistinctBy(c
+                    => c.Name
+                )
+                .Select<IChoreography, KeyValuePair<string, IChoreography>>(c
+                    => new KeyValuePair<string, IChoreography>(c.Name, c.SetAggregate(this))
+                )
+                .ToImmutableDictionary();
     }
 
     public string GetName()
@@ -164,6 +193,11 @@ public class AggregateT<TInfo, TState> : IAggregate
         return feedback;
     }
 
+    public static IAggregate Empty(StateCtorT<TState> newState)
+    {
+        return new AggregateT<TInfo, TState>(newState);
+    }
+
     public IID GetID()
     {
         return ID;
@@ -172,12 +206,9 @@ public class AggregateT<TInfo, TState> : IAggregate
     private async Task RaiseEvent(IEvtB evt)
     {
         evt.SetVersion(Version + 1);
-        // if (Version >= evt.Version) 
-        //     return;
         evt.SetTimeStamp(DateTime.UtcNow);
         _state = ApplyEvent(_state, evt);
         _uncommittedEvents.Add(evt);
-//        await _exchange.Publish(evt.Topic, evt);
         await WhenAsync(evt);
     }
 

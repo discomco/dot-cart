@@ -6,7 +6,7 @@ namespace DotCart.Abstractions.Actors;
 public interface ITry
 {
     string CmdType { get; }
-    void SetAggregate(IAggregate aggregate);
+    ITry SetAggregate(IAggregate aggregate);
 }
 
 public interface ITry<in TCmd, in TState> : ITry

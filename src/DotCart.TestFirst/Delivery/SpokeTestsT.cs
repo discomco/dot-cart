@@ -60,10 +60,10 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _actors = TestEnv.ResolveAll<IActor<TSpoke>>();
+        var actors = TestEnv.ResolveAll<IActor<TSpoke>>();
         // THEN
-        Assert.NotNull(_actors);
-        Assert.NotEmpty(_actors);
+        Assert.NotNull(actors);
+        Assert.NotEmpty(actors);
         return Task.CompletedTask;
     }
 

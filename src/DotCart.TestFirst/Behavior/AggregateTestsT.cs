@@ -118,19 +118,6 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
     }
 
     [Fact]
-    public void ShouldResolveAggregate()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var agg = TestEnv.Resolve<IAggregate>();
-        // THEN
-        Assert.NotNull(agg);
-        var state = agg.GetState();
-        Assert.NotNull(state);
-    }
-
-    [Fact]
     public async Task ShouldResolveEvt2State()
     {
         // GIVEN

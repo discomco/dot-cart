@@ -18,9 +18,10 @@ public class ApplyEvtT<TState, TEvt> : IApply<TState, TEvt>
         _evt2State = evt2State;
     }
 
-    public void SetAggregate(IAggregate aggregate)
+    public IApply SetAggregate(IAggregate aggregate)
     {
         Aggregate = aggregate;
+        return this;
     }
 
     public string EvtType => TopicAtt.Get<TEvt>();

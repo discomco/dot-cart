@@ -14,7 +14,6 @@ public static class Inject
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
     {
         return services
-            .AddAggregateBuilder()
             .AddTransient<ICmdHandler, CmdHandler>();
     }
 }

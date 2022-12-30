@@ -11,7 +11,7 @@ using Schema = Engine.Contract.Schema;
 
 namespace Engine.Behavior.Tests;
 
-public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregateInfo, Schema.Engine>>
+public class EngineBehaviorTests : FullBehaviorTestsT
 {
     private IAggregate _agg;
     private IAggregateBuilder _builder;
@@ -119,6 +119,8 @@ public class EngineBehaviorTests : FullBehaviorTestsT<AggregateT<IEngineAggregat
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddStopBehavior()
+            .AddChangeDetailsBehavior()
             .AddEngineBehavior();
     }
 }

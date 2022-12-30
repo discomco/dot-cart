@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Drivers.Mediator;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Spokes;
@@ -15,6 +16,7 @@ public static class Inject
         where TSpoke : SpokeT<TSpoke>
     {
         return services
+            .AddSingletonExchange()
             .AddTransient<TSpoke>()
             .AddSingleton<ISpokeBuilder<TSpoke>, SpokeBuilderT<TSpoke>>()
             .AddHostedService(provider =>

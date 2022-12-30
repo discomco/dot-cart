@@ -19,13 +19,17 @@ public class ChoreographyT<TEvt, TCmd> : IChoreography
         _evt2Cmd = evt2Cmd;
     }
 
-    public void SetAggregate(IAggregate aggregate)
+    public IChoreography SetAggregate(IAggregate aggregate)
     {
         _aggregate = aggregate;
+        return this;
     }
 
-    public string Name => NameAtt.ChoreographyName<TEvt, TCmd>();
-    public string Topic => $"{TopicAtt.Get<TEvt>()}";
+    public string
+        Name => NameAtt.ChoreographyName<TEvt, TCmd>();
+
+    public string
+        Topic => $"{TopicAtt.Get<TEvt>()}";
 
 
     public async Task<Feedback> WhenAsync(IEvtB evt)

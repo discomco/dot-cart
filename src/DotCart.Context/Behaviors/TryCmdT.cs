@@ -21,9 +21,10 @@ public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
 
     public string CmdType => TopicAtt.Get<TCmd>();
 
-    public void SetAggregate(IAggregate aggregate)
+    public ITry SetAggregate(IAggregate aggregate)
     {
         Aggregate = aggregate;
+        return this;
     }
 
     public IFeedback Verify(TCmd cmd, TState state)

@@ -1,6 +1,6 @@
-using System.Collections.Immutable;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Behaviors;
@@ -12,50 +12,47 @@ public interface IAggregateBuilder
 
 public static partial class Inject
 {
-    public static IServiceCollection AddAggregateBuilder(this IServiceCollection services)
+    public static IServiceCollection AddAggregateBuilder<TInfo, TState>(this IServiceCollection services)
+        where TInfo : IAggregateInfoB
+        where TState : IState
     {
         return services
-            .AddTransient<IAggregateBuilder, AggregateBuilder>();
+            .AddTransient<IAggregateBuilder, AggregateBuilder<TInfo, TState>>();
     }
 }
 
-internal class AggregateBuilder : IAggregateBuilder
+internal class AggregateBuilder<TInfo, TState> : IAggregateBuilder
+    where TInfo : IAggregateInfoB
+    where TState : IState
 {
-    private readonly IAggregate _aggregate;
     private readonly IEnumerable<IApply> _applies;
-    private readonly IEnumerable<IChoreography> _rules;
+    private readonly object _buildMutex = new();
+    private readonly IEnumerable<IChoreography> _choreography;
+    private readonly StateCtorT<TState> _newState;
     private readonly IEnumerable<ITry> _tries;
+    private IAggregate _aggregate;
 
     public AggregateBuilder(
-        IAggregate aggregate,
+        StateCtorT<TState> newState,
         IEnumerable<IChoreography> choreography,
         IEnumerable<ITry> tries,
         IEnumerable<IApply> applies)
     {
-        _aggregate = aggregate;
-        _rules = Distinct(choreography);
-        _tries = tries;
-        _applies = applies;
+        _newState = newState;
+        _choreography = choreography.DistinctBy(rule => rule.Name);
+        _tries = tries.DistinctBy(t => t.CmdType);
+        _applies = applies.DistinctBy(t => t.EvtType);
     }
 
     public IAggregate Build()
     {
-        _aggregate.InjectChoreography(_rules);
-        _aggregate.InjectTryFuncs(_tries);
-        _aggregate.InjectApplyFuncs(_applies);
-        return _aggregate;
-    }
-
-    private static IEnumerable<IChoreography> Distinct(IEnumerable<IChoreography> rules)
-    {
-        var result = ImmutableList<IChoreography>.Empty;
-        var known = new List<string>();
-        foreach (var rule in rules)
+        lock (_buildMutex)
         {
-            if (known.Contains(rule.Name)) continue;
-            known.Add(rule.Name);
-            result = result.Add(rule);
+            _aggregate = AggregateT<TInfo, TState>.Empty(_newState);
+            _aggregate.InjectChoreography(_choreography);
+            _aggregate.InjectTryFuncs(_tries);
+            _aggregate.InjectApplyFuncs(_applies);
+            return _aggregate;
         }
-        return result;
     }
 }
