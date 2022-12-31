@@ -7,7 +7,7 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Drivers.Mediator;
 
-[Name("dotcart:exchange:v1")]
+[Name(AttributeConstants.ExchangeName)]
 internal class Exchange : ActiveComponent, IExchange
 {
     private readonly object _subMutex = new();

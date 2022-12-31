@@ -4,55 +4,23 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ActorTestsT<TActor> : IoCTests where TActor : IActor
+public abstract class ActorTestsT<TActor> : ActiveComponentTestsT<TActor> 
+    where TActor : IActor
 {
     protected TActor _actor;
 
-    protected ActorTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-    {
-    }
 
     [Fact]
-    public void ShouldResolveActor()
+    public void ShouldResolveExchange()
     {
         // GIVEN
-        Assert.NotNull(TestEnv);
         // WHEN
-        _actor = TestEnv.ResolveRequired<TActor>();
         // THEN
-        Assert.NotNull(_actor);
     }
+    
+    
 
-    // [Fact]
-    // public async Task ShouldActivateActor()
-    // {
-    //     // var ts = new CancellationTokenSource(TimeSpan.FromSeconds(5));
-    //     var ts = new CancellationTokenSource();
-    //     // GIVEN
-    //     Assert.NotNull(_actor);
-    //
-    //     // WHEN
-    //     _actor.Activate(ts.Token);
-    //     // THEN
-    //     // WHEN
-    //     Thread.Sleep(2);
-    //
-    //     Assert.True(_actor.Status.HasFlag(ComponentStatus.Active));
-    //
-    //     await Task.Run(async () =>
-    //     {
-    //         await Task.Delay(3, ts.Token);
-    //         ts.Cancel(); // THEN
-    //     }, ts.Token);
-    //
-    //     Thread.Sleep(2);
-    //
-    //     Assert.False(_actor.Status.HasFlag(ComponentStatus.Active));
-    // }
-
-
-    protected override void Initialize()
+    protected ActorTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
-        _actor = TestEnv.ResolveRequired<TActor>();
     }
 }

@@ -8,7 +8,7 @@ public abstract class ActorB : ActiveComponent, IActor
 {
     protected readonly IExchange _exchange;
     private ISpokeB _spoke;
-    
+    protected IDriverB Driver;
 
     protected ActorB(IExchange exchange)
     {
@@ -22,11 +22,13 @@ public abstract class ActorB : ActiveComponent, IActor
     {
         return Run(async () =>
         {
+            if (Driver != null) Driver.SetActor(this);
             while (_exchange.Status != ComponentStatus.Active)
             {
                 _exchange.Activate(cancellationToken);
                 await Delay(10, cancellationToken);
             }
+
             return CompletedTask;
         }, cancellationToken);
     }

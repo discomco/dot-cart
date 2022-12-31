@@ -5,7 +5,6 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-
 public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
     where TID : IID
     where TPayload : IPayload

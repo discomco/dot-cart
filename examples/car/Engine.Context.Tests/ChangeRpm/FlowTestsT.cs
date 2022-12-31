@@ -1,20 +1,21 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.TestFirst;
+using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.ChangeDetails;
+namespace Engine.Context.Tests.ChangeRpm;
 
-public class ActorTests : EffectsTests<
-    Behavior.ChangeDetails.IEvt,
-    FactT<Contract.ChangeDetails.Payload>,
+public class FlowTestsT : FlowTestsT<
+    Behavior.ChangeRpm.IEvt,
+    FactT<Contract.ChangeRpm.Payload>,
     IDocStore<Schema.Engine>>
 {
-    public ActorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public FlowTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -27,6 +28,6 @@ public class ActorTests : EffectsTests<
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddTransient(_ => A.Fake<IDocStore<Schema.Engine>>())
-            .AddChangeDetailsSpoke();
+            .AddChangeRpmSpoke();
     }
 }

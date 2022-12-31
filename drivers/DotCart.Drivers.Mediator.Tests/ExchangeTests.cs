@@ -8,7 +8,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public class ExchangeTests : ActorTestsT<IExchange>
+public class ExchangeTests 
+    : ActiveComponentTestsT<IExchange>
 {
     private IConsumer1 _consumer1;
     private IConsumer2 _consumer2;
@@ -150,8 +151,6 @@ public class ExchangeTests : ActorTestsT<IExchange>
 
     protected override void Initialize()
     {
-        _actor = TestEnv.ResolveRequired<IExchange>();
-
         _producer = TestEnv.ResolveRequired<IProducer>();
         _consumer1 = TestEnv.ResolveRequired<IConsumer1>();
         _consumer2 = TestEnv.ResolveRequired<IConsumer2>();

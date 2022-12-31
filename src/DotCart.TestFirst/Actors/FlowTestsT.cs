@@ -7,9 +7,9 @@ using DotCart.Context.Behaviors;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Actors;
 
-public abstract class EffectsTests<
+public abstract class FlowTestsT<
     TEvt,
     TFact,
     TReadModelStore> : IoCTests
@@ -23,7 +23,7 @@ public abstract class EffectsTests<
     protected IAggregateStore AggregateStore;
 
 
-    protected EffectsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected FlowTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

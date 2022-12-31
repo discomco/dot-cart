@@ -24,10 +24,10 @@ public class ResponderT<TSpoke, TDriver, THope, TCmd> : ResponderT<TDriver, THop
     where THope : IHopeB
     where TCmd : ICmdB
 {
-    public ResponderT(TDriver responderDriver,
+    public ResponderT(TDriver driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TCmd, THope> hope2Cmd) : base(responderDriver,
+        Hope2Cmd<TCmd, THope> hope2Cmd) : base(driver,
         exchange,
         cmdHandler,
         hope2Cmd)
@@ -45,12 +45,12 @@ public class ResponderT<TDriver, THope, TCmd> : ActorB, IResponderT<THope, TCmd>
     private readonly TDriver _responderDriver;
 
     public ResponderT(
-        TDriver responderDriver,
+        TDriver driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
         Hope2Cmd<TCmd, THope> hope2Cmd) : base(exchange)
     {
-        _responderDriver = responderDriver;
+        Driver = driver;
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }

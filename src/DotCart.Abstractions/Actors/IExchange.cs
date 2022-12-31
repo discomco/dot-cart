@@ -1,7 +1,10 @@
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 
 namespace DotCart.Abstractions.Actors;
 
+
+[Name(AttributeConstants.ExchangeName)]
 public interface IExchange : IActor
 {
     void Subscribe(string topic, IActor consumer);

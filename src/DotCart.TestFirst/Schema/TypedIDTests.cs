@@ -3,7 +3,7 @@ using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst;
+namespace DotCart.TestFirst.Schema;
 
 public abstract class TypedIDTests<TID> : IoCTests where TID : IID
 {

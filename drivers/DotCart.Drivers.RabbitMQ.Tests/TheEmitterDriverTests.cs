@@ -7,11 +7,10 @@ namespace DotCart.Drivers.RabbitMQ.Tests;
 
 public class TheEmitterDriverTests :
     RMqEmitterDriverTestsT<
-        TheContract.IFact, 
-        TheContract.Payload, 
-        byte[]>
+        TheContract.IFact,
+        TheContract.Payload>
 {
-    public TheEmitterDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) 
+    public TheEmitterDriverTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }

@@ -6,8 +6,7 @@ public interface IEmitterDriverB : IDriverB
 {
 }
 
-public interface IEmitterDriverT<TDriverMsg,TPayload> : IEmitterDriverB
-    where TDriverMsg : class 
+public interface IEmitterDriverT<TPayload> : IEmitterDriverB
     where TPayload : IPayload
 {
     Task EmitAsync(FactT<TPayload> fact, CancellationToken cancellationToken = default);

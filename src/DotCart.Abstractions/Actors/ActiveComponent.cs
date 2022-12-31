@@ -26,7 +26,7 @@ public abstract class ActiveComponent : IActiveComponent
             catch (OperationCanceledException e)
             {
                 Status = ComponentStatus.Inactive;
-                Log.Information($"ActiveComponent [{GetType()}] is Canceled");
+                Log.Information($"{AppFacts.Cancelled} [{GetType().Name}] is Canceled");
             }
             catch (Exception e)
             {
@@ -76,8 +76,7 @@ public abstract class ActiveComponent : IActiveComponent
         {
             try
             {
-                var activated = "ACTIVATED".AsFact();
-                Log.Information($"{activated} [{Name}]");
+                Log.Information($"{AppFacts.Activated} [{Name}]");
                 Status = ComponentStatus.Active;
                 await StartActingAsync(cancellationToken).ConfigureAwait(false);
             }
@@ -95,7 +94,7 @@ public abstract class ActiveComponent : IActiveComponent
         {
             if (!cancellationToken.IsCancellationRequested) return CompletedTask;
             Status = ComponentStatus.Inactive;
-            Log.Information($"Actor::{Name}  ~> DEACTIVATED");
+            Log.Information($"{AppFacts.Deactivated} {Name}");
             return StopActingAsync(cancellationToken);
         }, cancellationToken);
     }

@@ -12,6 +12,14 @@ public static class TheContract
         _newFact =
             FactT<Payload>.New;
 
+    private static readonly Msg2Fact<Payload, byte[]>
+        _bytes2Fact =
+            msg => msg.FromBytes<FactT<Payload>>();
+
+    private static readonly Fact2Msg<byte[], Payload>
+        _fact2bytes =
+            fact => fact.ToBytes();
+
     public static IServiceCollection AddTheACLFuncs(this IServiceCollection services)
     {
         return services
@@ -19,15 +27,6 @@ public static class TheContract
             .AddTransient(_ => _fact2bytes)
             .AddTransient(_ => _newFact);
     }
-
-    private static readonly Msg2Fact<Payload, byte[]>
-        _bytes2Fact =
-            msg => msg.FromBytes<FactT<Payload>>(); 
-
-    private static readonly Fact2Msg<byte[],Payload>
-        _fact2bytes = 
-            fact => fact.ToBytes(); 
-
 
 
     [Topic(TheConstants.HopeTopic)]
@@ -39,7 +38,7 @@ public static class TheContract
             return new Hope(aggId, payload);
         }
     }
-    
+
     public record Payload : IPayload
     {
         [JsonConstructor]
@@ -67,7 +66,6 @@ public static class TheContract
                 DateTime.UtcNow);
         }
     }
-
 
 
     [Topic(TheConstants.FactTopic)]

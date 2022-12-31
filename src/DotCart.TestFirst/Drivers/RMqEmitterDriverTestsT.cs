@@ -5,12 +5,13 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class RMqListenerDriverTests<TIFact, TPayload>
-    : ListenerDriverTestsT<TIFact, TPayload>
+public abstract class RMqEmitterDriverTestsT<TIFact, TPayload>
+    : EmitterDriverTestsT<TIFact, TPayload>
     where TIFact : IFactB
     where TPayload : IPayload
 {
-    protected RMqListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected RMqEmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

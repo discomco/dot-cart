@@ -1,28 +1,27 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Polly.Retry;
 using RabbitMQ.Client;
 using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqEmitterDriverT<TIFact, TPayload> 
-    : DriverB, IEmitterDriverT<byte[], TPayload>
+public class RMqEmitterDriverT<TIFact, TPayload>
+    : DriverB, IEmitterDriverT<TPayload>
     where TIFact : IFactB
-    where TPayload: IPayload
+    where TPayload : IPayload
 {
     private readonly int _backoff = 100;
     private readonly IModel _channel;
     private readonly IConnection _connection;
     private readonly IConnectionFactory _connFact;
-    private readonly Fact2Msg<byte[],TPayload> _fact2Msg;
+    private readonly Fact2Msg<byte[], TPayload> _fact2Msg;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
 
 
     public RMqEmitterDriverT(
         IConnectionFactory connFact,
-        Fact2Msg<byte[],TPayload> fact2Msg)
+        Fact2Msg<byte[], TPayload> fact2Msg)
     {
         _connFact = connFact;
         _fact2Msg = fact2Msg;
@@ -51,6 +50,4 @@ public class RMqEmitterDriverT<TIFact, TPayload>
         _channel.Dispose();
         base.Dispose();
     }
-
-    
 }

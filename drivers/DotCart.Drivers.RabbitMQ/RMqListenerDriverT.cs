@@ -8,26 +8,26 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqListenerDriverT<TIFact, TPayload> 
-    : DriverB, IListenerDriverT<TIFact,byte[]>
-    where TIFact : IFactB 
+public class RMqListenerDriverT<TIFact, TPayload>
+    : DriverB, IListenerDriverT<TIFact, byte[]>
+    where TIFact : IFactB
     where TPayload : IPayload
 {
     private readonly IConnectionFactory _connFact;
     private readonly Msg2Fact<TPayload, byte[]> _msg2Fact;
+
+    public readonly string Topic = TopicAtt.Get<TIFact>();
     private IModel _channel;
     private IConnection _connection;
     private AsyncEventingBasicConsumer _consumer;
 
     public RMqListenerDriverT(
         IConnectionFactory connFact,
-        Msg2Fact<TPayload,byte[]> msg2Fact)
+        Msg2Fact<TPayload, byte[]> msg2Fact)
     {
         _connFact = connFact;
         _msg2Fact = msg2Fact;
     }
-
-    public readonly string Topic = TopicAtt.Get<TIFact>();
 
     public override void Dispose()
     {
@@ -74,6 +74,4 @@ public class RMqListenerDriverT<TIFact, TPayload>
             Log.Error(e.InnerAndOuter());
         }
     }
-
-    
 }

@@ -2,7 +2,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
 
-public abstract record CmdT<TPayload, TMeta>(
+public record CmdT<TPayload, TMeta>(
     IID AggregateID,
     TPayload Payload,
     TMeta Meta) : ICmdT<TPayload>
@@ -17,4 +17,7 @@ public abstract record CmdT<TPayload, TMeta>(
     {
         AggregateID = aggregateID;
     }
+
+    public static CmdT<TPayload, TMeta> New(IID iD, TPayload payload, TMeta meta) 
+        => new(iD, payload, meta);
 }

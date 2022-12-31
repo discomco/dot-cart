@@ -20,21 +20,19 @@ public static class Inject
             });
     }
 
-    public static IServiceCollection AddRabbitMqEmitterDriverT<TIFact,TPayload>(this IServiceCollection services) 
-        where TIFact : IFactB 
+    public static IServiceCollection AddRabbitMqEmitterDriverT<TIFact, TPayload>(this IServiceCollection services)
+        where TIFact : IFactB
         where TPayload : IPayload
     {
         return services
-            .AddTransient<IEmitterDriverT<byte[], TPayload>, RMqEmitterDriverT<TIFact, TPayload>>();
+            .AddTransient<IEmitterDriverT<TPayload>, RMqEmitterDriverT<TIFact, TPayload>>();
     }
 
-    public static IServiceCollection AddRabbitMqListenerDriverT<TIFact, TPayload>(this IServiceCollection services) 
-        where TIFact : IFactB 
+    public static IServiceCollection AddRabbitMqListenerDriverT<TIFact, TPayload>(this IServiceCollection services)
+        where TIFact : IFactB
         where TPayload : IPayload
     {
         return services
             .AddTransient<IListenerDriverT<TIFact, byte[]>, RMqListenerDriverT<TIFact, TPayload>>();
     }
-    
-    
 }

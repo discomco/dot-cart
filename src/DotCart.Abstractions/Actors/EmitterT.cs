@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Serilog;
@@ -11,17 +12,21 @@ public interface IEmitterB : IActor
 {
 }
 
-public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
-    where TEvt : IEvtB
-    where TFact : IFactB
+public abstract class EmitterT<TIEvt, TIFact, TPayload>
+    : ActorB, IEmitterB
+    where TIEvt : IEvtB
+    where TIFact : IFactB
+    where TPayload : IPayload
 {
-    private readonly Evt2Fact<TFact, TEvt> _evt2Fact;
+    private readonly Evt2Fact<TIFact, TIEvt> _evt2Fact;
 
 
     protected EmitterT(
+        IEmitterDriverT<TPayload> driver,
         IExchange exchange,
-        Evt2Fact<TFact, TEvt> evt2Fact) : base(exchange)
+        Evt2Fact<TIFact, TIEvt> evt2Fact) : base(exchange)
     {
+        Driver = driver;
         _evt2Fact = evt2Fact;
     }
 
@@ -35,14 +40,14 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
         }, cancellationToken);
     }
 
-    protected abstract Task EmitFactAsync(TFact fact);
+    protected abstract Task EmitFactAsync(TIFact fact);
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
         return Run(() =>
         {
             Log.Information($":: EMITTER :: [{GetType()}] ~> STARTED");
-            _exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
+            _exchange.Subscribe(TopicAtt.Get<TIEvt>(), this);
             return CompletedTask;
         }, cancellationToken);
     }
@@ -53,7 +58,7 @@ public abstract class EmitterT<TEvt, TFact> : ActorB, IEmitterB
         return Run(() =>
         {
             Log.Information($":: EMITTER :: [{GetType()}] ~> STOPPED");
-            _exchange.Unsubscribe(TopicAtt.Get<TEvt>(), this);
+            _exchange.Unsubscribe(TopicAtt.Get<TIEvt>(), this);
             return CompletedTask;
         }, cancellationToken);
     }

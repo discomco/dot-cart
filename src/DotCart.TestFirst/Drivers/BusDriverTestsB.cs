@@ -5,11 +5,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class BusDriverTestsB<TIFact, TPayload, TDriverMsg> 
+public abstract class BusDriverTestsB<TIFact, TPayload>
     : IoCTests
     where TIFact : IFactB
     where TPayload : IPayload
-    where TDriverMsg : class
 {
     private FactCtorT<TPayload> _newFact;
 
@@ -36,5 +35,4 @@ public abstract class BusDriverTestsB<TIFact, TPayload, TDriverMsg>
         // THEN
         Assert.NotNull(_newFact);
     }
-
 }

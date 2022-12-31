@@ -7,10 +7,10 @@ using Xunit.Abstractions;
 namespace Engine.Contract.Tests.Stop;
 
 [Topic(Contract.Stop.Topics.Fact_v1)]
-public class FactTests 
+public class FactTests
     : FactTestsT<
-        Contract.Schema.EngineID, 
-        Contract.Stop.IFact, 
+        Contract.Schema.EngineID,
+        Contract.Stop.IFact,
         Contract.Stop.Payload>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

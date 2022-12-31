@@ -32,9 +32,10 @@ public static class ChangeDetails
     }
 
     [Topic(Topics.Fact_v1)]
-    public interface IFact: IFactT<Payload>
-    {}
-    
+    public interface IFact : IFactT<Payload>
+    {
+    }
+
     // public record Fact(string AggId, Payload Payload)
     //     : FactT<Payload>(AggId, Payload)
     // {

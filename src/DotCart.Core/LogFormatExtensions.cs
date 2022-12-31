@@ -56,4 +56,5 @@ public static class AppFacts
     public static readonly string Subscribed = "SUBSCRIBED".AsFact();
     public static readonly string Received = "RECEIVED".AsFact();
     public static readonly string Responded = "RESPONDED".AsFact();
+    public static readonly string Cancelled = "CANCELLED".AsFact();
 }

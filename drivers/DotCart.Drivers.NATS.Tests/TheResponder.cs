@@ -15,10 +15,10 @@ public class TheResponderDriver : NATSResponderDriverT<TheContract.Hope>
 public class TheResponder : ResponderT<IResponderDriverT<TheContract.Hope>, TheContract.Hope, TheBehavior.Cmd>,
     ITheResponder
 {
-    public TheResponder(IResponderDriverT<TheContract.Hope> responderDriver,
+    public TheResponder(IResponderDriverT<TheContract.Hope> driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TheBehavior.Cmd, TheContract.Hope> hope2Cmd) : base(responderDriver,
+        Hope2Cmd<TheBehavior.Cmd, TheContract.Hope> hope2Cmd) : base(driver,
         exchange,
         cmdHandler,
         hope2Cmd)

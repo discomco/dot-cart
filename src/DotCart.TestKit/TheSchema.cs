@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,8 +18,6 @@ public static class TheConstants
     public const string FactTopic = "the_fact.topic";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
 }
-
-
 
 public static class TheSchema
 {

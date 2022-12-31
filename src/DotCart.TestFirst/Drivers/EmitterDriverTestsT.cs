@@ -5,23 +5,22 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class EmitterDriverTestsT<TIFact, TPayload, TDriverMsg> 
-    : BusDriverTestsB<TIFact, TPayload, TDriverMsg> 
-    where TIFact : IFactB 
-    where TPayload : IPayload 
-    where TDriverMsg : class
+public abstract class EmitterDriverTestsT<TIFact, TPayload>
+    : BusDriverTestsB<TIFact, TPayload>
+    where TIFact : IFactB
+    where TPayload : IPayload
 {
     protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public void ShouldResolveEmitterDriver()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TDriverMsg,TPayload>>();
+        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TPayload>>();
         // THEN
         Assert.NotNull(driver);
     }
@@ -33,9 +32,8 @@ public abstract class EmitterDriverTestsT<TIFact, TPayload, TDriverMsg>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var fact2Msg = TestEnv.ResolveRequired<Fact2Msg<TDriverMsg, TPayload>>();
+        var fact2Msg = TestEnv.ResolveRequired<Fact2Msg<byte[], TPayload>>();
         // THEN
         Assert.NotNull(fact2Msg);
     }
-
 }

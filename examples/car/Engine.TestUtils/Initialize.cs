@@ -42,6 +42,6 @@ public static class Initialize
     public static readonly FactCtorT<Contract.Initialize.Payload>
         FactCtor =
             (_, _) => FactT<Contract.Initialize.Payload>.New(
-                Schema.DocIDCtor().Id(), 
+                Schema.DocIDCtor().Id(),
                 PayloadCtor());
 }
