@@ -1,4 +1,3 @@
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
@@ -6,14 +5,15 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class AsyncInfraDriverTestsT<TIFact, TPayload, TMsg> : IoCTests
+public abstract class BusDriverTestsB<TIFact, TPayload, TDriverMsg> 
+    : IoCTests
     where TIFact : IFactB
     where TPayload : IPayload
-    where TMsg : class
+    where TDriverMsg : class
 {
     private FactCtorT<TPayload> _newFact;
 
-    protected AsyncInfraDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -35,18 +35,6 @@ public abstract class AsyncInfraDriverTestsT<TIFact, TPayload, TMsg> : IoCTests
         _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
         // THEN
         Assert.NotNull(_newFact);
-    }
-
-
-    [Fact]
-    public void ShouldResolveEmitterDriver()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TPayload, TMsg>>();
-        // THEN
-        Assert.NotNull(driver);
     }
 
 }

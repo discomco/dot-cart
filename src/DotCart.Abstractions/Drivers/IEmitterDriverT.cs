@@ -2,11 +2,11 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IEmitterDriverB : IDriver
+public interface IEmitterDriverB : IDriverB
 {
 }
 
-public interface IEmitterDriverT<TPayload, TDriverMsg> : IEmitterDriverB
+public interface IEmitterDriverT<TDriverMsg,TPayload> : IEmitterDriverB
     where TDriverMsg : class 
     where TPayload : IPayload
 {

@@ -4,19 +4,21 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
-    where TFact : IFactB
-    where TCmd : ICmdB
+public abstract class ListenerT<TIFact, TICmd, TDriverMsg> 
+    : ActorB, ISubscriber
+    where TIFact : IFactB
+    where TICmd : ICmdB
+    where TDriverMsg : class
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly IListenerDriverT<TFact> _driver;
-    private readonly Fact2Cmd<TCmd, TFact> _fact2Cmd;
+    private readonly IListenerDriverT<TIFact,TDriverMsg> _driver;
+    private readonly Fact2Cmd<TICmd, TIFact> _fact2Cmd;
 
     protected ListenerT(
-        IListenerDriverT<TFact> driver,
+        IListenerDriverT<TIFact,TDriverMsg> driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
-        Fact2Cmd<TCmd, TFact> fact2Cmd) : base(exchange)
+        Fact2Cmd<TICmd, TIFact> fact2Cmd) : base(exchange)
     {
         _driver = driver;
         _cmdHandler = cmdHandler;
@@ -25,7 +27,7 @@ public abstract class ListenerT<TFact, TCmd> : ActorB, ISubscriber
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        var fact = (TFact)msg;
+        var fact = (TIFact)msg;
         var cmd = _fact2Cmd(fact);
         return _cmdHandler.HandleAsync(cmd, cancellationToken);
     }

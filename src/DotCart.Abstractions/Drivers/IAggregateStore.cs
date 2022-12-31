@@ -3,7 +3,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IAggregateStore : IDriver, IClose
+public interface IAggregateStore : IDriverB, IClose
 {
     Task LoadAsync(IAggregate aggregate, CancellationToken cancellationToken = default);
     Task<AppendResult> SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default);

@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using static System.Threading.Tasks.Task;
 
@@ -7,6 +8,7 @@ public abstract class ActorB : ActiveComponent, IActor
 {
     protected readonly IExchange _exchange;
     private ISpokeB _spoke;
+    
 
     protected ActorB(IExchange exchange)
     {
@@ -25,7 +27,6 @@ public abstract class ActorB : ActiveComponent, IActor
                 _exchange.Activate(cancellationToken);
                 await Delay(10, cancellationToken);
             }
-
             return CompletedTask;
         }, cancellationToken);
     }

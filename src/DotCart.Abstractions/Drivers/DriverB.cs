@@ -3,7 +3,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Drivers;
 
-public abstract class DriverB : IDriver
+public abstract class DriverB : IDriverB
 {
     private IActor _actor;
 

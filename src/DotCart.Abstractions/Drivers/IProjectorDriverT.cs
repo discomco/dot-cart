@@ -2,7 +2,7 @@ using DotCart.Abstractions.Behavior;
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IProjectorDriver : IDriver
+public interface IProjectorDriver : IDriverB
 {
     Task StartStreamingAsync(CancellationToken cancellationToken = default);
     Task StopStreamingAsync(CancellationToken cancellationToken = default);

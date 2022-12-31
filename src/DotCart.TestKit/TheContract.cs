@@ -15,11 +15,16 @@ public static class TheContract
     public static IServiceCollection AddTheACLFuncs(this IServiceCollection services)
     {
         return services
+            .AddTransient(_ => _bytes2Fact)
             .AddTransient(_ => _fact2bytes)
             .AddTransient(_ => _newFact);
     }
 
-    private static readonly Fact2Msg<Payload, byte[]>
+    private static readonly Msg2Fact<Payload, byte[]>
+        _bytes2Fact =
+            msg => msg.FromBytes<FactT<Payload>>(); 
+
+    private static readonly Fact2Msg<byte[],Payload>
         _fact2bytes = 
             fact => fact.ToBytes(); 
 

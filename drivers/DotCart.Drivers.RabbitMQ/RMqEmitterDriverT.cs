@@ -8,7 +8,7 @@ using Serilog;
 namespace DotCart.Drivers.RabbitMQ;
 
 public class RMqEmitterDriverT<TIFact, TPayload> 
-    : DriverB, IEmitterDriverT<TPayload, byte[]>
+    : DriverB, IEmitterDriverT<byte[], TPayload>
     where TIFact : IFactB
     where TPayload: IPayload
 {
@@ -16,13 +16,13 @@ public class RMqEmitterDriverT<TIFact, TPayload>
     private readonly IModel _channel;
     private readonly IConnection _connection;
     private readonly IConnectionFactory _connFact;
-    private readonly Fact2Msg<TPayload, byte[]> _fact2Msg;
+    private readonly Fact2Msg<byte[],TPayload> _fact2Msg;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
 
 
     public RMqEmitterDriverT(
         IConnectionFactory connFact,
-        Fact2Msg<TPayload, byte[]> fact2Msg)
+        Fact2Msg<byte[],TPayload> fact2Msg)
     {
         _connFact = connFact;
         _fact2Msg = fact2Msg;

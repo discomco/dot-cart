@@ -1,10 +1,5 @@
 namespace DotCart.Abstractions.Schema;
 
-
-public delegate TMsg Fact2Msg<TPayload, out TMsg>(FactT<TPayload> fact) 
-    where TPayload : IPayload; 
-
-
 public interface IFactB : IDto
 {
 }

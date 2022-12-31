@@ -1,3 +1,5 @@
+using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
@@ -17,4 +19,22 @@ public static class Inject
                 Password = Config.Password
             });
     }
+
+    public static IServiceCollection AddRabbitMqEmitterDriverT<TIFact,TPayload>(this IServiceCollection services) 
+        where TIFact : IFactB 
+        where TPayload : IPayload
+    {
+        return services
+            .AddTransient<IEmitterDriverT<byte[], TPayload>, RMqEmitterDriverT<TIFact, TPayload>>();
+    }
+
+    public static IServiceCollection AddRabbitMqListenerDriverT<TIFact, TPayload>(this IServiceCollection services) 
+        where TIFact : IFactB 
+        where TPayload : IPayload
+    {
+        return services
+            .AddTransient<IListenerDriverT<TIFact, byte[]>, RMqListenerDriverT<TIFact, TPayload>>();
+    }
+    
+    
 }

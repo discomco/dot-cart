@@ -2,7 +2,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IResponderDriver : IDriver
+public interface IResponderDriver : IDriverB
 {
     Task StartRespondingAsync(CancellationToken cancellationToken = default);
     Task StopRespondingAsync(CancellationToken cancellationToken = default);

@@ -8,23 +8,26 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFact>
-    where TFact : IFactB
+public class RMqListenerDriverT<TIFact, TPayload> 
+    : DriverB, IListenerDriverT<TIFact,byte[]>
+    where TIFact : IFactB 
+    where TPayload : IPayload
 {
     private readonly IConnectionFactory _connFact;
+    private readonly Msg2Fact<TPayload, byte[]> _msg2Fact;
     private IModel _channel;
     private IConnection _connection;
     private AsyncEventingBasicConsumer _consumer;
 
-    protected RMqListenerDriverT(IConnectionFactory connFact)
+    public RMqListenerDriverT(
+        IConnectionFactory connFact,
+        Msg2Fact<TPayload,byte[]> msg2Fact)
     {
         _connFact = connFact;
+        _msg2Fact = msg2Fact;
     }
 
-    public string Topic => GetTopic();
-
-    public abstract Task<TFact> CreateFactAsync(object source, CancellationToken cancellationToken = default);
-
+    public readonly string Topic = TopicAtt.Get<TIFact>();
 
     public override void Dispose()
     {
@@ -37,7 +40,7 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
     {
         _connection = _connFact.CreateConnection();
         _channel = _connection.CreateModel();
-        Log.Debug($"[{Topic}]-SUB [{GetType().PrettyPrint()}]");
+        Log.Debug($"{AppVerbs.Subscribing} [{TopicAtt.Get<TIFact>()}]");
         _channel.ExchangeDeclare(Topic, ExchangeType.Fanout);
         var queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queueName, Topic, "");
@@ -55,10 +58,6 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
         return Task.CompletedTask;
     }
 
-    private string GetTopic()
-    {
-        return TopicAtt.Get(this);
-    }
 
     private async Task FactReceived(object sender, BasicDeliverEventArgs ea)
     {
@@ -66,8 +65,8 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
         {
             Guard.Against.Null(ea, nameof(ea));
             Guard.Against.Null(ea.Body, nameof(ea.Body));
-            var fact = await CreateFactAsync(ea.Body.ToArray());
-            Log.Debug($"[{Topic}]-RCV Fact({TopicAtt.Get(fact)})");
+            var fact = _msg2Fact(ea.Body.ToArray());
+            Log.Debug($"{AppFacts.Received} Fact({TopicAtt.Get<TIFact>()})");
             Cast(fact);
         }
         catch (Exception e)
@@ -76,5 +75,5 @@ public abstract class RMqListenerDriverT<TFact> : DriverB, IListenerDriverT<TFac
         }
     }
 
-    protected abstract IMsg CreateFact(byte[] data);
+    
 }
