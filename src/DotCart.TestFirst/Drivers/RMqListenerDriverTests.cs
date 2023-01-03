@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using RabbitMQ.Client;
@@ -5,10 +6,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class RMqListenerDriverTests<TIFact, TPayload>
-    : ListenerDriverTestsT<TIFact, TPayload>
-    where TIFact : IFactB
+public abstract class RMqListenerDriverTests<TPayload, TMeta>
+    : ListenerDriverTestsT<TPayload, TMeta>
     where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected RMqListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

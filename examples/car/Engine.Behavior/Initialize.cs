@@ -19,46 +19,41 @@ public static partial class Inject
 public static class Initialize
 {
     public static readonly EvtCtorT<
-            IEvt,
             Contract.Initialize.Payload,
             EventMeta>
         _newEvt =
-            (id, payload, meta) => Event.New(id,
-                TopicAtt.Get<IEvt>(),
-                payload.ToBytes(),
-                meta.ToBytes()
-            );
+            (id, payload, meta) => EvtT<Contract.Initialize.Payload, EventMeta>
+                .New(id.Id(),
+                    payload,
+                    meta
+                );
 
-    public static readonly CommandCtorT<
-            ICmd,
-            Contract.Initialize.Payload,
-            EventMeta>
-        _newCmd =
-            (id, payload, meta) => Command.New(id,
-                TopicAtt.Get<ICmd>(),
-                payload.ToBytes(),
-                meta.ToBytes()
-            );
+    public static readonly CmdCtorT<Schema.EngineID, Contract.Initialize.Payload, EventMeta>
+        _newCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New;
 
-    private static readonly Evt2Fact<
-            FactT<Contract.Initialize.Payload>,
-            IEvt>
+    private static readonly Evt2Fact<Contract.Initialize.Payload, EventMeta>
         _evt2Fact =
-            evt => FactT<Contract.Initialize.Payload>.New(
+            evt => FactT<Contract.Initialize.Payload, EventMeta>.New(
                 evt.AggregateId,
-                evt.GetPayload<Contract.Initialize.Payload>()
+                evt.Payload,
+                evt.Meta
             );
 
-    private static readonly Hope2Cmd<
-            Cmd,
-            Contract.Initialize.Hope>
+    private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>
         _hope2Cmd =
-            hope => Cmd.New(Schema.EngineID.New(), hope.Payload);
+            hope =>
+            {
+                var id = Schema.EngineID.New();
+                return CmdT<Contract.Initialize.Payload, EventMeta>.New(
+                    id
+                    , hope.Payload
+                    , EventMeta.New(
+                        NameAtt.Get<IEngineAggregateInfo>(),
+                        id.Id()));
+            };
 
-    private static readonly Evt2Doc<
-            Schema.Engine,
-            IEvt>
-        _evt2Doc =
+    private static readonly Evt2Doc<Schema.Engine,Contract.Initialize.Payload, EventMeta>
+        _evt2Doc =  
             (state, evt) =>
             {
                 if (evt == null) return state;
@@ -70,14 +65,12 @@ public static class Initialize
                 return newState;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+    private static readonly Evt2DocValidator<Schema.Engine,Contract.Initialize.Payload, EventMeta>
         _evt2DocVal =
             (_, output, evt) => output.Id == evt.AggregateId
                                 && output.Status.HasFlagFast(Schema.EngineStatus.Initialized);
 
-    private static readonly Evt2Doc<
-            Schema.EngineList,
-            IEvt>
+    private static readonly Evt2Doc<Schema.EngineList,Contract.Initialize.Payload, EventMeta>
         _evt2List =
             (list, evt) =>
             {
@@ -99,9 +92,7 @@ public static class Initialize
                 return newList;
             };
 
-    private static readonly Evt2DocValidator<
-            Schema.EngineList,
-            IEvt>
+    private static readonly Evt2DocValidator<Schema.EngineList,Contract.Initialize.Payload, EventMeta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -114,9 +105,7 @@ public static class Initialize
                 return result;
             };
 
-    private static readonly GuardFuncT<
-            Schema.Engine,
-            Cmd>
+    private static readonly GuardFuncT<Schema.Engine,Contract.Initialize.Payload, EventMeta>
         _guardFunc =
             (cmd, state) =>
             {
@@ -134,7 +123,7 @@ public static class Initialize
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine,Contract.Initialize.Payload, EventMeta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -144,7 +133,7 @@ public static class Initialize
                 };
             };
 
-    public static IServiceCollection AddInitializeMappers(this IServiceCollection services)
+    public static IServiceCollection AddInitializeACLFuncs(this IServiceCollection services)
     {
         return services
             .AddTransient(_ => _evt2Fact)
@@ -163,10 +152,11 @@ public static class Initialize
     public static IServiceCollection AddInitializeBehavior(this IServiceCollection services)
     {
         return services
+            .AddMetaCtor()
             .AddRootDocCtors()
             .AddRootListCtors()
             .AddInitializeProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Initialize.Payload, EventMeta>()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _newEvt);
@@ -196,35 +186,5 @@ public static class Initialize
         }
     }
 
-    [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.Initialize.Payload>
-    {
-    }
 
-    [Topic(Topics.Cmd_v1)]
-    public interface ICmd : ICmdT<Contract.Initialize.Payload>
-    {
-    }
-
-
-    [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.Initialize.Payload Payload, EventMeta Meta)
-        : CmdT<Contract.Initialize.Payload, EventMeta>(AggregateID, Payload, Meta)
-    {
-        public static Cmd New(IID aggID, Contract.Initialize.Payload payload)
-        {
-            return new Cmd(
-                aggID, payload,
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    aggID.Id()
-                ));
-        }
-    }
-
-    public static class Topics
-    {
-        public const string Cmd_v1 = "engine:initialize:v1";
-        public const string Evt_v1 = "engine:initialized:v1";
-    }
 }

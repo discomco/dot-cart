@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
@@ -5,22 +6,22 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class BusDriverTestsB<TIFact, TPayload>
+public abstract class BusDriverTestsB<TPayload, TMeta>
     : IoCTests
-    where TIFact : IFactB
+    where TMeta : IEventMeta
     where TPayload : IPayload
 {
-    private FactCtorT<TPayload> _newFact;
+    private FactCtorT<TPayload,TMeta> _newFact;
 
     protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
     [Fact]
-    public void ShouldTIFactHaveTopic()
+    public void ShouldTPayloadHaveTopic()
     {
         // GIVEN
-        var topic = TopicAtt.Get<TIFact>();
+        var topic = FactTopicAtt.Get<TPayload>();
         // THEN
         Assert.NotEmpty(topic);
     }
@@ -31,7 +32,7 @@ public abstract class BusDriverTestsB<TIFact, TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload,TMeta>>();
         // THEN
         Assert.NotNull(_newFact);
     }

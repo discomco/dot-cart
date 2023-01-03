@@ -1,5 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Spokes;
 using DotCart.Core;
@@ -16,15 +17,15 @@ public static class Stop
 {
     public const string Spoke_v1 = "engine:stop:spoke:v1";
 
-    public const string ToRedisDoc_v1 = Behavior.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
-    public const string ToRedisList_v1 = Behavior.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string ToRedisDoc_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
 
 
     public static IServiceCollection AddStopSpoke(this IServiceCollection services)
     {
         return services
             .AddHostedSpokeT<Spoke>()
-            .AddSpokedNATSResponder<Spoke, Contract.Stop.Hope, Behavior.Stop.Cmd>()
+            .AddSpokedNATSResponder<Spoke, Contract.Stop.Payload, EventMeta>()
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
             .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
@@ -55,12 +56,12 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
-            Behavior.Stop.IEvt>, IActor<Spoke>
+            Contract.Stop.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Behavior.Stop.IEvt> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.Stop.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -74,13 +75,12 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.EngineList>,
             Schema.EngineList,
-            Behavior.Stop.IEvt>, IActor<Spoke>
+            Contract.Stop.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList,
-                Behavior.Stop.IEvt> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.Stop.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {

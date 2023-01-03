@@ -5,13 +5,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
+public abstract class HopeTestsT<TID, TPayload> : IoCTests
     where TID : IID
-    where THope : IHopeT<TPayload>
     where TPayload : IPayload
 
 {
-    protected HopeCtorT<THope, TPayload> _newHope;
+    protected HopeCtorT<TPayload> _newHope;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
@@ -39,7 +38,7 @@ public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
     public void ShouldResolveHopeCtor()
     {
         Assert.NotNull(TestEnv);
-        _newHope = TestEnv.ResolveRequired<HopeCtorT<THope, TPayload>>();
+        _newHope = TestEnv.ResolveRequired<HopeCtorT<TPayload>>();
         Assert.NotNull(_newHope);
     }
 
@@ -53,7 +52,7 @@ public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
         Assert.NotEmpty(aggId);
         var hope = _newHope(aggId, _newPayload());
         var serialized = hope.ToJson();
-        var desHope = serialized.FromJson<THope>();
+        var desHope = serialized.FromJson<HopeT<TPayload>>();
         Assert.Equal(hope, desHope);
     }
 
@@ -63,7 +62,7 @@ public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
         // GIVEN
         var expectedTopic = GetExpectedTopic();
         // WHEN
-        var foundTopic = TopicAtt.Get<THope>();
+        var foundTopic = HopeTopicAtt.Get<TPayload>();
         // THEN
         Assert.Equal(expectedTopic, foundTopic);
     }
@@ -78,6 +77,6 @@ public abstract class HopeTestsT<TID, THope, TPayload> : IoCTests
     {
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         _newPayload = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
-        _newHope = TestEnv.ResolveRequired<HopeCtorT<THope, TPayload>>();
+        _newHope = TestEnv.ResolveRequired<HopeCtorT<TPayload>>();
     }
 }

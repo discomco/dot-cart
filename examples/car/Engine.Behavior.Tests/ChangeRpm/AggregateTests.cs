@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Context.Behaviors;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -10,10 +11,8 @@ namespace Engine.Behavior.Tests.ChangeRpm;
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Schema.Engine,
-    TryCmdT<Behavior.ChangeRpm.Cmd, Schema.Engine>,
-    ApplyEvtT<Schema.Engine, Behavior.ChangeRpm.IEvt>,
-    Behavior.ChangeRpm.Cmd,
-    Behavior.ChangeRpm.IEvt>
+    Contract.ChangeDetails.Payload, 
+    EventMeta>
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

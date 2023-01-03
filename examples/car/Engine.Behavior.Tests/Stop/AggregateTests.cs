@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Context.Behaviors;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -10,10 +11,8 @@ namespace Engine.Behavior.Tests.Stop;
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Schema.Engine,
-    TryCmdT<Behavior.Stop.Cmd, Schema.Engine>,
-    ApplyEvtT<Schema.Engine, Behavior.Stop.IEvt>,
-    Behavior.Stop.Cmd,
-    Behavior.Stop.IEvt
+    Contract.Stop.Payload,
+    EventMeta
 >
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

@@ -6,8 +6,8 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
-    where THope : IHopeB
+public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayload>
+    where TPayload : IPayload
 {
     private readonly IEncodedConnection _bus;
     private CancellationTokenSource _cts;
@@ -35,14 +35,14 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
             try
             {
                 await ConnectAsync(cancellationToken);
-                _logMessage = $"NATS{AppVerbs.Responding} Topic: [{TopicAtt.Get<THope>()}] on bus [{_bus.ConnectedId}]";
+                _logMessage = $"NATS{AppVerbs.Responding} Topic: [{HopeTopicAtt.Get<TPayload>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
                 _subscription = _bus.SubscribeAsync(
-                    TopicAtt.Get<THope>(),
+                    HopeTopicAtt.Get<TPayload>(),
                     async (sender, args) =>
                     {
-                        var hope = (THope)args.ReceivedObject;
+                        var hope = (HopeT<TPayload>)args.ReceivedObject;
                         Log.Debug($"{AppFacts.Received} NATS.Req {args.Subject} ~> {hope.AggId}");
                         var msg = await Call(hope, cancellationToken);
                         var rsp = (Feedback)msg;
@@ -80,7 +80,7 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
 
     private object OnDeserialize(byte[] data)
     {
-        return data.FromBytes<THope>();
+        return data.FromBytes<HopeT<TPayload>>();
     }
 
     private Task ConnectAsync(CancellationToken cancellationToken)
@@ -89,13 +89,10 @@ public class NATSResponderDriverT<THope> : DriverB, IResponderDriverT<THope>
         {
             while (_bus.IsClosed())
             {
-                var connecting = "CONNECTING".AsVerb();
-                _logMessage = $"{connecting} NATS [{_bus.ConnectedId}]";
+                _logMessage = $"{AppVerbs.Connecting} NATS [{_bus.ConnectedId}]";
                 Thread.Sleep(1_000);
             }
-
-            var connected = "CONNECTED".AsFact();
-            _logMessage = $"{connected} NATS [{_bus.ConnectedId}]";
+            _logMessage = $"{AppFacts.Connected} NATS [{_bus.ConnectedId}]";
             Log.Information(_logMessage);
             _bus.OnDeserialize += OnDeserialize;
             _bus.OnSerialize += OnSerialize;

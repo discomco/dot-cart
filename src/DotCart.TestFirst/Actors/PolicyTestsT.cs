@@ -1,18 +1,19 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
+public abstract class PolicyTestsT<TPolicy, TCmdPayload, TEvtPayload, TMeta> : IoCTests
     where TPolicy : IAggregatePolicy
-    where TEvt : IEvtB
-    where TCmd : ICmdB
+    where TCmdPayload : IPayload
+    where TMeta : IEventMeta
 {
-    protected Evt2Cmd<TCmd, TEvt> _evt2Cmd;
+    protected Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> _evt2Cmd;
     protected IExchange _exchange;
     protected IAggregatePolicy _policy;
 
@@ -28,7 +29,7 @@ public abstract class PolicyTestsT<TPolicy, TEvt, TCmd> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2Cmd = TestEnv.ResolveRequired<Evt2Cmd<TCmd, TEvt>>();
+        _evt2Cmd = TestEnv.ResolveRequired<Evt2Cmd<TCmdPayload, TEvtPayload, TMeta>>();
         // THEN
         Assert.NotNull(_evt2Cmd);
     }

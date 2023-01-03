@@ -55,7 +55,6 @@ internal class AggregateT<TInfo, TState> : IAggregate
         return _applyFuncs.ContainsKey(evtType);
     }
 
-
     public void InjectTryFuncs(IEnumerable<ITry> tryFuncs)
     {
         _tryFuncs =
@@ -176,7 +175,7 @@ internal class AggregateT<TInfo, TState> : IAggregate
             Guard.Against.Null(cmd);
             Guard.Against.Null(cmd.AggregateID);
             SetID(cmd.AggregateID);
-            var fTry = _tryFuncs[TopicAtt.Get(cmd)];
+            var fTry = _tryFuncs[cmd.CmdType];
             feedback = ((dynamic)fTry).Verify((dynamic)cmd, (dynamic)_state);
             if (!feedback.IsSuccess)
                 return feedback;

@@ -1,5 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
+using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
@@ -66,7 +68,11 @@ public static class ScenariosAndStreams
     public static IEnumerable<ICmdB> InitializeScenario(IDB ID)
     {
         var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initializeCmd = Behavior.Initialize.Cmd.New(Schema.DocIDCtor(), initializePayload);
+        var initializeCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New(
+            ID,
+            initializePayload,
+            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id())
+        );
         initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }

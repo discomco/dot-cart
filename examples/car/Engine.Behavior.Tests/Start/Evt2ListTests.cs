@@ -9,7 +9,6 @@ namespace Engine.Behavior.Tests.Start;
 
 public class Evt2ListTests :
     Evt2DocTestsT<
-        Behavior.Start.IEvt,
         Schema.EngineListID,
         Schema.EngineList,
         Contract.Start.Payload,

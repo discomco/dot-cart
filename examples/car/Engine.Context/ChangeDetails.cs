@@ -18,13 +18,13 @@ public static class ChangeDetails
     public const string Spoke_v1 = "engine:change_details:spoke:v1";
 
 
-    public const string ToRedisDoc_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
-    public const string ToRedisList_v1 = Behavior.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string ToRedisDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
 
 
-    private static readonly Hope2Cmd<Behavior.ChangeDetails.Cmd, Contract.ChangeDetails.Hope>
+    private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
         _hope2Cmd =
-            hope => Behavior.ChangeDetails.Cmd.New(
+            hope => CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
                 hope.AggId.IDFromIdString(),
                 hope.Payload,
                 EventMeta.New(
@@ -33,11 +33,12 @@ public static class ChangeDetails
                 )
             );
 
-    private static readonly Evt2Fact<FactT<Contract.ChangeDetails.Payload>, Behavior.ChangeDetails.IEvt>
+    private static readonly Evt2Fact<Contract.ChangeDetails.Payload, EventMeta>
         _evt2Fact =
-            evt => FactT<Contract.ChangeDetails.Payload>.New(
+            evt => FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
                 evt.AggregateId,
-                evt.GetPayload<Contract.ChangeDetails.Payload>()
+                evt.Payload,
+                evt.Meta
             );
 
     public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
@@ -50,7 +51,7 @@ public static class ChangeDetails
             .AddTransient<IActor<Spoke>, ToRedisList>()
             .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
             .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
-            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Hope, Behavior.ChangeDetails.Cmd>();
+            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>();
     }
 
     public static IServiceCollection AddChangeDetailsMappers(this IServiceCollection services)
@@ -76,11 +77,11 @@ public static class ChangeDetails
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Behavior.ChangeDetails.IEvt>, IActor<Spoke>
+        Contract.ChangeDetails.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Behavior.ChangeDetails.IEvt> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc) : base(exchange,
             docStore,
             evt2Doc,
@@ -95,13 +96,12 @@ public static class ChangeDetails
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Behavior.ChangeDetails.IEvt>, IActor<Spoke>
+        Contract.ChangeDetails.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList,
-                Behavior.ChangeDetails.IEvt> evt2Doc,
+            Evt2Doc<Schema.EngineList,Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {

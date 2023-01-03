@@ -5,20 +5,23 @@ using NATS.Client;
 
 namespace DotCart.Drivers.NATS.Tests;
 
-public class TheResponderDriver : NATSResponderDriverT<TheContract.Hope>
+public class TheResponderDriver : NATSResponderDriverT<TheContract.Payload>
 {
     public TheResponderDriver(IEncodedConnection bus) : base(bus)
     {
     }
 }
 
-public class TheResponder : ResponderT<IResponderDriverT<TheContract.Hope>, TheContract.Hope, TheBehavior.Cmd>,
-    ITheResponder
+public class TheResponder
+    : ResponderT<
+        IResponderDriverT<TheContract.Payload>,
+        TheContract.Payload,
+        TheContract.Meta>, ITheResponder
 {
-    public TheResponder(IResponderDriverT<TheContract.Hope> driver,
+    public TheResponder(IResponderDriverT<TheContract.Payload> driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TheBehavior.Cmd, TheContract.Hope> hope2Cmd) : base(driver,
+        Hope2Cmd<TheContract.Payload, TheContract.Meta> hope2Cmd) : base(driver,
         exchange,
         cmdHandler,
         hope2Cmd)

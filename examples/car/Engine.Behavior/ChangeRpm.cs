@@ -14,9 +14,9 @@ namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    private static readonly RaiseFuncT<Schema.Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
         _raiseFunc =
-            (cmd, state) =>
+            (cmd, _) =>
             {
                 var res = new List<Event>();
                 var rpmChanged = _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
@@ -24,7 +24,7 @@ public static class ChangeRpm
                 return res;
             };
 
-    private static readonly GuardFuncT<Schema.Engine, Cmd>
+    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
         _guardFunc =
             (cmd, state) =>
             {
@@ -44,7 +44,7 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2Doc<Schema.Engine, IEvt>
+    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
         _evt2Doc =
             (doc, evt) =>
             {
@@ -54,7 +54,7 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
         _evt2DocVal =
             (input, output, evt) =>
             {
@@ -63,7 +63,7 @@ public static class ChangeRpm
             };
 
 
-    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta>
         _evt2List =
             (doc, evt) =>
             {
@@ -80,7 +80,7 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -93,15 +93,16 @@ public static class ChangeRpm
             };
 
 
-    private static readonly Evt2Fact<FactT<Contract.ChangeRpm.Payload>, IEvt>
+    private static readonly Evt2Fact<Contract.ChangeRpm.Payload, EventMeta>
         _evt2Fact =
-            evt => FactT<Contract.ChangeRpm.Payload>.New(
+            evt => FactT<Contract.ChangeRpm.Payload, EventMeta>.New(
                 evt.AggregateId,
-                evt.GetPayload<Contract.ChangeRpm.Payload>());
+                evt.GetPayload<Contract.ChangeRpm.Payload>(),
+                evt.Meta);
 
-    private static readonly Hope2Cmd<Cmd, Contract.ChangeRpm.Hope>
+    private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta>
         _hope2Cmd =
-            hope => Cmd.New(
+            hope => CmdT<Contract.ChangeRpm.Payload, EventMeta>.New(
                 hope.AggId.IDFromIdString(),
                 hope.Payload,
                 EventMeta.New(
@@ -109,22 +110,14 @@ public static class ChangeRpm
                     hope.AggId)
             );
 
-    public static EvtCtorT<IEvt, Contract.ChangeRpm.Payload, EventMeta>
+    public static EvtCtorT<Contract.ChangeRpm.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => Event.New(
-                id,
-                TopicAtt.Get<IEvt>(),
-                payload.ToBytes(),
-                meta.ToBytes()
-            );
-
-    private static int calcPower(int power, int delta)
-    {
-        var newPower = power + delta;
-        if (newPower <= 0)
-            newPower = 0;
-        return newPower;
-    }
+            (id, payload, meta)
+                => EvtT<Contract.ChangeRpm.Payload, EventMeta>.New(
+                    id.Id(),
+                    payload,
+                    meta
+                );
 
     public static IServiceCollection AddChangeRpmACLFuncs(this IServiceCollection services)
     {
@@ -133,7 +126,6 @@ public static class ChangeRpm
             .AddTransient(_ => _evt2Fact)
             .AddTransient(_ => _hope2Cmd);
     }
-
 
     public static IServiceCollection AddChangeRpmProjectionFuncs(this IServiceCollection services)
     {
@@ -147,27 +139,22 @@ public static class ChangeRpm
     public static IServiceCollection AddChangeRpmBehavior(this IServiceCollection services)
     {
         return services
+            .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>()
             .AddChangeRpmProjectionFuncs()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc);
     }
 
-    [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.ChangeRpm.Payload Payload, EventMeta Meta)
-        : CmdT<Contract.ChangeRpm.Payload, EventMeta>(AggregateID, Payload, Meta)
+    private static int calcPower(int power, int delta)
     {
-        public static Cmd New(IID aggregateID, Contract.ChangeRpm.Payload payload, EventMeta meta)
-        {
-            return new Cmd(aggregateID, payload, meta);
-        }
+        var newPower = power + delta;
+        if (newPower <= 0)
+            newPower = 0;
+        return newPower;
     }
 
-    [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.ChangeRpm.Payload>
-    {
-    }
 
     public class Exception : System.Exception
     {
@@ -191,11 +178,5 @@ public static class ChangeRpm
         {
             return new Exception(msg);
         }
-    }
-
-    public static class Topics
-    {
-        public const string Cmd_v1 = "engine:change_rpm:v1";
-        public const string Evt_v1 = "engine:rpm_changed:v1";
     }
 }

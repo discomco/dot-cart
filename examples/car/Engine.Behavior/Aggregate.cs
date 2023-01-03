@@ -9,6 +9,16 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
+    private static readonly MetaCtorT<EventMeta>
+        _newMeta =
+            id => EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), id);
+
+    public static IServiceCollection AddMetaCtor(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _newMeta);
+    }
+
     public static IServiceCollection AddEngineBehavior(this IServiceCollection services)
     {
         return services

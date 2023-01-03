@@ -11,10 +11,11 @@ public interface IProjectionB : IActor
 {
 }
 
-public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
+public interface IProjectionT<TDriver, TState, TPayload, TMeta> : IProjectionB
     where TDriver : IDocStore<TState>
     where TState : IState
-    where TEvt : IEvtB
+    where TPayload: IPayload
+    where TMeta: IEventMeta
 {
 }
 
@@ -28,20 +29,21 @@ public interface IProjectionT<TDriver, TState, in TEvt> : IProjectionB
 /// </typeparam>
 /// <typeparam name="TDoc">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TIEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TIStore, TDoc, TIEvt>
-    : ActorB, IProjectionT<TIStore, TDoc, TIEvt>
+public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
+    : ActorB, IProjectionT<TIStore, TDoc, TPayload, TMeta>
     where TIStore : IDocStore<TDoc>
     where TDoc : IState
-    where TIEvt : IEvtB
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     private readonly TIStore _docStore;
-    private readonly Evt2Doc<TDoc, TIEvt> _evt2Doc;
+    private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
         TIStore docStore,
-        Evt2Doc<TDoc, TIEvt> evt2Doc,
+        Evt2Doc<TDoc, TPayload, TMeta> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
         _docStore = docStore;
@@ -66,7 +68,7 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
         var docId = GetDocId(evt);
         var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
-        doc = _evt2Doc(doc, (Event)evt);
+        doc = _evt2Doc(doc, (EvtT<TPayload,TMeta>)evt);
 
         // TODO: Call ProjectionValidationFunc here
 
@@ -89,8 +91,8 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
     {
         return Run(() =>
         {
-            Log.Information($"{AppFacts.Subscribed} {TopicAtt.Get<TIEvt>()}  ~> [{GetType().Name}]");
-            _exchange.Subscribe(TopicAtt.Get<TIEvt>(), this);
+            Log.Information($"{AppFacts.Subscribed} {EvtTopicAtt.Get<TPayload>()}  ~> [{GetType().Name}]");
+            _exchange.Subscribe(EvtTopicAtt.Get<TPayload>(), this);
             return CompletedTask;
         }, cancellationToken);
     }
@@ -99,7 +101,7 @@ public abstract class ProjectionT<TIStore, TDoc, TIEvt>
     {
         return Run(() =>
         {
-            _exchange.Unsubscribe(TopicAtt.Get<TIEvt>(), this);
+            _exchange.Unsubscribe(EvtTopicAtt.Get<TPayload>(), this);
             return CompletedTask;
         }, cancellationToken);
     }

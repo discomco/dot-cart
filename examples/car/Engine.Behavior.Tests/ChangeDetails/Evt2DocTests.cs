@@ -9,7 +9,6 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 
 public class Evt2DocTests
     : Evt2DocTestsT<
-        Behavior.ChangeDetails.IEvt,
         Schema.EngineID,
         Schema.Engine,
         Contract.ChangeDetails.Payload,

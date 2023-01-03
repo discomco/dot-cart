@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -9,8 +10,9 @@ namespace Engine.Behavior.Tests.Stop;
 [Name(Behavior.Stop.OnZeroPower_v1)]
 public class ShouldStopOnZeroPowerTests
     : ChoreographyTestsT<
-        Behavior.ChangeRpm.IEvt,
-        Behavior.Stop.Cmd>
+        Contract.Stop.Payload,
+        Contract.ChangeRpm.Payload,
+        EventMeta>
 {
     public ShouldStopOnZeroPowerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

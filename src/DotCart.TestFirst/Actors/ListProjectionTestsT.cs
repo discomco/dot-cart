@@ -8,12 +8,13 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Actors;
 
 public abstract class
-    ListProjectionTestsT<TSpoke, TProjection, TTargetDoc, TIEvt>
-    : ProjectionTestsT<TSpoke, TProjection, TTargetDoc, TIEvt>
+    ListProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
+    : ProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
     where TSpoke : ISpokeT<TSpoke>
     where TProjection : IActor<TSpoke>
     where TTargetDoc : IState
-    where TIEvt : IEvtB
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected ListProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

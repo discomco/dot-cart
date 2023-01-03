@@ -6,15 +6,15 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class ChoreographyT<TEvt, TCmd> : IChoreography
-    where TEvt : IEvtB
-    where TCmd : ICmdB
+public class ChoreographyT<TCmdPayload, TEvtPayload, TMeta> : IChoreography
+    where TCmdPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
+    private readonly Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> _evt2Cmd;
     private IAggregate _aggregate;
 
 
-    public ChoreographyT(Evt2Cmd<TCmd, TEvt> evt2Cmd)
+    public ChoreographyT(Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> evt2Cmd)
     {
         _evt2Cmd = evt2Cmd;
     }
@@ -26,10 +26,10 @@ public class ChoreographyT<TEvt, TCmd> : IChoreography
     }
 
     public string
-        Name => NameAtt.ChoreographyName<TEvt, TCmd>();
+        Name => NameAtt.ChoreographyName<TEvtPayload, TCmdPayload>();
 
     public string
-        Topic => $"{TopicAtt.Get<TEvt>()}";
+        Topic => $"{EvtTopicAtt.Get<TEvtPayload>()}";
 
 
     public async Task<Feedback> WhenAsync(IEvtB evt)
@@ -38,7 +38,7 @@ public class ChoreographyT<TEvt, TCmd> : IChoreography
         try
         {
             Log.Information($"{AppVerbs.Enforcing} [{Name}]");
-            var cmd = _evt2Cmd((Event)evt, _aggregate.GetState());
+            var cmd = _evt2Cmd((EvtT<TEvtPayload, TMeta>)evt, _aggregate.GetState());
             if (cmd != null)
                 feedback = await _aggregate.ExecuteAsync(cmd);
         }

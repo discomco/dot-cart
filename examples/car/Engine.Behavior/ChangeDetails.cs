@@ -19,18 +19,18 @@ public static class ChangeDetails
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
-    private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
+    private static readonly Evt2Cmd<Contract.ChangeDetails.Payload, Contract.Initialize.Payload, EventMeta>
         _shouldChangeDetailsOnInitialized =
             (evt, _) =>
             {
-                var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
-                return Cmd.New(
+                var details = evt.Payload.Details;
+                return CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
                     evt.AggregateID,
                     Contract.ChangeDetails.Payload.New(details),
-                    evt.GetMeta<EventMeta>());
+                    evt.Meta);
             };
 
-    private static readonly Evt2Doc<Schema.Engine, IEvt>
+    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
         _evt2Doc =
             (doc, evt) =>
             {
@@ -39,7 +39,7 @@ public static class ChangeDetails
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
         _evt2DocVal =
             (input, output, evt) =>
             {
@@ -50,7 +50,7 @@ public static class ChangeDetails
                            || input.Details.Description != output.Details.Description);
             };
 
-    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta>
         _evt2List =
             (doc, evt) =>
             {
@@ -61,12 +61,12 @@ public static class ChangeDetails
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta>
         _evt2ListVal =
             (_, output, evt) =>
                 output.Items[evt.AggregateId].Name == evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
 
-    private static readonly GuardFuncT<Schema.Engine, Cmd>
+    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
         _guardFunc = (cmd, state) =>
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
@@ -83,14 +83,14 @@ public static class ChangeDetails
             return fbk;
         };
 
-    public static readonly EvtCtorT<IEvt, Contract.ChangeDetails.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => Event.New(id,
-                TopicAtt.Get<IEvt>(),
-                payload.ToBytes(),
-                meta.ToBytes());
+            (id, payload, meta) => EvtT<Contract.ChangeDetails.Payload, EventMeta>.New(
+                id.Id(), 
+                payload,
+                meta);
 
-    private static readonly RaiseFuncT<Schema.Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -103,10 +103,11 @@ public static class ChangeDetails
     public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
     {
         return services
+            .AddMetaCtor()
             .AddRootDocCtors()
             .AddRootListCtors()
             .AddChangeDetailsProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>()
             .AddChoreography(_shouldChangeDetailsOnInitialized)
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
@@ -123,25 +124,4 @@ public static class ChangeDetails
     }
 
 
-    [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.ChangeDetails.Payload Payload, EventMeta Meta)
-        : CmdT<Contract.ChangeDetails.Payload, EventMeta>(AggregateID,
-            Payload, Meta)
-    {
-        public static Cmd New(IID engineId, Contract.ChangeDetails.Payload payload, EventMeta meta)
-        {
-            return new Cmd(engineId, payload, meta);
-        }
-    }
-
-    public static class Topics
-    {
-        public const string Cmd_v1 = "engine:change_details:v1";
-        public const string Evt_v1 = "engine:details_changed:v1";
-    }
-
-    [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.ChangeDetails.Payload>
-    {
-    }
-}
+ }

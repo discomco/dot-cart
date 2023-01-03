@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,8 +8,8 @@ namespace Engine.Context.Tests.Stop;
 
 public class ResponderTests
     : NATSResponderTestsT<
-        Contract.Stop.Hope,
-        Behavior.Stop.Cmd>
+        Contract.Stop.Payload,
+        EventMeta>
 {
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

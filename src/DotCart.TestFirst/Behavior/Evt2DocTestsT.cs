@@ -15,21 +15,19 @@ namespace DotCart.TestFirst.Behavior;
 /// <typeparam name="TPayload">The Payload type for the Spoke</typeparam>
 /// <typeparam name="TMeta">The Metadata Type</typeparam>
 public abstract class Evt2DocTestsT<
-    TIEvt,
     TDocID,
     TDoc,
     TPayload,
     TMeta> : IoCTests
-    where TIEvt : IEvtT<TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta
     where TDoc : IState
     where TDocID : IID
 {
     protected StateCtorT<TDoc> _docCtor;
-    protected Evt2Doc<TDoc, TIEvt> _evt2Doc;
-    protected Evt2DocValidator<TDoc, TIEvt> _evt2DocVal;
-    protected EvtCtorT<TIEvt, TPayload, TMeta> _evtCtor;
+    protected Evt2Doc<TDoc, TPayload,TMeta> _evt2Doc;
+    protected Evt2DocValidator<TDoc, TPayload,TMeta> _evt2DocVal;
+    protected EvtCtorT<TPayload, TMeta> _evtCtor;
     public IDCtorT<TDocID> _idCtor;
     protected MetaCtorT<TMeta> _metaCtor;
     protected PayloadCtorT<TPayload> _payloadCtor;
@@ -44,7 +42,7 @@ public abstract class Evt2DocTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evtCtor = TestEnv.ResolveRequired<EvtCtorT<TIEvt, TPayload, TMeta>>();
+        _evtCtor = TestEnv.ResolveRequired<EvtCtorT<TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_evtCtor);
     }
@@ -66,7 +64,7 @@ public abstract class Evt2DocTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TIEvt>>();
+        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TPayload,TMeta>>();
         // THEN
         Assert.NotNull(_evt2DocVal);
     }
@@ -89,7 +87,7 @@ public abstract class Evt2DocTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2Doc = TestEnv.ResolveRequired<Evt2Doc<TDoc, TIEvt>>();
+        _evt2Doc = TestEnv.ResolveRequired<Evt2Doc<TDoc, TPayload,TMeta>>();
         // THEN
         Assert.NotNull(_evt2Doc);
     }
@@ -121,11 +119,11 @@ public abstract class Evt2DocTestsT<
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        _evt2Doc = TestEnv.ResolveRequired<Evt2Doc<TDoc, TIEvt>>();
+        _evt2Doc = TestEnv.ResolveRequired<Evt2Doc<TDoc, TPayload,TMeta>>();
         Assert.NotNull(_evt2Doc);
         _docCtor = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
         Assert.NotNull(_docCtor);
-        _evtCtor = TestEnv.ResolveRequired<EvtCtorT<TIEvt, TPayload, TMeta>>();
+        _evtCtor = TestEnv.ResolveRequired<EvtCtorT<TPayload, TMeta>>();
         Assert.NotNull(_evtCtor);
         _payloadCtor = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
         Assert.NotNull(_payloadCtor);
@@ -139,7 +137,7 @@ public abstract class Evt2DocTestsT<
         var evt = _evtCtor(ID, payload, meta);
         var oldDoc = _docCtor();
         var newDoc = _evt2Doc(oldDoc, evt);
-        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TIEvt>>();
+        _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TPayload,TMeta>>();
         Assert.NotNull(_evt2DocVal);
         var isValid = _evt2DocVal(oldDoc, newDoc, evt);
         Assert.True(isValid);

@@ -6,7 +6,7 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHopeB
+public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IPayload
 {
     private readonly IEncodedConnection _bus;
 
@@ -23,7 +23,7 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHopeB
 
     private object OnDeserialize(byte[] data)
     {
-        return data.FromBytes<THope>();
+        return data.FromBytes<HopeT<TPayload>>();
     }
 
     public override void Dispose()
@@ -35,7 +35,7 @@ public class NATSRequesterT<THope> : RequesterT<THope> where THope : IHopeB
         _bus.Dispose();
     }
 
-    public override async Task<Feedback> RequestAsync(THope hope, CancellationToken cancellationToken = default)
+    public override async Task<Feedback> RequestAsync(HopeT<TPayload> hope, CancellationToken cancellationToken = default)
     {
         var res = Feedback.New(hope.AggId);
         try

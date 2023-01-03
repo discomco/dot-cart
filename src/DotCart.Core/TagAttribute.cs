@@ -1,3 +1,6 @@
+using Ardalis.GuardClauses;
+using DotCart.Drivers.Ardalis;
+
 namespace DotCart.Core;
 
 [AttributeUsage(AttributeTargets.All)]
@@ -16,14 +19,14 @@ public static class TagAtt
     public static string Get<T>()
     {
         var atts = (TagAttribute[])typeof(T).GetCustomAttributes(typeof(TagAttribute), true);
-        if (atts.Length == 0) throw new Exception($"Attribute 'Tag' is not defined on {typeof(T)}!");
+        Guard.Against.AttributeNotDefined("Tag", atts, typeof(T).Name);
         return atts[0].Id;
     }
 
     public static string Get(object obj)
     {
         var atts = (TagAttribute[])obj.GetType().GetCustomAttributes(typeof(TagAttribute), true);
-        if (atts.Length == 0) throw new Exception($"Attribute 'Tag' is not defined on {obj.GetType()}!");
+        Guard.Against.AttributeNotDefined("Tag", atts, obj.GetType().Name);
         return atts[0].Id;
     }
 

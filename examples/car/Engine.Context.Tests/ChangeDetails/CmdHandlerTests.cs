@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestKit;
 using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,10 +7,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeDetails;
 
 public class CmdHandlerTests
-    : EngineCmdHandlerTests<
-        Behavior.ChangeDetails.Cmd,
-        Behavior.ChangeDetails.IEvt,
-        Contract.ChangeDetails.Payload>
+    : EngineCmdHandlerTests<Contract.ChangeDetails.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -9,8 +10,9 @@ namespace Engine.Behavior.Tests.Start;
 [Name(Behavior.Start.OnInitialized_v1)]
 public class ShouldStartOnInitializedTests
     : ChoreographyTestsT<
-        Behavior.Initialize.IEvt,
-        Behavior.Start.Cmd>
+        Contract.Start.Payload,
+        Contract.Initialize.Payload,
+        EventMeta>
 {
     public ShouldStartOnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

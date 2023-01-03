@@ -7,17 +7,13 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-
-
-
-
-public abstract class EmitterTestT<TEmitter, TEvt, TFact> : IoCTests
-    where TEmitter : IEmitterB
-    where TEvt : IEvtB
-    where TFact : IFactB
+public abstract class EmitterTestT<TEmitter, TPayload, TMeta> : IoCTests
+    where TEmitter : IEmitterB 
+    where TPayload : IPayload 
+    where TMeta : IEventMeta
 {
     protected TEmitter _emitter;
-    protected Evt2Fact<TFact, TEvt> _evt2Fact;
+    protected Evt2Fact<TPayload,TMeta> _evt2Fact;
 
     protected EmitterTestT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -41,7 +37,7 @@ public abstract class EmitterTestT<TEmitter, TEvt, TFact> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2Fact = TestEnv.ResolveRequired<Evt2Fact<TFact, TEvt>>();
+        _evt2Fact = TestEnv.ResolveRequired<Evt2Fact<TPayload,TMeta>>();
         // THEN
         Assert.NotNull(_evt2Fact);
     }

@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.Mediator.Tests;
 
-public class ExchangeTests 
+public class ExchangeTests
     : ActiveComponentTestsT<IExchange>
 {
     private IConsumer1 _consumer1;

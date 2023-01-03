@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using Engine.Behavior;
+using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engine.Api.Cmd.Controllers;
@@ -10,18 +11,18 @@ namespace Engine.Api.Cmd.Controllers;
 public class StopController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<Stop.Cmd, Contract.Stop.Hope> _hope2Cmd;
+    private readonly Hope2Cmd<Stop.Payload, EventMeta> _hope2Cmd;
 
     public StopController(
         ICmdHandler cmdHandler,
-        Hope2Cmd<Stop.Cmd, Contract.Stop.Hope> hope2Cmd)
+        Hope2Cmd<Stop.Payload, EventMeta> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Contract.Stop.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] Stop.Hope hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

@@ -6,9 +6,7 @@ using Xunit.Abstractions;
 namespace DotCart.Drivers.RabbitMQ.Tests;
 
 public class TheListenerDriverTests
-    : RMqListenerDriverTests<
-        TheContract.IFact,
-        TheContract.Payload>
+    : RMqListenerDriverTests<TheContract.Payload, TheContract.Meta>
 {
     public TheListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -26,7 +24,7 @@ public class TheListenerDriverTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddRabbitMqListenerDriverT<TheContract.IFact, TheContract.Payload>()
+            .AddRabbitMqListenerDriverT<TheContract.Payload, TheContract.Meta>()
             .AddSingletonRMq()
             .AddTheACLFuncs();
     }

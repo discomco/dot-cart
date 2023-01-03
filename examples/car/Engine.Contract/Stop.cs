@@ -9,9 +9,14 @@ public static class Stop
     {
         public const string Fact_v1 = "engine.stopped.v1";
         public const string Hope_v1 = "engine.stop.v1";
+        public const string Evt_v1 = "engine:stopped:v1";
+        public const string Cmd_v1 = "engine:stop:v1";
     }
 
-
+    [HopeTopic(Topics.Hope_v1)]
+    [FactTopic(Topics.Fact_v1)]
+    [CmdTopic(Topics.Cmd_v1)]
+    [EvtTopic(Topics.Evt_v1)]
     public record Payload : IPayload
     {
         public static Payload New()
@@ -20,33 +25,4 @@ public static class Stop
         }
     }
 
-    [Topic(Topics.Fact_v1)]
-    public interface IFact : IFactT<Payload>
-    {
-    }
-
-    // [Topic(Topics.Fact_v1)]
-    // public record Fact(string AggId, Payload Payload)
-    //     : FactT<Payload>(AggId, Payload), IFact
-    // {
-    //     public static Fact New(string aggId, Payload payload)
-    //     {
-    //         return new Fact(aggId, payload);
-    //     }
-    // }
-
-    [Topic(Topics.Hope_v1)]
-    public interface IHope : IHopeT<Payload>
-    {
-    }
-
-    [Topic(Topics.Hope_v1)]
-    public record Hope(string AggId, Payload Payload)
-        : HopeT<Payload>(AggId, Payload), IHope
-    {
-        public static Hope New(string aggId, Payload payload)
-        {
-            return new Hope(aggId, payload);
-        }
-    }
 }

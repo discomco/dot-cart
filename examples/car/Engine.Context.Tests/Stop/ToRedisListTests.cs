@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
@@ -13,7 +14,8 @@ public class ToRedisListTests
         Context.Stop.Spoke,
         Context.Stop.ToRedisList,
         Schema.EngineList,
-        Behavior.Stop.IEvt>
+        Contract.Stop.Payload,
+        EventMeta>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

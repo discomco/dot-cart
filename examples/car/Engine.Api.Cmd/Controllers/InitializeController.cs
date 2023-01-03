@@ -1,8 +1,9 @@
 using Ardalis.GuardClauses;
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Engine.Behavior;
+using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -13,16 +14,16 @@ namespace Engine.Api.Cmd.Controllers;
 public class InitializeController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<Initialize.Cmd, Contract.Initialize.Hope> _hope2Cmd;
+    private readonly Hope2Cmd<Initialize.Payload, EventMeta> _hope2Cmd;
 
-    public InitializeController(ICmdHandler cmdHandler, Hope2Cmd<Initialize.Cmd, Contract.Initialize.Hope> hope2Cmd)
+    public InitializeController(ICmdHandler cmdHandler, Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Contract.Initialize.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Initialize.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try
@@ -35,7 +36,7 @@ public class InitializeController : ControllerBase
         catch (Exception e)
         {
             feedback.SetError(e.AsError());
-            Log.Fatal($":: EXCEPTION :: [{GetType()}] => {e.InnerAndOuter()}");
+            Log.Fatal($"{AppErrors.Error} {e.InnerAndOuter()}");
         }
 
         return BadRequest(feedback);

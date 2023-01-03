@@ -9,10 +9,11 @@ public interface ITry
     ITry SetAggregate(IAggregate aggregate);
 }
 
-public interface ITry<in TCmd, in TState> : ITry
-    where TCmd : ICmdB
+public interface ITry<in TState, TPayload, TMeta> : ITry
     where TState : IState
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    IFeedback Verify(TCmd cmd, TState state);
-    IEnumerable<IEvtB> Raise(TCmd cmd, TState state);
+    IFeedback Verify(CmdT<TPayload, TMeta> cmd, TState state);
+    IEnumerable<IEvtB> Raise(CmdT<TPayload,TMeta> cmd, TState state);
 }

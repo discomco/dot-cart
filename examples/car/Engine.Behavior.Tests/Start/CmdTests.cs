@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
@@ -7,8 +8,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.Start;
 
-[Topic(Behavior.Start.Topics.Cmd_v1)]
-public class CmdTests : CmdTestsT<Schema.EngineID, Behavior.Start.Cmd, Contract.Start.Payload>
+[Topic(Contract.Start.Topics.Cmd_v1)]
+public class CmdTests : CmdTestsT<Schema.EngineID, Contract.Start.Payload, EventMeta>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

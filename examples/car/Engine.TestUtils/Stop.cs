@@ -1,5 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
+using Engine.Behavior;
 
 namespace Engine.TestUtils;
 
@@ -10,31 +12,39 @@ public static class Stop
             Contract.Stop.Payload.New;
 
     public static readonly CmdCtorT<
-            Behavior.Stop.Cmd,
             Contract.Schema.EngineID,
-            Contract.Stop.Payload>
-        CmdCtor =
-            (_, _) => Behavior.Stop.Cmd.New(Schema.DocIDCtor(), PayloadCtor());
-
-    public static readonly HopeCtorT<
-            Contract.Stop.Hope,
-            Contract.Stop.Payload>
-        HopeCtor =
-            (_, _) => Contract.Stop.Hope.New(
-                Schema.DocIDCtor().Id(),
-                PayloadCtor());
-
-    public static readonly FactCtorT<
-            Contract.Stop.Payload>
-        FactCtor =
-            (_, _) => FactT<Contract.Stop.Payload>.New(
-                Schema.DocIDCtor().Id(),
-                PayloadCtor());
-
-    public static readonly EvtCtorT<
-            Behavior.Stop.IEvt,
             Contract.Stop.Payload,
             EventMeta>
+        CmdCtor =
+            (_, _, _) =>
+            {
+                var ID = Schema.DocIDCtor();
+                return CmdT<Contract.Stop.Payload, EventMeta>.New(
+                    ID,
+                    PayloadCtor(),
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id())
+                );
+            };
+
+
+    public static readonly HopeCtorT<Contract.Stop.Payload>
+        HopeCtor =
+            (_, _) => HopeT<Contract.Stop.Payload>.New(
+                Schema.DocIDCtor().Id(),
+                PayloadCtor());
+
+    public static readonly FactCtorT<Contract.Stop.Payload, EventMeta>
+        FactCtor =  
+            (_, _, _) =>
+            {
+                var ID = Schema.DocIDCtor();
+                return FactT<Contract.Stop.Payload, EventMeta>.New(
+                    ID.Id(),
+                    PayloadCtor(),
+                    Schema.MetaCtor(ID.Id()));
+            };
+
+    public static readonly EvtCtorT<Contract.Stop.Payload, EventMeta>
         EvtCtor =
             (_, _, _) => Behavior.Stop._newEvt(
                 Schema.DocIDCtor(),

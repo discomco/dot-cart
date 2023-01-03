@@ -17,20 +17,26 @@ public static class Start
     public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
 
 
-    private static readonly Evt2Fact<FactT<Contract.Start.Payload>, IEvt>
+    private static readonly Evt2Fact<Contract.Start.Payload, EventMeta>
         _evt2Fact =
             evt =>
-                FactT<Contract.Start.Payload>.New(
+                FactT<Contract.Start.Payload, EventMeta>.New(
                     evt.AggregateId,
-                    evt.GetPayload<Contract.Start.Payload>()
+                    evt.Payload,
+                    evt.Meta
                 );
 
-    private static readonly Hope2Cmd<Cmd, Contract.Start.Hope>
+    private static readonly Hope2Cmd<Contract.Start.Payload, EventMeta>
         _hope2Cmd =
             hope =>
-                Cmd.New(hope.AggId.IDFromIdString(), hope.Payload);
+                CmdT<Contract.Start.Payload, EventMeta>.New(
+                    hope.AggId.IDFromIdString(),
+                    hope.Payload,
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId)
+                );
 
-    private static readonly Evt2Doc<Schema.Engine, IEvt>
+
+    private static readonly Evt2Doc<Schema.Engine, Contract.Start.Payload, EventMeta>
         _evt2Doc =
             (doc, _) =>
             {
@@ -41,14 +47,14 @@ public static class Start
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, IEvt>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.Start.Payload, EventMeta>
         _evt2DocVal =
             (input, output, _)
                 => !input.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && output.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && !output.Status.HasFlagFast(Schema.EngineStatus.Stopped);
 
-    private static readonly Evt2Doc<Schema.EngineList, IEvt>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.Start.Payload, EventMeta>
         _evt2List =
             (lst, evt) =>
             {
@@ -65,7 +71,7 @@ public static class Start
                 return newLst;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, IEvt>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Start.Payload, EventMeta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -75,7 +81,7 @@ public static class Start
             };
 
 
-    private static readonly GuardFuncT<Schema.Engine, Cmd>
+    private static readonly GuardFuncT<Schema.Engine, Contract.Start.Payload, EventMeta>
         _specFunc =
             (_, state) =>
             {
@@ -92,7 +98,7 @@ public static class Start
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine, Cmd>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.Start.Payload, EventMeta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -103,17 +109,18 @@ public static class Start
             };
 
 
-    public static readonly EvtCtorT<IEvt, Contract.Start.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.Start.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => Event.New(id,
-                TopicAtt.Get<IEvt>(),
-                payload.ToBytes(),
-                meta.ToBytes());
+            (id, payload, meta) => EvtT<Contract.Start.Payload, EventMeta>
+                .New(id.Id(), payload, meta);
 
-    private static readonly Evt2Cmd<Cmd, Initialize.IEvt>
+    private static readonly Evt2Cmd<Contract.Start.Payload, Contract.Initialize.Payload, EventMeta>
         _shouldStartOnInitialized =
             (evt, _) =>
-                Cmd.New(evt.AggregateId.IDFromIdString(), Contract.Start.Payload.New);
+                CmdT<Contract.Start.Payload, EventMeta>.New(
+                    evt.AggregateId.IDFromIdString(),
+                    Contract.Start.Payload.New,
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId));
 
     public static IServiceCollection AddStartACLFuncs(this IServiceCollection services)
     {
@@ -126,8 +133,9 @@ public static class Start
     public static IServiceCollection AddStartBehavior(this IServiceCollection services)
     {
         return services
+            .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Cmd, IEvt>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Start.Payload, EventMeta>()
             .AddChoreography(_shouldStartOnInitialized)
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _specFunc)
@@ -143,12 +151,6 @@ public static class Start
             .AddTransient(_ => _evt2ListVal);
     }
 
-
-    public static class Topics
-    {
-        public const string Cmd_v1 = "engine:start:v1";
-        public const string Evt_v1 = "engine:started:v1";
-    }
 
     public class Exception : System.Exception
     {
@@ -172,26 +174,5 @@ public static class Start
         {
             return new Exception(message);
         }
-    }
-
-    [Topic(Topics.Cmd_v1)]
-    public record Cmd(IID AggregateID, Contract.Start.Payload Payload, EventMeta Meta)
-        : CmdT<Contract.Start.Payload, EventMeta>(AggregateID, Payload, Meta)
-    {
-        public static Cmd New(IID aggregateID, Contract.Start.Payload payload)
-        {
-            return new Cmd(
-                aggregateID,
-                payload,
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    aggregateID.Id()));
-        }
-    }
-
-
-    [Topic(Topics.Evt_v1)]
-    public interface IEvt : IEvtT<Contract.Start.Payload>
-    {
     }
 }

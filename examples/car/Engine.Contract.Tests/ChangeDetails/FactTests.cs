@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Contract;
 using DotCart.TestKit;
@@ -7,8 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Contract.Tests.ChangeDetails;
 
 [Topic(Contract.ChangeDetails.Topics.Fact_v1)]
-public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDetails.IFact,
-    Contract.ChangeDetails.Payload>
+public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDetails.Payload, EventMeta>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,6 +21,7 @@ public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDet
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddTransient(_ => TestUtils.Schema.MetaCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.FactCtor)
             .AddTransient(_ => TestUtils.ChangeDetails.PayloadCtor)
             .AddTransient(_ => TestUtils.Schema.DocIDCtor);

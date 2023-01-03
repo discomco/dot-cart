@@ -9,17 +9,15 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEvt> : IoCTests
+public abstract class AggregateTestsT<TID, TState, TPayload, TMeta> : IoCTests
     where TID : IID
     where TState : IState
-    where TApplyEvt : ApplyEvtT<TState, TEvt>
-    where TTryCmd : TryCmdT<TCmd, TState>
-    where TEvt : IEvtB
-    where TCmd : ICmdB
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;
-    protected Evt2Doc<TState, TEvt> _evt2State;
+    protected Evt2Doc<TState, TPayload, TMeta> _evt2State;
     protected TID _ID;
     protected IDCtorT<TID> _newID;
     protected StateCtorT<TState>? _newState;
@@ -39,10 +37,10 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // THEN
         try
         {
-            var tryCmd = tryCmds.FirstOrDefault(c => c.GetType() == typeof(TTryCmd));
+            var tryCmd = tryCmds.FirstOrDefault(c => c.GetType() == typeof(Context.Behaviors.TryCmdT<TState, TPayload, TMeta>));
             Assert.NotNull(tryCmd);
         }
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Output.WriteLine(e.InnerAndOuter());
             Assert.True(false);
@@ -60,10 +58,10 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // THEN
         try
         {
-            var apply = applyEvts.First(x => x.GetType() == typeof(TApplyEvt));
+            var apply = applyEvts.First(x => x.GetType() == typeof(ApplyEvtT<TState, TPayload, TMeta>));
             Assert.True(apply != null);
         }
-        catch (Exception e)
+        catch (System.Exception e)
         {
             Output.WriteLine(e.InnerAndOuter());
             Assert.True(false);
@@ -123,7 +121,7 @@ public abstract class AggregateTestsT<TID, TState, TTryCmd, TApplyEvt, TCmd, TEv
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TEvt>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_evt2State);
     }

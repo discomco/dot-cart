@@ -5,21 +5,23 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
-    where TCmd : ICmdB
+public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload,TMeta>
     where TState : IState
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private readonly RaiseFuncT<TState, TCmd> _raise;
-    private readonly GuardFuncT<TState, TCmd> _specify;
+    private readonly RaiseFuncT<TState, TPayload,TMeta> _raise;
+    private readonly GuardFuncT<TState, TPayload,TMeta> _specify;
+    
     protected IAggregate Aggregate;
 
-    public TryCmdT(GuardFuncT<TState, TCmd> specify, RaiseFuncT<TState, TCmd> raise)
+    public TryCmdT(GuardFuncT<TState, TPayload, TMeta> specify, RaiseFuncT<TState, TPayload, TMeta> raise)
     {
         _specify = specify;
         _raise = raise;
     }
 
-    public string CmdType => TopicAtt.Get<TCmd>();
+    public string CmdType => CmdTopicAtt.Get<TPayload>();
 
     public ITry SetAggregate(IAggregate aggregate)
     {
@@ -27,12 +29,12 @@ public class TryCmdT<TCmd, TState> : ITry<TCmd, TState>
         return this;
     }
 
-    public IFeedback Verify(TCmd cmd, TState state)
+    public IFeedback Verify(CmdT<TPayload, TMeta> cmd, TState state)
     {
         return _specify(cmd, state);
     }
 
-    public IEnumerable<IEvtB> Raise(TCmd cmd, TState state)
+    public IEnumerable<IEvtB> Raise(CmdT<TPayload,TMeta> cmd, TState state)
     {
         return _raise(cmd, state);
     }

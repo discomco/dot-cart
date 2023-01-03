@@ -12,19 +12,18 @@ public interface IEmitterB : IActor
 {
 }
 
-public abstract class EmitterT<TIEvt, TIFact, TPayload>
+public abstract class EmitterT<TPayload, TMeta>
     : ActorB, IEmitterB
-    where TIEvt : IEvtB
-    where TIFact : IFactB
     where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private readonly Evt2Fact<TIFact, TIEvt> _evt2Fact;
+    private readonly Evt2Fact<TPayload,TMeta> _evt2Fact;
 
 
     protected EmitterT(
-        IEmitterDriverT<TPayload> driver,
+        IEmitterDriverT<TPayload, TMeta> driver,
         IExchange exchange,
-        Evt2Fact<TIFact, TIEvt> evt2Fact) : base(exchange)
+        Evt2Fact<TPayload,TMeta> evt2Fact) : base(exchange)
     {
         Driver = driver;
         _evt2Fact = evt2Fact;
@@ -35,19 +34,19 @@ public abstract class EmitterT<TIEvt, TIFact, TPayload>
     {
         return Run(() =>
         {
-            var fact = _evt2Fact((Event)msg);
+            var fact = _evt2Fact((EvtT<TPayload,TMeta>)msg);
             return EmitFactAsync(fact);
         }, cancellationToken);
     }
 
-    protected abstract Task EmitFactAsync(TIFact fact);
+    protected abstract Task EmitFactAsync(FactT<TPayload, TMeta> fact);
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
         return Run(() =>
         {
-            Log.Information($":: EMITTER :: [{GetType()}] ~> STARTED");
-            _exchange.Subscribe(TopicAtt.Get<TIEvt>(), this);
+            Log.Information($"{AppFacts.Started} {Name}");
+            _exchange.Subscribe(EvtTopicAtt.Get<TPayload>(), this);
             return CompletedTask;
         }, cancellationToken);
     }
@@ -57,8 +56,8 @@ public abstract class EmitterT<TIEvt, TIFact, TPayload>
     {
         return Run(() =>
         {
-            Log.Information($":: EMITTER :: [{GetType()}] ~> STOPPED");
-            _exchange.Unsubscribe(TopicAtt.Get<TIEvt>(), this);
+            Log.Information($"{AppFacts.Stopped} {Name}");
+            _exchange.Unsubscribe(EvtTopicAtt.Get<TPayload>(), this);
             return CompletedTask;
         }, cancellationToken);
     }

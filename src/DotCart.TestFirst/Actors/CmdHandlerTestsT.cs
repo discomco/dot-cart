@@ -9,20 +9,20 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCTests
+public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
     where TState : IState
     where TID : IID
-    where TCmd : ICmdB
-    where TEvt : IEvtB
     where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected static IDCtorT<TID> _newID;
     protected IAggregateStore _aggStore;
-    protected TCmd _cmd;
+    protected CmdT<TPayload, TMeta> _cmd;
     protected ICmdHandler _cmdHandler;
     protected Feedback _feedback;
 
-    protected CmdCtorT<TCmd, TID, TPayload> _newCmd;
+    protected CmdCtorT<TID, TPayload, TMeta> _newCmd;
+    private MetaCtorT<TMeta> _newMeta;
     protected PayloadCtorT<TPayload> _newPayload;
     protected StateCtorT<TState> _newState;
 
@@ -40,7 +40,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCT
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TCmd, TID, TPayload>>();
+        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TID, TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_newCmd);
     }
@@ -137,9 +137,21 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCT
         Assert.NotNull(_feedback);
     }
 
-    protected TCmd CreateCmd()
+
+    [Fact]
+    public void ShouldResolveMetaCtor()
     {
-        return _newCmd(_newID(), _newPayload());
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _newMeta = TestEnv.ResolveRequired<MetaCtorT<TMeta>>();
+        // THEN
+        Assert.NotNull(_newMeta);
+    }
+
+    protected CmdT<TPayload, TMeta> CreateCmd()
+    {
+        return _newCmd(_newID(), _newPayload(), _newMeta(_newID().Id()));
     }
 
 
@@ -149,7 +161,8 @@ public abstract class CmdHandlerTestsT<TID, TState, TCmd, TEvt, TPayload> : IoCT
         _aggStore = TestEnv.ResolveRequired<IAggregateStore>();
         _newState = TestEnv.ResolveRequired<StateCtorT<TState>>();
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
-        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TCmd, TID, TPayload>>();
+        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TID, TPayload, TMeta>>();
         _newPayload = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
+        _newMeta = TestEnv.ResolveRequired<MetaCtorT<TMeta>>();
     }
 }

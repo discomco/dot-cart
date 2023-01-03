@@ -17,6 +17,7 @@ public static class Schema
         Overheated = 8
     }
 
+
     public static readonly ValueObjectCtorT<EngineListItem>
         EngineListItemCtor =
             () => new EngineListItem();

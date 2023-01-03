@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -10,7 +11,8 @@ public class ToRedisDocTests : ProjectionTestsT<
     Context.Stop.Spoke,
     Context.Stop.ToRedisDoc,
     Schema.Engine,
-    Behavior.Stop.IEvt>
+    Contract.Stop.Payload,
+    EventMeta>
 {
     public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

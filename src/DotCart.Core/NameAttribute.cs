@@ -32,8 +32,8 @@ public static class NameAtt
         return atts[0].Name;
     }
 
-    public static string ChoreographyName<TEvt, TCmd>()
+    public static string ChoreographyName<TEvtPayload, TCmdPayload>()
     {
-        return $"should ({TopicAtt.Get<TCmd>()}) on ({TopicAtt.Get<TEvt>()})";
+        return $"should ({CmdTopicAtt.Get<TCmdPayload>()}) on ({EvtTopicAtt.Get<TEvtPayload>()})";
     }
 }

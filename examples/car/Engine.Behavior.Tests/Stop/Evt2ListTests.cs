@@ -8,8 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Stop;
 
 public class Evt2ListTests
-    : Evt2DocTestsT<Behavior.Stop.IEvt,
-        Schema.EngineListID,
+    : Evt2DocTestsT<Schema.EngineListID,
         Schema.EngineList,
         Contract.Stop.Payload,
         EventMeta>

@@ -10,29 +10,29 @@ namespace DotCart.Context.Behaviors;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddChoreography<TEvt, TCmd>(this IServiceCollection services,
-        Evt2Cmd<TCmd, TEvt> evt2Cmd)
-        where TEvt : IEvtB
-        where TCmd : ICmdB
+    public static IServiceCollection AddChoreography<TCmdPayload, TEvtPayload, TMeta>(this IServiceCollection services,
+        Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> evt2Cmd)
+        where TCmdPayload: IPayload 
+        where TEvtPayload : IPayload
+        where TMeta : IEventMeta
     {
         return services
-            .AddTransient<IChoreography, ChoreographyT<TEvt, TCmd>>()
+            .AddTransient<IChoreography, ChoreographyT<TCmdPayload, TEvtPayload, TMeta>>()
             .AddTransient(_ => evt2Cmd);
     }
 
-    public static IServiceCollection AddBaseBehavior<TInfo, TState, TCmd, TEvt>(this IServiceCollection services)
-        where TCmd : ICmdB
+    public static IServiceCollection AddBaseBehavior<TAggregateInfo, TState, TPayload, TMeta>(
+        this IServiceCollection services)
         where TState : IState
-        where TEvt : IEvtB
-        where TInfo : IAggregateInfoB
+        where TAggregateInfo : IAggregateInfoB
+        where TPayload : IPayload
+        where TMeta : IEventMeta
     {
         return services
             .AddConsoleLogger()
-//            .AddSingletonExchange()
-            .AddAggregateBuilder<TInfo, TState>()
+            .AddAggregateBuilder<TAggregateInfo, TState>()
             .AddCmdHandler()
-//            .AddTransient<IAggregate, AggregateT<TInfo, TState>>()
-            .AddTransient<ITry, TryCmdT<TCmd, TState>>()
-            .AddTransient<IApply, ApplyEvtT<TState, TEvt>>();
+            .AddTransient<ITry, TryCmdT<TState,TPayload, TMeta>>()
+            .AddTransient<IApply, ApplyEvtT<TState, TPayload, TMeta>>();
     }
 }

@@ -7,10 +7,10 @@ public static class Inject
     public static IServiceCollection AddCartwheel(this IServiceCollection services)
     {
         return services
-            .AddInitializeSpoke()
-            .AddChangeDetailsSpoke()
-            .AddChangeRpmSpoke()
-            .AddStartSpoke()
-            .AddStopSpoke();
+            .AddInitializeSpoke();
+            // .AddChangeDetailsSpoke()
+            // .AddChangeRpmSpoke()
+            // .AddStartSpoke()
+            // .AddStopSpoke();
     }
 }

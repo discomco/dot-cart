@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Context.Behaviors;
 using DotCart.Core;
 using DotCart.TestFirst.Behavior;
@@ -10,8 +11,10 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 
 [Name(Behavior.ChangeDetails.OnInitialized_v1)]
 public class ShouldChangeDetailsOnInitializedTests
-    : ChoreographyTestsT<Behavior.Initialize.IEvt,
-        Behavior.ChangeDetails.Cmd>
+    : ChoreographyTestsT<
+        Contract.ChangeDetails.Payload, 
+        Contract.Initialize.Payload, 
+        EventMeta>
 {
     public ShouldChangeDetailsOnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output,
         testEnv)
@@ -30,7 +33,10 @@ public class ShouldChangeDetailsOnInitializedTests
         var agg = aggBuilder.Build();
         var aggID = Schema.DocIDCtor();
         var initPld = TestUtils.Initialize.PayloadCtor();
-        var initCmd = Behavior.Initialize.Cmd.New(aggID, initPld);
+        var initCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New(
+            aggID,
+            initPld,
+            EventMeta.New(aggID.Id(), NameAtt.Get<IEngineAggregateInfo>()));
         // WHEN
         var fdbk = await agg.ExecuteAsync(initCmd);
         Assert.NotNull(fdbk);

@@ -9,13 +9,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class FlowTestsT<
-    TEvt,
-    TFact,
-    TReadModelStore> : IoCTests
-    where TEvt : IEvtB
-    where TFact : IFactB
-
+public abstract class SequenceTestsT<TPayload, TMeta, TReadModelStore> 
+    : IoCTests 
+    where TPayload : IPayload 
+    where TMeta : IEventMeta
 {
     protected IAggregateBuilder _aggregateBuilder;
     protected ICmdHandler _cmdHandler;
@@ -23,7 +20,7 @@ public abstract class FlowTestsT<
     protected IAggregateStore AggregateStore;
 
 
-    protected FlowTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected SequenceTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -45,7 +42,7 @@ public abstract class FlowTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var e2f = TestEnv.ResolveRequired<Evt2Fact<TFact, TEvt>>();
+        var e2f = TestEnv.ResolveRequired<Evt2Fact<TPayload,TMeta>>();
         // THEN
         Assert.NotNull(e2f);
     }

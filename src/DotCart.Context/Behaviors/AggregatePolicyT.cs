@@ -7,22 +7,22 @@ using Serilog;
 
 namespace DotCart.Context.Behaviors;
 
-public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
-    where TEvt : IEvtB
-    where TCmd : ICmdB
+public class AggregatePolicyT<TEvtPayload, TCmdPayload, TMeta> : ActorB, IAggregatePolicy
+    where TCmdPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private readonly Evt2Cmd<TCmd, TEvt> _evt2Cmd;
+    private readonly Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> _evt2Cmd;
 
     private IAggregate? Aggregate;
 
     protected AggregatePolicyT
     (
         IExchange exchange,
-        Evt2Cmd<TCmd, TEvt> evt2Cmd
+        Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> evt2Cmd
     ) : base(exchange)
     {
         _evt2Cmd = evt2Cmd;
-        exchange.Subscribe(TopicAtt.Get<TEvt>(), this);
+        exchange.Subscribe(EvtTopicAtt.Get<TEvtPayload>(), this);
     }
 
 
@@ -31,7 +31,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         Aggregate = aggregate;
     }
 
-    public string Topic => TopicAtt.Get<TEvt>();
+    public string Topic => EvtTopicAtt.Get<TEvtPayload>();
 
     public async Task HandleEvtAsync(IEvtB evt, CancellationToken cancellationToken = default)
     {
@@ -49,7 +49,7 @@ public class AggregatePolicyT<TEvt, TCmd> : ActorB, IAggregatePolicy
         {
             Log.Information($"{AppVerbs.Enforcing} [{NameAtt.Get(this)}] on {evt.Topic}");
             Aggregate.SetID(evt.AggregateId.IDFromIdString());
-            var cmd = _evt2Cmd((Event)evt, Aggregate.GetState());
+            var cmd = _evt2Cmd((EvtT<TEvtPayload,TMeta>)evt, Aggregate.GetState());
             if (cmd != null)
                 feedback = await Aggregate.ExecuteAsync(cmd);
         }

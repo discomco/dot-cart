@@ -9,7 +9,6 @@ namespace Engine.Behavior.Tests.Stop;
 
 public class Evt2DocTests
     : Evt2DocTestsT<
-        Behavior.Stop.IEvt,
         Schema.EngineID,
         Schema.Engine,
         Contract.Stop.Payload,

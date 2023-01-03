@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +7,8 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Start;
 
 public class ResponderTests : NATSResponderTestsT<
-    Contract.Start.Hope,
-    Behavior.Start.Cmd>
+    Contract.Start.Payload,
+    EventMeta>
 {
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

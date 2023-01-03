@@ -6,12 +6,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
-    where TCmd : ICmdB
+public abstract class CmdTestsT<TID, TPayload, TMeta> : IoCTests
     where TID : IID
     where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    protected CmdCtorT<TCmd, TID, TPayload> _newCmd;
+    protected CmdCtorT<TID, TPayload, TMeta> _newCmd;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
@@ -37,7 +37,7 @@ public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TCmd, TID, TPayload>>();
+        _newCmd = TestEnv.ResolveRequired<CmdCtorT<TID, TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_newCmd);
     }
@@ -55,13 +55,13 @@ public abstract class CmdTestsT<TID, TCmd, TPayload> : IoCTests
     }
 
     [Fact]
-    public async Task ShouldHaveTopic()
+    public async Task ShouldHaveCmdTopic()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         var expectedTopic = TopicAtt.Get(this);
         // WHEN
-        var cmdTopic = TopicAtt.Get<TCmd>();
+        var cmdTopic = CmdTopicAtt.Get<TPayload>();
         // THEN
         Assert.Equal(expectedTopic, cmdTopic);
     }

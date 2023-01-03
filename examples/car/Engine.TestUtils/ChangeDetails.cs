@@ -18,32 +18,37 @@ public static class ChangeDetails
             () => Contract.ChangeDetails.Payload.New(Contract.Schema.Details.New("Engine #5", "A Wankel Motor."));
 
 
-    public static readonly HopeCtorT<
-            Contract.ChangeDetails.Hope,
-            Contract.ChangeDetails.Payload>
+    public static readonly HopeCtorT<Contract.ChangeDetails.Payload>
         HopeCtor =
-            (_, _) => Contract.ChangeDetails.Hope.New(Schema.DocIDCtor().Id(), PayloadCtor());
+            (_, _) => HopeT<Contract.ChangeDetails.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.ChangeDetails.Payload>
-        FactCtor =
-            (_, _) => FactT<Contract.ChangeDetails.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
+    public static readonly FactCtorT<Contract.ChangeDetails.Payload, EventMeta>
+        FactCtor = 
+            (_, _, _) =>
+            {
+                var ID = Schema.DocIDCtor(); 
+                return FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
+                    ID.Id(),
+                    PayloadCtor(),
+                    Schema.MetaCtor(ID.Id()));
+            };
 
-    public static readonly CmdCtorT<Behavior.ChangeDetails.Cmd,
-            Contract.Schema.EngineID,
-            Contract.ChangeDetails.Payload>
+
+    public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeDetails.Payload, EventMeta>
         CmdCtor =
-            (_, _) => Behavior.ChangeDetails.Cmd.New(
+            (_, _, _) => CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
                 Schema.DocIDCtor(),
                 PayloadCtor(),
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    Schema.DocIDCtor().Id()
-                )
+                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), Schema.DocIDCtor().Id())
             );
 
-    public static readonly EvtCtorT<Behavior.ChangeDetails.IEvt, Contract.ChangeDetails.Payload, EventMeta>
-        EvtCtor =
-            (_, _, _) => Behavior.ChangeDetails._newEvt(Schema.DocIDCtor(), PayloadCtor(), Schema.MetaCtor(null));
+
+    public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
+        EvtCtor = 
+            (_, _, _) => Behavior.ChangeDetails._newEvt(
+                Schema.DocIDCtor(), 
+                PayloadCtor(), 
+                Schema.MetaCtor(null));
 
 
     [Tag(StateTags.Invalid)] public static readonly StateCtorT<Contract.Schema.Engine>

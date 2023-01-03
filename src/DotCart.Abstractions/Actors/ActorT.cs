@@ -22,7 +22,8 @@ public abstract class ActorB : ActiveComponent, IActor
     {
         return Run(async () =>
         {
-            if (Driver != null) Driver.SetActor(this);
+            if (Driver != null) 
+                Driver.SetActor(this);
             while (_exchange.Status != ComponentStatus.Active)
             {
                 _exchange.Activate(cancellationToken);

@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
@@ -5,10 +6,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class EmitterDriverTestsT<TIFact, TPayload>
-    : BusDriverTestsB<TIFact, TPayload>
-    where TIFact : IFactB
+public abstract class EmitterDriverTestsT<TPayload, TMeta>
+    : BusDriverTestsB<TPayload,TMeta>
     where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -20,7 +21,7 @@ public abstract class EmitterDriverTestsT<TIFact, TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TPayload>>();
+        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TPayload,TMeta>>();
         // THEN
         Assert.NotNull(driver);
     }
@@ -32,7 +33,7 @@ public abstract class EmitterDriverTestsT<TIFact, TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var fact2Msg = TestEnv.ResolveRequired<Fact2Msg<byte[], TPayload>>();
+        var fact2Msg = TestEnv.ResolveRequired<Fact2Msg<byte[], TPayload, TMeta>>();
         // THEN
         Assert.NotNull(fact2Msg);
     }

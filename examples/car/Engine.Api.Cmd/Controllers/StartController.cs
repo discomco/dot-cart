@@ -1,7 +1,8 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Engine.Behavior;
+using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -12,10 +13,9 @@ namespace Engine.Api.Cmd.Controllers;
 public class StartController : ControllerBase
 {
     private readonly ICmdHandler _handler;
-    private readonly Hope2Cmd<Start.Cmd, Contract.Start.Hope> _hope2Cmd;
+    private readonly Hope2Cmd<Start.Payload, EventMeta> _hope2Cmd;
 
-    public StartController(ICmdHandler handler,
-        Hope2Cmd<Start.Cmd, Contract.Start.Hope> hope2Cmd)
+    public StartController(ICmdHandler handler, Hope2Cmd<Start.Payload, EventMeta> hope2Cmd)
     {
         _handler = handler;
         _hope2Cmd = hope2Cmd;

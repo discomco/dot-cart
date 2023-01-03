@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Contract;
 using DotCart.TestKit;
@@ -10,8 +11,8 @@ namespace Engine.Contract.Tests.Stop;
 public class FactTests
     : FactTestsT<
         Contract.Schema.EngineID,
-        Contract.Stop.IFact,
-        Contract.Stop.Payload>
+        Contract.Stop.Payload,
+        EventMeta>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -24,6 +25,7 @@ public class FactTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddTransient(_ => TestUtils.Schema.MetaCtor)
             .AddTransient(_ => TestUtils.Schema.DocIDCtor)
             .AddTransient(_ => TestUtils.Stop.PayloadCtor)
             .AddTransient(_ => TestUtils.Stop.FactCtor);

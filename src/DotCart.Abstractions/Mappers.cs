@@ -3,13 +3,14 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions;
 
-public delegate TCmd Evt2Cmd<out TCmd, in TEvt>(Event Evt, IState state)
-    where TEvt : IEvtB
-    where TCmd : ICmdB;
+public delegate CmdT<TCmdPayload, TMeta> Evt2Cmd<TCmdPayload, TEvtPayload, TMeta>(EvtT<TEvtPayload, TMeta> Evt, IState state)
+    where TCmdPayload : IPayload
+    where TMeta : IEventMeta;
 
-public delegate TCmd Fact2Cmd<out TCmd, in TFact>(TFact fact)
-    where TFact : IFactB
-    where TCmd : ICmdB;
+public delegate CmdT<TCmdPayload, TMeta> Fact2Cmd<TCmdPayload, TMeta, TFactPayload>(FactT<TFactPayload,TMeta> fact)
+    where TCmdPayload : IPayload
+    where TMeta : IEventMeta
+    where TFactPayload : IPayload;
 
 /// <summary>
 ///     Evt2DocVal functions are meant to check the validity of the projection
@@ -18,14 +19,17 @@ public delegate TCmd Fact2Cmd<out TCmd, in TFact>(TFact fact)
 /// </summary>
 /// <typeparam name="TDoc">Type of the document the Event is projected onto.</typeparam>
 /// <typeparam name="TIEvt">The IEvt Injection Discriminator (Injector) that uniquely identifies the Event</typeparam>
-public delegate bool Evt2DocValidator<in TDoc, in TIEvt>(TDoc input, TDoc output, Event evt)
+public delegate bool Evt2DocValidator<in TDoc, TPayload, TMeta>(TDoc input, TDoc output, EvtT<TPayload, TMeta> evt)
     where TDoc : IState
-    where TIEvt : IEvtB;
+    where TMeta: IEventMeta
+    where TPayload: IPayload;
 
-public delegate TDoc Evt2Doc<TDoc, in TEvt>(TDoc doc, Event evt)
+
+public delegate TDoc Evt2Doc<TDoc, TPayload, TMeta>(TDoc doc, EvtT<TPayload, TMeta> evt)
     where TDoc : IState
-    where TEvt : IEvtB;
+    where TPayload : IPayload
+    where TMeta : IEventMeta;
 
-public delegate TFact Evt2Fact<out TFact, in TEvt>(Event evt)
-    where TFact : IFactB
-    where TEvt : IEvtB;
+public delegate FactT<TPayload, TMeta> Evt2Fact<TPayload, TMeta>(EvtT<TPayload,TMeta> evt)
+    where TPayload : IPayload
+    where TMeta : IEventMeta;

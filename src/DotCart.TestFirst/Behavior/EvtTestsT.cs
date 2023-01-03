@@ -6,13 +6,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class EvtTestsT<TID, TEvt, TPayload, TMeta> : IoCTests
+public abstract class EvtTestsT<TID, TPayload, TMeta> : IoCTests
     where TID : IID
-    where TEvt : IEvtT<TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
-    protected EvtCtorT<TEvt, TPayload, TMeta> _newEvt;
+    protected EvtCtorT<TPayload, TMeta> _newEvt;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
@@ -37,7 +36,7 @@ public abstract class EvtTestsT<TID, TEvt, TPayload, TMeta> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newEvt = TestEnv.ResolveRequired<EvtCtorT<TEvt, TPayload, TMeta>>();
+        _newEvt = TestEnv.ResolveRequired<EvtCtorT<TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_newEvt);
     }
@@ -60,7 +59,7 @@ public abstract class EvtTestsT<TID, TEvt, TPayload, TMeta> : IoCTests
         Assert.NotNull(TestEnv);
         var expectedTopic = TopicAtt.Get(this);
         // WHEN
-        var actualTopic = TopicAtt.Get<TEvt>();
+        var actualTopic = EvtTopicAtt.Get<TPayload>();
         // THEN
         Assert.Equal(expectedTopic, actualTopic);
     }

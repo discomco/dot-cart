@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Contract.Tests.Start;
 
 [Topic(Contract.Start.Topics.Hope_v1)]
-public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Start.Hope, Contract.Start.Payload>
+public class HopeTests : HopeTestsT<Contract.Schema.EngineID, Contract.Start.Payload>
 {
     public HopeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

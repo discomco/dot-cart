@@ -5,8 +5,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class CmdHandlerTests : EngineCmdHandlerTests<Behavior.Initialize.Cmd, Behavior.Initialize.IEvt,
-    Contract.Initialize.Payload>
+public class CmdHandlerTests
+    : EngineCmdHandlerTests<Contract.Initialize.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

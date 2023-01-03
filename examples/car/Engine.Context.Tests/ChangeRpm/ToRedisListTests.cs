@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
@@ -12,7 +13,9 @@ public class ToRedisListTests
     : ListProjectionTestsT<Context.ChangeRpm.Spoke,
         Context.ChangeRpm.ToRedisList,
         Schema.EngineList,
-        Behavior.ChangeRpm.IEvt>
+        Contract.ChangeRpm.Payload,
+        EventMeta
+    >
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

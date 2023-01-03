@@ -16,7 +16,7 @@ public static class Initialize
     {
     }
 
-    internal class Requester : NATSRequesterT<Contract.Initialize.Hope>, IRequester
+    internal class Requester : NATSRequesterT<Contract.Initialize.Payload>, IRequester
     {
         protected Requester(IEncodedConnection bus) : base(bus)
         {

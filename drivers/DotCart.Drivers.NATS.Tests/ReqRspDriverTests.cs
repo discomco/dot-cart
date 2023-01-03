@@ -15,8 +15,8 @@ public class ReqRspDriverTests : IoCTests
 {
     protected IEncodedConnection _encodedConnection;
     protected IDCtorT<TheSchema.ID> _newID;
-    protected IRequesterT<TheContract.Hope> _theRequester;
-    protected IResponderT<TheContract.Hope, TheBehavior.Cmd> _theResponder;
+    protected IRequesterT<TheContract.Payload> _theRequester;
+    protected IResponderT<TheContract.Payload> _theResponder;
 
     public ReqRspDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -52,7 +52,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _theRequester = TestEnv.ResolveRequired<IRequesterT<TheContract.Hope>>();
+        _theRequester = TestEnv.ResolveRequired<IRequesterT<TheContract.Payload>>();
         // THEN
         Assert.NotNull(_theRequester);
     }
@@ -73,7 +73,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Hope, TheBehavior.Cmd>>();
+        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Payload>>();
         // THEN
         Assert.NotNull(_theResponder);
     }
@@ -87,7 +87,7 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(TestEnv);
         var cts = new CancellationTokenSource(10_000);
         // WHEN
-        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Hope, TheBehavior.Cmd>>();
+        _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Payload>>();
         await _theResponder.Activate(cts.Token).ConfigureAwait(false);
         // THEN
         // while (!cts.Token.IsCancellationRequested)
@@ -145,10 +145,11 @@ public class ReqRspDriverTests : IoCTests
             .AddTheIDCtor()
             // .AddSingleton<ITheResponder, TheResponder>()
             // .AddSingleton<IResponderT2<TheHope, TheCmd>, TheResponder>()
-            .AddTransient<IRequesterT<TheContract.Hope>, TheRequester>()
-            .AddTransient<IResponderDriverT<TheContract.Hope>, TheResponderDriver>()
-            .AddTransient<IResponderT<TheContract.Hope, TheBehavior.Cmd>, ResponderT<
-                IResponderDriverT<TheContract.Hope>, TheContract.Hope, TheBehavior.Cmd>>()
+            .AddTransient<IRequesterT<TheContract.Payload>, TheRequester>()
+            .AddTransient<IResponderDriverT<TheContract.Payload>, TheResponderDriver>()
+            .AddTransient<
+                IResponderT<TheContract.Payload>,
+                ResponderT<TheSpoke, TheContract.Payload, TheContract.Meta>>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

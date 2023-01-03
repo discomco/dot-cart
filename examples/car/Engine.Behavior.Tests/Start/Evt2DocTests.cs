@@ -9,10 +9,10 @@ namespace Engine.Behavior.Tests.Start;
 
 public class Evt2DocTests
     : Evt2DocTestsT<
-        Behavior.Start.IEvt,
         Schema.EngineID,
         Schema.Engine,
-        Contract.Start.Payload, EventMeta>
+        Contract.Start.Payload, 
+        EventMeta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

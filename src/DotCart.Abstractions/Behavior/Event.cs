@@ -8,6 +8,15 @@ public static class EventConst
     public const long NewAggregateVersion = -1;
 }
 
+public record EvtT<TPayload, TMeta>(string AggregateId, TPayload Payload, TMeta Meta)
+    : Event(AggregateId, EvtTopicAtt.Get<TPayload>(), Payload.ToBytes(), Meta.ToBytes())
+{
+    public static EvtT<TPayload, TMeta> New(string id, TPayload payload, TMeta meta)
+    {
+        return new EvtT<TPayload, TMeta>(id, payload, meta);
+    }
+}
+
 public record Event(
     string AggregateId,
     string EventType,

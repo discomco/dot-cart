@@ -9,12 +9,13 @@ public interface IFactT<TPayload> : IFactB
 {
 }
 
-public record FactT<TPayload>(string AggId, TPayload Payload)
+public record FactT<TPayload, TMeta>(string AggId, TPayload Payload, TMeta Meta)
     : Dto<TPayload>(AggId, Payload), IFactT<TPayload>
     where TPayload : IPayload
 {
-    public static FactT<TPayload> New(string aggId, TPayload payload)
+    public TMeta Meta { get; set; } = Meta;
+    public static FactT<TPayload, TMeta> New(string aggId, TPayload payload, TMeta meta)
     {
-        return new FactT<TPayload>(aggId, payload);
+        return new FactT<TPayload,TMeta>(aggId, payload, meta);
     }
 }

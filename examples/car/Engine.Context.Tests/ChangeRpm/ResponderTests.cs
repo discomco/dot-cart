@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,9 +7,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeRpm;
 
 public class ResponderTests
-    : NATSResponderTestsT<
-        Contract.ChangeRpm.Hope,
-        Behavior.ChangeRpm.Cmd>
+    : NATSResponderTestsT<Contract.ChangeRpm.Payload, EventMeta>
 {
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

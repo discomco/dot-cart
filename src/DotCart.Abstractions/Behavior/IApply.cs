@@ -8,9 +8,9 @@ public interface IApply
     IApply SetAggregate(IAggregate aggregate);
 }
 
-public interface IApply<TState, in TEvt> : IApply
-    where TEvt : IEvtB
+
+public interface IApply<TState, TPayload, TMeta> : IApply
     where TState : IState
 {
-    TState Apply(TState state, Event evt);
+    TState Apply(TState state, EvtT<TPayload,TMeta> evt);
 }

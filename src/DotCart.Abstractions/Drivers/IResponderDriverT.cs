@@ -8,7 +8,7 @@ public interface IResponderDriver : IDriverB
     Task StopRespondingAsync(CancellationToken cancellationToken = default);
 }
 
-public interface IResponderDriverT<THope> : IResponderDriver
-    where THope : IHopeB
+public interface IResponderDriverT<TPayload> : IResponderDriver
+    where TPayload : IPayload
 {
 }

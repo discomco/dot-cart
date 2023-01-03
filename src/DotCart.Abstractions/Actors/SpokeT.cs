@@ -58,23 +58,25 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     private async Task ActivateActors(CancellationToken cancellationToken)
     {
+        _allActorsUp = ScanActors();
         while (!_allActorsUp)
             foreach (var actor in _actors)
             {
+                var i = 0;
                 while (actor.Value.Status != ComponentStatus.Active)
                 {
-                    Log.Information($"{AppVerbs.Starting} [{NameAtt.Get(this)}]");
+                    i++;
+                    Log.Information($"{AppVerbs.Looping("Activate", i)} [{(actor.Value.GetType())}]");
                     actor.Value.Activate(cancellationToken).ConfigureAwait(false);
                     await Task.Delay(20, cancellationToken).ConfigureAwait(false);
                 }
-
                 _allActorsUp = ScanActors();
             }
     }
 
     private bool ScanActors()
     {
-        return _actors.All(actor => actor.Value.Status == ComponentStatus.Active);
+        return !_actors.Any() || _actors.All(actor => actor.Value.Status == ComponentStatus.Active);
     }
 
     private async Task ActivateExchangeAsync(CancellationToken cancellationToken)
@@ -99,23 +101,22 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     private async Task StartProjectorAsync(CancellationToken cancellationToken)
     {
+        var i = 0;
         if (_projector == null)
             return;
         while (_projector.Status != ComponentStatus.Active)
         {
-            var starting = "STARTING".AsVerb();
-            Log.Information($"{starting} Projector [{_projector.Name}]");
+            i++;
+            Log.Information($"{AppVerbs.Looping("Activate", i)} Projector [{_projector.Name}]");
             await _projector.Activate(cancellationToken).ConfigureAwait(false);
             if (_projector.Status != ComponentStatus.Active)
             {
-                var waiting = "WAITING_1S".AsVerb();
-                Log.Information($"{waiting} Projector [{_projector.Name}]");
+                Log.Information($"{AppVerbs.Waiting1s} Projector [{_projector.Name}]");
                 await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                var running = "RUNNING".AsVerb();
-                Log.Information($"{running} Projector [{_projector.Name}]");
+                Log.Information($"{AppVerbs.Running} Projector [{_projector.Name}]");
             }
         }
     }

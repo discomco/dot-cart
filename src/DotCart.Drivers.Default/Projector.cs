@@ -30,16 +30,18 @@ public static class Inject
 }
 
 [Name("dotcart:projector")]
-public class Projector<TInfo> : ActorB, IProjector, IProducer
+public class Projector<TInfo> 
+    : ActorB, IProjector, IProducer
     where TInfo : ISubscriptionInfoB
 {
-    private readonly IProjectorDriverT<TInfo> _projectorDriver;
-
+    
+//    private readonly IProjectorDriverT<TInfo> _projectorDriver;
     public Projector(
         IExchange exchange,
-        IProjectorDriverT<TInfo> projectorDriver) : base(exchange)
+        IProjectorDriverT<TInfo> projectorDriver) 
+        : base(exchange)
     {
-        _projectorDriver = projectorDriver;
+        Driver = projectorDriver;
     }
 
     public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken)
@@ -66,10 +68,8 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer
     {
         return Task.Run(() =>
         {
-            _projectorDriver.SetActor(this);
-            var started = AppFacts.Started;
-            Log.Information($"{started} [Projector<{GroupNameAtt.Get<TInfo>()}-{IDPrefixAtt.Get<TInfo>()}>]");
-            return _projectorDriver.StartStreamingAsync(cancellationToken);
+            Log.Information($"{AppFacts.Started} [Projector<{GroupNameAtt.Get<TInfo>()}-{IDPrefixAtt.Get<TInfo>()}>]");
+            return ((IProjectorDriverT<TInfo>)Driver).StartStreamingAsync(cancellationToken);
         }, cancellationToken);
     }
 
@@ -78,7 +78,7 @@ public class Projector<TInfo> : ActorB, IProjector, IProducer
         return Task.Run(() =>
         {
             Log.Information("Projector :: is Stopping.");
-            return _projectorDriver.StopStreamingAsync(cancellationToken);
+            return ((IProjectorDriverT<TInfo>)Driver).StopStreamingAsync(cancellationToken);
         }, cancellationToken);
     }
 }

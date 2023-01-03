@@ -9,7 +9,6 @@ namespace Engine.Behavior.Tests.ChangeRpm;
 
 public class Evt2ListTests
     : Evt2DocTestsT<
-        Behavior.ChangeRpm.IEvt,
         Schema.EngineListID,
         Schema.EngineList,
         Contract.ChangeRpm.Payload,

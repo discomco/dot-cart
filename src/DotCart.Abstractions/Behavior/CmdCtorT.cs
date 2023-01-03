@@ -2,7 +2,8 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
 
-public delegate TCmd CmdCtorT<out TCmd, in TAggID, in TPayload>(TAggID ID, TPayload payload)
-    where TCmd : ICmdB
-    where TAggID : IID
-    where TPayload : IPayload;
+public delegate
+    CmdT<TPayload, TMeta> CmdCtorT<in TID, TPayload, TMeta>(TID ID, TPayload payload, TMeta meta)
+    where TID : IID
+    where TPayload : IPayload
+    where TMeta : IEventMeta;

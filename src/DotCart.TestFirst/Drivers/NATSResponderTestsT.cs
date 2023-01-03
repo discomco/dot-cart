@@ -7,9 +7,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class NATSResponderTestsT<THope, TCmd> : ResponderTestsT<THope, TCmd>
-    where TCmd : ICmdB
-    where THope : IHopeB
+public abstract class NATSResponderTestsT<TPayload, TMeta>
+    : ResponderTestsT<TPayload, TMeta>
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
     protected IEncodedConnection _bus;
 

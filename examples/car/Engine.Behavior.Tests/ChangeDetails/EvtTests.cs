@@ -8,8 +8,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Behavior.Tests.ChangeDetails;
 
-[Topic(Behavior.ChangeDetails.Topics.Evt_v1)]
-public class EvtTests : EvtTestsT<Schema.EngineID, Behavior.ChangeDetails.IEvt, Contract.ChangeDetails.Payload,
+[Topic(Contract.ChangeDetails.Topics.Evt_v1)]
+public class EvtTests : EvtTestsT<Schema.EngineID, Contract.ChangeDetails.Payload,
     EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

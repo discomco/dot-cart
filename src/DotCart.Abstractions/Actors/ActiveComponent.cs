@@ -11,29 +11,36 @@ public abstract class ActiveComponent : IActiveComponent
 
     public ComponentStatus Status { get; private set; }
 
+    private object activateMutex = new object();
+
     public Task Activate(CancellationToken stoppingToken = default)
     {
-        _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-        return Run(async () =>
+        if (Status == ComponentStatus.Active)
+            return CompletedTask;
+        lock (activateMutex)
         {
-            await PrepareAsync(_cts.Token).ConfigureAwait(false);
-            try
+            _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+            return Run(async () =>
             {
-                await StartAsync(_cts.Token).ConfigureAwait(false);
-                if (Status == ComponentStatus.Active)
-                    LoopAsync(_cts.Token);
-            }
-            catch (OperationCanceledException e)
-            {
-                Status = ComponentStatus.Inactive;
-                Log.Information($"{AppFacts.Cancelled} [{GetType().Name}] is Canceled");
-            }
-            catch (Exception e)
-            {
-                Log.Fatal(e.InnerAndOuter());
-                Status = ComponentStatus.Inactive;
-            }
-        }, stoppingToken);
+                await PrepareAsync(_cts.Token).ConfigureAwait(false);
+                try
+                {
+                    await StartAsync(_cts.Token).ConfigureAwait(false);
+                    if (Status == ComponentStatus.Active)
+                        LoopAsync(_cts.Token);
+                }
+                catch (OperationCanceledException e)
+                {
+                    Status = ComponentStatus.Inactive;
+                    Log.Information($"{AppFacts.Cancelled} [{GetType().Name}]");
+                }
+                catch (Exception e)
+                {
+                    Log.Fatal(e.InnerAndOuter());
+                    Status = ComponentStatus.Inactive;
+                }
+            }, stoppingToken);
+        }
     }
 
     public Task Deactivate(CancellationToken cancellationToken = default)
@@ -70,22 +77,29 @@ public abstract class ActiveComponent : IActiveComponent
     protected abstract Task StartActingAsync(CancellationToken cancellationToken = default);
     protected abstract Task StopActingAsync(CancellationToken cancellationToken = default);
 
+    private readonly object startMutex = new();
+
     private Task StartAsync(CancellationToken cancellationToken)
     {
-        return Run(async () =>
+        if (Status == ComponentStatus.Active)
+            return CompletedTask;
+        lock (startMutex)
         {
-            try
+            return Run(async () =>
             {
-                Log.Information($"{AppFacts.Activated} [{Name}]");
-                Status = ComponentStatus.Active;
-                await StartActingAsync(cancellationToken).ConfigureAwait(false);
-            }
-            catch (Exception e)
-            {
-                Log.Fatal(e.InnerAndOuter());
-                Status = ComponentStatus.Inactive;
-            }
-        }, cancellationToken);
+                try
+                {
+                    Log.Information($"{AppFacts.Activated} [{Name}]");
+                    Status = ComponentStatus.Active;
+                    await StartActingAsync(cancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception e)
+                {
+                    Log.Fatal(e.InnerAndOuter());
+                    Status = ComponentStatus.Inactive;
+                }
+            }, cancellationToken);
+        }
     }
 
     private Task StopAsync(CancellationToken cancellationToken = default)

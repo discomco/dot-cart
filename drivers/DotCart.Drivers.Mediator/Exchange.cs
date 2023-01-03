@@ -75,16 +75,16 @@ internal class Exchange : ActiveComponent, IExchange
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
-        return Run(() =>
-        {
-            var started = "STARTED".AsFact();
-            Log.Information($"{started} [{GetType().Name}]");
-        }, cancellationToken);
+        return CompletedTask;
+        // return Run(() =>
+        // {
+        //     Log.Information($"{AppFacts.Started} [{GetType().Name}]");
+        // }, cancellationToken);
     }
 
     protected override Task StopActingAsync(CancellationToken cancellationToken)
     {
-        var stopping = "STOPPING".AsVerb();
-        return Run(() => { Log.Information($"{stopping} [{GetType().Name}]"); }, cancellationToken);
+        return CompletedTask;
+//        return Run(() => { Log.Information($"{AppVerbs.Stopping} [{GetType().Name}]"); }, cancellationToken);
     }
 }

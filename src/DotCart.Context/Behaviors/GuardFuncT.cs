@@ -3,6 +3,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Context.Behaviors;
 
-public delegate IFeedback GuardFuncT<in TState, in TCmd>(TCmd cmd, TState state)
+public delegate IFeedback GuardFuncT<in TState, TPayload, TMeta>(CmdT<TPayload, TMeta> cmd, TState state)
     where TState : IState
-    where TCmd : ICmdB;
+    where TPayload : IPayload
+    where TMeta : IEventMeta;

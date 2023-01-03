@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
@@ -5,13 +6,14 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
+public abstract class FactTestsT<TID, TPayload, TMeta> : IoCTests
     where TID : IID
     where TPayload : IPayload
 {
-    protected FactCtorT<TPayload> _newFact;
+    protected FactCtorT<TPayload,TMeta> _newFact;
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
+    private MetaCtorT<TMeta> _newMeta;
 
     public FactTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -38,7 +40,7 @@ public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
     public void ShouldResolveFactCtor()
     {
         Assert.NotNull(TestEnv);
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload,TMeta>>();
         Assert.NotNull(_newFact);
     }
 
@@ -50,19 +52,30 @@ public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
         Assert.NotNull(_newFact);
         var aggId = _newID().Id();
         Assert.NotEmpty(aggId);
-        var fact = _newFact(aggId, _newPayload());
+        var fact = _newFact(aggId, _newPayload(), _newMeta(aggId));
         var serialized = fact.ToJson();
-        var desFact = serialized.FromJson<FactT<TPayload>>();
+        var desFact = serialized.FromJson<FactT<TPayload,TMeta>>();
         Assert.Equal(fact, desFact);
     }
 
     [Fact]
-    protected void ShouldHaveTopic()
+    public void ShouldResolveMetaCtor()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _newMeta = TestEnv.ResolveRequired<MetaCtorT<TMeta>>();
+        // THEN
+        Assert.NotNull(_newMeta);
+    }
+
+    [Fact]
+    protected void ShouldHaveFactTopic()
     {
         // GIVEN
         var expectedTopic = GetExpectedTopic();
         // WHEN
-        var foundTopic = TopicAtt.Get<TIFact>();
+        var foundTopic = FactTopicAtt.Get<TPayload>();
         // THEN
         Assert.Equal(expectedTopic, foundTopic);
     }
@@ -77,6 +90,7 @@ public abstract class FactTestsT<TID, TIFact, TPayload> : IoCTests
     {
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         _newPayload = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload,TMeta>>();
+        _newMeta = TestEnv.ResolveRequired<MetaCtorT<TMeta>>();
     }
 }

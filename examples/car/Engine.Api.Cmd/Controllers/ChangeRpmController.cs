@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using Engine.Behavior;
+using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engine.Api.Cmd.Controllers;
@@ -10,16 +11,16 @@ namespace Engine.Api.Cmd.Controllers;
 public class ChangeRpmController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<ChangeRpm.Cmd, Contract.ChangeRpm.Hope> _hope2Cmd;
+    private readonly Hope2Cmd<ChangeRpm.Payload, EventMeta> _hope2Cmd;
 
-    public ChangeRpmController(ICmdHandler cmdHandler, Hope2Cmd<ChangeRpm.Cmd, Contract.ChangeRpm.Hope> hope2Cmd)
+    public ChangeRpmController(ICmdHandler cmdHandler, Hope2Cmd<ChangeRpm.Payload, EventMeta> hope2Cmd)
     {
         _cmdHandler = cmdHandler;
         _hope2Cmd = hope2Cmd;
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Contract.ChangeRpm.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] ChangeRpm.Hope hope)
     {
         var fbk = Feedback.New(hope.AggId);
         if (hope == null) return BadRequest(fbk);

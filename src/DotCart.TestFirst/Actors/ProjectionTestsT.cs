@@ -13,13 +13,14 @@ public abstract class ProjectionTestsT<
     TSpoke,
     TProjection,
     TState,
-    TEvt> : IoCTests
+    TPayload, TMeta> : IoCTests
     where TProjection : IActor<TSpoke>
     where TState : IState
-    where TEvt : IEvtB
     where TSpoke : ISpokeT<TSpoke>
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private Evt2Doc<TState, TEvt> _evt2State;
+    private Evt2Doc<TState, TPayload, TMeta> _evt2State;
 
     private IExchange _exchange;
     private IActor<TSpoke>? _projection;
@@ -47,7 +48,7 @@ public abstract class ProjectionTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TEvt>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TPayload,TMeta>>();
         // THEN
         Assert.NotNull(_evt2State);
     }
@@ -75,12 +76,12 @@ public abstract class ProjectionTestsT<
     }
 
     [Fact]
-    public async Task ShouldEventHaveATopic()
+    public async Task ShouldPayloadHaveFactTopic()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var topic = TopicAtt.Get<TEvt>();
+        var topic = FactTopicAtt.Get<TPayload>();
         // THEN
         Assert.NotEmpty(topic);
     }

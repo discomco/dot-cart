@@ -1,4 +1,5 @@
 using Ardalis.GuardClauses;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -8,22 +9,23 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqListenerDriverT<TIFact, TPayload>
-    : DriverB, IListenerDriverT<TIFact, byte[]>
-    where TIFact : IFactB
-    where TPayload : IPayload
+public class RMqListenerDriverT<TFactPayload, TFactMeta>
+    : DriverB, IListenerDriverT<TFactPayload,byte[]>
+    where TFactPayload : IPayload
+    where TFactMeta : IEventMeta
 {
     private readonly IConnectionFactory _connFact;
-    private readonly Msg2Fact<TPayload, byte[]> _msg2Fact;
+    private readonly Msg2Fact<TFactPayload, TFactMeta, byte[]> _msg2Fact;
 
-    public readonly string Topic = TopicAtt.Get<TIFact>();
+    
     private IModel _channel;
     private IConnection _connection;
     private AsyncEventingBasicConsumer _consumer;
+    private string _topic;
 
     public RMqListenerDriverT(
         IConnectionFactory connFact,
-        Msg2Fact<TPayload, byte[]> msg2Fact)
+        Msg2Fact<TFactPayload, TFactMeta, byte[]> msg2Fact)
     {
         _connFact = connFact;
         _msg2Fact = msg2Fact;
@@ -40,7 +42,7 @@ public class RMqListenerDriverT<TIFact, TPayload>
     {
         _connection = _connFact.CreateConnection();
         _channel = _connection.CreateModel();
-        Log.Debug($"{AppVerbs.Subscribing} [{TopicAtt.Get<TIFact>()}]");
+        Log.Debug($"{AppVerbs.Subscribing} [{FactTopicAtt.Get<TFactPayload>()}]");
         _channel.ExchangeDeclare(Topic, ExchangeType.Fanout);
         var queueName = _channel.QueueDeclare().QueueName;
         _channel.QueueBind(queueName, Topic, "");
@@ -58,6 +60,8 @@ public class RMqListenerDriverT<TIFact, TPayload>
         return Task.CompletedTask;
     }
 
+    public string Topic => FactTopicAtt.Get<TFactPayload>(); 
+
 
     private async Task FactReceived(object sender, BasicDeliverEventArgs ea)
     {
@@ -66,7 +70,7 @@ public class RMqListenerDriverT<TIFact, TPayload>
             Guard.Against.Null(ea, nameof(ea));
             Guard.Against.Null(ea.Body, nameof(ea.Body));
             var fact = _msg2Fact(ea.Body.ToArray());
-            Log.Debug($"{AppFacts.Received} Fact({TopicAtt.Get<TIFact>()})");
+            Log.Debug($"{AppFacts.Received} Fact({FactTopicAtt.Get<TFactPayload>()})");
             Cast(fact);
         }
         catch (Exception e)

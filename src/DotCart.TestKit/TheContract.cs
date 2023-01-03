@@ -8,15 +8,15 @@ namespace DotCart.TestKit;
 
 public static class TheContract
 {
-    private static readonly FactCtorT<Payload>
+    private static readonly FactCtorT<Payload,Meta>
         _newFact =
-            FactT<Payload>.New;
+            FactT<Payload, Meta>.New;
 
-    private static readonly Msg2Fact<Payload, byte[]>
+    private static readonly Msg2Fact<Payload,Meta, byte[]>
         _bytes2Fact =
-            msg => msg.FromBytes<FactT<Payload>>();
+            msg => msg.FromBytes<FactT<Payload,Meta>>();
 
-    private static readonly Fact2Msg<byte[], Payload>
+    private static readonly Fact2Msg<byte[], Payload,Meta>
         _fact2bytes =
             fact => fact.ToBytes();
 
@@ -38,7 +38,10 @@ public static class TheContract
             return new Hope(aggId, payload);
         }
     }
-
+    
+    
+    [HopeTopic(TheConstants.HopeTopic)]
+    [FactTopic(TheConstants.FactTopic)]
     public record Payload : IPayload
     {
         [JsonConstructor]
@@ -74,5 +77,11 @@ public static class TheContract
     }
 
     public record Meta(string AggregateType, string AggregateId)
-        : EventMeta(AggregateType, AggregateId);
+        : EventMeta(AggregateType, AggregateId)
+    {
+        public static Meta New(string aggType, string aggId)
+        {
+            return new(aggType, aggId);
+        }
+    }
 }

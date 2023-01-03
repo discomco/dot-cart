@@ -1,6 +1,6 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.TestFirst;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -8,14 +8,15 @@ using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.Stop;
+namespace Engine.Context.Tests.ChangeRpm;
 
-public class FlowTestsT : FlowTestsT<
-    Behavior.Stop.IEvt,
-    FactT<Contract.Stop.Payload>,
+public class SequenceTestsT 
+    : SequenceTestsT<
+    Contract.ChangeRpm.Payload,
+    EventMeta,
     IDocStore<Schema.Engine>>
 {
-    public FlowTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public SequenceTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
@@ -28,6 +29,6 @@ public class FlowTestsT : FlowTestsT<
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddTransient(_ => A.Fake<IDocStore<Schema.Engine>>())
-            .AddStopSpoke();
+            .AddChangeRpmSpoke();
     }
 }

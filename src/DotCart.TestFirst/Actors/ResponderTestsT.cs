@@ -8,12 +8,12 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ResponderTestsT<THope, TCmd> : IoCTests
+public abstract class ResponderTestsT<TPayload, TMeta> : IoCTests
 //    where TIResponder : IResponder
-    where THope : IHopeB
-    where TCmd : ICmdB
+    where TPayload : IPayload
+    where TMeta : IEventMeta
 {
-    private IResponderT<THope, TCmd> _responder;
+    private IResponderT<TPayload> _responder;
 
     public ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -25,7 +25,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var h2c = TestEnv.ResolveRequired<Hope2Cmd<TCmd, THope>>();
+        var h2c = TestEnv.ResolveRequired<Hope2Cmd<TPayload, TMeta>>();
         // THEN
         Assert.NotNull(h2c);
     }
@@ -41,7 +41,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
         Assert.NotNull(TestEnv);
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
         // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<THope, TCmd>>();
+        _responder = TestEnv.ResolveRequired<IResponderT<TPayload>>();
         // THEN
         Assert.NotNull(_responder);
     }
@@ -55,7 +55,7 @@ public abstract class ResponderTestsT<THope, TCmd> : IoCTests
         TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
 
         // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<THope, TCmd>>();
+        _responder = TestEnv.ResolveRequired<IResponderT<TPayload>>();
         try
         {
             Assert.NotNull(_responder);

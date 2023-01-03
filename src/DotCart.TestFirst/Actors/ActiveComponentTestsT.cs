@@ -34,9 +34,9 @@ public abstract class ActiveComponentTestsT<TActiveComponent>
         // THEN
         Assert.NotEmpty(name);
     }
-    
+
     // TODO: Make this a test again
-//    [Fact]
+    [Fact]
     public async Task ShouldActivateComponent()
     {
         //var ts = new CancellationTokenSource();
@@ -46,20 +46,16 @@ public abstract class ActiveComponentTestsT<TActiveComponent>
         var ac = TestEnv.ResolveRequired<TActiveComponent>();
         Assert.NotNull(ac);
         // WHEN
-        ac.Activate(ts.Token);
+        await ac.Activate(ts.Token);
         // THEN
-        Thread.Sleep(2);
+//        Thread.Sleep(5000);
         Assert.True(ac.Status.HasFlag(ComponentStatus.Active));
-        await Task.Run(async () =>
-        {
-            await Task.Delay(3, ts.Token);
-            ts.Cancel(); // THEN
-        }, ts.Token);
-        Thread.Sleep(2);
-        Assert.False(ac.Status.HasFlag(ComponentStatus.Active));
+        // await Task.Run(async () =>
+        // {
+        //     await Task.Delay(3, ts.Token);
+        //     ts.Cancel(); // THEN
+        // }, ts.Token);
+        // Thread.Sleep(2);
+        // Assert.False(ac.Status.HasFlag(ComponentStatus.Active));
     }
-
-    
-    
-    
 }

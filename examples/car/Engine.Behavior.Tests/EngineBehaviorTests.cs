@@ -50,8 +50,13 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         _agg = _builder.Build();
         Assert.NotNull(_agg);
         // WHEN
+        var ID = TestUtils.Schema.DocIDCtor();
         var details = Schema.Details.New("New Engine");
-        var cmd = Behavior.Initialize.Cmd.New(TestUtils.Schema.DocIDCtor(), Contract.Initialize.Payload.New(details));
+        var cmd = CmdT<Contract.Initialize.Payload, EventMeta>
+            .New(
+                ID,
+                Contract.Initialize.Payload.New(details),
+                TestUtils.Schema.MetaCtor(ID.Id()));
         _agg.SetID(cmd.AggregateID);
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = (Schema.Engine)feedback.Payload;
@@ -74,7 +79,11 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         // GIVEN
         await ShouldExecuteInitializeCmd();
         _ID = _newID();
-        var startCmd = Behavior.Start.Cmd.New(_ID, Contract.Start.Payload.New);
+        var startCmd = CmdT<Contract.Start.Payload, EventMeta>.New(
+            _ID,
+            Contract.Start.Payload.New,
+            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id())
+        );
 //        _agg.SetID(_ID);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
@@ -98,7 +107,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         // WHEN
         var builder = TestEnv.ResolveRequired<IAggregateBuilder>();
         var agg = builder.Build();
-        var topic = TopicAtt.Get<Behavior.Start.Cmd>();
+        var topic = CmdTopicAtt.Get<Contract.Start.Payload>();
         var knowsIt = agg.KnowsTry(topic);
         // THEN
         Assert.True(knowsIt);

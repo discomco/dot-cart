@@ -2,8 +2,8 @@
 
 namespace DotCart.Abstractions.Clients;
 
-public interface IRequesterT<in THope> : IDisposable
-    where THope : IHopeB
+public interface IRequesterT<TPayload> : IDisposable
+    where TPayload : IPayload
 {
-    Task<Feedback> RequestAsync(THope hope, CancellationToken cancellationToken = default);
+    Task<Feedback> RequestAsync(HopeT<TPayload> hope, CancellationToken cancellationToken = default);
 }

@@ -45,23 +45,25 @@ public static class Inject
     }
 
 
-    public static IServiceCollection AddNATSResponder<THope, TCmd>(this IServiceCollection services)
-        where TCmd : ICmdB where THope : IHopeB
+    public static IServiceCollection AddNATSResponder<TPayload, TMeta>(this IServiceCollection services)
+        where TPayload : IPayload
+        where TMeta : IEventMeta
     {
         return services
             .AddCoreNATS()
-            .AddSingleton<IResponderDriverT<THope>, NATSResponderDriverT<THope>>()
-            .AddSingleton<IResponderT<THope, TCmd>, ResponderT<IResponderDriverT<THope>, THope, TCmd>>();
+            .AddSingleton<IResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
+            .AddSingleton<IResponderT<TPayload>, ResponderT<TPayload, TMeta>>();
     }
 
-    public static IServiceCollection AddSpokedNATSResponder<TSpoke, THope, TCmd>(this IServiceCollection services)
-        where TCmd : ICmdB
-        where THope : IHopeB
+    public static IServiceCollection AddSpokedNATSResponder<TSpoke, TPayload, TMeta>(
+        this IServiceCollection services)
+        where TPayload : IPayload
+        where TMeta : IEventMeta
     {
         return services
             .AddCoreNATS()
-            .AddSingleton<IResponderDriverT<THope>, NATSResponderDriverT<THope>>()
-            .AddSingleton<IResponderT<THope, TCmd>, ResponderT<TSpoke, IResponderDriverT<THope>, THope, TCmd>>()
-            .AddSingleton<IActor<TSpoke>, ResponderT<TSpoke, IResponderDriverT<THope>, THope, TCmd>>();
+            .AddSingleton<IResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
+            .AddSingleton<IResponderT<TPayload>, ResponderT<TSpoke, TPayload, TMeta>>()
+            .AddSingleton<IActor<TSpoke>, ResponderT<TSpoke, TPayload, TMeta>>();
     }
 }
