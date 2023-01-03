@@ -86,7 +86,7 @@ public static class ChangeDetails
     public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
         _newEvt =
             (id, payload, meta) => EvtT<Contract.ChangeDetails.Payload, EventMeta>.New(
-                id.Id(), 
+                id.Id(),
                 payload,
                 meta);
 
@@ -99,6 +99,7 @@ public static class ChangeDetails
                     _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
                 };
             };
+
 
     public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)
     {
@@ -122,6 +123,4 @@ public static class ChangeDetails
             .AddTransient(_ => _evt2List)
             .AddTransient(_ => _evt2ListVal);
     }
-
-
- }
+}

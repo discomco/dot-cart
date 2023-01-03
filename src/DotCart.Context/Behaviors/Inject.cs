@@ -12,7 +12,7 @@ public static partial class Inject
 {
     public static IServiceCollection AddChoreography<TCmdPayload, TEvtPayload, TMeta>(this IServiceCollection services,
         Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> evt2Cmd)
-        where TCmdPayload: IPayload 
+        where TCmdPayload : IPayload
         where TEvtPayload : IPayload
         where TMeta : IEventMeta
     {
@@ -32,7 +32,7 @@ public static partial class Inject
             .AddConsoleLogger()
             .AddAggregateBuilder<TAggregateInfo, TState>()
             .AddCmdHandler()
-            .AddTransient<ITry, TryCmdT<TState,TPayload, TMeta>>()
+            .AddTransient<ITry, TryCmdT<TState, TPayload, TMeta>>()
             .AddTransient<IApply, ApplyEvtT<TState, TPayload, TMeta>>();
     }
 }

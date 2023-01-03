@@ -11,7 +11,7 @@ public class ToRedisDocTests : ProjectionTestsT<
     Context.Initialize.Spoke,
     Context.Initialize.ToRedisDoc,
     Schema.Engine,
-    Contract.Initialize.Payload, 
+    Contract.Initialize.Payload,
     EventMeta>
 {
     public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

@@ -37,10 +37,10 @@ public abstract class AggregateTestsT<TID, TState, TPayload, TMeta> : IoCTests
         // THEN
         try
         {
-            var tryCmd = tryCmds.FirstOrDefault(c => c.GetType() == typeof(Context.Behaviors.TryCmdT<TState, TPayload, TMeta>));
+            var tryCmd = tryCmds.FirstOrDefault(c => c.GetType() == typeof(TryCmdT<TState, TPayload, TMeta>));
             Assert.NotNull(tryCmd);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Output.WriteLine(e.InnerAndOuter());
             Assert.True(false);
@@ -61,7 +61,7 @@ public abstract class AggregateTestsT<TID, TState, TPayload, TMeta> : IoCTests
             var apply = applyEvts.First(x => x.GetType() == typeof(ApplyEvtT<TState, TPayload, TMeta>));
             Assert.True(apply != null);
         }
-        catch (System.Exception e)
+        catch (Exception e)
         {
             Output.WriteLine(e.InnerAndOuter());
             Assert.True(false);

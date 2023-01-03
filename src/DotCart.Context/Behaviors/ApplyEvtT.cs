@@ -5,13 +5,13 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public class ApplyEvtT<TState, TPayload, TMeta> 
+public class ApplyEvtT<TState, TPayload, TMeta>
     : IApply<TState, TPayload, TMeta>
     where TState : IState
-    where TPayload: IPayload
+    where TPayload : IPayload
     where TMeta : IEventMeta
 {
-    private readonly Evt2Doc<TState, TPayload,TMeta> _evt2State;
+    private readonly Evt2Doc<TState, TPayload, TMeta> _evt2State;
 
     protected IAggregate Aggregate;
 
@@ -28,7 +28,7 @@ public class ApplyEvtT<TState, TPayload, TMeta>
 
     public string EvtType => EvtTopicAtt.Get<TPayload>();
 
-    public TState Apply(TState state, EvtT<TPayload,TMeta> evt)
+    public TState Apply(TState state, EvtT<TPayload, TMeta> evt)
     {
         return _evt2State(state, evt);
     }

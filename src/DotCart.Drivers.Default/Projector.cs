@@ -12,7 +12,7 @@ namespace DotCart.Drivers.Default;
 public static class Inject
 {
     public static IServiceCollection AddSingletonProjector<TInfo>(this IServiceCollection services)
-        where TInfo : ISubscriptionInfoB
+        where TInfo : IProjectorInfoB
     {
         return services
             .AddConfiguredESDBClients()
@@ -21,7 +21,7 @@ public static class Inject
     }
 
     public static IServiceCollection AddTransientProjector<TInfo>(this IServiceCollection services)
-        where TInfo : ISubscriptionInfoB
+        where TInfo : IProjectorInfoB
     {
         return services
             .AddTransientESDBProjectorDriver<TInfo>()
@@ -30,15 +30,14 @@ public static class Inject
 }
 
 [Name("dotcart:projector")]
-public class Projector<TInfo> 
+public class Projector<TInfo>
     : ActorB, IProjector, IProducer
-    where TInfo : ISubscriptionInfoB
+    where TInfo : IProjectorInfoB
 {
-    
 //    private readonly IProjectorDriverT<TInfo> _projectorDriver;
     public Projector(
         IExchange exchange,
-        IProjectorDriverT<TInfo> projectorDriver) 
+        IProjectorDriverT<TInfo> projectorDriver)
         : base(exchange)
     {
         Driver = projectorDriver;

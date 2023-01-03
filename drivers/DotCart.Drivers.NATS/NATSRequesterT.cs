@@ -35,7 +35,8 @@ public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IP
         _bus.Dispose();
     }
 
-    public override async Task<Feedback> RequestAsync(HopeT<TPayload> hope, CancellationToken cancellationToken = default)
+    public override async Task<Feedback> RequestAsync(HopeT<TPayload> hope,
+        CancellationToken cancellationToken = default)
     {
         var res = Feedback.New(hope.AggId);
         try

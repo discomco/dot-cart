@@ -9,7 +9,7 @@ using Serilog;
 
 namespace DotCart.Context.Actors;
 
-public static class Inject
+public static partial class Inject
 {
     public static IServiceCollection AddCmdHandler(this IServiceCollection services)
     {

@@ -1,6 +1,6 @@
 namespace DotCart.Abstractions.Drivers;
 
-public interface ISubscriptionInfoB
+public interface IProjectorInfoB
 {
     // string GroupName { get; set; }
     // string Prefix { get; set; }

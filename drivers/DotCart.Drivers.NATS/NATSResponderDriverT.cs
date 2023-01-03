@@ -35,7 +35,8 @@ public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayloa
             try
             {
                 await ConnectAsync(cancellationToken);
-                _logMessage = $"NATS{AppVerbs.Responding} Topic: [{HopeTopicAtt.Get<TPayload>()}] on bus [{_bus.ConnectedId}]";
+                _logMessage =
+                    $"NATS{AppVerbs.Responding} Topic: [{HopeTopicAtt.Get<TPayload>()}] on bus [{_bus.ConnectedId}]";
                 Log.Debug(_logMessage);
                 _logMessage = "";
                 _subscription = _bus.SubscribeAsync(
@@ -92,6 +93,7 @@ public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayloa
                 _logMessage = $"{AppVerbs.Connecting} NATS [{_bus.ConnectedId}]";
                 Thread.Sleep(1_000);
             }
+
             _logMessage = $"{AppFacts.Connected} NATS [{_bus.ConnectedId}]";
             Log.Information(_logMessage);
             _bus.OnDeserialize += OnDeserialize;

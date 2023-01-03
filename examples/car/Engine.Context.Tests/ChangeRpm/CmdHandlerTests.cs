@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeRpm;
 
-public class CmdHandlerTests 
+public class CmdHandlerTests
     : EngineCmdHandlerTests<Contract.ChangeRpm.Payload>
 {
     public CmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

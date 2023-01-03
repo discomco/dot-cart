@@ -22,7 +22,7 @@ public class ChangeDetailsController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] ChangeDetails.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<ChangeDetails.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

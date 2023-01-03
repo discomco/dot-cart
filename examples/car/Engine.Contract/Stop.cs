@@ -24,5 +24,4 @@ public static class Stop
             return new Payload();
         }
     }
-
 }

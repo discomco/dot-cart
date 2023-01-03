@@ -2,6 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -49,8 +50,7 @@ public static class ChangeDetails
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
-            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>();
     }
 
@@ -101,7 +101,7 @@ public static class ChangeDetails
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList,Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {

@@ -1,3 +1,5 @@
+using DotCart.Abstractions;
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
@@ -5,19 +7,7 @@ using DotCart.Core;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
-namespace DotCart.Abstractions.Actors;
-
-public interface IProjectionB : IActor
-{
-}
-
-public interface IProjectionT<TDriver, TState, TPayload, TMeta> : IProjectionB
-    where TDriver : IDocStore<TState>
-    where TState : IState
-    where TPayload: IPayload
-    where TMeta: IEventMeta
-{
-}
+namespace DotCart.Context.Actors;
 
 /// <summary>
 ///     A Projection is an active Unit of Effect (Actor) that is defined
@@ -40,6 +30,7 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
     private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
+
     protected ProjectionT(
         IExchange exchange,
         TIStore docStore,
@@ -61,14 +52,21 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
         return (Task<IMsg>)CompletedTask;
     }
 
-    private async Task Handler(IEvtB evt, CancellationToken cancellationToken = default)
+    private async Task Handler(IEvtB evtB, CancellationToken cancellationToken = default)
     {
-        if (!evt.IsCommitted) return;
-        Log.Information($"{AppVerbs.Projecting} [{evt.AggregateId}::{evt.Topic}] ~> [{GetType().Name}]");
-        var docId = GetDocId(evt);
+        if (!evtB.IsCommitted) return;
+        Log.Information($"{AppVerbs.Projecting} [{evtB.AggregateId}::{evtB.Topic}] ~> [{GetType().Name}]");
+        var docId = GetDocId(evtB);
         var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
-        doc = _evt2Doc(doc, (EvtT<TPayload,TMeta>)evt);
+
+//        var evtT = _event2EvtT((Event)evtB);
+        var evtT = new EvtT<TPayload, TMeta>(
+            evtB.AggregateId,
+            evtB.Data.FromBytes<TPayload>(),
+            evtB.MetaData.FromBytes<TMeta>());
+
+        doc = _evt2Doc(doc, evtT);
 
         // TODO: Call ProjectionValidationFunc here
 

@@ -6,7 +6,6 @@ using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
-using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
@@ -27,14 +26,10 @@ public static class Initialize
             .AddEngineBehavior()
             .AddInitializeACLFuncs()
             .AddHostedSpokeT<Spoke>()
+            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Payload, EventMeta>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
-            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Payload, EventMeta>()
-            .AddESDBStore()
-            .AddCmdHandler()
-            .AddTransientRedisDb<Schema.Engine>()
-            .AddTransientRedisDb<Schema.EngineList>()
-            .AddSingletonProjector<IEngineSubscriptionInfo>();
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
     }
 
 
@@ -43,7 +38,7 @@ public static class Initialize
     public class ToRedisDoc : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
-            Contract.Initialize.Payload, 
+            Contract.Initialize.Payload,
             EventMeta
         >,
         IActor<Spoke>
@@ -80,7 +75,7 @@ public static class Initialize
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.Initialize.Payload, 
+        Contract.Initialize.Payload,
         EventMeta>, IActor<Spoke>
     {
         public ToRedisList(

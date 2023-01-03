@@ -1,5 +1,5 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Drivers.Mediator;
+using DotCart.Context.Actors;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Spokes;

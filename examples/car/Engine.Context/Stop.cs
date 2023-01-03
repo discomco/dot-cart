@@ -2,6 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -24,14 +25,13 @@ public static class Stop
     public static IServiceCollection AddStopSpoke(this IServiceCollection services)
     {
         return services
+            .AddEngineBehavior()
+            .AddStopACLFuncs()
             .AddHostedSpokeT<Spoke>()
             .AddSpokedNATSResponder<Spoke, Contract.Stop.Payload, EventMeta>()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
-            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
-            .AddEngineBehavior()
-            .AddStopACLFuncs();
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
     }
 
     [Name(Spoke_v1)]

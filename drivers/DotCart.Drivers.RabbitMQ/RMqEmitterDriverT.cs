@@ -15,13 +15,13 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayl
     private readonly IModel _channel;
     private readonly IConnection _connection;
     private readonly IConnectionFactory _connFact;
-    private readonly Fact2Msg<byte[], TPayload,TMeta> _fact2Msg;
+    private readonly Fact2Msg<byte[], TPayload, TMeta> _fact2Msg;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
 
 
     public RMqEmitterDriverT(
         IConnectionFactory connFact,
-        Fact2Msg<byte[], TPayload,TMeta> fact2Msg)
+        Fact2Msg<byte[], TPayload, TMeta> fact2Msg)
     {
         _connFact = connFact;
         _fact2Msg = fact2Msg;
@@ -33,7 +33,7 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayl
 
     public string Topic => FactTopicAtt.Get<TPayload>();
 
-    public Task EmitAsync(FactT<TPayload,TMeta> fact, CancellationToken cancellationToken = default)
+    public Task EmitAsync(FactT<TPayload, TMeta> fact, CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {

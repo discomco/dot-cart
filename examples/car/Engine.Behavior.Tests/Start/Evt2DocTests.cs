@@ -11,7 +11,7 @@ public class Evt2DocTests
     : Evt2DocTestsT<
         Schema.EngineID,
         Schema.Engine,
-        Contract.Start.Payload, 
+        Contract.Start.Payload,
         EventMeta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

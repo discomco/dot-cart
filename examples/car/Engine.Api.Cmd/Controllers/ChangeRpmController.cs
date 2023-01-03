@@ -20,7 +20,7 @@ public class ChangeRpmController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] ChangeRpm.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<ChangeRpm.Payload> hope)
     {
         var fbk = Feedback.New(hope.AggId);
         if (hope == null) return BadRequest(fbk);

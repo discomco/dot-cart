@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
-using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
@@ -19,7 +18,7 @@ public static class Stop
 
     private static readonly Evt2Fact<Contract.Stop.Payload, EventMeta>
         _evt2Fact =
-            evt => FactT<Contract.Stop.Payload,EventMeta>
+            evt => FactT<Contract.Stop.Payload, EventMeta>
                 .New(
                     evt.AggregateId,
                     evt.Payload,
@@ -184,7 +183,4 @@ public static class Stop
         {
         }
     }
-
-
-
 }

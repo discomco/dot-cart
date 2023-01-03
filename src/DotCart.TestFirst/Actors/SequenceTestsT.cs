@@ -9,9 +9,9 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class SequenceTestsT<TPayload, TMeta, TReadModelStore> 
-    : IoCTests 
-    where TPayload : IPayload 
+public abstract class SequenceTestsT<TPayload, TMeta, TReadModelStore>
+    : IoCTests
+    where TPayload : IPayload
     where TMeta : IEventMeta
 {
     protected IAggregateBuilder _aggregateBuilder;
@@ -42,7 +42,7 @@ public abstract class SequenceTestsT<TPayload, TMeta, TReadModelStore>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var e2f = TestEnv.ResolveRequired<Evt2Fact<TPayload,TMeta>>();
+        var e2f = TestEnv.ResolveRequired<Evt2Fact<TPayload, TMeta>>();
         // THEN
         Assert.NotNull(e2f);
     }

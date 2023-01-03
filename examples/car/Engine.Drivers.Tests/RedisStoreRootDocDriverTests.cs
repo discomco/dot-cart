@@ -23,6 +23,6 @@ public class RedisStoreRootDocDriverTests
     {
         services
             .AddRootDocCtors()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>();
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
     }
 }

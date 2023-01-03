@@ -16,7 +16,7 @@ public class GroupNameAttribute : Attribute
 
 public static class GroupNameAtt
 {
-    public static string Get<TInfo>() where TInfo : ISubscriptionInfoB
+    public static string Get<TInfo>() where TInfo : IProjectorInfoB
     {
         var atts = (GroupNameAttribute[])typeof(TInfo).GetCustomAttributes(typeof(GroupNameAttribute),
             true);

@@ -5,7 +5,6 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Behaviors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
-using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;

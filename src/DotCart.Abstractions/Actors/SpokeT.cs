@@ -66,10 +66,11 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
                 while (actor.Value.Status != ComponentStatus.Active)
                 {
                     i++;
-                    Log.Information($"{AppVerbs.Looping("Activate", i)} [{(actor.Value.GetType())}]");
+                    Log.Information($"{AppVerbs.Looping("Activate", i)} [{actor.Value.GetType()}]");
                     actor.Value.Activate(cancellationToken).ConfigureAwait(false);
                     await Task.Delay(20, cancellationToken).ConfigureAwait(false);
                 }
+
                 _allActorsUp = ScanActors();
             }
     }

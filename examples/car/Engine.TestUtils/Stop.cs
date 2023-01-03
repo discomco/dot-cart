@@ -34,7 +34,7 @@ public static class Stop
                 PayloadCtor());
 
     public static readonly FactCtorT<Contract.Stop.Payload, EventMeta>
-        FactCtor =  
+        FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();

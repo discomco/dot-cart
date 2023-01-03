@@ -20,6 +20,7 @@ public static class ChangeDetails
     public record Payload(Schema.Details Details) : IPayload
     {
         public Schema.Details Details { get; set; } = Details;
+
         public static Payload New(Schema.Details details)
         {
             return new Payload(details);

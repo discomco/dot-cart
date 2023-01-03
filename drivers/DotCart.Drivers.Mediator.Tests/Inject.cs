@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Drivers.InMem;
 using Microsoft.Extensions.DependencyInjection;

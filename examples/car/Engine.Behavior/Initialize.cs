@@ -2,7 +2,6 @@ using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
-using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
@@ -52,8 +51,8 @@ public static class Initialize
                         id.Id()));
             };
 
-    private static readonly Evt2Doc<Schema.Engine,Contract.Initialize.Payload, EventMeta>
-        _evt2Doc =  
+    private static readonly Evt2Doc<Schema.Engine, Contract.Initialize.Payload, EventMeta>
+        _evt2Doc =
             (state, evt) =>
             {
                 if (evt == null) return state;
@@ -65,12 +64,12 @@ public static class Initialize
                 return newState;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine,Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.Initialize.Payload, EventMeta>
         _evt2DocVal =
             (_, output, evt) => output.Id == evt.AggregateId
                                 && output.Status.HasFlagFast(Schema.EngineStatus.Initialized);
 
-    private static readonly Evt2Doc<Schema.EngineList,Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, EventMeta>
         _evt2List =
             (list, evt) =>
             {
@@ -92,7 +91,7 @@ public static class Initialize
                 return newList;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList,Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Initialize.Payload, EventMeta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -105,7 +104,7 @@ public static class Initialize
                 return result;
             };
 
-    private static readonly GuardFuncT<Schema.Engine,Contract.Initialize.Payload, EventMeta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.Initialize.Payload, EventMeta>
         _guardFunc =
             (cmd, state) =>
             {
@@ -123,7 +122,7 @@ public static class Initialize
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine,Contract.Initialize.Payload, EventMeta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.Initialize.Payload, EventMeta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -185,6 +184,4 @@ public static class Initialize
             return new Exception(msg);
         }
     }
-
-
 }

@@ -48,7 +48,7 @@ public abstract class ProjectionTestsT<
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TPayload,TMeta>>();
+        _evt2State = TestEnv.ResolveRequired<Evt2Doc<TState, TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_evt2State);
     }

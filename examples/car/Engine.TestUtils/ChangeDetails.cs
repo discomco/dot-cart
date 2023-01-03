@@ -23,10 +23,10 @@ public static class ChangeDetails
             (_, _) => HopeT<Contract.ChangeDetails.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
     public static readonly FactCtorT<Contract.ChangeDetails.Payload, EventMeta>
-        FactCtor = 
+        FactCtor =
             (_, _, _) =>
             {
-                var ID = Schema.DocIDCtor(); 
+                var ID = Schema.DocIDCtor();
                 return FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
                     ID.Id(),
                     PayloadCtor(),
@@ -44,10 +44,10 @@ public static class ChangeDetails
 
 
     public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
-        EvtCtor = 
+        EvtCtor =
             (_, _, _) => Behavior.ChangeDetails._newEvt(
-                Schema.DocIDCtor(), 
-                PayloadCtor(), 
+                Schema.DocIDCtor(),
+                PayloadCtor(),
                 Schema.MetaCtor(null));
 
 

@@ -2,7 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Clients;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Drivers.Mediator;
+using DotCart.Context.Actors;
 using DotCart.TestKit;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;

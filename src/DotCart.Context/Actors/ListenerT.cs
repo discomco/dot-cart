@@ -8,12 +8,12 @@ namespace DotCart.Context.Actors;
 
 public abstract class ListenerT<TCmdPayload, TMeta, TFactPayload>
     : ActorB, ISubscriber
-    where TCmdPayload : IPayload 
+    where TCmdPayload : IPayload
     where TMeta : IEventMeta
     where TFactPayload : IPayload
 {
     private readonly ICmdHandler _cmdHandler;
-    private readonly Fact2Cmd<TCmdPayload,  TMeta, TFactPayload> _fact2Cmd;
+    private readonly Fact2Cmd<TCmdPayload, TMeta, TFactPayload> _fact2Cmd;
 
     protected ListenerT(
         IListenerDriverB driver,
@@ -28,7 +28,7 @@ public abstract class ListenerT<TCmdPayload, TMeta, TFactPayload>
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        var fact = (FactT<TFactPayload,TMeta>)msg;
+        var fact = (FactT<TFactPayload, TMeta>)msg;
         var cmd = _fact2Cmd(fact);
         return _cmdHandler.HandleAsync(cmd, cancellationToken);
     }

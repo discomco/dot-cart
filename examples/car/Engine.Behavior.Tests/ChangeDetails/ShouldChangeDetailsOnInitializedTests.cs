@@ -12,8 +12,8 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 [Name(Behavior.ChangeDetails.OnInitialized_v1)]
 public class ShouldChangeDetailsOnInitializedTests
     : ChoreographyTestsT<
-        Contract.ChangeDetails.Payload, 
-        Contract.Initialize.Payload, 
+        Contract.ChangeDetails.Payload,
+        Contract.Initialize.Payload,
         EventMeta>
 {
     public ShouldChangeDetailsOnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output,

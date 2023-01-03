@@ -27,7 +27,7 @@ public static partial class Inject
 
 
     public static IServiceCollection AddSingletonESDBProjectorDriver<TInfo>(this IServiceCollection services)
-        where TInfo : ISubscriptionInfoB
+        where TInfo : IProjectorInfoB
     {
         return services
             .AddSingleton(_ =>
@@ -37,7 +37,7 @@ public static partial class Inject
     }
 
     public static IServiceCollection AddTransientESDBProjectorDriver<TInfo>(this IServiceCollection services)
-        where TInfo : ISubscriptionInfoB
+        where TInfo : IProjectorInfoB
     {
         return services
             .AddConfiguredESDBClients()

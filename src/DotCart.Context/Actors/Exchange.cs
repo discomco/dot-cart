@@ -2,10 +2,20 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
-namespace DotCart.Drivers.Mediator;
+namespace DotCart.Context.Actors;
+
+public static partial class Inject
+{
+    public static IServiceCollection AddSingletonExchange(this IServiceCollection services)
+    {
+        return services
+            .AddSingleton<IExchange, Exchange>();
+    }
+}
 
 [Name(AttributeConstants.ExchangeName)]
 internal class Exchange : ActiveComponent, IExchange

@@ -1,7 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 
@@ -22,16 +21,16 @@ public static class Inject
             });
     }
 
-    public static IServiceCollection AddRabbitMqEmitterDriverT<TPayload,TMeta>(this IServiceCollection services)
+    public static IServiceCollection AddRabbitMqEmitterDriverT<TPayload, TMeta>(this IServiceCollection services)
         where TPayload : IPayload
         where TMeta : IEventMeta
     {
         return services
-            .AddTransient<IEmitterDriverT<TPayload,TMeta>, RMqEmitterDriverT<TPayload, TMeta>>();
+            .AddTransient<IEmitterDriverT<TPayload, TMeta>, RMqEmitterDriverT<TPayload, TMeta>>();
     }
 
     public static IServiceCollection AddRabbitMqListenerDriverT<TFactPayload, TMeta>(this IServiceCollection services)
-        where TFactPayload : IPayload 
+        where TFactPayload : IPayload
         where TMeta : IEventMeta
     {
         return services

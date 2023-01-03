@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
-using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -10,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Start;
 
-public class SequenceTestsT 
+public class SequenceTestsT
     : SequenceTestsT<
         Contract.Start.Payload,
         EventMeta,

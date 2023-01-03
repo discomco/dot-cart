@@ -1,26 +1,14 @@
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 
-namespace DotCart.Abstractions.Actors;
-
-public delegate CmdT<TPayload, TMeta> Hope2Cmd<TPayload, TMeta>(HopeT<TPayload> hope)
-    where TPayload : IPayload
-    where TMeta : IEventMeta;
-
-public interface IResponder : IActor
-{
-}
-
-public interface IResponderT<TPayload> : IResponder
-    where TPayload : IPayload
-{
-}
+namespace DotCart.Context.Actors;
 
 public class
-    ResponderT<TSpoke,  TPayload, TMeta> : ResponderT<TPayload, TMeta>,
-        IActor<TSpoke>
+    ResponderT<TSpoke, TPayload, TMeta>
+    : ResponderT<TPayload, TMeta>, IActor<TSpoke>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
@@ -28,10 +16,8 @@ public class
         IResponderDriverT<TPayload> driver,
         IExchange exchange,
         ICmdHandler cmdHandler,
-        Hope2Cmd<TPayload, TMeta> hope2Cmd) : base(driver,
-        exchange,
-        cmdHandler,
-        hope2Cmd)
+        Hope2Cmd<TPayload, TMeta> hope2Cmd)
+        : base(driver, exchange, cmdHandler, hope2Cmd)
     {
     }
 }
@@ -41,6 +27,7 @@ public class ResponderT<TPayload, TMeta> : ActorB, IResponderT<TPayload>
     where TPayload : IPayload
 {
     private readonly ICmdHandler _cmdHandler;
+
     private readonly Hope2Cmd<TPayload, TMeta> _hope2Cmd;
 //    private readonly TDriver _responderDriver;
 

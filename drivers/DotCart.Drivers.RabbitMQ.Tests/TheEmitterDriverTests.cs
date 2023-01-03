@@ -24,7 +24,7 @@ public class TheEmitterDriverTests :
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddRabbitMqEmitterDriverT<TheContract.Payload,TheContract.Meta>()
+            .AddRabbitMqEmitterDriverT<TheContract.Payload, TheContract.Meta>()
             .AddSingletonRMq()
             .AddTheACLFuncs();
     }

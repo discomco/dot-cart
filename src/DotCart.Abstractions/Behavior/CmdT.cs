@@ -3,6 +3,10 @@ using DotCart.Core;
 
 namespace DotCart.Abstractions.Behavior;
 
+public delegate CmdT<TPayload, TMeta> Hope2Cmd<TPayload, TMeta>(HopeT<TPayload> hope)
+    where TPayload : IPayload
+    where TMeta : IEventMeta;
+
 public record CmdT<TPayload, TMeta>(
     IID AggregateID,
     TPayload Payload,
@@ -24,6 +28,6 @@ public record CmdT<TPayload, TMeta>(
 
     public static CmdT<TPayload, TMeta> New(IID iD, TPayload payload, TMeta meta)
     {
-        return new(iD, payload, meta);
+        return new CmdT<TPayload, TMeta>(iD, payload, meta);
     }
 }

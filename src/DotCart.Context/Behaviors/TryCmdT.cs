@@ -5,14 +5,14 @@ using DotCart.Core;
 
 namespace DotCart.Context.Behaviors;
 
-public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload,TMeta>
+public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload, TMeta>
     where TState : IState
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
-    private readonly RaiseFuncT<TState, TPayload,TMeta> _raise;
-    private readonly GuardFuncT<TState, TPayload,TMeta> _specify;
-    
+    private readonly RaiseFuncT<TState, TPayload, TMeta> _raise;
+    private readonly GuardFuncT<TState, TPayload, TMeta> _specify;
+
     protected IAggregate Aggregate;
 
     public TryCmdT(GuardFuncT<TState, TPayload, TMeta> specify, RaiseFuncT<TState, TPayload, TMeta> raise)
@@ -34,7 +34,7 @@ public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload,TMeta>
         return _specify(cmd, state);
     }
 
-    public IEnumerable<IEvtB> Raise(CmdT<TPayload,TMeta> cmd, TState state)
+    public IEnumerable<IEvtB> Raise(CmdT<TPayload, TMeta> cmd, TState state)
     {
         return _raise(cmd, state);
     }

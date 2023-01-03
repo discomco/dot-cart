@@ -7,7 +7,7 @@ public static class TheActors
 {
     [GroupName(TheConstants.SubscriptionGroup)]
     [IDPrefix(TheConstants.IDPrefix)]
-    public interface ISubscriptionInfo : ISubscriptionInfoB
+    public interface IProjectorInfo : IProjectorInfoB
     {
     }
 }

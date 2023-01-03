@@ -6,6 +6,6 @@ namespace Engine.Context;
 
 [GroupName("engine-sub")]
 [IDPrefix(IDConstants.EngineIDPrefix)]
-public interface IEngineSubscriptionInfo : ISubscriptionInfoB
+public interface IEngineProjectorInfo : IProjectorInfoB
 {
 }

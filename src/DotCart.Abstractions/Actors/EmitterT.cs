@@ -17,13 +17,13 @@ public abstract class EmitterT<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
-    private readonly Evt2Fact<TPayload,TMeta> _evt2Fact;
+    private readonly Evt2Fact<TPayload, TMeta> _evt2Fact;
 
 
     protected EmitterT(
         IEmitterDriverT<TPayload, TMeta> driver,
         IExchange exchange,
-        Evt2Fact<TPayload,TMeta> evt2Fact) : base(exchange)
+        Evt2Fact<TPayload, TMeta> evt2Fact) : base(exchange)
     {
         Driver = driver;
         _evt2Fact = evt2Fact;
@@ -34,7 +34,7 @@ public abstract class EmitterT<TPayload, TMeta>
     {
         return Run(() =>
         {
-            var fact = _evt2Fact((EvtT<TPayload,TMeta>)msg);
+            var fact = _evt2Fact((EvtT<TPayload, TMeta>)msg);
             return EmitFactAsync(fact);
         }, cancellationToken);
     }

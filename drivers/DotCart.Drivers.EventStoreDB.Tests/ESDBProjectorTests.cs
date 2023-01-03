@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
+using DotCart.Context.Actors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
-using DotCart.Drivers.Mediator;
 using DotCart.TestKit;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -134,7 +134,7 @@ public class ESDBProjectorTests : IoCTests
         services
             .AddSingletonExchange()
             .AddConfiguredESDBClients()
-            .AddSingletonESDBProjectorDriver<TheActors.ISubscriptionInfo>()
+            .AddSingletonESDBProjectorDriver<TheActors.IProjectorInfo>()
             .AddESDBStore();
     }
 }

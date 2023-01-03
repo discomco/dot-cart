@@ -22,7 +22,7 @@ public class StopController : ControllerBase
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Stop.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Stop.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

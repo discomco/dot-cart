@@ -6,14 +6,14 @@ namespace DotCart.Context.Actors;
 
 public class SequenceBuilder : ISequenceBuilder
 {
+    private readonly IAggregateBuilder _aggBuilder;
+    private readonly IAggregateStore _aggStore;
+
     public SequenceBuilder(IAggregateBuilder aggBuilder, IAggregateStore aggStore)
     {
         _aggBuilder = aggBuilder;
         _aggStore = aggStore;
     }
-    
-    private readonly IAggregateBuilder _aggBuilder;
-    private readonly IAggregateStore _aggStore;
 
     public ICmdHandler Build()
     {

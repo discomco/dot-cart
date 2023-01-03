@@ -2,6 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -27,10 +28,9 @@ public static class ChangeRpm
             .AddEngineBehavior()
             .AddChangeRpmACLFuncs()
             .AddHostedSpokeT<Spoke>()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
-            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Payload, EventMeta>();
     }
 
@@ -39,11 +39,11 @@ public static class ChangeRpm
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Contract.ChangeRpm.Payload,EventMeta>, IActor<Spoke>
+        Contract.ChangeRpm.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload,EventMeta> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -67,12 +67,12 @@ public static class ChangeRpm
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.ChangeRpm.Payload,EventMeta>, IActor<Spoke>
+        Contract.ChangeRpm.Payload, EventMeta>, IActor<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList,Contract.ChangeRpm.Payload,EventMeta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

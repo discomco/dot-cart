@@ -24,6 +24,6 @@ public class RedisStoreRootListDriverTests
     {
         services
             .AddRootListCtors()
-            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>();
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
     }
 }

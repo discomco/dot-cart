@@ -9,10 +9,10 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Initialize;
 
 [Topic(Contract.Initialize.Topics.Evt_v1)]
-public class EvtTests 
+public class EvtTests
     : EvtTestsT<
-        Schema.EngineID, 
-        Contract.Initialize.Payload, 
+        Schema.EngineID,
+        Contract.Initialize.Payload,
         EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

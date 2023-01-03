@@ -9,14 +9,17 @@ namespace DotCart.Drivers.Default;
 
 public static class Defaults
 {
-    public static IServiceCollection AddDefaultDrivers<TDoc, TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddDefaultDrivers<TProjectionInfo, TDoc, TListDoc>(
+        this IServiceCollection services)
         where TDoc : IState
-        where TInfo : ISubscriptionInfoB
+        where TProjectionInfo : IProjectorInfoB
+        where TListDoc : IState
     {
         return services
             .AddESDBStore()
             .AddCmdHandler()
             .AddTransientRedisDb<TDoc>()
-            .AddSingletonProjector<TInfo>();
+            .AddTransientRedisDb<TListDoc>()
+            .AddSingletonProjector<TProjectionInfo>();
     }
 }

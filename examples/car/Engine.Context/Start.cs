@@ -2,6 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
@@ -26,12 +27,11 @@ public static class Start
             .AddEngineBehavior()
             .AddStartACLFuncs()
             .AddStartProjectionFuncs()
-            .AddDefaultDrivers<Schema.Engine, IEngineSubscriptionInfo>()
-            .AddDefaultDrivers<Schema.EngineList, IEngineSubscriptionInfo>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddHostedSpokeT<Spoke>()
-            .AddSpokedNATSResponder<Spoke,  Contract.Start.Payload, EventMeta>();
+            .AddSpokedNATSResponder<Spoke, Contract.Start.Payload, EventMeta>();
     }
 
     public interface IToRedisDoc : IActor<Spoke>
@@ -71,13 +71,13 @@ public static class Start
         : ProjectionT<
             IRedisStore<Schema.EngineList>,
             Schema.EngineList,
-            Contract.Start.Payload, 
+            Contract.Start.Payload,
             EventMeta>, IActor<Spoke>
     {
         public ToRedisList(IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
             Evt2Doc<Schema.EngineList, Contract.Start.Payload, EventMeta> evt2Doc,
-            StateCtorT<Schema.EngineList> newDoc) 
+            StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

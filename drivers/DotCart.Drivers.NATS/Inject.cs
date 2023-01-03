@@ -2,6 +2,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 

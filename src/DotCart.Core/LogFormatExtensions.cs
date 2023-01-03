@@ -39,6 +39,7 @@ public static class AppVerbs
     public static readonly string Responding = "RESPONDING".AsVerb();
     public static readonly string Enforcing = "ENFORCING".AsVerb();
     public static readonly string Emitting = "EMITTING".AsVerb();
+
     public static string Looping(string activity, int counter)
     {
         return $"LOOPING({activity}, {counter})".AsVerb();

@@ -13,7 +13,7 @@ public class ToRedisListTests : ListProjectionTestsT<
     Context.ChangeDetails.Spoke,
     Context.ChangeDetails.ToRedisList,
     Schema.EngineList,
-    Contract.ChangeDetails.Payload, 
+    Contract.ChangeDetails.Payload,
     EventMeta>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

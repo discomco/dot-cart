@@ -3,7 +3,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Drivers.Mediator;
+using DotCart.Context.Actors;
 using Microsoft.Extensions.DependencyInjection;
 using static System.Threading.Tasks.Task;
 

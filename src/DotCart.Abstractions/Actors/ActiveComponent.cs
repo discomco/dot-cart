@@ -6,12 +6,13 @@ namespace DotCart.Abstractions.Actors;
 
 public abstract class ActiveComponent : IActiveComponent
 {
+    private readonly object startMutex = new();
     private CancellationTokenSource _cts;
+
+    private readonly object activateMutex = new();
     public string Name => GetName();
 
     public ComponentStatus Status { get; private set; }
-
-    private object activateMutex = new object();
 
     public Task Activate(CancellationToken stoppingToken = default)
     {
@@ -76,8 +77,6 @@ public abstract class ActiveComponent : IActiveComponent
     protected abstract Task PrepareAsync(CancellationToken cancellationToken = default);
     protected abstract Task StartActingAsync(CancellationToken cancellationToken = default);
     protected abstract Task StopActingAsync(CancellationToken cancellationToken = default);
-
-    private readonly object startMutex = new();
 
     private Task StartAsync(CancellationToken cancellationToken)
     {

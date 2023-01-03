@@ -28,12 +28,12 @@ public static class Start
             (_, _) => HopeT<Contract.Start.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
     public static readonly FactCtorT<Contract.Start.Payload, EventMeta>
-        FactCtor = 
+        FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
                 return FactT<Contract.Start.Payload, EventMeta>.New(
-                    ID.Id(), 
+                    ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
@@ -41,8 +41,8 @@ public static class Start
     public static readonly EvtCtorT<Contract.Start.Payload, EventMeta>
         EvtCtor =
             (_, _, _) => Behavior.Start._newEvt(
-                Schema.DocIDCtor(), 
-                PayloadCtor(), 
+                Schema.DocIDCtor(),
+                PayloadCtor(),
                 Schema.MetaCtor(null));
 
     public static readonly StateCtorT<Contract.Schema.Engine>

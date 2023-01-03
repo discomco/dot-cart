@@ -22,7 +22,7 @@ public abstract class ActorB : ActiveComponent, IActor
     {
         return Run(async () =>
         {
-            if (Driver != null) 
+            if (Driver != null)
                 Driver.SetActor(this);
             while (_exchange.Status != ComponentStatus.Active)
             {

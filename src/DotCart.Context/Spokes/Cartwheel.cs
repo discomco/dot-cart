@@ -36,7 +36,7 @@ public class Cartwheel : BackgroundService
 
     private async Task StartActorsAsync(CancellationToken ctsToken)
     {
-        foreach (var actor in _actors) 
+        foreach (var actor in _actors)
             await actor.Activate(ctsToken);
     }
 

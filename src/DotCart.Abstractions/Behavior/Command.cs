@@ -1,5 +1,3 @@
-using DotCart.Abstractions.Schema;
-
 namespace DotCart.Abstractions.Behavior;
 
 // public record Command(

@@ -10,14 +10,14 @@ using Serilog;
 namespace DotCart.Drivers.RabbitMQ;
 
 public class RMqListenerDriverT<TFactPayload, TFactMeta>
-    : DriverB, IListenerDriverT<TFactPayload,byte[]>
+    : DriverB, IListenerDriverT<TFactPayload, byte[]>
     where TFactPayload : IPayload
     where TFactMeta : IEventMeta
 {
     private readonly IConnectionFactory _connFact;
     private readonly Msg2Fact<TFactPayload, TFactMeta, byte[]> _msg2Fact;
 
-    
+
     private IModel _channel;
     private IConnection _connection;
     private AsyncEventingBasicConsumer _consumer;
@@ -60,7 +60,7 @@ public class RMqListenerDriverT<TFactPayload, TFactMeta>
         return Task.CompletedTask;
     }
 
-    public string Topic => FactTopicAtt.Get<TFactPayload>(); 
+    public string Topic => FactTopicAtt.Get<TFactPayload>();
 
 
     private async Task FactReceived(object sender, BasicDeliverEventArgs ea)

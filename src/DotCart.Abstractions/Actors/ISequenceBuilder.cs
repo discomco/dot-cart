@@ -1,4 +1,5 @@
 namespace DotCart.Abstractions.Actors;
 
-public interface ISequenceBuilder {}
-
+public interface ISequenceBuilder
+{
+}

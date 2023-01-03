@@ -9,10 +9,10 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.ChangeRpm;
 
 [Topic(Contract.ChangeRpm.Topics.Evt_v1)]
-public class EvtTests 
+public class EvtTests
     : EvtTestsT<
         Schema.EngineID,
-        Contract.ChangeRpm.Payload, 
+        Contract.ChangeRpm.Payload,
         EventMeta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

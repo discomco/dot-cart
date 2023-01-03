@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
-using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;

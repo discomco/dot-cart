@@ -11,7 +11,7 @@ public abstract class BusDriverTestsB<TPayload, TMeta>
     where TMeta : IEventMeta
     where TPayload : IPayload
 {
-    private FactCtorT<TPayload,TMeta> _newFact;
+    private FactCtorT<TPayload, TMeta> _newFact;
 
     protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -32,7 +32,7 @@ public abstract class BusDriverTestsB<TPayload, TMeta>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload,TMeta>>();
+        _newFact = TestEnv.ResolveRequired<FactCtorT<TPayload, TMeta>>();
         // THEN
         Assert.NotNull(_newFact);
     }

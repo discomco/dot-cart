@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
-using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Engine.Contract;
@@ -10,11 +9,11 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeRpm;
 
-public class SequenceTestsT 
+public class SequenceTestsT
     : SequenceTestsT<
-    Contract.ChangeRpm.Payload,
-    EventMeta,
-    IDocStore<Schema.Engine>>
+        Contract.ChangeRpm.Payload,
+        EventMeta,
+        IDocStore<Schema.Engine>>
 {
     public SequenceTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

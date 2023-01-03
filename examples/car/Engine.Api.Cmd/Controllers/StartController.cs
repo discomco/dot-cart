@@ -23,7 +23,7 @@ public class StartController : ControllerBase
 
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] Contract.Start.Hope hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Start.Payload> hope)
     {
         if (hope == null) return BadRequest("Body cannot be null.");
         var fbk = Feedback.New(hope.AggId);

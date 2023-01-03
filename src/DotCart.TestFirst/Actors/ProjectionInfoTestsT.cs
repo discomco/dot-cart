@@ -3,7 +3,8 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class SubscriptionInfoTestsT<TInfo> where TInfo : ISubscriptionInfoB
+public abstract class ProjectionInfoTestsT<TInfo>
+    where TInfo : IProjectorInfoB
 {
     [Fact]
     public void ShouldHaveGroupName()
