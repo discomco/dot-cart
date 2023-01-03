@@ -13,9 +13,9 @@ public class ChangeRpmController : ControllerBase
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<ChangeRpm.Payload, EventMeta> _hope2Cmd;
 
-    public ChangeRpmController(ICmdHandler cmdHandler, Hope2Cmd<ChangeRpm.Payload, EventMeta> hope2Cmd)
+    public ChangeRpmController(ISequenceBuilder sequenceBuilder, Hope2Cmd<ChangeRpm.Payload, EventMeta> hope2Cmd)
     {
-        _cmdHandler = cmdHandler;
+        _cmdHandler = sequenceBuilder.Build();
         _hope2Cmd = hope2Cmd;
     }
 

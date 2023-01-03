@@ -1,8 +1,25 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Context.Behaviors;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Actors;
+
+public static partial class Inject
+{
+    public static IServiceCollection AddSingletonSequenceBuilder<TAggregateInfo, TAggregateState>(
+        this IServiceCollection services)
+        where TAggregateInfo : IAggregateInfoB
+        where TAggregateState : IState
+    {
+        return
+            services
+                .AddSingletonAggregateBuilder<TAggregateInfo, TAggregateState>()
+                .AddSingleton<ISequenceBuilder, SequenceBuilder>();
+    }
+}
 
 public class SequenceBuilder : ISequenceBuilder
 {

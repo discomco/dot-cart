@@ -6,10 +6,9 @@ namespace DotCart.Abstractions.Actors;
 
 public abstract class ActiveComponent : IActiveComponent
 {
+    private readonly object activateMutex = new();
     private readonly object startMutex = new();
     private CancellationTokenSource _cts;
-
-    private readonly object activateMutex = new();
     public string Name => GetName();
 
     public ComponentStatus Status { get; private set; }

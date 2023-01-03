@@ -1,6 +1,7 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
@@ -134,7 +135,7 @@ public abstract class Evt2DocTestsT<
         var ID = _idCtor();
         var payload = _payloadCtor();
         var meta = _metaCtor(ID.Id());
-        var evt = _evtCtor(ID, payload, meta);
+        var evt = _evtCtor(ID, payload.ToBytes(), meta.ToBytes());
         var oldDoc = _docCtor();
         var newDoc = _evt2Doc(oldDoc, evt);
         _evt2DocVal = TestEnv.ResolveRequired<Evt2DocValidator<TDoc, TPayload, TMeta>>();

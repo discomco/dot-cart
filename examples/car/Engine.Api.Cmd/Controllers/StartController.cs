@@ -15,9 +15,9 @@ public class StartController : ControllerBase
     private readonly ICmdHandler _handler;
     private readonly Hope2Cmd<Start.Payload, EventMeta> _hope2Cmd;
 
-    public StartController(ICmdHandler handler, Hope2Cmd<Start.Payload, EventMeta> hope2Cmd)
+    public StartController(ISequenceBuilder sequenceBuilder, Hope2Cmd<Start.Payload, EventMeta> hope2Cmd)
     {
-        _handler = handler;
+        _handler = sequenceBuilder.Build();
         _hope2Cmd = hope2Cmd;
     }
 

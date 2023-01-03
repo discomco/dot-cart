@@ -27,6 +27,7 @@ public static class ChangeRpm
         return services
             .AddEngineBehavior()
             .AddChangeRpmACLFuncs()
+            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()

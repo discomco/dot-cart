@@ -33,10 +33,11 @@ public class ShouldChangeDetailsOnInitializedTests
         var agg = aggBuilder.Build();
         var aggID = Schema.DocIDCtor();
         var initPld = TestUtils.Initialize.PayloadCtor();
-        var initCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New(
+        var initCmd = Command.New<Contract.Initialize.Payload>(
             aggID,
-            initPld,
-            EventMeta.New(aggID.Id(), NameAtt.Get<IEngineAggregateInfo>()));
+            initPld.ToBytes(),
+            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), aggID.Id()).ToBytes()
+        );
         // WHEN
         var fdbk = await agg.ExecuteAsync(initCmd);
         Assert.NotNull(fdbk);

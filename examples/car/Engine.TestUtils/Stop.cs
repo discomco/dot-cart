@@ -19,10 +19,10 @@ public static class Stop
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return CmdT<Contract.Stop.Payload, EventMeta>.New(
+                return Command.New<Contract.Stop.Payload>(
                     ID,
-                    PayloadCtor(),
-                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id())
+                    PayloadCtor().ToBytes(),
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()).ToBytes()
                 );
             };
 
@@ -48,8 +48,8 @@ public static class Stop
         EvtCtor =
             (_, _, _) => Behavior.Stop._newEvt(
                 Schema.DocIDCtor(),
-                PayloadCtor(),
-                Schema.MetaCtor(Schema.DocIDCtor().Id())
+                PayloadCtor().ToBytes(),
+                Schema.MetaCtor(Schema.DocIDCtor().Id()).ToBytes()
             );
 
     public static readonly Contract.Schema.EngineListItem

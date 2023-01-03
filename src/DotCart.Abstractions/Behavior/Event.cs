@@ -8,14 +8,14 @@ public static class EventConst
     public const long NewAggregateVersion = -1;
 }
 
-public record EvtT<TPayload, TMeta>(string AggregateId, TPayload Payload, TMeta Meta)
-    : Event(AggregateId, EvtTopicAtt.Get<TPayload>(), Payload.ToBytes(), Meta.ToBytes())
-{
-    public static EvtT<TPayload, TMeta> New(string id, TPayload payload, TMeta meta)
-    {
-        return new EvtT<TPayload, TMeta>(id, payload, meta);
-    }
-}
+// public record Event(string AggregateId, TPayload Payload, TMeta Meta)
+//     : Event(AggregateId, EvtTopicAtt.Get<TPayload>(), Payload.ToBytes(), Meta.ToBytes())
+// {
+//     public static Event New(string id, TPayload payload, TMeta meta)
+//     {
+//         return new Event(id, payload, meta);
+//     }
+// }
 
 public record Event(
     string AggregateId,
@@ -109,15 +109,14 @@ public record Event(
     //         DateTime.UtcNow);
     // }
 
-    public static Event New(
+    public static Event New<TPayload>(
         IID aggregateID,
-        string eventType,
         byte[] data,
         byte[] meta)
     {
         return new Event(
             aggregateID.Id(),
-            eventType,
+            EvtTopicAtt.Get<TPayload>(),
             data,
             meta);
     }

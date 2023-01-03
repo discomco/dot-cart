@@ -28,7 +28,7 @@ public class ApplyEvtT<TState, TPayload, TMeta>
 
     public string EvtType => EvtTopicAtt.Get<TPayload>();
 
-    public TState Apply(TState state, EvtT<TPayload, TMeta> evt)
+    public TState Apply(TState state, Event evt)
     {
         return _evt2State(state, evt);
     }

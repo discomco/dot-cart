@@ -20,22 +20,14 @@ public static class Initialize
     public static readonly EvtCtorT<
             Contract.Initialize.Payload,
             EventMeta>
-        _newEvt =
-            (id, payload, meta) => EvtT<Contract.Initialize.Payload, EventMeta>
-                .New(id.Id(),
-                    payload,
-                    meta
-                );
-
-    public static readonly CmdCtorT<Schema.EngineID, Contract.Initialize.Payload, EventMeta>
-        _newCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New;
+        _newEvt = Event.New<Contract.Initialize.Payload>;
 
     private static readonly Evt2Fact<Contract.Initialize.Payload, EventMeta>
         _evt2Fact =
             evt => FactT<Contract.Initialize.Payload, EventMeta>.New(
                 evt.AggregateId,
-                evt.Payload,
-                evt.Meta
+                evt.Data.FromBytes<Contract.Initialize.Payload>(),
+                evt.MetaData.FromBytes<EventMeta>()
             );
 
     private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>
@@ -43,12 +35,13 @@ public static class Initialize
             hope =>
             {
                 var id = Schema.EngineID.New();
-                return CmdT<Contract.Initialize.Payload, EventMeta>.New(
+                return Command.New<Contract.Initialize.Payload>(
                     id
-                    , hope.Payload
+                    , hope.Payload.ToBytes()
                     , EventMeta.New(
                         NameAtt.Get<IEngineAggregateInfo>(),
-                        id.Id()));
+                        id.Id()).ToBytes()
+                );
             };
 
     private static readonly Evt2Doc<Schema.Engine, Contract.Initialize.Payload, EventMeta>
@@ -128,7 +121,7 @@ public static class Initialize
             {
                 return new[]
                 {
-                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Data, cmd.MetaData)
                 };
             };
 

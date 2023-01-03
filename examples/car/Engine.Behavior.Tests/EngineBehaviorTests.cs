@@ -52,11 +52,10 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         // WHEN
         var ID = TestUtils.Schema.DocIDCtor();
         var details = Schema.Details.New("New Engine");
-        var cmd = CmdT<Contract.Initialize.Payload, EventMeta>
-            .New(
-                ID,
-                Contract.Initialize.Payload.New(details),
-                TestUtils.Schema.MetaCtor(ID.Id()));
+        var cmd = Command.New<Contract.Initialize.Payload>(
+            ID,
+            Contract.Initialize.Payload.New(details).ToBytes(),
+            TestUtils.Schema.MetaCtor(ID.Id()).ToBytes());
         _agg.SetID(cmd.AggregateID);
         var feedback = await _agg.ExecuteAsync(cmd);
         var state = (Schema.Engine)feedback.Payload;
@@ -79,10 +78,10 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         // GIVEN
         await ShouldExecuteInitializeCmd();
         _ID = _newID();
-        var startCmd = CmdT<Contract.Start.Payload, EventMeta>.New(
+        var startCmd = Command.New<Contract.Start.Payload>(
             _ID,
-            Contract.Start.Payload.New,
-            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id())
+            TestUtils.Initialize.PayloadCtor().ToBytes(),
+            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id()).ToBytes()
         );
 //        _agg.SetID(_ID);
         // WHEN

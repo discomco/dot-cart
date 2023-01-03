@@ -36,10 +36,10 @@ public static class ChangeDetails
 
     public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeDetails.Payload, EventMeta>
         CmdCtor =
-            (_, _, _) => CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
+            (_, _, _) => Command.New<Contract.ChangeDetails.Payload>(
                 Schema.DocIDCtor(),
-                PayloadCtor(),
-                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), Schema.DocIDCtor().Id())
+                PayloadCtor().ToBytes(),
+                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), Schema.DocIDCtor().Id()).ToBytes()
             );
 
 
@@ -47,8 +47,8 @@ public static class ChangeDetails
         EvtCtor =
             (_, _, _) => Behavior.ChangeDetails._newEvt(
                 Schema.DocIDCtor(),
-                PayloadCtor(),
-                Schema.MetaCtor(null));
+                PayloadCtor().ToBytes(),
+                Schema.MetaCtor(null).ToBytes());
 
 
     [Tag(StateTags.Invalid)] public static readonly StateCtorT<Contract.Schema.Engine>

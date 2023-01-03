@@ -16,9 +16,9 @@ public class InitializeController : ControllerBase
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<Initialize.Payload, EventMeta> _hope2Cmd;
 
-    public InitializeController(ICmdHandler cmdHandler, Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
+    public InitializeController(ISequenceBuilder sequenceBuilder, Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
     {
-        _cmdHandler = cmdHandler;
+        _cmdHandler = sequenceBuilder.Build();
         _hope2Cmd = hope2Cmd;
     }
 

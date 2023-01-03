@@ -2,7 +2,6 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
 using DotCart.Drivers.Serilog;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -30,8 +29,7 @@ public static partial class Inject
     {
         return services
             .AddConsoleLogger()
-            .AddAggregateBuilder<TAggregateInfo, TState>()
-            .AddCmdHandler()
+            .AddSingletonAggregateBuilder<TAggregateInfo, TState>()
             .AddTransient<ITry, TryCmdT<TState, TPayload, TMeta>>()
             .AddTransient<IApply, ApplyEvtT<TState, TPayload, TMeta>>();
     }

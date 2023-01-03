@@ -61,12 +61,7 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
                   ?? _newDoc();
 
 //        var evtT = _event2EvtT((Event)evtB);
-        var evtT = new EvtT<TPayload, TMeta>(
-            evtB.AggregateId,
-            evtB.Data.FromBytes<TPayload>(),
-            evtB.MetaData.FromBytes<TMeta>());
-
-        doc = _evt2Doc(doc, evtT);
+        doc = _evt2Doc(doc, (Event)evtB);
 
         // TODO: Call ProjectionValidationFunc here
 

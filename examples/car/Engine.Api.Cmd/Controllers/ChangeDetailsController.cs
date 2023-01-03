@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 namespace Engine.Api.Cmd.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api/engine/[controller]")]
 public class ChangeDetailsController : ControllerBase
 {
     private readonly ICmdHandler _cmdHandler;
     private readonly Hope2Cmd<ChangeDetails.Payload, EventMeta> _hope2Cmd;
 
     public ChangeDetailsController(
-        ICmdHandler cmdHandler,
+        ISequenceBuilder sequenceBuilder,
         Hope2Cmd<ChangeDetails.Payload, EventMeta> hope2Cmd)
     {
-        _cmdHandler = cmdHandler;
+        _cmdHandler = sequenceBuilder.Build();
         _hope2Cmd = hope2Cmd;
     }
 

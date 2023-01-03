@@ -14,6 +14,6 @@ public interface ITry<in TState, TPayload, TMeta> : ITry
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
-    IFeedback Verify(CmdT<TPayload, TMeta> cmd, TState state);
-    IEnumerable<IEvtB> Raise(CmdT<TPayload, TMeta> cmd, TState state);
+    IFeedback Verify(Command cmd, TState state);
+    IEnumerable<IEvtB> Raise(Command cmd, TState state);
 }

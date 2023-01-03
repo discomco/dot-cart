@@ -16,6 +16,7 @@ public static class TheConstants
     public const string EvtTopic = "the_event.topic";
     public const string MsgTopic = "dotcart:the_msg";
     public const string FactTopic = "the_fact.topic";
+    public const string AggregateName = "the:aggregate";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
 }
 

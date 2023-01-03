@@ -18,7 +18,7 @@ public static class ChangeRpm
             (cmd, _) =>
             {
                 var res = new List<Event>();
-                var rpmChanged = _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta);
+                var rpmChanged = _newEvt(cmd.AggregateID, cmd.Data, cmd.MetaData);
                 res.Add(rpmChanged);
                 return res;
             };
@@ -97,23 +97,21 @@ public static class ChangeRpm
             evt => FactT<Contract.ChangeRpm.Payload, EventMeta>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeRpm.Payload>(),
-                evt.Meta);
+                evt.GetMeta<EventMeta>());
 
     private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta>
         _hope2Cmd =
-            hope => CmdT<Contract.ChangeRpm.Payload, EventMeta>.New(
+            hope => Command.New<Contract.ChangeRpm.Payload>(
                 hope.AggId.IDFromIdString(),
-                hope.Payload,
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    hope.AggId)
+                hope.Payload.ToBytes(),
+                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
             );
 
     public static EvtCtorT<Contract.ChangeRpm.Payload, EventMeta>
         _newEvt =
             (id, payload, meta)
-                => EvtT<Contract.ChangeRpm.Payload, EventMeta>.New(
-                    id.Id(),
+                => Event.New<Contract.ChangeRpm.Payload>(
+                    id,
                     payload,
                     meta
                 );

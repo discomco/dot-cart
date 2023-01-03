@@ -28,6 +28,7 @@ public static class Stop
             .AddEngineBehavior()
             .AddStopACLFuncs()
             .AddHostedSpokeT<Spoke>()
+            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddSpokedNATSResponder<Spoke, Contract.Stop.Payload, EventMeta>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()

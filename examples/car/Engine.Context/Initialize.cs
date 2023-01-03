@@ -25,6 +25,7 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeACLFuncs()
+            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Payload, EventMeta>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()

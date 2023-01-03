@@ -14,10 +14,10 @@ public class StopController : ControllerBase
     private readonly Hope2Cmd<Stop.Payload, EventMeta> _hope2Cmd;
 
     public StopController(
-        ICmdHandler cmdHandler,
+        ISequenceBuilder sequenceBuilder,
         Hope2Cmd<Stop.Payload, EventMeta> hope2Cmd)
     {
-        _cmdHandler = cmdHandler;
+        _cmdHandler = sequenceBuilder.Build();
         _hope2Cmd = hope2Cmd;
     }
 

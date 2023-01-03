@@ -32,11 +32,11 @@ public static class ScenariosAndStreams
     public static IEnumerable<IEvtB> InitializeWithChangeRpmEvents(Contract.Schema.EngineID ID)
     {
         var initPayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initEvt = Behavior.Initialize._newEvt(ID, initPayload, Schema.MetaCtor(ID.Id()));
+        var initEvt = Behavior.Initialize._newEvt(ID, initPayload.ToBytes(), Schema.MetaCtor(ID.Id()).ToBytes());
         initEvt.SetVersion(0);
         // AND
         var startPayload = Contract.Start.Payload.New;
-        var startEvt = Behavior.Start._newEvt(ID, startPayload, Schema.MetaCtor(ID.Id()));
+        var startEvt = Behavior.Start._newEvt(ID, startPayload.ToBytes(), Schema.MetaCtor(ID.Id()).ToBytes());
         startEvt.SetVersion(1);
         // AND
         var revs = RandomRevs(ID);
@@ -56,8 +56,8 @@ public static class ScenariosAndStreams
             var changeRpmPld = Contract.ChangeRpm.Payload.New(delta);
             var changeRpmEvt = Behavior.ChangeRpm._newEvt(
                 ID,
-                changeRpmPld,
-                Schema.MetaCtor(ID.Id()));
+                changeRpmPld.ToBytes(),
+                Schema.MetaCtor(ID.Id()).ToBytes());
             changeRpmEvt.SetVersion(i + 2);
             res.Add(changeRpmEvt);
         }
@@ -68,12 +68,12 @@ public static class ScenariosAndStreams
     public static IEnumerable<ICmdB> InitializeScenario(IDB ID)
     {
         var initializePayload = Contract.Initialize.Payload.New(Contract.Schema.Details.New("New Engine"));
-        var initializeCmd = CmdT<Contract.Initialize.Payload, EventMeta>.New(
+        var initializeCmd = Command.New<Contract.Initialize.Payload>(
             ID,
-            initializePayload,
-            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id())
+            initializePayload.ToBytes(),
+            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()).ToBytes()
         );
-        initializeCmd.SetID(ID);
+//        initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }
 

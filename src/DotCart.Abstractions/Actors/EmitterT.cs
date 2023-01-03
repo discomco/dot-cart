@@ -34,7 +34,7 @@ public abstract class EmitterT<TPayload, TMeta>
     {
         return Run(() =>
         {
-            var fact = _evt2Fact((EvtT<TPayload, TMeta>)msg);
+            var fact = _evt2Fact((Event)msg);
             return EmitFactAsync(fact);
         }, cancellationToken);
     }

@@ -21,8 +21,8 @@ public static class Stop
             evt => FactT<Contract.Stop.Payload, EventMeta>
                 .New(
                     evt.AggregateId,
-                    evt.Payload,
-                    evt.Meta
+                    evt.GetPayload<Contract.Stop.Payload>(),
+                    evt.GetMeta<EventMeta>()
                 );
 
     private static readonly Evt2Doc<Schema.Engine, Contract.Stop.Payload, EventMeta>
@@ -66,10 +66,10 @@ public static class Stop
     private static readonly Hope2Cmd<Contract.Stop.Payload, EventMeta>
         _hope2Cmd =
             hope =>
-                CmdT<Contract.Stop.Payload, EventMeta>.New(
+                Command.New<Contract.Stop.Payload>(
                     hope.AggId.IDFromIdString(),
-                    hope.Payload,
-                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId));
+                    hope.Payload.ToBytes(),
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes());
 
     private static readonly GuardFuncT<Schema.Engine, Contract.Stop.Payload, EventMeta>
         _guardFunc =
@@ -98,16 +98,13 @@ public static class Stop
             {
                 return new[]
                 {
-                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Data, cmd.MetaData)
                 };
             };
 
     public static readonly EvtCtorT<Contract.Stop.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => EvtT<Contract.Stop.Payload, EventMeta>.New(
-                id.Id(),
-                payload,
-                meta);
+            Event.New<Contract.Stop.Payload>;
 
     private static readonly Evt2Cmd<Contract.Stop.Payload, Contract.ChangeRpm.Payload, EventMeta>
         _shouldStopOnZeroPower =
@@ -116,10 +113,10 @@ public static class Stop
                 var eng = (Schema.Engine)state;
                 var pld = evt.GetPayload<Contract.ChangeRpm.Payload>();
                 return (eng.Power + pld.Delta <= 0
-                    ? CmdT<Contract.Stop.Payload, EventMeta>.New(
+                    ? Command.New<Contract.Stop.Payload>(
                         evt.AggregateID,
-                        Contract.Stop.Payload.New(),
-                        EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId)
+                        Contract.Stop.Payload.New().ToBytes(),
+                        EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes()
                     )
                     : null)!;
             };

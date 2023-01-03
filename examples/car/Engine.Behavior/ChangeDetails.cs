@@ -23,11 +23,11 @@ public static class ChangeDetails
         _shouldChangeDetailsOnInitialized =
             (evt, _) =>
             {
-                var details = evt.Payload.Details;
-                return CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
+                var details = evt.GetPayload<Contract.Initialize.Payload>().Details;
+                return Command.New<Contract.ChangeDetails.Payload>(
                     evt.AggregateID,
-                    Contract.ChangeDetails.Payload.New(details),
-                    evt.Meta);
+                    Contract.ChangeDetails.Payload.New(details).ToBytes(),
+                    evt.MetaData);
             };
 
     private static readonly Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
@@ -85,8 +85,8 @@ public static class ChangeDetails
 
     public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => EvtT<Contract.ChangeDetails.Payload, EventMeta>.New(
-                id.Id(),
+            (id, payload, meta) => Event.New<Contract.ChangeDetails.Payload>(
+                id,
                 payload,
                 meta);
 
@@ -96,9 +96,35 @@ public static class ChangeDetails
             {
                 return new[]
                 {
-                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Data, cmd.MetaData)
                 };
             };
+
+    private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
+        _hope2Cmd =
+            hope => Command.New<Contract.ChangeDetails.Payload>(
+                hope.AggId.IDFromIdString(),
+                hope.Payload.ToBytes(),
+                EventMeta.New(
+                    NameAtt.Get<IEngineAggregateInfo>(),
+                    hope.AggId
+                ).ToBytes()
+            );
+
+    private static readonly Evt2Fact<Contract.ChangeDetails.Payload, EventMeta>
+        _evt2Fact =
+            evt => FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
+                evt.AggregateId,
+                evt.GetPayload<Contract.ChangeDetails.Payload>(),
+                evt.GetMeta<EventMeta>()
+            );
+
+    public static IServiceCollection AddChangeDetailsACLFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _hope2Cmd);
+    }
 
 
     public static IServiceCollection AddChangeDetailsBehavior(this IServiceCollection services)

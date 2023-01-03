@@ -17,7 +17,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
 {
     protected static IDCtorT<TID> _newID;
     protected IAggregateStore _aggStore;
-    protected CmdT<TPayload, TMeta> _cmd;
+    protected Command _cmd;
     protected ICmdHandler _cmdHandler;
     protected Feedback _feedback;
 
@@ -149,7 +149,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
         Assert.NotNull(_newMeta);
     }
 
-    protected CmdT<TPayload, TMeta> CreateCmd()
+    protected Command CreateCmd()
     {
         return _newCmd(_newID(), _newPayload(), _newMeta(_newID().Id()));
     }

@@ -5,6 +5,9 @@
 		},
 		{
 			"path": "../../rgfaber/m5x-sdk"
+		},
+		{
+			"path": "../../rgfaber/compose-dev-stack"
 		}
 	],
 	"settings": {}

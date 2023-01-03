@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Core;
 
 namespace Engine.TestUtils;
 
@@ -10,8 +11,8 @@ public static class Initialize
             (_, _, _) =>
                 Behavior.Initialize._newEvt(
                     Schema.DocIDCtor(),
-                    PayloadCtor(),
-                    Schema.MetaCtor(null)
+                    PayloadCtor().ToBytes(),
+                    Schema.MetaCtor(null).ToBytes()
                 );
 
 
@@ -31,10 +32,10 @@ public static class Initialize
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return CmdT<Contract.Initialize.Payload, EventMeta>.New(
+                return Command.New<Contract.Initialize.Payload>(
                     ID,
-                    PayloadCtor(),
-                    Schema.MetaCtor(ID.Id())
+                    PayloadCtor().ToBytes(),
+                    Schema.MetaCtor(ID.Id()).ToBytes()
                 );
             };
 

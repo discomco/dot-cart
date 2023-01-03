@@ -146,7 +146,7 @@ public class ESDBEventStoreTests : IoCTests
     {
         services.AddCmdHandler()
 //            .AddTransient<IAggregate, TheAggregate>()
-            .AddAggregateBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
+            .AddSingletonAggregateBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
             .AddTransient(_ => TheSchema.Doc.Rand)
             .AddTransient(_ => TheSchema.ID.Ctor)
             .AddSingleton<IAggregateStore, ESDBStore>()

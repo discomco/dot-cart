@@ -23,30 +23,12 @@ public static class ChangeDetails
     public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
 
 
-    private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
-        _hope2Cmd =
-            hope => CmdT<Contract.ChangeDetails.Payload, EventMeta>.New(
-                hope.AggId.IDFromIdString(),
-                hope.Payload,
-                EventMeta.New(
-                    NameAtt.Get<IEngineAggregateInfo>(),
-                    hope.AggId
-                )
-            );
-
-    private static readonly Evt2Fact<Contract.ChangeDetails.Payload, EventMeta>
-        _evt2Fact =
-            evt => FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
-                evt.AggregateId,
-                evt.Payload,
-                evt.Meta
-            );
-
     public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
     {
         return services
             .AddEngineBehavior()
-            .AddChangeDetailsMappers()
+            .AddChangeDetailsACLFuncs()
+            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActor<Spoke>, ToRedisDoc>()
             .AddTransient<IActor<Spoke>, ToRedisList>()
@@ -54,12 +36,6 @@ public static class ChangeDetails
             .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>();
     }
 
-    public static IServiceCollection AddChangeDetailsMappers(this IServiceCollection services)
-    {
-        return services
-            .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _hope2Cmd);
-    }
 
     [Name(Spoke_v1)]
     public class Spoke : SpokeT<Spoke>

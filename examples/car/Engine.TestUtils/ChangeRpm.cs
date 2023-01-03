@@ -9,14 +9,10 @@ public static class ChangeRpm
 {
     public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeRpm.Payload, EventMeta>
         CmdCtor =
-            (id, _, _) =>
-                CmdT<Contract.ChangeRpm.Payload, EventMeta>.New(
-                    id,
-                    PayloadCtor(),
-                    EventMeta.New(
-                        NameAtt.Get<IEngineAggregateInfo>(),
-                        id.Id()
-                    ));
+            (id, _, _) => Command.New<Contract.ChangeRpm.Payload>(
+                id,
+                PayloadCtor().ToBytes(),
+                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), id.Id()).ToBytes());
 
     public static readonly PayloadCtorT<Contract.ChangeRpm.Payload>
         PayloadCtor =
@@ -44,8 +40,8 @@ public static class ChangeRpm
                 var ID = Schema.DocIDCtor();
                 return Behavior.ChangeRpm._newEvt(
                     ID,
-                    PayloadCtor(),
-                    Schema.MetaCtor(ID.Id())
+                    PayloadCtor().ToBytes(),
+                    Schema.MetaCtor(ID.Id()).ToBytes()
                 );
             };
 }

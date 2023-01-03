@@ -29,12 +29,12 @@ public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload, TMeta>
         return this;
     }
 
-    public IFeedback Verify(CmdT<TPayload, TMeta> cmd, TState state)
+    public IFeedback Verify(Command cmd, TState state)
     {
         return _specify(cmd, state);
     }
 
-    public IEnumerable<IEvtB> Raise(CmdT<TPayload, TMeta> cmd, TState state)
+    public IEnumerable<IEvtB> Raise(Command cmd, TState state)
     {
         return _raise(cmd, state);
     }

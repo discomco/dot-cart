@@ -21,17 +21,17 @@ public static class Start
             evt =>
                 FactT<Contract.Start.Payload, EventMeta>.New(
                     evt.AggregateId,
-                    evt.Payload,
-                    evt.Meta
+                    evt.GetPayload<Contract.Start.Payload>(),
+                    evt.GetMeta<EventMeta>()
                 );
 
     private static readonly Hope2Cmd<Contract.Start.Payload, EventMeta>
         _hope2Cmd =
             hope =>
-                CmdT<Contract.Start.Payload, EventMeta>.New(
+                Command.New<Contract.Start.Payload>(
                     hope.AggId.IDFromIdString(),
-                    hope.Payload,
-                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId)
+                    hope.Payload.ToBytes(),
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
                 );
 
 
@@ -103,23 +103,22 @@ public static class Start
             {
                 return new[]
                 {
-                    _newEvt(cmd.AggregateID, cmd.Payload, cmd.Meta)
+                    _newEvt(cmd.AggregateID, cmd.Data, cmd.MetaData)
                 };
             };
 
 
     public static readonly EvtCtorT<Contract.Start.Payload, EventMeta>
         _newEvt =
-            (id, payload, meta) => EvtT<Contract.Start.Payload, EventMeta>
-                .New(id.Id(), payload, meta);
+            Event.New<Contract.Start.Payload>;
 
     private static readonly Evt2Cmd<Contract.Start.Payload, Contract.Initialize.Payload, EventMeta>
         _shouldStartOnInitialized =
             (evt, _) =>
-                CmdT<Contract.Start.Payload, EventMeta>.New(
+                Command.New<Contract.Start.Payload>(
                     evt.AggregateId.IDFromIdString(),
-                    Contract.Start.Payload.New,
-                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId));
+                    Contract.Start.Payload.New.ToBytes(),
+                    EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes());
 
     public static IServiceCollection AddStartACLFuncs(this IServiceCollection services)
     {
