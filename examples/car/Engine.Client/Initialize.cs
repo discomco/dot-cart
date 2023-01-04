@@ -18,7 +18,8 @@ public static class Initialize
 
     internal class Requester : NATSRequesterT<Contract.Initialize.Payload>, IRequester
     {
-        protected Requester(IEncodedConnection bus) : base(bus)
+        protected Requester(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions) 
+            : base(connectionFactory, configureOptions)
         {
         }
     }

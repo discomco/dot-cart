@@ -8,11 +8,14 @@ namespace DotCart.Drivers.NATS;
 
 public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IPayload
 {
-    private readonly IEncodedConnection _bus;
+    private readonly INatsClientConnectionFactory _connectionFactory;
+    private readonly Action<Options> _configureOptions;
+    private IEncodedConnection _bus;
 
-    protected NATSRequesterT(IEncodedConnection bus)
+    protected NATSRequesterT(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)
     {
-        _bus = bus;
+        _connectionFactory = connectionFactory;
+        _configureOptions = configureOptions;
     }
 
 
@@ -41,6 +44,7 @@ public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IP
         var res = Feedback.New(hope.AggId);
         try
         {
+            _bus = _connectionFactory.CreateEncodedConnection(_configureOptions);
             if (!_bus.IsClosed())
                 Log.Debug($"::CONNECT bus: {_bus.ConnectedId}");
             Log.Debug($"::REQUEST hope: AggId:{hope.AggId} on topic {TopicAtt.Get(hope)}.");

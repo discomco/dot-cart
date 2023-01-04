@@ -5,7 +5,8 @@ namespace DotCart.Drivers.NATS.Tests;
 
 public class TheRequester : NATSRequesterT<TheContract.Payload>
 {
-    public TheRequester(IEncodedConnection bus) : base(bus)
+    public TheRequester(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions) 
+        : base(connectionFactory, configureOptions)
     {
     }
 }
