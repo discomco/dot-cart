@@ -92,7 +92,7 @@ public class ReqRspDriverTests : IoCTests
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var cts = new CancellationTokenSource(10_000);
+        var cts = new CancellationTokenSource(2_000);
         // WHEN
         _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Payload>>();
         await _theResponder.Activate(cts.Token).ConfigureAwait(false);

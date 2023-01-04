@@ -52,7 +52,7 @@ public abstract class ActorTestsT<TSpoke, TActor>
     {
         //var ts = new CancellationTokenSource();
         // GIVEN
-        var ts = new CancellationTokenSource(TimeSpan.FromSeconds(20));
+        var ts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         Assert.NotNull(TestEnv);
         var ac = TestEnv.ResolveActor<TSpoke,TActor>();
         Assert.NotNull(ac);
