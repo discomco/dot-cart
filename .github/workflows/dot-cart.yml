@@ -87,7 +87,7 @@ jobs:
           --health-interval 10s 
           --health-timeout 5s 
           --health-retries 5
-
+      
       nats:
         env:
           NATS_CLUSTER: "default"

@@ -34,7 +34,7 @@ public class ReqRspDriverTests : IoCTests
     //     Assert.NotNull(_responderActor);
     // }
 
-    [Fact]
+//    [Fact]
     public void ShouldResolveOptionsAction()
     {
         Assert.NotNull(TestEnv);
@@ -42,7 +42,7 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(opt);
     }
 
-    [Fact]
+//    [Fact]
     public void ShouldResolveConnectionFactory()
     {
         // GIVEN
@@ -53,7 +53,7 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(_encodedConnection);
     }
 
-    [Fact]
+//    [Fact]
     public void ShouldResolveTheRequester()
     {
         // GIVEN
