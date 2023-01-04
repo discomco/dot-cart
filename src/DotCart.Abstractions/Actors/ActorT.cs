@@ -4,6 +4,15 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Abstractions.Actors;
 
+
+public abstract class ActorT<TSpoke> : ActorB, IActorT<TSpoke>
+{
+    protected ActorT(IExchange exchange) : base(exchange)
+    {
+    }
+}
+
+
 public abstract class ActorB : ActiveComponent, IActor
 {
     protected readonly IExchange _exchange;

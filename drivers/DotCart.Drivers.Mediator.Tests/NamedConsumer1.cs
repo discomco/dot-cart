@@ -7,7 +7,7 @@ using Serilog;
 namespace DotCart.Drivers.Mediator.Tests;
 
 [Name("NamedConsumer1")]
-public class NamedConsumer1 : ActorB, IActor<TheSpoke>, INamedConsumer
+public class NamedConsumer1 : ActorB, IActorT<TheSpoke>, INamedConsumer
 {
     private readonly IExchange _exchange;
 

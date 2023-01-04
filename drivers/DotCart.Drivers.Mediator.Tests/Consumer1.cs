@@ -11,7 +11,7 @@ public interface IConsumer1 : IActor
 }
 
 [Name("Consumer1")]
-public class Consumer1 : ActorB, IActor<TheSpoke>, IConsumer1
+public class Consumer1 : ActorB, IActorT<TheSpoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)
     {

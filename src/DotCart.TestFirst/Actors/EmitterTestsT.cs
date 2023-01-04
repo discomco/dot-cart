@@ -7,28 +7,18 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class EmitterTestT<TEmitter, TPayload, TMeta> : IoCTests
-    where TEmitter : IEmitterB
+public abstract class EmitterTestsT<TSpoke, TEmitter, TPayload, TMeta> 
+    : ActorTestsT<TSpoke, TEmitter>
     where TPayload : IPayload
     where TMeta : IEventMeta
+    where TSpoke : ISpokeT<TSpoke>
+    where TEmitter : IActorT<TSpoke>
 {
-    protected TEmitter _emitter;
     protected Evt2Fact<TPayload, TMeta> _evt2Fact;
 
-    protected EmitterTestT(ITestOutputHelper output, IoCTestContainer testEnv)
+    protected EmitterTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
-    }
-
-    [Fact]
-    public void ShouldResolveEmitter()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _emitter = TestEnv.ResolveRequired<TEmitter>();
-        // THEN
-        Assert.NotNull(_emitter);
     }
 
     [Fact]
@@ -41,4 +31,7 @@ public abstract class EmitterTestT<TEmitter, TPayload, TMeta> : IoCTests
         // THEN
         Assert.NotNull(_evt2Fact);
     }
+ 
+    
+    
 }

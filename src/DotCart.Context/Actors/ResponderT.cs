@@ -8,7 +8,7 @@ namespace DotCart.Context.Actors;
 
 public class
     ResponderT<TSpoke, TPayload, TMeta>
-    : ResponderT<TPayload, TMeta>, IActor<TSpoke>
+    : ResponderT<TPayload, TMeta>, IActorT<TSpoke>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {

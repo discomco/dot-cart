@@ -1,7 +1,10 @@
+using DotCart.Core;
+
 namespace DotCart.Abstractions.Schema;
 
 public interface IFactB : IDto
 {
+    public string Topic { get; }
 }
 
 public interface IFactT<TPayload> : IFactB
@@ -14,6 +17,8 @@ public record FactT<TPayload, TMeta>(string AggId, TPayload Payload, TMeta Meta)
     where TPayload : IPayload
 {
     public TMeta Meta { get; set; } = Meta;
+
+    public string Topic => FactTopicAtt.Get<TPayload>();
 
     public static FactT<TPayload, TMeta> New(string aggId, TPayload payload, TMeta meta)
     {

@@ -34,9 +34,16 @@ public class ReqRspDriverTests : IoCTests
     //     Assert.NotNull(_responderActor);
     // }
 
+    [Fact]
+    public void ShouldResolveOptionsAction()
+    {
+        Assert.NotNull(TestEnv);
+        var opt = TestEnv.ResolveRequired<Action<Options>>();
+        Assert.NotNull(opt);
+    }
 
     [Fact]
-    public void ShouldResolveEncodedConnection()
+    public void ShouldResolveConnectionFactory()
     {
         // GIVEN
         Assert.NotNull(TestEnv);

@@ -29,8 +29,8 @@ public static class ChangeRpm
             .AddChangeRpmACLFuncs()
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddTransient<IActor<Spoke>, ToRedisList>()
+            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+            .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Payload, EventMeta>();
     }
@@ -40,7 +40,7 @@ public static class ChangeRpm
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Contract.ChangeRpm.Payload, EventMeta>, IActor<Spoke>
+        Contract.ChangeRpm.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
@@ -68,7 +68,7 @@ public static class ChangeRpm
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.ChangeRpm.Payload, EventMeta>, IActor<Spoke>
+        Contract.ChangeRpm.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,

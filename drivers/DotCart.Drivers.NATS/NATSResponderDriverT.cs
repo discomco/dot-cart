@@ -9,14 +9,18 @@ namespace DotCart.Drivers.NATS;
 public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayload>
     where TPayload : IPayload
 {
-    private readonly IEncodedConnection _bus;
+    private readonly INatsClientConnectionFactory _connectionFactory;
+    private readonly Action<Options> _configureOptions;
+    private IEncodedConnection _bus;
     private CancellationTokenSource _cts;
     private string _logMessage;
     private ISubscription _subscription;
 
-    public NATSResponderDriverT(IEncodedConnection bus)
+    public NATSResponderDriverT(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)
     {
-        _bus = bus;
+        _connectionFactory = connectionFactory;
+        _configureOptions = configureOptions;
+        //        _bus = bus;
     }
 
 
@@ -88,10 +92,11 @@ public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayloa
     {
         return Task.Run(async () =>
         {
+            _bus = _connectionFactory.CreateEncodedConnection(_configureOptions);
             while (_bus.IsClosed())
             {
                 _logMessage = $"{AppVerbs.Connecting} NATS [{_bus.ConnectedId}]";
-                Thread.Sleep(1_000);
+                Thread.Sleep(2_000);
             }
 
             _logMessage = $"{AppFacts.Connected} NATS [{_bus.ConnectedId}]";

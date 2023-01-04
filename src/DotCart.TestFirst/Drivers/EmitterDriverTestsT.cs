@@ -6,10 +6,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class EmitterDriverTestsT<TPayload, TMeta>
+public abstract class EmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     : BusDriverTestsB<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
+    where TEmitterDriver: IEmitterDriverB
 {
     protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -21,7 +22,7 @@ public abstract class EmitterDriverTestsT<TPayload, TMeta>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        using var driver = TestEnv.ResolveRequired<IEmitterDriverT<TPayload, TMeta>>();
+        using var driver = TestEnv.ResolveRequired<TEmitterDriver>();
         // THEN
         Assert.NotNull(driver);
     }

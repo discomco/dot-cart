@@ -44,11 +44,11 @@ public class IoCTestContainer : IDisposable
         return Provider.GetServices<T>();
     }
 
-    public IActor<TSpoke>? ResolveActor<TSpoke, TActor>()
+    public IActorT<TSpoke>? ResolveActor<TSpoke, TActor>()
         where TSpoke : ISpokeT<TSpoke>
-        where TActor : IActor<TSpoke>
+        where TActor : IActorT<TSpoke>
     {
-        IEnumerable<IActor<TSpoke>?> actors = ResolveAll<IActor<TSpoke>>();
+        IEnumerable<IActorT<TSpoke>?> actors = ResolveAll<IActorT<TSpoke>>();
         var res = actors.FirstOrDefault(actor => actor.GetType() == typeof(TActor));
         if (res == null)
             throw new InvalidOperationException("Actor of type [" + typeof(TActor) +

@@ -7,13 +7,18 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayload, TMeta>
+public interface IRmqEmitterDriverT<TPayload, TMeta> : IEmitterDriverT<TPayload,TMeta> 
+    where TPayload : IPayload 
+    where TMeta : IEventMeta
+{}
+
+public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
     private readonly int _backoff = 100;
-    private readonly IModel _channel;
-    private readonly IConnection _connection;
+    private IModel _channel;
+    private IConnection _connection;
     private readonly IConnectionFactory _connFact;
     private readonly Fact2Msg<byte[], TPayload, TMeta> _fact2Msg;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
@@ -25,10 +30,19 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayl
     {
         _connFact = connFact;
         _fact2Msg = fact2Msg;
-        _connection = _connFact.CreateConnection();
-        _channel = _connection.CreateModel();
-        _channel.ExchangeDeclare(FactTopicAtt.Get<TPayload>(), ExchangeType.Fanout);
     }
+
+    public Task ConnectAsync()
+    {
+        return Task.Run(() =>
+        {
+            Log.Information($"{AppVerbs.Connecting} ");
+            _connection = _connFact.CreateConnection();
+            _channel = _connection.CreateModel();
+            _channel.ExchangeDeclare(FactTopicAtt.Get<TPayload>(), ExchangeType.Fanout);
+        });
+    }
+    
 
 
     public string Topic => FactTopicAtt.Get<TPayload>();
@@ -37,7 +51,7 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayl
     {
         return Task.Run(() =>
         {
-            Log.Information($"{AppVerbs.Emitting} Fact[{TopicAtt.Get(fact)}]");
+            Log.Information($"{AppVerbs.Emitting} [{Topic}] ~> RabbitMq");
             var body = _fact2Msg(fact);
             _channel.BasicPublish(Topic, "", null, body);
             return Task.CompletedTask;
@@ -46,8 +60,10 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IEmitterDriverT<TPayl
 
     public override void Dispose()
     {
-        _connection.Dispose();
-        _channel.Dispose();
+        if (_connection!=null)
+            _connection.Dispose();
+        if (_channel!=null)
+            _channel.Dispose();
         base.Dispose();
     }
 }

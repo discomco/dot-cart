@@ -9,7 +9,7 @@ namespace DotCart.TestFirst.Delivery;
 public abstract class SpokeTestsT<TSpoke> : IoCTests
     where TSpoke : ISpokeT<TSpoke>
 {
-    protected IEnumerable<IActor<TSpoke>> _actors;
+    protected IEnumerable<IActorT<TSpoke>> _actors;
     protected ISpokeBuilder<TSpoke> _builder;
     protected Exception _caught;
     protected string _name;
@@ -60,7 +60,7 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var actors = TestEnv.ResolveAll<IActor<TSpoke>>();
+        var actors = TestEnv.ResolveAll<IActorT<TSpoke>>();
         // THEN
         Assert.NotNull(actors);
         Assert.NotEmpty(actors);

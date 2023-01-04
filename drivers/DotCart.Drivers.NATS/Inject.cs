@@ -23,7 +23,7 @@ public static class Inject
             // if (!k8sFact.InCluster) 
             //     services.AddStanInfraFromK8S();
             // else
-            .AddNatsClient(options =>
+            .AddSingleton<Action<Options>>(_ => options =>
             {
                 options.AllowReconnect = true;
                 options.MaxReconnect = 10;
@@ -33,7 +33,19 @@ public static class Inject
                 {
                     Config.Uri
                 };
-            });
+            })
+            .AddNatsClient();
+            // .AddNatsClient(options =>
+            // {
+            //     options.AllowReconnect = true;
+            //     options.MaxReconnect = 10;
+            //     options.User = Config.User;
+            //     options.Password = Config.Password;
+            //     options.Servers = new[]
+            //     {
+            //         Config.Uri
+            //     };
+            // });
         return services;
     }
 
@@ -65,6 +77,6 @@ public static class Inject
             .AddCoreNATS()
             .AddSingleton<IResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
             .AddSingleton<IResponderT<TPayload>, ResponderT<TSpoke, TPayload, TMeta>>()
-            .AddSingleton<IActor<TSpoke>, ResponderT<TSpoke, TPayload, TMeta>>();
+            .AddSingleton<IActorT<TSpoke>, ResponderT<TSpoke, TPayload, TMeta>>();
     }
 }

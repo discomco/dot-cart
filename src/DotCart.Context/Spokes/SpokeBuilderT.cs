@@ -5,12 +5,12 @@ namespace DotCart.Context.Spokes;
 public class SpokeBuilderT<TSpoke> : ISpokeBuilder<TSpoke>
     where TSpoke : ISpokeT<TSpoke>
 {
-    private readonly IEnumerable<IActor<TSpoke>> _actors;
+    private readonly IEnumerable<IActorT<TSpoke>> _actors;
     private readonly TSpoke _spoke;
 
     public SpokeBuilderT(
         TSpoke spoke,
-        IEnumerable<IActor<TSpoke>> actors)
+        IEnumerable<IActorT<TSpoke>> actors)
     {
         _spoke = spoke;
         _actors = actors;

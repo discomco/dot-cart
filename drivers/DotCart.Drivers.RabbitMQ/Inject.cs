@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
@@ -26,7 +27,8 @@ public static class Inject
         where TMeta : IEventMeta
     {
         return services
-            .AddTransient<IEmitterDriverT<TPayload, TMeta>, RMqEmitterDriverT<TPayload, TMeta>>();
+            .AddSingletonRMq()
+            .AddTransient<IRmqEmitterDriverT<TPayload, TMeta>, RMqEmitterDriverT<TPayload, TMeta>>();
     }
 
     public static IServiceCollection AddRabbitMqListenerDriverT<TFactPayload, TMeta>(this IServiceCollection services)
@@ -34,6 +36,19 @@ public static class Inject
         where TMeta : IEventMeta
     {
         return services
+            .AddSingletonRMq()
             .AddTransient<IListenerDriverT<TFactPayload, byte[]>, RMqListenerDriverT<TFactPayload, TMeta>>();
     }
+    
+    public static IServiceCollection AddRabbitMQEmitter<TSpoke, TEmitter, TPayload,TMeta>(this IServiceCollection services) 
+        where TPayload : IPayload 
+        where TMeta : IEventMeta
+        where TEmitter : EmitterT<TSpoke,TPayload,TMeta>, IActorT<TSpoke>
+        where TSpoke : ISpokeT<TSpoke>
+    {
+        return services
+            .AddRabbitMqEmitterDriverT<TPayload,TMeta>()
+            .AddTransient<IActorT<TSpoke>, TEmitter>();
+    }
+
 }

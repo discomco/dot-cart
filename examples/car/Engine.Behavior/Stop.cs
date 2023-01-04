@@ -106,6 +106,9 @@ public static class Stop
         _newEvt =
             Event.New<Contract.Stop.Payload>;
 
+    public static readonly Fact2Msg<byte[], Contract.Stop.Payload, EventMeta>
+        _fact2Msg = fact => fact.ToBytes();
+
     private static readonly Evt2Cmd<Contract.Stop.Payload, Contract.ChangeRpm.Payload, EventMeta>
         _shouldStopOnZeroPower =
             (evt, state) =>
@@ -158,7 +161,8 @@ public static class Stop
         return services
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _hope2Cmd)
-            .AddTransient(_ => _evt2Fact);
+            .AddTransient(_ => _evt2Fact)
+            .AddTransient(_ => _fact2Msg);
     }
 
 

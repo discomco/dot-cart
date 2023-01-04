@@ -12,10 +12,11 @@ public interface IEmitterB : IActor
 {
 }
 
-public abstract class EmitterT<TPayload, TMeta>
-    : ActorB, IEmitterB
+public abstract class EmitterT<TSpoke, TPayload, TMeta>
+    : ActorB, IActorT<TSpoke>, IEmitterT<TSpoke, TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
+    where TSpoke : ISpokeT<TSpoke>
 {
     private readonly Evt2Fact<TPayload, TMeta> _evt2Fact;
 
@@ -35,16 +36,25 @@ public abstract class EmitterT<TPayload, TMeta>
         return Run(() =>
         {
             var fact = _evt2Fact((Event)msg);
-            return EmitFactAsync(fact);
+            return ((IEmitterDriverT<TPayload, TMeta>)Driver).EmitAsync(fact, cancellationToken);
         }, cancellationToken);
     }
 
-    protected abstract Task EmitFactAsync(FactT<TPayload, TMeta> fact);
+    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    {
+        return (Task<IMsg>)CompletedTask;
+    }
+
+    protected override Task CleanupAsync(CancellationToken cancellationToken)
+    {
+        return CompletedTask;
+    }
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
-        return Run(() =>
+        return Run(async () =>
         {
+            await ((IEmitterDriverB)Driver).ConnectAsync();
             Log.Information($"{AppFacts.Started} {Name}");
             _exchange.Subscribe(EvtTopicAtt.Get<TPayload>(), this);
             return CompletedTask;
@@ -61,4 +71,11 @@ public abstract class EmitterT<TPayload, TMeta>
             return CompletedTask;
         }, cancellationToken);
     }
+}
+
+public interface IEmitterT<TSpoke, TPayload, TMeta>
+    where TSpoke : ISpokeT<TSpoke>
+    where TPayload : IPayload
+    where TMeta : IEventMeta
+{
 }

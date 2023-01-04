@@ -6,7 +6,7 @@ using DotCart.TestKit;
 namespace DotCart.Drivers.Mediator.Tests;
 
 [Name("Producer")]
-public class Producer : ActorB, IActor<TheSpoke>, IProducer
+public class Producer : ActorB, IActorT<TheSpoke>, IProducer
 {
     public Producer(IExchange exchange) : base(exchange)
     {

@@ -5,6 +5,7 @@ namespace DotCart.Abstractions.Drivers;
 
 public interface IEmitterDriverB : IDriverB
 {
+    Task ConnectAsync();
 }
 
 public interface IEmitterDriverT<TPayload, TMeta> : IEmitterDriverB

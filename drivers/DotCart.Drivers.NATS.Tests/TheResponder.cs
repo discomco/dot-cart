@@ -9,7 +9,8 @@ namespace DotCart.Drivers.NATS.Tests;
 
 public class TheResponderDriver : NATSResponderDriverT<TheContract.Payload>
 {
-    public TheResponderDriver(IEncodedConnection bus) : base(bus)
+    public TheResponderDriver(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions) 
+        : base(connectionFactory, configureOptions)
     {
     }
 }

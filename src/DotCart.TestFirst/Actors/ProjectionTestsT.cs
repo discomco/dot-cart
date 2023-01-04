@@ -14,7 +14,7 @@ public abstract class ProjectionTestsT<
     TProjection,
     TState,
     TPayload, TMeta> : IoCTests
-    where TProjection : IActor<TSpoke>
+    where TProjection : IActorT<TSpoke>
     where TState : IState
     where TSpoke : ISpokeT<TSpoke>
     where TPayload : IPayload
@@ -23,7 +23,7 @@ public abstract class ProjectionTestsT<
     private Evt2Doc<TState, TPayload, TMeta> _evt2State;
 
     private IExchange _exchange;
-    private IActor<TSpoke>? _projection;
+    private IActorT<TSpoke>? _projection;
 
     public ProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

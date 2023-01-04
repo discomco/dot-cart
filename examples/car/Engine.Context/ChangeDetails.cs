@@ -1,12 +1,14 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
+using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
 using Engine.Contract;
@@ -21,6 +23,7 @@ public static class ChangeDetails
 
     public const string ToRedisDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string ToRabbitMq_v1 = Contract.ChangeDetails.Topics.Fact_v1 + ":to_rabbit_mq:v1";
 
 
     public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
@@ -30,10 +33,11 @@ public static class ChangeDetails
             .AddChangeDetailsACLFuncs()
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddTransient<IActor<Spoke>, ToRedisList>()
+            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+            .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>();
+            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>()
+            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.ChangeDetails.Payload, EventMeta>();
     }
 
 
@@ -53,7 +57,7 @@ public static class ChangeDetails
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Contract.ChangeDetails.Payload, EventMeta>, IActor<Spoke>
+        Contract.ChangeDetails.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
@@ -72,7 +76,7 @@ public static class ChangeDetails
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.ChangeDetails.Payload, EventMeta>, IActor<Spoke>
+        Contract.ChangeDetails.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
@@ -83,4 +87,21 @@ public static class ChangeDetails
         {
         }
     }
+    
+    [Name(ToRabbitMq_v1)]
+    public class ToRabbitMq 
+        : EmitterT<Spoke, Contract.ChangeDetails.Payload, EventMeta>
+    {
+        public ToRabbitMq(
+            IRmqEmitterDriverT<Contract.ChangeDetails.Payload, EventMeta> driver,
+            IExchange exchange,
+            Evt2Fact<Contract.ChangeDetails.Payload, EventMeta> evt2Fact) : base(driver,
+            exchange,
+            evt2Fact)
+        {
+        }
+    }
+   
+    
 }
+

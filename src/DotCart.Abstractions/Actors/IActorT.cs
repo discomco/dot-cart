@@ -2,7 +2,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface IActor<in TSpoke> : IActor
+public interface IActorT<in TSpoke> : IActor
 {
     void SetSpoke(ISpokeB spoke);
 }

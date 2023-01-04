@@ -11,7 +11,7 @@ public abstract class
     ListProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
     : ProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
     where TSpoke : ISpokeT<TSpoke>
-    where TProjection : IActor<TSpoke>
+    where TProjection : IActorT<TSpoke>
     where TTargetDoc : IState
     where TPayload : IPayload
     where TMeta : IEventMeta

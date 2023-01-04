@@ -1,12 +1,14 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
+using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
 using Engine.Contract;
@@ -18,6 +20,7 @@ public static class Initialize
 {
     public const string ToRedisDoc_v1 = Contract.Initialize.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Initialize.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string ToRabbitMq_v1 = Contract.Initialize.Topics.Fact_v1 + ":to_rabbit_mq:v1";
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
@@ -28,9 +31,10 @@ public static class Initialize
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
             .AddSpokedNATSResponder<Spoke, Contract.Initialize.Payload, EventMeta>()
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddTransient<IActor<Spoke>, ToRedisList>()
-            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
+            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+            .AddTransient<IActorT<Spoke>, ToRedisList>()
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Initialize.Payload, EventMeta>();
     }
 
 
@@ -42,7 +46,7 @@ public static class Initialize
             Contract.Initialize.Payload,
             EventMeta
         >,
-        IActor<Spoke>
+        IActorT<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
@@ -77,7 +81,7 @@ public static class Initialize
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
         Contract.Initialize.Payload,
-        EventMeta>, IActor<Spoke>
+        EventMeta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
@@ -85,6 +89,20 @@ public static class Initialize
             Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
+        {
+        }
+    }
+ 
+    [Name(ToRabbitMq_v1)]
+    public class ToRabbitMq
+    : EmitterT<Spoke,Contract.Initialize.Payload, EventMeta>
+    {
+        public ToRabbitMq(
+            IRmqEmitterDriverT<Contract.Initialize.Payload, EventMeta> driver,
+            IExchange exchange,
+            Evt2Fact<Contract.Initialize.Payload, EventMeta> evt2Fact) : base(driver,
+            exchange,
+            evt2Fact)
         {
         }
     }

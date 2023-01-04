@@ -7,7 +7,7 @@ public class TheSpokeBuilder : SpokeBuilderT<TheSpoke>, ISpokeBuilder<TheSpoke>
 {
     public TheSpokeBuilder(
         TheSpoke spoke,
-        IEnumerable<IActor<TheSpoke>> actors) : base(
+        IEnumerable<IActorT<TheSpoke>> actors) : base(
         spoke,
         actors)
     {

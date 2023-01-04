@@ -1,12 +1,14 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Drivers.Default;
 using DotCart.Drivers.NATS;
+using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
 using Engine.Contract;
@@ -20,6 +22,7 @@ public static class Stop
 
     public const string ToRedisDoc_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string ToRabbitMq_v1 = Contract.Stop.Topics.Fact_v1 + ":to_redis_list:v1";
 
 
     public static IServiceCollection AddStopSpoke(this IServiceCollection services)
@@ -30,9 +33,10 @@ public static class Stop
             .AddHostedSpokeT<Spoke>()
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddSpokedNATSResponder<Spoke, Contract.Stop.Payload, EventMeta>()
-            .AddTransient<IActor<Spoke>, ToRedisDoc>()
-            .AddTransient<IActor<Spoke>, ToRedisList>()
-            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
+            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+            .AddTransient<IActorT<Spoke>, ToRedisList>()
+            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Stop.Payload, EventMeta>();
     }
 
     [Name(Spoke_v1)]
@@ -47,7 +51,7 @@ public static class Stop
     }
 
 
-    public interface IToRedisDoc : IActor<Spoke>
+    public interface IToRedisDoc : IActorT<Spoke>
     {
     }
 
@@ -57,7 +61,7 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
-            Contract.Stop.Payload, EventMeta>, IActor<Spoke>
+            Contract.Stop.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
@@ -76,7 +80,7 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.EngineList>,
             Schema.EngineList,
-            Contract.Stop.Payload, EventMeta>, IActor<Spoke>
+            Contract.Stop.Payload, EventMeta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
@@ -84,6 +88,20 @@ public static class Stop
             Evt2Doc<Schema.EngineList, Contract.Stop.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
+        {
+        }
+    }
+
+    [Name(ToRabbitMq_v1)]
+    public class ToRabbitMq
+        : EmitterT<Spoke, Contract.Stop.Payload, EventMeta>
+    {
+        public ToRabbitMq(
+            IRmqEmitterDriverT<Contract.Stop.Payload, EventMeta> driver,
+            IExchange exchange,
+            Evt2Fact<Contract.Stop.Payload, EventMeta> evt2Fact) : base(driver,
+            exchange,
+            evt2Fact)
         {
         }
     }

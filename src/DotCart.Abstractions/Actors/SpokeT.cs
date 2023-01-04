@@ -11,8 +11,8 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
 
     private readonly IProjector _projector;
 
-    private IImmutableDictionary<string, IActor<TSpoke>> _actors =
-        ImmutableDictionary<string, IActor<TSpoke>>.Empty;
+    private IImmutableDictionary<string, IActorT<TSpoke>> _actors =
+        ImmutableDictionary<string, IActorT<TSpoke>>.Empty;
 
     private bool _allActorsUp;
 
@@ -26,7 +26,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     public ComponentStatus Status { get; set; }
 
 
-    public void InjectActors(params IActor<TSpoke>[] reactors)
+    public void InjectActors(params IActorT<TSpoke>[] reactors)
     {
         foreach (var actor in reactors)
         {
