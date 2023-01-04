@@ -5,7 +5,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ActorTestsT<TSpoke, TActor> 
+public abstract class ActorTestsT<TSpoke, TActor>
     : IoCTests
     where TActor : IActorT<TSpoke> where TSpoke : ISpokeT<TSpoke>
 {
@@ -24,18 +24,18 @@ public abstract class ActorTestsT<TSpoke, TActor>
         // WHEN
         // THEN
     }
-    
+
     [Fact]
     public void ShouldResolveEmitter()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var actor = TestEnv.ResolveActor<TSpoke,TActor>();
+        var actor = TestEnv.ResolveActor<TSpoke, TActor>();
         // THEN
         Assert.NotNull(actor);
     }
-    
+
     [Fact]
     public void ShouldBeNamedActor()
     {
@@ -54,13 +54,11 @@ public abstract class ActorTestsT<TSpoke, TActor>
         // GIVEN
         var ts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         Assert.NotNull(TestEnv);
-        var ac = TestEnv.ResolveActor<TSpoke,TActor>();
+        var ac = TestEnv.ResolveActor<TSpoke, TActor>();
         Assert.NotNull(ac);
         // WHEN
         await ac.Activate(ts.Token);
         // THEN
         Assert.True(ac.Status.HasFlag(ComponentStatus.Active));
     }
-
-    
 }

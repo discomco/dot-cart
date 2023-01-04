@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -21,6 +20,8 @@ public static class Initialize
     public const string ToRedisDoc_v1 = Contract.Initialize.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Initialize.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.Initialize.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromNATS_v1 = Contract.Initialize.Topics.Hope_v1 + ":from_nats:v1";
+
     public const string SpokeName = "engine:initialize:spoke";
 
     public static IServiceCollection AddInitializeSpoke(this IServiceCollection services)
@@ -30,7 +31,7 @@ public static class Initialize
             .AddInitializeACLFuncs()
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
             .AddHostedSpokeT<Spoke>()
-            .AddSpokedNATSResponder<Spoke, Contract.Initialize.Payload, EventMeta>()
+            .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
@@ -92,10 +93,10 @@ public static class Initialize
         {
         }
     }
- 
+
     [Name(ToRabbitMq_v1)]
     public class ToRabbitMq
-    : EmitterT<Spoke,Contract.Initialize.Payload, EventMeta>
+        : EmitterT<Spoke, Contract.Initialize.Payload, EventMeta>
     {
         public ToRabbitMq(
             IRmqEmitterDriverT<Contract.Initialize.Payload, EventMeta> driver,
@@ -103,6 +104,25 @@ public static class Initialize
             Evt2Fact<Contract.Initialize.Payload, EventMeta> evt2Fact) : base(driver,
             exchange,
             evt2Fact)
+        {
+        }
+    }
+
+    [Name(FromNATS_v1)]
+    public class FromNATS
+        : ResponderT<
+            Spoke,
+            Contract.Initialize.Payload,
+            EventMeta>
+    {
+        public FromNATS(
+            INATSResponderDriverT<Contract.Initialize.Payload> driver,
+            IExchange exchange,
+            ISequenceBuilder builder,
+            Hope2Cmd<Contract.Initialize.Payload, EventMeta> hope2Cmd) : base(driver,
+            exchange,
+            builder,
+            hope2Cmd)
         {
         }
     }

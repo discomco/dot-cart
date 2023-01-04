@@ -1,8 +1,6 @@
 ﻿using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
 
@@ -35,17 +33,17 @@ public static class Inject
                 };
             })
             .AddNatsClient();
-            // .AddNatsClient(options =>
-            // {
-            //     options.AllowReconnect = true;
-            //     options.MaxReconnect = 10;
-            //     options.User = Config.User;
-            //     options.Password = Config.Password;
-            //     options.Servers = new[]
-            //     {
-            //         Config.Uri
-            //     };
-            // });
+        // .AddNatsClient(options =>
+        // {
+        //     options.AllowReconnect = true;
+        //     options.MaxReconnect = 10;
+        //     options.User = Config.User;
+        //     options.Password = Config.Password;
+        //     options.Servers = new[]
+        //     {
+        //         Config.Uri
+        //     };
+        // });
         return services;
     }
 
@@ -58,25 +56,15 @@ public static class Inject
     }
 
 
-    public static IServiceCollection AddNATSResponder<TPayload, TMeta>(this IServiceCollection services)
-        where TPayload : IPayload
-        where TMeta : IEventMeta
-    {
-        return services
-            .AddCoreNATS()
-            .AddSingleton<IResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
-            .AddSingleton<IResponderT<TPayload>, ResponderT<TPayload, TMeta>>();
-    }
-
-    public static IServiceCollection AddSpokedNATSResponder<TSpoke, TPayload, TMeta>(
+    public static IServiceCollection AddNATSResponder<TSpoke, TResponder, TPayload, TMeta>(
         this IServiceCollection services)
         where TPayload : IPayload
         where TMeta : IEventMeta
+        where TResponder : class, IResponderT<TPayload>, IActorT<TSpoke>
     {
         return services
             .AddCoreNATS()
-            .AddSingleton<IResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
-            .AddSingleton<IResponderT<TPayload>, ResponderT<TSpoke, TPayload, TMeta>>()
-            .AddSingleton<IActorT<TSpoke>, ResponderT<TSpoke, TPayload, TMeta>>();
+            .AddSingleton<INATSResponderDriverT<TPayload>, NATSResponderDriverT<TPayload>>()
+            .AddSingleton<IActorT<TSpoke>, TResponder>();
     }
 }

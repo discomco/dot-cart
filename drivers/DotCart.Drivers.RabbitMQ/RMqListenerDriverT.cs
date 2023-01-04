@@ -9,11 +9,12 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public interface IRmqListenerDriver<TFactPayload, TFactMeta> 
-    : IListenerDriverT<TFactPayload, TFactMeta> 
-    where TFactPayload : IPayload 
+public interface IRmqListenerDriver<TFactPayload, TFactMeta>
+    : IListenerDriverT<TFactPayload, TFactMeta>
+    where TFactPayload : IPayload
     where TFactMeta : class
-{}
+{
+}
 
 public class RMqListenerDriverT<TFactPayload, TFactMeta>
     : DriverB, IListenerDriverT<TFactPayload, byte[]>

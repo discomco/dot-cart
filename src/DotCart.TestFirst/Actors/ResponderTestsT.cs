@@ -2,16 +2,15 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
-using FakeItEasy;
-using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ResponderTestsT<TPayload, TMeta> : IoCTests
-//    where TIResponder : IResponder
+public abstract class ResponderTestsT<TSpoke, TActor, TPayload, TMeta> : ActorTestsT<TSpoke, TActor>
     where TPayload : IPayload
     where TMeta : IEventMeta
+    where TActor : IActorT<TSpoke>
+    where TSpoke : ISpokeT<TSpoke>
 {
     private IResponderT<TPayload> _responder;
 
@@ -31,50 +30,5 @@ public abstract class ResponderTestsT<TPayload, TMeta> : IoCTests
     }
 
     [Fact]
-    public abstract Task ShouldResolveConnection();
-
-
-    [Fact]
-    public async Task ShouldResolveResponder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
-        // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<TPayload>>();
-        // THEN
-        Assert.NotNull(_responder);
-    }
-
-    [Fact]
-    public async Task ShouldStartResponder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // GIVEN
-        TestEnv.Services.AddTransient(_ => A.Fake<ICmdHandler>());
-
-        // WHEN
-        _responder = TestEnv.ResolveRequired<IResponderT<TPayload>>();
-        try
-        {
-            Assert.NotNull(_responder);
-            var tokenSource = new CancellationTokenSource(1_000);
-            var cancellationToken = tokenSource.Token;
-            // WHEN
-            await Task.Run(async () =>
-            {
-                await _responder.Activate(cancellationToken);
-                while (!cancellationToken.IsCancellationRequested)
-                {
-                    Thread.SpinWait(5);
-                    Output.WriteLine("Waiting");
-                }
-            }, cancellationToken);
-        }
-        catch (TaskCanceledException e)
-        {
-            Assert.True(true);
-        }
-    }
+    public abstract Task ShouldResolveConnectionFactory();
 }

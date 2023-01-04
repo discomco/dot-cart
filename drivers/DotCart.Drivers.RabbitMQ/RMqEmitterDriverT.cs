@@ -7,21 +7,22 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public interface IRmqEmitterDriverT<TPayload, TMeta> : IEmitterDriverT<TPayload,TMeta> 
-    where TPayload : IPayload 
+public interface IRmqEmitterDriverT<TPayload, TMeta> : IEmitterDriverT<TPayload, TMeta>
+    where TPayload : IPayload
     where TMeta : IEventMeta
-{}
+{
+}
 
 public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
 {
     private readonly int _backoff = 100;
-    private IModel _channel;
-    private IConnection _connection;
     private readonly IConnectionFactory _connFact;
     private readonly Fact2Msg<byte[], TPayload, TMeta> _fact2Msg;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
+    private IModel _channel;
+    private IConnection _connection;
 
 
     public RMqEmitterDriverT(
@@ -31,6 +32,9 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
         _connFact = connFact;
         _fact2Msg = fact2Msg;
     }
+
+
+    public string Topic => FactTopicAtt.Get<TPayload>();
 
     public Task ConnectAsync()
     {
@@ -42,10 +46,6 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
             _channel.ExchangeDeclare(FactTopicAtt.Get<TPayload>(), ExchangeType.Fanout);
         });
     }
-    
-
-
-    public string Topic => FactTopicAtt.Get<TPayload>();
 
     public Task EmitAsync(FactT<TPayload, TMeta> fact, CancellationToken cancellationToken = default)
     {
@@ -60,9 +60,9 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
 
     public override void Dispose()
     {
-        if (_connection!=null)
+        if (_connection != null)
             _connection.Dispose();
-        if (_channel!=null)
+        if (_channel != null)
             _channel.Dispose();
         base.Dispose();
     }

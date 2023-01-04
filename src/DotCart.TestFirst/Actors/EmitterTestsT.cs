@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class EmitterTestsT<TSpoke, TEmitter, TPayload, TMeta> 
+public abstract class EmitterTestsT<TSpoke, TEmitter, TPayload, TMeta>
     : ActorTestsT<TSpoke, TEmitter>
     where TPayload : IPayload
     where TMeta : IEventMeta
@@ -31,7 +31,4 @@ public abstract class EmitterTestsT<TSpoke, TEmitter, TPayload, TMeta>
         // THEN
         Assert.NotNull(_evt2Fact);
     }
- 
-    
-    
 }

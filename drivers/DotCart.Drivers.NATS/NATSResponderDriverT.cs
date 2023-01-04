@@ -6,11 +6,16 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSResponderDriverT<TPayload> : DriverB, IResponderDriverT<TPayload>
+public interface INATSResponderDriverT<TPayload> : IResponderDriverT<TPayload>
     where TPayload : IPayload
 {
-    private readonly INatsClientConnectionFactory _connectionFactory;
+}
+
+public class NATSResponderDriverT<TPayload> : DriverB, INATSResponderDriverT<TPayload>
+    where TPayload : IPayload
+{
     private readonly Action<Options> _configureOptions;
+    private readonly INatsClientConnectionFactory _connectionFactory;
     private IEncodedConnection _bus;
     private CancellationTokenSource _cts;
     private string _logMessage;

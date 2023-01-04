@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Drivers;
 
 public abstract class RMqEmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
-    : EmitterDriverTestsT<TEmitterDriver,TPayload, TMeta>
+    : EmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
     where TEmitterDriver : IEmitterDriverB

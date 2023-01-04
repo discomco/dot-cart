@@ -31,7 +31,7 @@ public static class Initialize
             );
 
     private static readonly Fact2Msg<byte[], Contract.Initialize.Payload, EventMeta>
-        _fact2Msg = 
+        _fact2Msg =
             fact => fact.ToBytes();
 
     private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>

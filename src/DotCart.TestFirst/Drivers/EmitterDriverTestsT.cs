@@ -10,7 +10,7 @@ public abstract class EmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     : BusDriverTestsB<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta
-    where TEmitterDriver: IEmitterDriverB
+    where TEmitterDriver : IEmitterDriverB
 {
     protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

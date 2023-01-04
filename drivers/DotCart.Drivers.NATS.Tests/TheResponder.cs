@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
 using NATS.Client;
@@ -9,7 +8,7 @@ namespace DotCart.Drivers.NATS.Tests;
 
 public class TheResponderDriver : NATSResponderDriverT<TheContract.Payload>
 {
-    public TheResponderDriver(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions) 
+    public TheResponderDriver(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)
         : base(connectionFactory, configureOptions)
     {
     }
@@ -17,17 +16,16 @@ public class TheResponderDriver : NATSResponderDriverT<TheContract.Payload>
 
 public class TheResponder
     : ResponderT<
-        IResponderDriverT<TheContract.Payload>,
+        TheSpoke,
         TheContract.Payload,
         TheContract.Meta>, ITheResponder
 {
-    public TheResponder(IResponderDriverT<TheContract.Payload> driver,
+    public TheResponder(
+        INATSResponderDriverT<TheContract.Payload> driver,
         IExchange exchange,
-        ICmdHandler cmdHandler,
-        Hope2Cmd<TheContract.Payload, TheContract.Meta> hope2Cmd) : base(driver,
-        exchange,
-        cmdHandler,
-        hope2Cmd)
+        ISequenceBuilder builder,
+        Hope2Cmd<TheContract.Payload, TheContract.Meta> hope2Cmd)
+        : base(driver, exchange, builder, hope2Cmd)
     {
     }
 }

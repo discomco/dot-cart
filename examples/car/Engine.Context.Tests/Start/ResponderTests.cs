@@ -7,6 +7,8 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Start;
 
 public class ResponderTests : NATSResponderTestsT<
+    Context.Start.Spoke,
+    Context.Start.FromNATS,
     Contract.Start.Payload,
     EventMeta>
 {

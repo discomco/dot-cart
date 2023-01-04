@@ -18,7 +18,7 @@ public static class ChangeRpm
 {
     public const string ToRedisDoc_v1 = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_list:v1";
-
+    public const string FromNATS_v1 = Contract.ChangeRpm.Topics.Hope_v1 + ":from_nats:v1";
 
     public const string Spoke_v1 = "engine:change_rpm:spoke:v1";
 
@@ -32,7 +32,7 @@ public static class ChangeRpm
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddSpokedNATSResponder<Spoke, Contract.ChangeRpm.Payload, EventMeta>();
+            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeRpm.Payload, EventMeta>();
     }
 
     [Name(ToRedisDoc_v1)]
@@ -75,6 +75,23 @@ public static class ChangeRpm
             IRedisStore<Schema.EngineList> docStore,
             Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) : base(exchange, docStore, evt2Doc, newDoc)
+        {
+        }
+    }
+
+    [Name(FromNATS_v1)]
+    public class FromNATS
+        : ResponderT<
+            Spoke,
+            Contract.ChangeRpm.Payload,
+            EventMeta>
+    {
+        public FromNATS(
+            INATSResponderDriverT<Contract.ChangeRpm.Payload> driver,
+            IExchange exchange,
+            ISequenceBuilder builder,
+            Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta> hope2Cmd)
+            : base(driver, exchange, builder, hope2Cmd)
         {
         }
     }

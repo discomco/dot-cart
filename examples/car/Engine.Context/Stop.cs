@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -23,6 +22,7 @@ public static class Stop
     public const string ToRedisDoc_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.Stop.Topics.Fact_v1 + ":to_redis_list:v1";
+    public const string FromNATS_v1 = Contract.Stop.Topics.Hope_v1 + ":from_nats:v1";
 
 
     public static IServiceCollection AddStopSpoke(this IServiceCollection services)
@@ -32,10 +32,10 @@ public static class Stop
             .AddStopACLFuncs()
             .AddHostedSpokeT<Spoke>()
             .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
-            .AddSpokedNATSResponder<Spoke, Contract.Stop.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+            .AddNATSResponder<Spoke, FromNATS, Contract.Stop.Payload, EventMeta>()
             .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Stop.Payload, EventMeta>();
     }
 
@@ -102,6 +102,20 @@ public static class Stop
             Evt2Fact<Contract.Stop.Payload, EventMeta> evt2Fact) : base(driver,
             exchange,
             evt2Fact)
+        {
+        }
+    }
+
+    [Name(FromNATS_v1)]
+    public class FromNATS
+        : ResponderT<Spoke, Contract.Stop.Payload, EventMeta>
+    {
+        public FromNATS(
+            INATSResponderDriverT<Contract.Stop.Payload> driver,
+            IExchange exchange,
+            ISequenceBuilder builder,
+            Hope2Cmd<Contract.Stop.Payload, EventMeta> hope2Cmd)
+            : base(driver, exchange, builder, hope2Cmd)
         {
         }
     }

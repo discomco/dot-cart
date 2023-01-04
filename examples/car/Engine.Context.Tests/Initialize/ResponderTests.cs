@@ -8,6 +8,8 @@ namespace Engine.Context.Tests.Initialize;
 
 public class ResponderTests
     : NATSResponderTestsT<
+        Context.Initialize.Spoke,
+        Context.Initialize.FromNATS,
         Contract.Initialize.Payload,
         EventMeta>
 {

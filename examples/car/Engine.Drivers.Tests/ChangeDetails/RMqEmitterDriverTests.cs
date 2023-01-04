@@ -8,8 +8,9 @@ using Xunit.Abstractions;
 
 namespace Engine.Drivers.Tests.ChangeDetails;
 
-public class RMqEmitterDriverTests 
-    : RMqEmitterDriverTestsT<IRmqEmitterDriverT<Contract.ChangeDetails.Payload, EventMeta>, Contract.ChangeDetails.Payload, EventMeta>
+public class RMqEmitterDriverTests
+    : RMqEmitterDriverTestsT<IRmqEmitterDriverT<Contract.ChangeDetails.Payload, EventMeta>,
+        Contract.ChangeDetails.Payload, EventMeta>
 {
     public RMqEmitterDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -17,12 +18,10 @@ public class RMqEmitterDriverTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

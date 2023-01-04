@@ -6,39 +6,26 @@ using DotCart.Core;
 
 namespace DotCart.Context.Actors;
 
-public class
-    ResponderT<TSpoke, TPayload, TMeta>
-    : ResponderT<TPayload, TMeta>, IActorT<TSpoke>
-    where TPayload : IPayload
-    where TMeta : IEventMeta
-{
-    public ResponderT(
-        IResponderDriverT<TPayload> driver,
-        IExchange exchange,
-        ICmdHandler cmdHandler,
-        Hope2Cmd<TPayload, TMeta> hope2Cmd)
-        : base(driver, exchange, cmdHandler, hope2Cmd)
-    {
-    }
-}
-
-public class ResponderT<TPayload, TMeta> : ActorB, IResponderT<TPayload>
+public class ResponderT<TSpoke, TPayload, TMeta> : ActorT<TSpoke>, IResponderT<TPayload>
     where TMeta : IEventMeta
     where TPayload : IPayload
+    where TSpoke : ISpokeT<TSpoke>
 {
-    private readonly ICmdHandler _cmdHandler;
+    private readonly ISequenceBuilder _builder;
 
     private readonly Hope2Cmd<TPayload, TMeta> _hope2Cmd;
+
+    private ICmdHandler _cmdHandler;
 //    private readonly TDriver _responderDriver;
 
     public ResponderT(
         IResponderDriverT<TPayload> driver,
         IExchange exchange,
-        ICmdHandler cmdHandler,
+        ISequenceBuilder builder,
         Hope2Cmd<TPayload, TMeta> hope2Cmd) : base(exchange)
     {
         Driver = driver;
-        _cmdHandler = cmdHandler;
+        _builder = builder;
         _hope2Cmd = hope2Cmd;
     }
 
@@ -52,6 +39,7 @@ public class ResponderT<TPayload, TMeta> : ActorB, IResponderT<TPayload>
     {
         var hope = (HopeT<TPayload>)msg;
         var cmd = _hope2Cmd(hope);
+        _cmdHandler = _builder.Build();
         return await _cmdHandler.HandleAsync(cmd, cancellationToken);
     }
 

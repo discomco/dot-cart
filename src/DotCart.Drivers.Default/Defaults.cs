@@ -1,10 +1,7 @@
-﻿using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
+﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Drivers.EventStoreDB;
-using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -25,7 +22,4 @@ public static class Defaults
             .AddTransientRedisDb<TListDoc>()
             .AddSingletonProjector<TProjectionInfo>();
     }
-    
-    
-    
 }

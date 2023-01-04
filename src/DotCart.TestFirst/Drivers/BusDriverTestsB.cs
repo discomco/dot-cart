@@ -11,7 +11,6 @@ public abstract class BusDriverTestsB<TPayload, TMeta>
     where TMeta : IEventMeta
     where TPayload : IPayload
 {
-
     protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
@@ -24,6 +23,4 @@ public abstract class BusDriverTestsB<TPayload, TMeta>
         // THEN
         Assert.NotEmpty(topic);
     }
-
-
 }

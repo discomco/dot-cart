@@ -149,7 +149,9 @@ public class ReqRspDriverTests : IoCTests
             .AddCoreNATS()
             .AddSingletonExchange()
             .AddSingleton(_ => A.Fake<ICmdHandler>())
+            .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddTheIDCtor()
+            .AddTransient(_ => TheSchema.Doc.Rand)
             // .AddSingleton<ITheResponder, TheResponder>()
             // .AddSingleton<IResponderT2<TheHope, TheCmd>, TheResponder>()
             .AddTransient<IRequesterT<TheContract.Payload>, TheRequester>()
@@ -157,6 +159,7 @@ public class ReqRspDriverTests : IoCTests
             .AddTransient<
                 IResponderT<TheContract.Payload>,
                 ResponderT<TheSpoke, TheContract.Payload, TheContract.Meta>>()
+            .AddSingletonSequenceBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

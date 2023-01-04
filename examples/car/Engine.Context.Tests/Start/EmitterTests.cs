@@ -10,7 +10,7 @@ public class EmitterTests
     : EmitterTestsT<
         Context.Start.Spoke,
         Context.Start.ToRabbitMq,
-        Contract.Start.Payload, 
+        Contract.Start.Payload,
         EventMeta>
 {
     public EmitterTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -19,12 +19,10 @@ public class EmitterTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

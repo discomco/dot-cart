@@ -7,11 +7,11 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Initialize;
 
 public class EmitterTests
-: EmitterTestsT<
-    Context.Initialize.Spoke, 
-    Context.Initialize.ToRabbitMq, 
-    Contract.Initialize.Payload, 
-    EventMeta>
+    : EmitterTestsT<
+        Context.Initialize.Spoke,
+        Context.Initialize.ToRabbitMq,
+        Contract.Initialize.Payload,
+        EventMeta>
 {
     public EmitterTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -19,12 +19,10 @@ public class EmitterTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

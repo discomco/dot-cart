@@ -7,7 +7,11 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeRpm;
 
 public class ResponderTests
-    : NATSResponderTestsT<Contract.ChangeRpm.Payload, EventMeta>
+    : NATSResponderTestsT<
+        Context.ChangeRpm.Spoke,
+        Context.ChangeRpm.FromNATS,
+        Contract.ChangeRpm.Payload,
+        EventMeta>
 {
     public ResponderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

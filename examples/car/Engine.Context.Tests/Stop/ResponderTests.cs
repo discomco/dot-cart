@@ -8,6 +8,8 @@ namespace Engine.Context.Tests.Stop;
 
 public class ResponderTests
     : NATSResponderTestsT<
+        Context.Stop.Spoke,
+        Context.Stop.FromNATS,
         Contract.Stop.Payload,
         EventMeta>
 {

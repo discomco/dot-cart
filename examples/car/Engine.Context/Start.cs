@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -21,6 +20,7 @@ public static class Start
     public const string ToRedisDoc_v1 = Contract.Start.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Start.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.Start.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromNATS_v1 = Contract.Start.Topics.Hope_v1 + ":from_nats:v1";
 
     public const string Spoke_v1 = "engine:start:spoke:v1";
 
@@ -35,8 +35,8 @@ public static class Start
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddHostedSpokeT<Spoke>()
-            .AddSpokedNATSResponder<Spoke, Contract.Start.Payload, EventMeta>()
-            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Start.Payload,EventMeta>();
+            .AddNATSResponder<Spoke, FromNATS, Contract.Start.Payload, EventMeta>()
+            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Start.Payload, EventMeta>();
     }
 
     public interface IToRedisDoc : IActorT<Spoke>
@@ -87,15 +87,32 @@ public static class Start
         {
         }
     }
- 
+
     [Name(ToRabbitMq_v1)]
-    public class ToRabbitMq 
+    public class ToRabbitMq
         : EmitterT<Spoke, Contract.Start.Payload, EventMeta>
     {
         public ToRabbitMq(
-            IRmqEmitterDriverT<Contract.Start.Payload, EventMeta> driver, 
-            IExchange exchange, 
+            IRmqEmitterDriverT<Contract.Start.Payload, EventMeta> driver,
+            IExchange exchange,
             Evt2Fact<Contract.Start.Payload, EventMeta> evt2Fact) : base(driver, exchange, evt2Fact)
+        {
+        }
+    }
+
+    [Name(FromNATS_v1)]
+    public class FromNATS
+        : ResponderT<
+            Spoke,
+            Contract.Start.Payload,
+            EventMeta>
+    {
+        public FromNATS(
+            INATSResponderDriverT<Contract.Start.Payload> driver,
+            IExchange exchange,
+            ISequenceBuilder builder,
+            Hope2Cmd<Contract.Start.Payload, EventMeta> hope2Cmd)
+            : base(driver, exchange, builder, hope2Cmd)
         {
         }
     }

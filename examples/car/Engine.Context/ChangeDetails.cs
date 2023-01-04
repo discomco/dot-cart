@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -24,6 +23,7 @@ public static class ChangeDetails
     public const string ToRedisDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.ChangeDetails.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromNATS_v1 = Contract.ChangeDetails.Topics.Hope_v1 + ":from_nats:v1";
 
 
     public static IServiceCollection AddChangeDetailsSpoke(this IServiceCollection services)
@@ -36,7 +36,7 @@ public static class ChangeDetails
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddSpokedNATSResponder<Spoke, Contract.ChangeDetails.Payload, EventMeta>()
+            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeDetails.Payload, EventMeta>()
             .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.ChangeDetails.Payload, EventMeta>();
     }
 
@@ -87,9 +87,9 @@ public static class ChangeDetails
         {
         }
     }
-    
+
     [Name(ToRabbitMq_v1)]
-    public class ToRabbitMq 
+    public class ToRabbitMq
         : EmitterT<Spoke, Contract.ChangeDetails.Payload, EventMeta>
     {
         public ToRabbitMq(
@@ -101,7 +101,22 @@ public static class ChangeDetails
         {
         }
     }
-   
-    
-}
 
+
+    [Name(FromNATS_v1)]
+    public class FromNATS
+        : ResponderT<
+            Spoke,
+            Contract.ChangeDetails.Payload,
+            EventMeta>
+    {
+        public FromNATS(
+            INATSResponderDriverT<Contract.ChangeDetails.Payload> driver,
+            IExchange exchange,
+            ISequenceBuilder builder,
+            Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta> hope2Cmd)
+            : base(driver, exchange, builder, hope2Cmd)
+        {
+        }
+    }
+}
