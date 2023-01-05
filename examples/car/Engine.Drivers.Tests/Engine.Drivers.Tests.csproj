@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\..\src\DotCart.Drivers.Default\DotCart.Drivers.Default.csproj"/>
+        <ProjectReference Include="..\..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
     </ItemGroup>

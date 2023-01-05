@@ -3,21 +3,15 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using DotCart.Defaults.RabbitMq;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public interface IRmqListenerDriver<TFactPayload, TFactMeta>
-    : IListenerDriverT<TFactPayload, TFactMeta>
-    where TFactPayload : IPayload
-    where TFactMeta : class
-{
-}
-
 public class RMqListenerDriverT<TFactPayload, TFactMeta>
-    : DriverB, IListenerDriverT<TFactPayload, byte[]>
+    : DriverB, IRmqListenerDriverT<TFactPayload, byte[]>
     where TFactPayload : IPayload
     where TFactMeta : IEventMeta
 {
@@ -40,8 +34,10 @@ public class RMqListenerDriverT<TFactPayload, TFactMeta>
 
     public override void Dispose()
     {
-        _connection.Dispose();
-        _channel.Dispose();
+        if (_connection != null)
+            _connection.Dispose();
+        if (_channel != null)
+            _channel.Dispose();
         base.Dispose();
     }
 
@@ -78,7 +74,7 @@ public class RMqListenerDriverT<TFactPayload, TFactMeta>
             Guard.Against.Null(ea.Body, nameof(ea.Body));
             var fact = _msg2Fact(ea.Body.ToArray());
             Log.Debug($"{AppFacts.Received} Fact({FactTopicAtt.Get<TFactPayload>()})");
-            Cast(fact);
+            await Cast(fact);
         }
         catch (Exception e)
         {

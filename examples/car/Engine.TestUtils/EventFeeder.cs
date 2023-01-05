@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
 using Serilog;
 
 namespace Engine.TestUtils;

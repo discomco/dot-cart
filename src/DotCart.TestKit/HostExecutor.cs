@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 
@@ -8,8 +9,8 @@ public static partial class Inject
 {
     public static IServiceCollection AddHostExecutor(this IServiceCollection services)
     {
-        return services?
-            .AddTransient<IHostExecutor, HostExecutor>();
+        services.TryAddSingleton<IHostExecutor, HostExecutor>();
+        return services;
     }
 }
 

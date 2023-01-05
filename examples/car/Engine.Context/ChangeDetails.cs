@@ -5,7 +5,8 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
-using DotCart.Drivers.Default;
+using DotCart.Defaults;
+using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
@@ -31,7 +32,7 @@ public static class ChangeDetails
         return services
             .AddEngineBehavior()
             .AddChangeDetailsACLFuncs()
-            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
+            .AddHopeSequence<Contract.ChangeDetails.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
@@ -113,7 +114,7 @@ public static class ChangeDetails
         public FromNATS(
             INATSResponderDriverT<Contract.ChangeDetails.Payload> driver,
             IExchange exchange,
-            ISequenceBuilder builder,
+            ISequenceBuilderT<Contract.ChangeDetails.Payload> builder,
             Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta> hope2Cmd)
             : base(driver, exchange, builder, hope2Cmd)
         {

@@ -3,7 +3,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
 using Engine.Behavior;
-using Engine.Contract;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -30,7 +29,7 @@ public class SequenceBuilderTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var _seqBuild = TestEnv.ResolveRequired<ISequenceBuilder>();
+        var _seqBuild = TestEnv.ResolveRequired<ISequenceBuilderT<TheContract.Payload>>();
         // THEN
         Assert.NotNull(_seqBuild);
     }
@@ -40,7 +39,7 @@ public class SequenceBuilderTests : IoCTests
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var seq1 = TestEnv.ResolveRequired<ISequenceBuilder>();
+        var seq1 = TestEnv.ResolveRequired<ISequenceBuilderT<TheContract.Payload>>();
         // WHEN
         var ch1 = seq1.Build();
         var ch2 = seq1.Build();
@@ -56,6 +55,6 @@ public class SequenceBuilderTests : IoCTests
         services
             .AddSingleton(_ => A.Fake<IAggregateStore>())
             .AddInitializeBehavior()
-            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>();
+            .AddSequenceBuilder<TheContract.Payload>();
     }
 }

@@ -13,13 +13,12 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class InitializeController : ControllerBase
 {
-    private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<Initialize.Payload, EventMeta> _hope2Cmd;
+    private readonly ISequenceT<Initialize.Payload> _sequence;
 
-    public InitializeController(ISequenceBuilder sequenceBuilder, Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
+    public InitializeController(ISequenceBuilderT<Initialize.Payload> sequenceBuilder,
+        Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
     {
-        _cmdHandler = sequenceBuilder.Build();
-        _hope2Cmd = hope2Cmd;
+        _sequence = sequenceBuilder.Build();
     }
 
     [HttpPost]
@@ -29,14 +28,13 @@ public class InitializeController : ControllerBase
         try
         {
             Guard.Against.Null(hope);
-            var cmd = _hope2Cmd(hope);
-            feedback = await _cmdHandler.HandleAsync(cmd);
+            feedback = await _sequence.ExecuteAsync(hope);
             return Ok(feedback);
         }
         catch (Exception e)
         {
             feedback.SetError(e.AsError());
-            Log.Fatal($"{AppErrors.Error} {e.InnerAndOuter()}");
+            Log.Fatal($"{AppErrors.Error(e.InnerAndOuter())}");
         }
 
         return BadRequest(feedback);

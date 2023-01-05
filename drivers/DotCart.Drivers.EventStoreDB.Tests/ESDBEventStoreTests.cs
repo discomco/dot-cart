@@ -3,7 +3,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
-using DotCart.Context.Behaviors;
+using DotCart.Context.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;

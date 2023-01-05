@@ -1,5 +1,5 @@
 using DotCart.Abstractions.Behavior;
-using DotCart.Drivers.RabbitMQ;
+using DotCart.Defaults.RabbitMq;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Engine.Context;

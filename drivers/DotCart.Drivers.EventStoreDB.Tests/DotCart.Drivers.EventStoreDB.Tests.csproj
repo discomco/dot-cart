@@ -27,7 +27,6 @@
         <ProjectReference Include="..\..\examples\car\Engine.Contract\Engine.Contract.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
         <ProjectReference Include="..\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.InMem\DotCart.Drivers.InMem.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

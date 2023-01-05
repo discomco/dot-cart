@@ -1,6 +1,6 @@
 <Project>
     <PropertyGroup>
-        <VersionPrefix>0.0.0.1</VersionPrefix>
+        <VersionPrefix>2.12.0.1</VersionPrefix>
         <VersionSuffix>$(VersionSuffix)</VersionSuffix>
         <Authors>macula.io</Authors>
         <Company>DisComCo Sp.z.o.o</Company>
@@ -9,8 +9,12 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>../../dot-cart.snk</AssemblyOriginatorKeyFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <PackageIconUrl>https://discomco.pl/img/discomco-favicon.png</PackageIconUrl>
-        <PackageProjectUrl>https://github.com/rgfaber/dot-scream</PackageProjectUrl>
+        <PackageIcon>discomco-favicon.png</PackageIcon>
+        <PackageProjectUrl>https://github.com/discomco/dot-cart</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+        <None Include="../../icons/discomco-favicon.png" Pack="true" PackagePath="\"/>
+    </ItemGroup>
+
 </Project>

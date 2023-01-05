@@ -12,6 +12,8 @@
 
 
     <ItemGroup>
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
         <ProjectReference Include="..\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
     </ItemGroup>
 

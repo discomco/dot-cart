@@ -8,8 +8,8 @@ namespace DotCart.Drivers.NATS;
 
 public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IPayload
 {
-    private readonly INatsClientConnectionFactory _connectionFactory;
     private readonly Action<Options> _configureOptions;
+    private readonly INatsClientConnectionFactory _connectionFactory;
     private IEncodedConnection _bus;
 
     protected NATSRequesterT(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)

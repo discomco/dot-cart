@@ -3,7 +3,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Behaviors;
+using DotCart.Context.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
@@ -31,9 +31,12 @@ internal class CmdHandler : ICmdHandler
         _aggregateStore = aggregateStore;
     }
 
-    public async Task<Feedback> HandleAsync(ICmdB cmd, CancellationToken cancellationToken = default)
+    public async Task<Feedback> HandleAsync(ICmdB cmd, Feedback previous, CancellationToken cancellationToken = default)
     {
-        var fbk = Feedback.Empty;
+        var step = "unknown";
+        if (previous != null) 
+            step = previous.Step;
+        var fbk = Feedback.New(cmd.AggregateID.Id(), previous, step);
         try
         {
             Guard.Against.Null(cmd);

@@ -125,7 +125,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
         // AND
         try
         {
-            _feedback = await _cmdHandler.HandleAsync(_cmd, cts.Token);
+            _feedback = await _cmdHandler.HandleAsync(_cmd, null, cts.Token);
         }
         catch (Exception e)
         {

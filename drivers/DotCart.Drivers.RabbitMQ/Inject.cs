@@ -2,6 +2,8 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Context.Actors;
+using DotCart.Defaults.RabbitMq;
 using Microsoft.Extensions.DependencyInjection;
 using RabbitMQ.Client;
 

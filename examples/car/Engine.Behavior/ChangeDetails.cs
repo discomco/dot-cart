@@ -2,7 +2,7 @@ using Ardalis.GuardClauses;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Behaviors;
+using DotCart.Context.Behavior;
 using DotCart.Core;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
@@ -77,7 +77,7 @@ public static class ChangeDetails
             catch (Exception e)
             {
                 fbk.SetError(e.AsError());
-                Log.Error($"{AppErrors.Error} - {e.InnerAndOuter()}");
+                Log.Error($"{AppErrors.Error(e.InnerAndOuter())}");
             }
 
             return fbk;

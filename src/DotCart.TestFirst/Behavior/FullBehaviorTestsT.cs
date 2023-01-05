@@ -1,4 +1,4 @@
-using DotCart.Context.Behaviors;
+using DotCart.Context.Behavior;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 

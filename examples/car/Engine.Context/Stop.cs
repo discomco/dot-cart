@@ -5,7 +5,8 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
-using DotCart.Drivers.Default;
+using DotCart.Defaults;
+using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
@@ -31,7 +32,7 @@ public static class Stop
             .AddEngineBehavior()
             .AddStopACLFuncs()
             .AddHostedSpokeT<Spoke>()
-            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
+            .AddHopeSequence<Contract.Stop.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
@@ -113,7 +114,7 @@ public static class Stop
         public FromNATS(
             INATSResponderDriverT<Contract.Stop.Payload> driver,
             IExchange exchange,
-            ISequenceBuilder builder,
+            ISequenceBuilderT<Contract.Stop.Payload> builder,
             Hope2Cmd<Contract.Stop.Payload, EventMeta> hope2Cmd)
             : base(driver, exchange, builder, hope2Cmd)
         {

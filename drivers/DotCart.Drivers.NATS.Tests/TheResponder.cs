@@ -23,7 +23,7 @@ public class TheResponder
     public TheResponder(
         INATSResponderDriverT<TheContract.Payload> driver,
         IExchange exchange,
-        ISequenceBuilder builder,
+        ISequenceBuilderT<TheContract.Payload> builder,
         Hope2Cmd<TheContract.Payload, TheContract.Meta> hope2Cmd)
         : base(driver, exchange, builder, hope2Cmd)
     {

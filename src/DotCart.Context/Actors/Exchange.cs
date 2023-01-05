@@ -67,9 +67,10 @@ internal class Exchange : ActiveComponent, IExchange
         return (Task<IMsg>)CompletedTask;
     }
 
-    public void Dispose()
+    public override void Dispose()
     {
-        _topics.Clear();
+        if (_topics != null)
+            _topics.Clear();
         Log.Information($"{AppFacts.Stopped} [{GetType().Name}]");
     }
 

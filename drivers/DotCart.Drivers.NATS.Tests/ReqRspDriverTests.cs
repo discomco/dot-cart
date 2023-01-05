@@ -152,14 +152,12 @@ public class ReqRspDriverTests : IoCTests
             .AddTransient(_ => A.Fake<IAggregateStore>())
             .AddTheIDCtor()
             .AddTransient(_ => TheSchema.Doc.Rand)
-            // .AddSingleton<ITheResponder, TheResponder>()
-            // .AddSingleton<IResponderT2<TheHope, TheCmd>, TheResponder>()
             .AddTransient<IRequesterT<TheContract.Payload>, TheRequester>()
             .AddTransient<IResponderDriverT<TheContract.Payload>, TheResponderDriver>()
             .AddTransient<
                 IResponderT<TheContract.Payload>,
                 ResponderT<TheSpoke, TheContract.Payload, TheContract.Meta>>()
-            .AddSingletonSequenceBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
+            .AddSequenceBuilder<TheContract.Payload>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

@@ -5,7 +5,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
-using DotCart.Drivers.Default;
+using DotCart.Defaults;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
@@ -27,7 +27,7 @@ public static class ChangeRpm
         return services
             .AddEngineBehavior()
             .AddChangeRpmACLFuncs()
-            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
+            .AddHopeSequence<Contract.ChangeRpm.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
@@ -89,7 +89,7 @@ public static class ChangeRpm
         public FromNATS(
             INATSResponderDriverT<Contract.ChangeRpm.Payload> driver,
             IExchange exchange,
-            ISequenceBuilder builder,
+            ISequenceBuilderT<Contract.ChangeRpm.Payload> builder,
             Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta> hope2Cmd)
             : base(driver, exchange, builder, hope2Cmd)
         {

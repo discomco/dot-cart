@@ -1,6 +1,6 @@
 namespace DotCart.Abstractions.Schema;
 
-public interface IFeedback : IDto, IMsg
+public interface IFeedback : IDto
 {
     ErrorState ErrState { get; }
     IEnumerable<string> Warnings { get; }
@@ -8,9 +8,11 @@ public interface IFeedback : IDto, IMsg
     bool IsSuccess { get; }
     void SetError(Error error);
     void SetPayload<TState>(TState state) where TState : IState;
+    IFeedback? Previous { get; }
+    string Step { get; }
 }
 
-public record Feedback(string AggId) : IFeedback
+public record Feedback(string AggId, IFeedback Previous=null, string Step="") : IFeedback
 {
     public static Feedback Empty => New("");
     public IState Payload { get; set; }
@@ -20,24 +22,22 @@ public record Feedback(string AggId) : IFeedback
     public bool IsSuccess => ErrState.IsSuccessful;
 
     public string AggId { get; set; } = AggId;
+    public string Step { get;  } = Step;
 
     public void SetError(Error error)
     {
         ErrState.Errors.Add(error.Code.ToString(), error);
     }
-
     public void SetPayload<TState>(TState state) where TState : IState
     {
         Payload = state;
     }
 
-    public static Feedback New(string Id)
+    public IFeedback? Previous { get; } = Previous;
+
+    public static Feedback New(string Id, IFeedback? previous=null, string step="")
     {
-        return new Feedback(Id);
+        return new Feedback(Id, previous, step);
     }
 
-    public static Feedback New<TPayload>(string aggId, TPayload payload) where TPayload : IPayload
-    {
-        return new Feedback(aggId);
-    }
 }

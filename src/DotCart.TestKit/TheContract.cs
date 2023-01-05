@@ -42,6 +42,8 @@ public static class TheContract
 
     [HopeTopic(TheConstants.HopeTopic)]
     [FactTopic(TheConstants.FactTopic)]
+    [CmdTopic(TheConstants.CmdTopic)]
+    [EvtTopic(TheConstants.EvtTopic)]
     public record Payload : IPayload
     {
         [JsonConstructor]

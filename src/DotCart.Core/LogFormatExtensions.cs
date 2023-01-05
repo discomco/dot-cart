@@ -16,7 +16,7 @@ public static class LogFormatExtensions
 
     public static string AsFact(this string value)
     {
-        return Output.Background.Green(Output.White($"::{value}::"));
+        return Output.Background.Rgb(22, 120,120,Output.Yellow($"::{value}::"));
     }
 
     public static string AsError(this string value)
@@ -27,6 +27,7 @@ public static class LogFormatExtensions
 
 public static class AppVerbs
 {
+    public static readonly string Executing = "EXECUTING".AsVerb();
     public static readonly string Connecting = "CONNECTING".AsVerb();
     public static readonly string Starting = "STARTING".AsVerb();
     public static readonly string Stopping = "STOPPING".AsVerb();
@@ -48,18 +49,23 @@ public static class AppVerbs
 
 public static class AppErrors
 {
-    public static readonly string Error = "ERROR".AsError();
+    public static string Error(string error)
+    {
+        return "ERROR".AsError() + $"~> ({error})";
+    }
 }
 
 public static class AppFacts
 {
-    public static string Connected = "CONNECTED".AsFact();
+    public static readonly string Connected = "CONNECTED".AsFact();
     public static readonly string Started = "STARTED".AsFact();
     public static readonly string Stopped = "STOPPED".AsFact();
-    public static string Activated = "ACTIVATED".AsFact();
-    public static string Deactivated = "DEACTIVATED".AsFact();
+    public static readonly string Activated = "ACTIVATED".AsFact();
+    public static readonly string Deactivated = "DEACTIVATED".AsFact();
     public static readonly string Subscribed = "SUBSCRIBED".AsFact();
     public static readonly string Received = "RECEIVED".AsFact();
     public static readonly string Responded = "RESPONDED".AsFact();
     public static readonly string Cancelled = "CANCELLED".AsFact();
+    public static readonly string Ran = "RAN".AsFact();
+    public static readonly string Executed = "EXECUTED".AsFact();
 }

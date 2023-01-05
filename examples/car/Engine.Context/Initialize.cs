@@ -5,7 +5,8 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
-using DotCart.Drivers.Default;
+using DotCart.Defaults;
+using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
@@ -29,7 +30,7 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeACLFuncs()
-            .AddSingletonSequenceBuilder<IEngineAggregateInfo, Schema.Engine>()
+            .AddHopeSequence<Contract.Initialize.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
@@ -118,7 +119,7 @@ public static class Initialize
         public FromNATS(
             INATSResponderDriverT<Contract.Initialize.Payload> driver,
             IExchange exchange,
-            ISequenceBuilder builder,
+            ISequenceBuilderT<Contract.Initialize.Payload> builder,
             Hope2Cmd<Contract.Initialize.Payload, EventMeta> hope2Cmd) : base(driver,
             exchange,
             builder,

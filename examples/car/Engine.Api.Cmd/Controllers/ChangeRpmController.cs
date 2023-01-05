@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +9,11 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class ChangeRpmController : ControllerBase
 {
-    private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<ChangeRpm.Payload, EventMeta> _hope2Cmd;
+    private readonly ISequenceT<ChangeRpm.Payload> _sequence;
 
-    public ChangeRpmController(ISequenceBuilder sequenceBuilder, Hope2Cmd<ChangeRpm.Payload, EventMeta> hope2Cmd)
+    public ChangeRpmController(ISequenceBuilderT<ChangeRpm.Payload> sequenceBuilder)
     {
-        _cmdHandler = sequenceBuilder.Build();
-        _hope2Cmd = hope2Cmd;
+        _sequence = sequenceBuilder.Build();
     }
 
     [HttpPost]
@@ -26,7 +23,7 @@ public class ChangeRpmController : ControllerBase
         if (hope == null) return BadRequest(fbk);
         try
         {
-            fbk = await _cmdHandler.HandleAsync(_hope2Cmd(hope));
+            fbk = await _sequence.ExecuteAsync(hope);
             return Ok(fbk);
         }
         catch (Exception e)

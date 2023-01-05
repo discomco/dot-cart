@@ -1,3 +1,4 @@
+using DotCart.Defaults.RabbitMq;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;

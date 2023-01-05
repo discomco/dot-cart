@@ -50,7 +50,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
         }
         catch (Exception e)
         {
-            Log.Fatal($"{AppErrors.Error} => {e.InnerAndOuter()}");
+            Log.Fatal($"{AppErrors.Error("{e.InnerAndOuter()}")}");
             throw;
         }
     }

@@ -2,16 +2,11 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using DotCart.Defaults.RabbitMq;
 using RabbitMQ.Client;
 using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
-
-public interface IRmqEmitterDriverT<TPayload, TMeta> : IEmitterDriverT<TPayload, TMeta>
-    where TPayload : IPayload
-    where TMeta : IEventMeta
-{
-}
 
 public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
     where TPayload : IPayload

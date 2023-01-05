@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using Engine.Contract;
 using Microsoft.AspNetCore.Mvc;
@@ -10,15 +9,11 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class StopController : ControllerBase
 {
-    private readonly ICmdHandler _cmdHandler;
-    private readonly Hope2Cmd<Stop.Payload, EventMeta> _hope2Cmd;
+    private readonly ISequenceT<Stop.Payload> _sequence;
 
-    public StopController(
-        ISequenceBuilder sequenceBuilder,
-        Hope2Cmd<Stop.Payload, EventMeta> hope2Cmd)
+    public StopController(ISequenceBuilderT<Stop.Payload> sequenceBuilder)
     {
-        _cmdHandler = sequenceBuilder.Build();
-        _hope2Cmd = hope2Cmd;
+        _sequence = sequenceBuilder.Build();
     }
 
     [HttpPost]
@@ -27,8 +22,7 @@ public class StopController : ControllerBase
         var feedback = Feedback.New(hope.AggId);
         try
         {
-            var cmd = _hope2Cmd(hope);
-            feedback = await _cmdHandler.HandleAsync(cmd);
+            feedback = await _sequence.ExecuteAsync(hope);
             return Ok(feedback);
         }
         catch (Exception e)

@@ -25,7 +25,7 @@
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Mediator\DotCart.Drivers.Mediator.csproj"/>
+
     </ItemGroup>
 
 </Project>
