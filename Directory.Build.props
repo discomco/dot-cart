@@ -12,6 +12,8 @@
         <PackageIcon>discomco-favicon.png</PackageIcon>
         <PackageProjectUrl>https://github.com/discomco/dot-cart</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
+        <RepositoryUrl>https://github.com/discomco/dot-cart</RepositoryUrl>
+        <PackageProjectUrl>https://dotcart.io</PackageProjectUrl>
     </PropertyGroup>
     <ItemGroup>
         <None Include="../../icons/discomco-favicon.png" Pack="true" PackagePath="\"/>

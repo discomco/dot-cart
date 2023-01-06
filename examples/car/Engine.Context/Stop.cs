@@ -1,6 +1,7 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -22,22 +23,39 @@ public static class Stop
 
     public const string ToRedisDoc_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
-    public const string ToRabbitMq_v1 = Contract.Stop.Topics.Fact_v1 + ":to_redis_list:v1";
+    
+    public const string ToRabbitMq_v1 = Contract.Stop.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromRabbitMqRetro_v1 = Contract.Stop.Topics.Fact_v1 + ":from_rabbit_mq_retro:v1";
+
+
     public const string FromNATS_v1 = Contract.Stop.Topics.Hope_v1 + ":from_nats:v1";
 
 
     public static IServiceCollection AddStopSpoke(this IServiceCollection services)
     {
         return services
-            .AddEngineBehavior()
-            .AddStopACLFuncs()
-            .AddHostedSpokeT<Spoke>()
-            .AddHopeSequence<Contract.Stop.Payload, EventMeta>()
-            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
-            .AddTransient<IActorT<Spoke>, ToRedisList>()
-            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.Stop.Payload, EventMeta>()
-            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Stop.Payload, EventMeta>();
+                .AddEngineBehavior()
+                .AddStopACLFuncs()
+                .AddHostedSpokeT<Spoke>()
+                .AddHopeInPipe<IHopeInPipe, Contract.Stop.Payload, EventMeta>()
+                .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+                .AddTransient<IActorT<Spoke>, ToRedisList>()
+                .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+                .AddNATSResponder<Spoke, 
+                    FromNATS, 
+                    Contract.Stop.Payload, 
+                    EventMeta>()
+                .AddRabbitMqEmitter<Spoke, 
+                    ToRabbitMq, 
+                    Contract.Stop.Payload, 
+                    EventMeta>()
+                .AddRabbitMqListener<Spoke,
+                    FromRabbitMqRetro,
+                    Contract.Stop.Payload,
+                    Contract.Stop.Dummyload,
+                    EventMeta,
+                    IRetroInPipe>()
+            ;
     }
 
     [Name(Spoke_v1)]
@@ -100,23 +118,51 @@ public static class Stop
         public ToRabbitMq(
             IRmqEmitterDriverT<Contract.Stop.Payload, EventMeta> driver,
             IExchange exchange,
-            Evt2Fact<Contract.Stop.Payload, EventMeta> evt2Fact) : base(driver,
-            exchange,
-            evt2Fact)
+            Evt2Fact<Contract.Stop.Payload, EventMeta> evt2Fact)
+            : base(driver, exchange, evt2Fact)
         {
         }
     }
 
     [Name(FromNATS_v1)]
     public class FromNATS
-        : ResponderT<Spoke, Contract.Stop.Payload, EventMeta>
+        : ResponderT<
+            Spoke,
+            Contract.Stop.Payload,
+            IHopeInPipe>
     {
         public FromNATS(
             INATSResponderDriverT<Contract.Stop.Payload> driver,
             IExchange exchange,
-            ISequenceBuilderT<Contract.Stop.Payload> builder,
-            Hope2Cmd<Contract.Stop.Payload, EventMeta> hope2Cmd)
-            : base(driver, exchange, builder, hope2Cmd)
+            IPipeBuilderT<IHopeInPipe, Contract.Stop.Payload> builder)
+            : base(driver, exchange, builder)
+        {
+        }
+    }
+
+    public interface IHopeInPipe : IPipeInfoB
+    {
+    }
+
+    public interface IRetroInPipe : IPipeInfoB
+    {
+    }
+
+    [Name(FromRabbitMqRetro_v1)]
+    public class FromRabbitMqRetro
+        : ListenerT<
+            Spoke,
+            Contract.Stop.Dummyload,
+            EventMeta,
+            Contract.Stop.Payload,
+            byte[],
+            IRetroInPipe>
+    {
+        public FromRabbitMqRetro(
+            IRmqListenerDriverT<Contract.Stop.Payload> driver,
+            IExchange exchange,
+            IPipeBuilderT<IRetroInPipe, Contract.Stop.Payload> pipeBuilder)
+            : base(driver, exchange, pipeBuilder)
         {
         }
     }

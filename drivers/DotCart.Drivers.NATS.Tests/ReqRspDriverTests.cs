@@ -156,8 +156,8 @@ public class ReqRspDriverTests : IoCTests
             .AddTransient<IResponderDriverT<TheContract.Payload>, TheResponderDriver>()
             .AddTransient<
                 IResponderT<TheContract.Payload>,
-                ResponderT<TheSpoke, TheContract.Payload, TheContract.Meta>>()
-            .AddSequenceBuilder<TheContract.Payload>()
+                ResponderT<TheSpoke, TheContract.Payload, TheContext.IPipeInfo>>()
+            .AddPipeBuilder<TheContext.IPipeInfo, TheContract.Payload>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }
 }

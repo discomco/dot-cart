@@ -1,3 +1,4 @@
+using DotCart.Defaults.RabbitMq;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,7 @@ using Xunit.Abstractions;
 namespace DotCart.Drivers.RabbitMQ.Tests;
 
 public class TheListenerDriverTests
-    : RMqListenerDriverTests<TheContract.Payload, TheContract.Meta>
+    : RabbitMqListenerDriverTestsT<TheContract.Payload, TheContract.Meta>
 {
     public TheListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

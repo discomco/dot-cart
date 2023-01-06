@@ -9,11 +9,11 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class ChangeRpmController : ControllerBase
 {
-    private readonly ISequenceT<ChangeRpm.Payload> _sequence;
+    private readonly IPipeT<Context.ChangeRpm.IHopePipe, ChangeRpm.Payload> _pipe;
 
-    public ChangeRpmController(ISequenceBuilderT<ChangeRpm.Payload> sequenceBuilder)
+    public ChangeRpmController(IPipeBuilderT<Context.ChangeRpm.IHopePipe, ChangeRpm.Payload> pipeBuilder)
     {
-        _sequence = sequenceBuilder.Build();
+        _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
@@ -23,7 +23,7 @@ public class ChangeRpmController : ControllerBase
         if (hope == null) return BadRequest(fbk);
         try
         {
-            fbk = await _sequence.ExecuteAsync(hope);
+            fbk = await _pipe.ExecuteAsync(hope);
             return Ok(fbk);
         }
         catch (Exception e)

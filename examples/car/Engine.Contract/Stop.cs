@@ -24,4 +24,9 @@ public static class Stop
             return new Payload();
         }
     }
+
+    public class Dummyload 
+        : IPayload
+    {
+    }
 }

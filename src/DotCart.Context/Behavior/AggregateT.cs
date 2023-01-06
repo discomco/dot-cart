@@ -167,9 +167,9 @@ internal class AggregateT<TInfo, TState> : IAggregate
         return ID.Id();
     }
 
-    public async Task<Feedback> ExecuteAsync(ICmdB cmd)
+    public async Task<Feedback> ExecuteAsync(ICmdB cmd, IFeedback previous)
     {
-        var feedback = Feedback.New(cmd.AggregateID.Id());
+        var feedback = Feedback.New(cmd.AggregateID.Id(), previous);
         try
         {
             Guard.Against.Null(cmd);
@@ -188,7 +188,6 @@ internal class AggregateT<TInfo, TState> : IAggregate
         {
             feedback.SetError(e.AsError());
         }
-
         return feedback;
     }
 

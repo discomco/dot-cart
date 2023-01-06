@@ -12,12 +12,12 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class StartController : ControllerBase
 {
-    private readonly ISequenceT<Start.Payload> _sequence;
+    private readonly IPipeT<Context.Start.IHopePipe, Start.Payload> _pipe;
 
-    public StartController(ISequenceBuilderT<Start.Payload> sequenceBuilder,
-        Hope2Cmd<Start.Payload, EventMeta> hope2Cmd)
+    public StartController(
+        IPipeBuilderT<Context.Start.IHopePipe, Start.Payload> pipeBuilder)
     {
-        _sequence = sequenceBuilder.Build();
+        _pipe = pipeBuilder.Build();
     }
 
 
@@ -28,7 +28,7 @@ public class StartController : ControllerBase
         var fbk = Feedback.New(hope.AggId);
         try
         {
-            fbk = await _sequence.ExecuteAsync(hope);
+            fbk = await _pipe.ExecuteAsync(hope);
             return Ok(fbk);
         }
         catch (Exception e)

@@ -52,7 +52,7 @@ public class AggregatePolicyT<TEvtPayload, TCmdPayload, TMeta> : ActorB, IAggreg
             Aggregate.SetID(evt.AggregateId.IDFromIdString());
             var cmd = _evt2Cmd((Event)evt, Aggregate.GetState());
             if (cmd != null)
-                feedback = await Aggregate.ExecuteAsync(cmd);
+                feedback = await Aggregate.ExecuteAsync(cmd, null);
         }
         catch (Exception e)
         {

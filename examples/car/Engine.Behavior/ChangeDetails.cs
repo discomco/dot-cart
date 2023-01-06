@@ -105,6 +105,9 @@ public static class ChangeDetails
         _fact2Msg =
             fact => fact.ToBytes();
 
+    private static readonly Msg2Fact<Contract.ChangeDetails.Payload, EventMeta, byte[]>
+        _msg2Fact =
+            msg => msg.FromBytes<FactT<Contract.ChangeDetails.Payload, EventMeta>>(); 
 
     private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
         _hope2Cmd =
@@ -130,7 +133,8 @@ public static class ChangeDetails
         return services
             .AddTransient(_ => _evt2Fact)
             .AddTransient(_ => _hope2Cmd)
-            .AddTransient(_ => _fact2Msg);
+            .AddTransient(_ => _fact2Msg)
+            .AddTransient(_ => _msg2Fact);
     }
 
 

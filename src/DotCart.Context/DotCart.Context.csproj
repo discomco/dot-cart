@@ -4,6 +4,7 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Server side base for the DotCart SDK</Title>
     </PropertyGroup>
 
     <ItemGroup>

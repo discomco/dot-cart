@@ -1,11 +1,13 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Defaults;
+using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using Engine.Behavior;
@@ -27,11 +29,11 @@ public static class ChangeRpm
         return services
             .AddEngineBehavior()
             .AddChangeRpmACLFuncs()
-            .AddHopeSequence<Contract.ChangeRpm.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+            .AddHopeInPipe<IHopePipe, Contract.ChangeRpm.Payload, EventMeta>()
             .AddNATSResponder<Spoke, FromNATS, Contract.ChangeRpm.Payload, EventMeta>();
     }
 
@@ -84,15 +86,20 @@ public static class ChangeRpm
         : ResponderT<
             Spoke,
             Contract.ChangeRpm.Payload,
-            EventMeta>
+            IHopePipe>
     {
         public FromNATS(
             INATSResponderDriverT<Contract.ChangeRpm.Payload> driver,
             IExchange exchange,
-            ISequenceBuilderT<Contract.ChangeRpm.Payload> builder,
-            Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta> hope2Cmd)
-            : base(driver, exchange, builder, hope2Cmd)
+            IPipeBuilderT<IHopePipe, Contract.ChangeRpm.Payload> builder)
+            : base(driver, exchange, builder)
         {
         }
     }
+
+    public interface IHopePipe : IPipeInfoB
+    {
+    }
+
+
 }

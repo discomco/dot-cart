@@ -11,7 +11,6 @@ public static partial class Inject
     {
         services.TryAddSingleton<ITopicMediator, TopicMediator>();
         return services;
-
     }
 }
 

@@ -9,11 +9,13 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class StopController : ControllerBase
 {
-    private readonly ISequenceT<Stop.Payload> _sequence;
+    private readonly IPipeT<Context.Stop.IHopeInPipe, Stop.Payload> _pipe;
 
-    public StopController(ISequenceBuilderT<Stop.Payload> sequenceBuilder)
+    public StopController(
+        IPipeBuilderT<Context.Stop.IHopeInPipe, Stop.Payload> pipeBuilder
+    )
     {
-        _sequence = sequenceBuilder.Build();
+        _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
@@ -22,7 +24,7 @@ public class StopController : ControllerBase
         var feedback = Feedback.New(hope.AggId);
         try
         {
-            feedback = await _sequence.ExecuteAsync(hope);
+            feedback = await _pipe.ExecuteAsync(hope);
             return Ok(feedback);
         }
         catch (Exception e)

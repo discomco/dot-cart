@@ -107,7 +107,12 @@ public static class Stop
             Event.New<Contract.Stop.Payload>;
 
     public static readonly Fact2Msg<byte[], Contract.Stop.Payload, EventMeta>
-        _fact2Msg = fact => fact.ToBytes();
+        _fact2Msg = 
+            fact => fact.ToBytes();
+
+    private static readonly Msg2Fact<Contract.Stop.Payload, EventMeta, byte[]>
+        _msg2Fact =
+            msg => msg.FromBytes<FactT<Contract.Stop.Payload, EventMeta>>(); 
 
     private static readonly Evt2Cmd<Contract.Stop.Payload, Contract.ChangeRpm.Payload, EventMeta>
         _shouldStopOnZeroPower =
@@ -162,7 +167,8 @@ public static class Stop
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _hope2Cmd)
             .AddTransient(_ => _evt2Fact)
-            .AddTransient(_ => _fact2Msg);
+            .AddTransient(_ => _fact2Msg)
+            .AddTransient(_ => _msg2Fact);
     }
 
 

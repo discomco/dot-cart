@@ -3,13 +3,14 @@ using DotCart.Core;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface IStepT<TPayload>
-    where TPayload : IPayload
+public interface IStepT<TPipeInfo,TPayload>
+    where TPayload : IPayload 
+    where TPipeInfo : IPipeInfoB
 {
-    ISequenceT<TPayload> Sequence { get; }
+    IPipeT<TPipeInfo,TPayload> Pipe { get; }
     string Name { get; }
-    uint Order { get; }
-    StepLevel Level { get; }
+    int Order { get; }
+    Importance Level { get; }
     Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback, CancellationToken cancellationToken = default);
-    void SetSequence(ISequenceT<TPayload> sequence);
+    void SetPipe(IPipeT<TPipeInfo,TPayload> pipe);
 }

@@ -30,6 +30,10 @@ public static class Start
         _fact2Msg =
             fact => fact.ToBytes();
 
+    private static readonly Msg2Fact<Contract.Start.Payload, EventMeta, byte[]>
+        _msg2Fact =
+            msg => msg.FromBytes<FactT<Contract.Start.Payload, EventMeta>>(); 
+
     private static readonly Hope2Cmd<Contract.Start.Payload, EventMeta>
         _hope2Cmd =
             hope =>
@@ -131,7 +135,8 @@ public static class Start
             .AddTransient(_ => _evt2Fact)
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _hope2Cmd)
-            .AddTransient(_ => _fact2Msg);
+            .AddTransient(_ => _fact2Msg)
+            .AddTransient(_ => _msg2Fact);
     }
 
     public static IServiceCollection AddStartBehavior(this IServiceCollection services)

@@ -1,13 +1,9 @@
-using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
-using Serilog;
 
 namespace DotCart.TestKit;
-
-
 
 public static class TheActors
 {
@@ -19,18 +15,19 @@ public static class TheActors
 
     [Name(TheConstants.StepName)]
     [Order(0)]
-    public class Step : StepT<TheContract.Payload>
+    public class Step : StepT<TheContext.IPipeInfo,TheContract.Payload>
     {
         protected override string GetName()
         {
-            return NameAtt.StepName(Level, NameAtt.Get(this),FactTopicAtt.Get<TheContract.Payload>());
+            return NameAtt.StepName(Level, NameAtt.Get(this), FactTopicAtt.Get<TheContract.Payload>());
         }
 
-        public override async Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback, CancellationToken cancellationToken = default)
+        public override async Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback,
+            CancellationToken cancellationToken = default)
         {
             var feedback = Feedback.New(msg.AggId, previousFeedback, Name);
-            
-            
+
+
             return feedback;
         }
     }

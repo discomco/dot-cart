@@ -21,6 +21,8 @@ public static class Start
     public const string ToRedisDoc_v1 = Contract.Start.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Start.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.Start.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromRabbitMqRetro_v1 = Contract.Start.Topics.Fact_v1 + ":from_rabbit_mq_retro:v1";
+
     public const string FromNATS_v1 = Contract.Start.Topics.Hope_v1 + ":from_nats:v1";
 
     public const string Spoke_v1 = "engine:start:spoke:v1";
@@ -31,13 +33,19 @@ public static class Start
             .AddEngineBehavior()
             .AddStartACLFuncs()
             .AddStartProjectionFuncs()
-            .AddHopeSequence<Contract.Start.Payload, EventMeta>()
+            .AddHopeInPipe<IHopePipe, Contract.Start.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddHostedSpokeT<Spoke>()
             .AddNATSResponder<Spoke, FromNATS, Contract.Start.Payload, EventMeta>()
-            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.Start.Payload, EventMeta>();
+            .AddRabbitMqEmitter<Spoke, ToRabbitMq, Contract.Start.Payload, EventMeta>()
+            .AddRabbitMqListener<Spoke,
+                FromRabbitMqRetro,
+                Contract.Start.Payload,
+                Contract.Start.Dummyload,
+                EventMeta,
+                IRetroPipe>();
     }
 
     public interface IToRedisDoc : IActorT<Spoke>
@@ -106,14 +114,41 @@ public static class Start
         : ResponderT<
             Spoke,
             Contract.Start.Payload,
-            EventMeta>
+            IHopePipe>
     {
         public FromNATS(
             INATSResponderDriverT<Contract.Start.Payload> driver,
             IExchange exchange,
-            ISequenceBuilderT<Contract.Start.Payload> builder,
-            Hope2Cmd<Contract.Start.Payload, EventMeta> hope2Cmd)
-            : base(driver, exchange, builder, hope2Cmd)
+            IPipeBuilderT<IHopePipe, Contract.Start.Payload> builder)
+            : base(driver, exchange, builder)
+        {
+        }
+    }
+
+    public interface IHopePipe : IPipeInfoB
+    {
+    }
+
+    public interface IRetroPipe : IPipeInfoB
+    {
+    }
+
+    [Name(FromRabbitMqRetro_v1)]
+    public class FromRabbitMqRetro
+        : ListenerT<
+            Spoke,
+            Contract.Start.Dummyload,
+            EventMeta,
+            Contract.Start.Payload,
+            byte[],
+            IRetroPipe>
+    {
+        public FromRabbitMqRetro(
+            IRmqListenerDriverT<Contract.Start.Payload> driver,
+            IExchange exchange,
+            IPipeBuilderT<IRetroPipe, Contract.Start.Payload> pipeBuilder) : base(driver,
+            exchange,
+            pipeBuilder)
         {
         }
     }

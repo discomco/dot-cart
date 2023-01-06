@@ -6,10 +6,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class StepTestsT<TStep, TPayload>
+public abstract class StepTestsT<TPipeInfo,TStep, TPayload>
     : IoCTests
-    where TStep : IStepT<TPayload>
+    where TStep : IStepT<TPipeInfo,TPayload>
     where TPayload : IPayload
+    where TPipeInfo : IPipeInfoB
 {
     protected StepTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -42,7 +43,7 @@ public abstract class StepTestsT<TStep, TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var step = TestEnv.ResolveRequired<IStepT<TPayload>>();
+        var step = TestEnv.ResolveRequired<IStepT<TPipeInfo,TPayload>>();
         // THEN
         Assert.NotNull(step);
     }

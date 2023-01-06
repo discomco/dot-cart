@@ -10,15 +10,13 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class ChangeDetailsController : ControllerBase
 {
-    private readonly Hope2Cmd<ChangeDetails.Payload, EventMeta> _hope2Cmd;
-    private readonly ISequenceT<ChangeDetails.Payload> _sequence;
+    private readonly IPipeT<Context.ChangeDetails.IHopePipe, ChangeDetails.Payload> _pipe;
 
     public ChangeDetailsController(
-        ISequenceBuilderT<ChangeDetails.Payload> sequenceBuilder,
-        Hope2Cmd<ChangeDetails.Payload, EventMeta> hope2Cmd)
+        IPipeBuilderT<Context.ChangeDetails.IHopePipe, ChangeDetails.Payload> pipeBuilder
+        )
     {
-        _sequence = sequenceBuilder.Build();
-        _hope2Cmd = hope2Cmd;
+        _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
@@ -27,7 +25,7 @@ public class ChangeDetailsController : ControllerBase
         var feedback = Feedback.New(hope.AggId);
         try
         {
-            feedback = await _sequence.ExecuteAsync(hope);
+            feedback = await _pipe.ExecuteAsync(hope);
             return Ok(feedback);
         }
         catch (Exception e)

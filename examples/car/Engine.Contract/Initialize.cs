@@ -17,7 +17,8 @@ public static class Initialize
     [FactTopic(Topics.Fact_v1)]
     [CmdTopic(Topics.Cmd_v1)]
     [EvtTopic(Topics.Evt_v1)]
-    public record Payload(Schema.Details Details) : IPayload
+    public record Payload(Schema.Details Details) 
+        : IPayload
     {
         public Schema.Details Details { get; } = Details;
 
@@ -25,5 +26,10 @@ public static class Initialize
         {
             return new Payload(details);
         }
+    }
+
+    public record Dummyload
+        : IPayload
+    {
     }
 }

@@ -24,6 +24,8 @@ public static class ChangeDetails
     public const string ToRedisDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.ChangeDetails.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+    public const string FromRabbitMqRetro_v1 = Contract.ChangeDetails.Topics.Fact_v1 + ":from_rabbit_mq_retro:v1";
+
     public const string FromNATS_v1 = Contract.ChangeDetails.Topics.Hope_v1 + ":from_nats:v1";
 
 
@@ -32,13 +34,25 @@ public static class ChangeDetails
         return services
             .AddEngineBehavior()
             .AddChangeDetailsACLFuncs()
-            .AddHopeSequence<Contract.ChangeDetails.Payload, EventMeta>()
+            .AddHopeInPipe<IHopePipe, Contract.ChangeDetails.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeDetails.Payload, EventMeta>()
-            .AddRabbitMQEmitter<Spoke, ToRabbitMq, Contract.ChangeDetails.Payload, EventMeta>();
+            .AddNATSResponder<Spoke, 
+                FromNATS, 
+                Contract.ChangeDetails.Payload, 
+                EventMeta>()
+            .AddRabbitMqEmitter<Spoke, 
+                ToRabbitMq, 
+                Contract.ChangeDetails.Payload, 
+                EventMeta>()
+            .AddRabbitMqListener<Spoke, 
+                FromRabbitMqRetro, 
+                Contract.ChangeDetails.Payload, 
+                Contract.ChangeDetails.DummyLoad,
+                EventMeta, 
+                IRetroPipe>();
     }
 
 
@@ -91,7 +105,10 @@ public static class ChangeDetails
 
     [Name(ToRabbitMq_v1)]
     public class ToRabbitMq
-        : EmitterT<Spoke, Contract.ChangeDetails.Payload, EventMeta>
+        : EmitterT<
+            Spoke,
+            Contract.ChangeDetails.Payload,
+            EventMeta>
     {
         public ToRabbitMq(
             IRmqEmitterDriverT<Contract.ChangeDetails.Payload, EventMeta> driver,
@@ -109,15 +126,43 @@ public static class ChangeDetails
         : ResponderT<
             Spoke,
             Contract.ChangeDetails.Payload,
-            EventMeta>
+            IHopePipe>
     {
         public FromNATS(
             INATSResponderDriverT<Contract.ChangeDetails.Payload> driver,
             IExchange exchange,
-            ISequenceBuilderT<Contract.ChangeDetails.Payload> builder,
-            Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta> hope2Cmd)
-            : base(driver, exchange, builder, hope2Cmd)
+            IPipeBuilderT<IHopePipe, Contract.ChangeDetails.Payload> builder)
+            : base(driver, exchange, builder)
         {
         }
     }
+
+    [Name(FromRabbitMqRetro_v1)]
+    public class FromRabbitMqRetro
+        : ListenerT<
+            Spoke,
+            Contract.ChangeDetails.DummyLoad,
+            EventMeta,
+            Contract.ChangeDetails.Payload,
+            byte[],
+            IRetroPipe>
+    {
+        public FromRabbitMqRetro(
+            IRmqListenerDriverT<Contract.ChangeDetails.Payload> driver,
+            IExchange exchange,
+            IPipeBuilderT<IRetroPipe, Contract.ChangeDetails.Payload> pipeBuilder)
+            : base(driver, exchange, pipeBuilder)
+        {
+        }
+    }
+
+    public interface IHopePipe : IPipeInfoB
+    {
+    }
+
+    public interface IRetroPipe : IPipeInfoB
+    {
+    }
+
+
 }

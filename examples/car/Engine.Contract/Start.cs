@@ -21,4 +21,7 @@ public static class Start
     {
         public static readonly Payload New = new();
     }
+
+    public class Dummyload : IPayload
+    {}
 }

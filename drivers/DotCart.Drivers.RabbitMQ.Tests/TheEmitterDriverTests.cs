@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace DotCart.Drivers.RabbitMQ.Tests;
 
 public class TheEmitterDriverTests :
-    RMqEmitterDriverTestsT<IRmqEmitterDriverT<TheContract.Payload, TheContract.Meta>, TheContract.Payload,
+    RabbitMqEmitterDriverTestsT<IRmqEmitterDriverT<TheContract.Payload, TheContract.Meta>, TheContract.Payload,
         TheContract.Meta>
 {
     public TheEmitterDriverTests(ITestOutputHelper output, IoCTestContainer testEnv)

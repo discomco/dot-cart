@@ -17,7 +17,7 @@ public interface IAggregate
     bool KnowsApply(string evtType);
     void InjectTryFuncs(IEnumerable<ITry> tryFuncs);
     void InjectApplyFuncs(IEnumerable<IApply> applyFuncs);
-    Task<Feedback> ExecuteAsync(ICmdB cmd);
+    Task<Feedback> ExecuteAsync(ICmdB cmd, IFeedback previous=null);
     IAggregate SetID(IID ID);
     string Id();
     string GetName();

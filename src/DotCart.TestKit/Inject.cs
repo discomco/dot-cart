@@ -16,6 +16,5 @@ public static partial class Inject
             .AddHostExecutor()
             .AddConsoleLogger()
             .AddTransient<ITestOutputHelper, TestOutputHelper>();
-
     }
 }

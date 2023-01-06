@@ -1,3 +1,25 @@
+// MIT License
+//
+// Copyright (c) 2022-2023 by DisComCo Sp.z.o.o.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal
+// in the Software without restriction, including without limitation the rights
+// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+// copies of the Software, and to permit persons to whom the Software is
+// furnished to do so, subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in all
+// copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+// SOFTWARE.
+
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
@@ -7,36 +29,32 @@ using DotCart.Core;
 
 namespace DotCart.Context.Actors;
 
-public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg>
-    : ActorB, ISubscriber
+public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPipeInfo>
+    : ActorT<TSpoke>, ISubscriber
     where TCmdPayload : IPayload
     where TMeta : IEventMeta
     where TFactPayload : IPayload
-    where TSpoke: ISpokeT<TSpoke>
+    where TSpoke : ISpokeT<TSpoke>
     where TDriverMsg : class
+    where TPipeInfo : IPipeInfoB
 {
     private readonly Fact2Cmd<TCmdPayload, TMeta, TFactPayload> _fact2Cmd;
-    private readonly ISequenceBuilderT<TFactPayload> _sequenceBuilder;
+    private readonly IPipeBuilderT<TPipeInfo, TFactPayload> _pipeBuilder;
 
     protected ListenerT(
         IListenerDriverB driver,
         IExchange exchange,
-        ISequenceBuilderT<TFactPayload> sequenceBuilder) : base(exchange)
+        IPipeBuilderT<TPipeInfo,TFactPayload> pipeBuilder) : base(exchange)
     {
         Driver = driver;
-        _sequenceBuilder = sequenceBuilder;
+        _pipeBuilder = pipeBuilder;
     }
 
     public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
         var fact = (FactT<TFactPayload, TMeta>)msg;
-        var sequence = _sequenceBuilder.Build();
-        var fdbk = await sequence.ExecuteAsync(fact, cancellationToken);
-    }
-
-    private string GetSequenceName()
-    {
-        return $"{NameAtt.Get<TSpoke>()}:listener_seq";
+        var pipe = _pipeBuilder.Build();
+        var fdbk = await pipe.ExecuteAsync(fact, cancellationToken);
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)

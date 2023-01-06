@@ -23,12 +23,14 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.RabbitMQ.Tests\DotCart.Drivers.RabbitMQ.Tests.csproj" />
         <ProjectReference Include="..\DotCart.TestFirst\DotCart.TestFirst.csproj" />
         <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 
     <ItemGroup>
         <Folder Include="Behavior" />
+        <Folder Include="Drivers" />
     </ItemGroup>
 
 </Project>

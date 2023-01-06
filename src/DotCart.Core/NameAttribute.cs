@@ -37,7 +37,7 @@ public static class NameAtt
         return $"should ({CmdTopicAtt.Get<TCmdPayload>()}) on ({EvtTopicAtt.Get<TEvtPayload>()})";
     }
 
-    public static string StepName(StepLevel level, string stepName, string payloadTopic)
+    public static string StepName(Importance level, string stepName, string payloadTopic)
     {
         return $"[{level}] step {stepName}({payloadTopic})";
     }

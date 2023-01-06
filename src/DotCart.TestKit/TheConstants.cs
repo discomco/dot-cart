@@ -16,6 +16,6 @@ public static class TheConstants
     public const string FactTopic = "the_fact.topic";
     public const string AggregateName = "the_aggregate";
     public const string StepName = "the_step";
+    public const string PipeName = "the_pipe";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
-    public const string SequenceName = "the_sequence";
 }

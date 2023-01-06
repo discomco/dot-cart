@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Drivers.RabbitMQ.Tests;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,7 +7,7 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Tests.Actors;
 
-public class TheStepTests : StepTestsT<TheActors.Step, TheContract.Payload>
+public class TheStepTests : StepTestsT<TheContext.IPipeInfo, TheActors.Step, TheContract.Payload>
 {
     public TheStepTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -14,17 +15,15 @@ public class TheStepTests : StepTestsT<TheActors.Step, TheContract.Payload>
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient<IStepT<TheContract.Payload>, TheActors.Step>();
+            .AddTransient<IStepT<TheContext.IPipeInfo,TheContract.Payload>, TheActors.Step>();
     }
 }

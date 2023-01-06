@@ -18,14 +18,13 @@ public class TheResponder
     : ResponderT<
         TheSpoke,
         TheContract.Payload,
-        TheContract.Meta>, ITheResponder
+    TheContext.IPipeInfo>, ITheResponder
 {
     public TheResponder(
         INATSResponderDriverT<TheContract.Payload> driver,
         IExchange exchange,
-        ISequenceBuilderT<TheContract.Payload> builder,
-        Hope2Cmd<TheContract.Payload, TheContract.Meta> hope2Cmd)
-        : base(driver, exchange, builder, hope2Cmd)
+        IPipeBuilderT<TheContext.IPipeInfo, TheContract.Payload> builder)
+        : base(driver, exchange, builder)
     {
     }
 }

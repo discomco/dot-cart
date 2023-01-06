@@ -16,7 +16,7 @@ public static class LogFormatExtensions
 
     public static string AsFact(this string value)
     {
-        return Output.Background.Rgb(22, 120,120,Output.Yellow($"::{value}::"));
+        return Output.Background.Rgb(22, 120, 120, Output.Yellow($"::{value}::"));
     }
 
     public static string AsError(this string value)

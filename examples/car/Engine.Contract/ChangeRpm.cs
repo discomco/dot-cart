@@ -24,4 +24,8 @@ public static class ChangeRpm
             return new Payload(delta);
         }
     }
+
+    public class Dummyload : IPayload
+    {
+    }
 }

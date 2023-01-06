@@ -13,12 +13,13 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class InitializeController : ControllerBase
 {
-    private readonly ISequenceT<Initialize.Payload> _sequence;
+    private readonly IPipeT<Context.Initialize.IHopePipe ,Initialize.Payload> _pipe;
 
-    public InitializeController(ISequenceBuilderT<Initialize.Payload> sequenceBuilder,
-        Hope2Cmd<Initialize.Payload, EventMeta> hope2Cmd)
+    public InitializeController(
+        IPipeBuilderT<Context.Initialize.IHopePipe, Initialize.Payload> pipeBuilder
+        )
     {
-        _sequence = sequenceBuilder.Build();
+        _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
@@ -28,7 +29,7 @@ public class InitializeController : ControllerBase
         try
         {
             Guard.Against.Null(hope);
-            feedback = await _sequence.ExecuteAsync(hope);
+            feedback = await _pipe.ExecuteAsync(hope);
             return Ok(feedback);
         }
         catch (Exception e)

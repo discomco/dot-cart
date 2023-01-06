@@ -34,22 +34,20 @@ internal class CmdHandler : ICmdHandler
     public async Task<Feedback> HandleAsync(ICmdB cmd, Feedback previous, CancellationToken cancellationToken = default)
     {
         var step = "unknown";
-        if (previous != null) 
+        if (previous != null)
             step = previous.Step;
         var fbk = Feedback.New(cmd.AggregateID.Id(), previous, step);
         try
         {
             Guard.Against.Null(cmd);
             var aggId = cmd.AggregateID;
-
             _aggregate.SetID(aggId);
-
             await _aggregateStore
                 .LoadAsync(_aggregate, cancellationToken)
                 .ConfigureAwait(false);
 
             fbk = await _aggregate
-                .ExecuteAsync(cmd)
+                .ExecuteAsync(cmd, fbk)
                 .ConfigureAwait(false);
 
             await _aggregateStore

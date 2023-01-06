@@ -34,6 +34,10 @@ public static class Initialize
         _fact2Msg =
             fact => fact.ToBytes();
 
+    private static readonly Msg2Fact<Contract.Initialize.Payload, EventMeta, byte[]>
+        _msg2Fact =
+            msg => msg.FromBytes<FactT<Contract.Initialize.Payload, EventMeta>>(); 
+
     private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>
         _hope2Cmd =
             hope =>
@@ -134,7 +138,8 @@ public static class Initialize
         return services
             .AddTransient(_ => _evt2Fact)
             .AddTransient(_ => _hope2Cmd)
-            .AddTransient(_ => _fact2Msg);
+            .AddTransient(_ => _fact2Msg)
+            .AddTransient(_ => _msg2Fact);
     }
 
     public static IServiceCollection AddInitializeProjectionFuncs(this IServiceCollection services)

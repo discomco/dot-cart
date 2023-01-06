@@ -10,9 +10,9 @@ using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqListenerDriverT<TFactPayload, TFactMeta>
-    : DriverB, IRmqListenerDriverT<TFactPayload, byte[]>
-    where TFactPayload : IPayload
+public class RMqListenerDriverT<TFactPayload,TFactMeta>
+    : DriverB, IRmqListenerDriverT<TFactPayload>
+    where TFactPayload : IPayload 
     where TFactMeta : IEventMeta
 {
     private readonly IConnectionFactory _connFact;
@@ -22,7 +22,7 @@ public class RMqListenerDriverT<TFactPayload, TFactMeta>
     private IModel _channel;
     private IConnection _connection;
     private AsyncEventingBasicConsumer _consumer;
-    private string _topic;
+
 
     public RMqListenerDriverT(
         IConnectionFactory connFact,
@@ -73,7 +73,7 @@ public class RMqListenerDriverT<TFactPayload, TFactMeta>
             Guard.Against.Null(ea, nameof(ea));
             Guard.Against.Null(ea.Body, nameof(ea.Body));
             var fact = _msg2Fact(ea.Body.ToArray());
-            Log.Debug($"{AppFacts.Received} Fact({FactTopicAtt.Get<TFactPayload>()})");
+//            Log.Debug($"{AppFacts.Received} Fact({FactTopicAtt.Get<TFactPayload>()})");
             await Cast(fact);
         }
         catch (Exception e)

@@ -39,10 +39,10 @@ public static class Inject
     {
         return services
             .AddSingletonRMq()
-            .AddTransient<IListenerDriverT<TFactPayload, byte[]>, RMqListenerDriverT<TFactPayload, TMeta>>();
+            .AddTransient<IRmqListenerDriverT<TFactPayload>, RMqListenerDriverT<TFactPayload, TMeta>>();
     }
 
-    public static IServiceCollection AddRabbitMQEmitter<TSpoke, TEmitter, TPayload, TMeta>(
+    public static IServiceCollection AddRabbitMqEmitter<TSpoke, TEmitter, TPayload, TMeta>(
         this IServiceCollection services)
         where TPayload : IPayload
         where TMeta : IEventMeta
@@ -53,4 +53,25 @@ public static class Inject
             .AddRabbitMqEmitterDriverT<TPayload, TMeta>()
             .AddTransient<IActorT<TSpoke>, TEmitter>();
     }
-}
+
+    public static IServiceCollection AddRabbitMqListener<
+        TSpoke, 
+        TListener, 
+        TFactPayload, 
+        TCmdPayload, 
+        TMeta, 
+        TPipeInfo>(
+        this IServiceCollection services) 
+        where TMeta : IEventMeta 
+        where TFactPayload : IPayload 
+        where TListener : ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, byte[], TPipeInfo>
+        where TSpoke : ISpokeT<TSpoke>
+        where TPipeInfo : IPipeInfoB
+        where TCmdPayload : IPayload
+    {
+        return services
+            .AddPipeBuilder<TPipeInfo, TFactPayload>()
+            .AddRabbitMqListenerDriverT<TFactPayload, TMeta>()
+            .AddTransient<IActorT<TSpoke>, TListener>();
+    }
+    }
