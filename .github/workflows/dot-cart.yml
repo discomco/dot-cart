@@ -122,6 +122,12 @@ jobs:
         uses: actions/setup-dotnet@v3
         with:
           dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Make Scripts Executable
+        run: chmod +x ./cid
+      - name: Install dependencies
+        run: dotnet restore
+      - name: Build Packages
+        run: ./cid/build.sh          
       - name: Publish Packages
         run: ./cid/pub_pkg.sh
         env:
