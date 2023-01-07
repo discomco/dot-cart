@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.ChangeDetails;
 
-public class HopePipeBuilderTests 
+public class HopePipeBuilderTests
     : PipeBuilderTestsT<
         Context.ChangeDetails.IHopePipe,
         Contract.ChangeDetails.Payload>
@@ -21,12 +21,10 @@ public class HopePipeBuilderTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -34,6 +32,6 @@ public class HopePipeBuilderTests
         services
             .AddTransient(_ => A.Fake<ICmdHandler>())
             .AddChangeDetailsACLFuncs()
-            .AddHopeInPipe<Context.ChangeDetails.IHopePipe,Contract.ChangeDetails.Payload, EventMeta>();
+            .AddHopeInPipe<Context.ChangeDetails.IHopePipe, Contract.ChangeDetails.Payload, EventMeta>();
     }
 }

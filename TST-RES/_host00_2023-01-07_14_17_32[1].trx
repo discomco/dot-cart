@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="cb23ee4d-1b7d-48bf-bcdc-46e5d6be9c74" name="@host00 2023-01-07 14:17:32" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-01-07T14:17:32.3912900+01:00" queuing="2023-01-07T14:17:32.3912900+01:00" start="2023-01-07T14:17:30.6493320+01:00" finish="2023-01-07T14:17:32.3991070+01:00" />
+  <TestSettings name="default" id="a7bcd84d-4063-4bb4-8a89-02bd7ac2270d">
+    <Deployment runDeploymentRoot="_host00_2023-01-07_14_17_32" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="32c67d6f-ffce-4c89-b65b-e91bb69f20e4" testId="943ab482-0260-b8d3-2c6b-d2bd06c94b6e" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveConnectionMultiplexer" computerName="host00" duration="00:00:00.0095718" startTime="2023-01-07T14:17:32.2376440+01:00" endTime="2023-01-07T14:17:32.2376441+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="32c67d6f-ffce-4c89-b65b-e91bb69f20e4" />
+    <UnitTestResult executionId="8b2b5ff9-bd03-4340-8001-7f841b708cec" testId="002d7edf-59b1-ba30-e8e2-4498874c98f1" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveRedisStoreDriver" computerName="host00" duration="00:00:00.0058830" startTime="2023-01-07T14:17:32.2280968+01:00" endTime="2023-01-07T14:17:32.2280969+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8b2b5ff9-bd03-4340-8001-7f841b708cec" />
+    <UnitTestResult executionId="9cfa8c40-5b1d-4b69-8bbf-2d98d4a0228d" testId="ba89eb5b-9250-d658-06d0-b6a146798230" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveDocCtor" computerName="host00" duration="00:00:00.0048250" startTime="2023-01-07T14:17:32.2425231+01:00" endTime="2023-01-07T14:17:32.2425232+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9cfa8c40-5b1d-4b69-8bbf-2d98d4a0228d" />
+    <UnitTestResult executionId="9cb7a6f8-e548-4f76-b1a1-149e26bc92ba" testId="f90710f3-170a-232a-bf1d-3c97f17b14c8" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldCheckIfDocExists" computerName="host00" duration="00:00:00.2056654" startTime="2023-01-07T14:17:32.2209804+01:00" endTime="2023-01-07T14:17:32.2209979+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="9cb7a6f8-e548-4f76-b1a1-149e26bc92ba" />
+    <UnitTestResult executionId="89a41930-5a44-4506-a74c-fb5ada0761ec" testId="2db50201-bf32-252a-0cd2-de7f1f797aea" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldSetDocToRedisStore" computerName="host00" duration="00:00:00.0122183" startTime="2023-01-07T14:17:32.2753656+01:00" endTime="2023-01-07T14:17:32.2753657+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="89a41930-5a44-4506-a74c-fb5ada0761ec" />
+    <UnitTestResult executionId="0d4ac929-f8b5-480e-8055-9f8bb6f65539" testId="959a9b42-25b2-9ab0-a774-955c25a2e01c" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldDeleteDocFromRedisStore" computerName="host00" duration="00:00:00.0076342" startTime="2023-01-07T14:17:32.2630292+01:00" endTime="2023-01-07T14:17:32.2630294+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d4ac929-f8b5-480e-8055-9f8bb6f65539" />
+    <UnitTestResult executionId="651458bc-cf03-41e9-9865-84ead2d5fd26" testId="6d3ede89-3686-b034-e727-1ceffdab6fa5" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveIDCtor" computerName="host00" duration="00:00:00.0059794" startTime="2023-01-07T14:17:32.2897129+01:00" endTime="2023-01-07T14:17:32.2897130+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="651458bc-cf03-41e9-9865-84ead2d5fd26" />
+    <UnitTestResult executionId="e1206c87-f9ad-467c-ac49-7bfd3ed3a5c4" testId="2ae4a2fb-9ecf-b480-b3a9-0c12258c0ddd" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveRedisDB" computerName="host00" duration="00:00:00.0053663" startTime="2023-01-07T14:17:32.2807912+01:00" endTime="2023-01-07T14:17:32.2807913+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e1206c87-f9ad-467c-ac49-7bfd3ed3a5c4" />
+    <UnitTestResult executionId="5c0efd06-f20f-4f76-aa12-3646b87de9bd" testId="3c6ecf6c-36d7-c8bc-cca4-03301f230cab" testName="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldGetDocFromRedisStore" computerName="host00" duration="00:00:00.0125608" startTime="2023-01-07T14:17:32.2552572+01:00" endTime="2023-01-07T14:17:32.2552574+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5c0efd06-f20f-4f76-aa12-3646b87de9bd" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldSetDocToRedisStore" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="2db50201-bf32-252a-0cd2-de7f1f797aea">
+      <Execution id="89a41930-5a44-4506-a74c-fb5ada0761ec" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldSetDocToRedisStore" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveRedisStoreDriver" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="002d7edf-59b1-ba30-e8e2-4498874c98f1">
+      <Execution id="8b2b5ff9-bd03-4340-8001-7f841b708cec" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldResolveRedisStoreDriver" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveRedisDB" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="2ae4a2fb-9ecf-b480-b3a9-0c12258c0ddd">
+      <Execution id="e1206c87-f9ad-467c-ac49-7bfd3ed3a5c4" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldResolveRedisDB" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldGetDocFromRedisStore" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="3c6ecf6c-36d7-c8bc-cca4-03301f230cab">
+      <Execution id="5c0efd06-f20f-4f76-aa12-3646b87de9bd" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldGetDocFromRedisStore" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveConnectionMultiplexer" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="943ab482-0260-b8d3-2c6b-d2bd06c94b6e">
+      <Execution id="32c67d6f-ffce-4c89-b65b-e91bb69f20e4" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldResolveConnectionMultiplexer" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveDocCtor" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="ba89eb5b-9250-d658-06d0-b6a146798230">
+      <Execution id="9cfa8c40-5b1d-4b69-8bbf-2d98d4a0228d" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldResolveDocCtor" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldDeleteDocFromRedisStore" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="959a9b42-25b2-9ab0-a774-955c25a2e01c">
+      <Execution id="0d4ac929-f8b5-480e-8055-9f8bb6f65539" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldDeleteDocFromRedisStore" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldResolveIDCtor" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="6d3ede89-3686-b034-e727-1ceffdab6fa5">
+      <Execution id="651458bc-cf03-41e9-9865-84ead2d5fd26" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldResolveIDCtor" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests.ShouldCheckIfDocExists" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.redis.tests/bin/debug/net7.0/dotcart.drivers.redis.tests.dll" id="f90710f3-170a-232a-bf1d-3c97f17b14c8">
+      <Execution id="9cb7a6f8-e548-4f76-b1a1-149e26bc92ba" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Redis.Tests/bin/Debug/net7.0/DotCart.Drivers.Redis.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Redis.Tests.MyRedisStoreDriverTests" name="ShouldCheckIfDocExists" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="943ab482-0260-b8d3-2c6b-d2bd06c94b6e" executionId="32c67d6f-ffce-4c89-b65b-e91bb69f20e4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="002d7edf-59b1-ba30-e8e2-4498874c98f1" executionId="8b2b5ff9-bd03-4340-8001-7f841b708cec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ba89eb5b-9250-d658-06d0-b6a146798230" executionId="9cfa8c40-5b1d-4b69-8bbf-2d98d4a0228d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f90710f3-170a-232a-bf1d-3c97f17b14c8" executionId="9cb7a6f8-e548-4f76-b1a1-149e26bc92ba" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2db50201-bf32-252a-0cd2-de7f1f797aea" executionId="89a41930-5a44-4506-a74c-fb5ada0761ec" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="959a9b42-25b2-9ab0-a774-955c25a2e01c" executionId="0d4ac929-f8b5-480e-8055-9f8bb6f65539" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d3ede89-3686-b034-e727-1ceffdab6fa5" executionId="651458bc-cf03-41e9-9865-84ead2d5fd26" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="2ae4a2fb-9ecf-b480-b3a9-0c12258c0ddd" executionId="e1206c87-f9ad-467c-ac49-7bfd3ed3a5c4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3c6ecf6c-36d7-c8bc-cca4-03301f230cab" executionId="5c0efd06-f20f-4f76-aa12-3646b87de9bd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="9" executed="9" passed="9" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 7.0.0)
+[xUnit.net 00:00:00.80]   Discovering: DotCart.Drivers.Redis.Tests
+[xUnit.net 00:00:00.82]   Discovered:  DotCart.Drivers.Redis.Tests
+[xUnit.net 00:00:00.82]   Starting:    DotCart.Drivers.Redis.Tests
+[xUnit.net 00:00:01.15]   Finished:    DotCart.Drivers.Redis.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

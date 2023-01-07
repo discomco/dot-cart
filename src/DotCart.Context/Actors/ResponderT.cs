@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -11,14 +10,14 @@ public class ResponderT<TSpoke, TPayload, TPipeInfo> : ActorT<TSpoke>, IResponde
     where TSpoke : ISpokeT<TSpoke>
     where TPipeInfo : IPipeInfoB
 {
-    private readonly IPipeBuilderT<TPipeInfo,TPayload> _builder;
+    private readonly IPipeBuilderT<TPipeInfo, TPayload> _builder;
 
-    private IPipeT<TPipeInfo,TPayload> _pipe;
-    
+    private IPipeT<TPipeInfo, TPayload> _pipe;
+
     public ResponderT(
         IResponderDriverT<TPayload> driver,
         IExchange exchange,
-        IPipeBuilderT<TPipeInfo,TPayload> builder) : base(exchange)
+        IPipeBuilderT<TPipeInfo, TPayload> builder) : base(exchange)
     {
         Driver = driver;
         _builder = builder;

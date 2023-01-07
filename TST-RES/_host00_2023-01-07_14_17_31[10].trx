@@ -1,0 +1,142 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="591d592c-8f79-44ca-85bd-16be87c27500" name="@host00 2023-01-07 14:17:31" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-01-07T14:17:32.0051300+01:00" queuing="2023-01-07T14:17:32.0051301+01:00" start="2023-01-07T14:17:30.6627234+01:00" finish="2023-01-07T14:17:34.1717787+01:00" />
+  <TestSettings name="default" id="49ba5803-5954-4473-bb38-ce40968a51ad">
+    <Deployment runDeploymentRoot="_host00_2023-01-07_14_17_31" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="e677bae9-f13f-4d55-b3b2-c33eae18389c" testId="7dee401b-989e-cb3e-18a8-631139fc0bff" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldBeNamedComponent" computerName="host00" duration="00:00:00.0007604" startTime="2023-01-07T14:17:31.9588945+01:00" endTime="2023-01-07T14:17:31.9588946+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e677bae9-f13f-4d55-b3b2-c33eae18389c" />
+    <UnitTestResult executionId="ff39a35d-4f8e-4b96-8cb0-7e34a4445adf" testId="c12adbd2-8b2a-2ba1-2d22-900bdbf421cd" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpoke" computerName="host00" duration="00:00:00.0004948" startTime="2023-01-07T14:17:31.9580801+01:00" endTime="2023-01-07T14:17:31.9580802+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ff39a35d-4f8e-4b96-8cb0-7e34a4445adf" />
+    <UnitTestResult executionId="f6eb3e0c-e9ef-46aa-8163-6eb6f25aeece" testId="6d4c566d-b38c-25be-c057-9f8847fa5484" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveProducer" computerName="host00" duration="00:00:00.0008403" startTime="2023-01-07T14:17:31.9803939+01:00" endTime="2023-01-07T14:17:31.9803940+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f6eb3e0c-e9ef-46aa-8163-6eb6f25aeece" />
+    <UnitTestResult executionId="0d8fef1c-288d-467c-8553-d7e60cb727eb" testId="f009d648-dc15-6079-00cb-c4a0bbdbb509" testName="DotCart.Context.Tests.Effects.TopicMediatorTests.ShouldResolveTopicMediator" computerName="host00" duration="00:00:00.0313009" startTime="2023-01-07T14:17:31.9509191+01:00" endTime="2023-01-07T14:17:31.9509193+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0d8fef1c-288d-467c-8553-d7e60cb727eb" />
+    <UnitTestResult executionId="5f58495d-b3cd-4a54-ad59-f7e3db0e21fd" testId="926612c2-91f6-ad3e-cc70-a7d6a96d7671" testName="DotCart.Context.Tests.Behavior.InjectFunctionsTests.ShouldResolveReceiver" computerName="host00" duration="00:00:00.0329851" startTime="2023-01-07T14:17:31.9522303+01:00" endTime="2023-01-07T14:17:31.9522303+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="5f58495d-b3cd-4a54-ad59-f7e3db0e21fd" />
+    <UnitTestResult executionId="dd6ec580-9096-4408-b3fb-dbec3ec615aa" testId="e1f8ca21-fb91-43de-9322-364b6ec20b07" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveConsumer2" computerName="host00" duration="00:00:00.0004472" startTime="2023-01-07T14:17:31.9569886+01:00" endTime="2023-01-07T14:17:31.9569887+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="dd6ec580-9096-4408-b3fb-dbec3ec615aa" />
+    <UnitTestResult executionId="720d5585-a547-422c-94ab-a4a3751a63ac" testId="fbad8ae3-e05d-1bb9-53d6-68c26a0aefde" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldActivateComponent" computerName="host00" duration="00:00:00.0068970" startTime="2023-01-07T14:17:31.9802283+01:00" endTime="2023-01-07T14:17:31.9802284+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="720d5585-a547-422c-94ab-a4a3751a63ac" />
+    <UnitTestResult executionId="44ed77aa-1c2d-4666-a539-f38ad0558ea0" testId="0cb4a35e-115e-925f-6b30-182e8b011faa" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpokeBuilder" computerName="host00" duration="00:00:00.0012788" startTime="2023-01-07T14:17:34.1120143+01:00" endTime="2023-01-07T14:17:34.1120143+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="44ed77aa-1c2d-4666-a539-f38ad0558ea0" />
+    <UnitTestResult executionId="e8631758-b2be-4bed-9e2f-e73a4ade8232" testId="8aaee8d6-fa47-616e-bf39-ddbcc4369892" testName="DotCart.Context.Tests.SpokeTests.Test1" computerName="host00" duration="00:00:00.0021021" startTime="2023-01-07T14:17:31.9276963+01:00" endTime="2023-01-07T14:17:31.9277469+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e8631758-b2be-4bed-9e2f-e73a4ade8232" />
+    <UnitTestResult executionId="338f5320-e5e8-4efb-9dcd-9d1aed1f3954" testId="1b38514d-9cd7-4e2f-7abf-02708bf6124f" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpokeAsHostedService" computerName="host00" duration="00:00:00.0012708" startTime="2023-01-07T14:17:34.1141905+01:00" endTime="2023-01-07T14:17:34.1141906+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="338f5320-e5e8-4efb-9dcd-9d1aed1f3954" />
+    <UnitTestResult executionId="0a818aa7-0bfd-42a7-9ed5-32907ed377f4" testId="e678b54b-69ca-1a44-9cf7-e428f7fa4f4d" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveActiveComponent" computerName="host00" duration="00:00:00.0005141" startTime="2023-01-07T14:17:31.9575390+01:00" endTime="2023-01-07T14:17:31.9575390+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0a818aa7-0bfd-42a7-9ed5-32907ed377f4" />
+    <UnitTestResult executionId="f24a78c3-b338-4ba3-83f9-35d70caa9187" testId="92c3d9bf-109c-37de-e51d-d60eb0347cb2" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveProjector" computerName="host00" duration="00:00:00.0008074" startTime="2023-01-07T14:17:34.1128737+01:00" endTime="2023-01-07T14:17:34.1128737+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f24a78c3-b338-4ba3-83f9-35d70caa9187" />
+    <UnitTestResult executionId="451591d3-861c-4745-bb1b-e516332c8e4d" testId="acaa3234-50b3-46d0-7c8d-f3bfbeb0a845" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldBuildSpoke" computerName="host00" duration="00:00:00.0366921" startTime="2023-01-07T14:17:31.9555034+01:00" endTime="2023-01-07T14:17:31.9555034+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="451591d3-861c-4745-bb1b-e516332c8e4d" />
+    <UnitTestResult executionId="efb4f6cd-9b10-4771-8bb6-5a08427f4972" testId="5ce7874a-77e3-0784-9256-54a5d57707a8" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldActivateSpoke" computerName="host00" duration="00:00:02.1397224" startTime="2023-01-07T14:17:34.1106120+01:00" endTime="2023-01-07T14:17:34.1106122+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="efb4f6cd-9b10-4771-8bb6-5a08427f4972">
+      <Output>
+        <StdOut>2023-01-07 14:17:31.986 [033][INF] \x1b[44m\x1b[30m::STARTING::\x1b[0m\x1b[44m\x1b[0m Spoke:[the_spoke]
+2023-01-07 14:17:31.993 [033][INF] \x1b[44m\x1b[30m::ACTIVATING::\x1b[0m\x1b[44m\x1b[0m exchange [dotcart:exchange:v1]
+2023-01-07 14:17:31.993 [033][INF] \x1b[44m\x1b[30m::WAIT_1S::\x1b[0m\x1b[44m\x1b[0m exchange [dotcart:exchange:v1]...
+2023-01-07 14:17:31.994 [005][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [dotcart:exchange:v1]
+2023-01-07 14:17:31.998 [033][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m [DotCart.Context.Tests.Actors.NamedConsumer2]
+2023-01-07 14:17:31.999 [049][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [NamedConsumer2]
+2023-01-07 14:17:31.999 [051][INF] NamedConsumer2 is subscribing to DotCart.Context.Actors.Exchange
+2023-01-07 14:17:32.018 [049][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m [DotCart.Context.Tests.Actors.Consumer2]
+2023-01-07 14:17:32.019 [052][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [Consumer2]
+2023-01-07 14:17:32.019 [050][INF] Consumer2 is subscribing to DotCart.Context.Actors.Exchange
+2023-01-07 14:17:32.039 [052][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m [DotCart.Context.Tests.Actors.Producer]
+2023-01-07 14:17:32.039 [052][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [Producer]
+2023-01-07 14:17:32.060 [049][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m [DotCart.Context.Tests.Actors.Consumer1]
+2023-01-07 14:17:32.060 [054][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [Consumer1]
+2023-01-07 14:17:32.061 [054][INF] Consumer1 is subscribing to DotCart.Context.Actors.Exchange
+2023-01-07 14:17:32.080 [053][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m [DotCart.Context.Tests.Actors.NamedConsumer1]
+2023-01-07 14:17:32.081 [053][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [NamedConsumer1]
+2023-01-07 14:17:32.081 [053][INF] \x1b[44m\x1b[30m::SUBSCRIBING::\x1b[0m\x1b[44m\x1b[0m [NamedConsumer1] ~&gt; [DotCart.Context.Actors.Exchange]
+2023-01-07 14:17:32.102 [055][INF] \x1b[44m\x1b[30m::LOOPING(Activate, 1)::\x1b[0m\x1b[44m\x1b[0m Projector [dotcart:mem_projector]
+2023-01-07 14:17:32.103 [056][INF] \x1b[48;2;22;120;120m\x1b[33m::ACTIVATED::\x1b[0m\x1b[48;2;22;120;120m\x1b[0m [dotcart:mem_projector]
+2023-01-07 14:17:32.103 [056][INF] \x1b[48;2;16;16;128m\x1b[30m::RUNNING::\x1b[0m\x1b[48;2;16;16;128m\x1b[0m Projector [dotcart:mem_projector]</StdOut>
+      </Output>
+    </UnitTestResult>
+    <UnitTestResult executionId="e016a4a3-ccd9-4b3a-802a-11e69eeb6325" testId="fc883992-bc4d-3f6c-17e5-1eb7d4644ad7" testName="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveConsumer1" computerName="host00" duration="00:00:00.0008739" startTime="2023-01-07T14:17:31.9564875+01:00" endTime="2023-01-07T14:17:31.9564876+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="e016a4a3-ccd9-4b3a-802a-11e69eeb6325" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpokeBuilder" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="0cb4a35e-115e-925f-6b30-182e8b011faa">
+      <Execution id="44ed77aa-1c2d-4666-a539-f38ad0558ea0" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveSpokeBuilder" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldBeNamedComponent" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="7dee401b-989e-cb3e-18a8-631139fc0bff">
+      <Execution id="e677bae9-f13f-4d55-b3b2-c33eae18389c" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldBeNamedComponent" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldBuildSpoke" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="acaa3234-50b3-46d0-7c8d-f3bfbeb0a845">
+      <Execution id="451591d3-861c-4745-bb1b-e516332c8e4d" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldBuildSpoke" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveProducer" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="6d4c566d-b38c-25be-c057-9f8847fa5484">
+      <Execution id="f6eb3e0c-e9ef-46aa-8163-6eb6f25aeece" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveProducer" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Effects.TopicMediatorTests.ShouldResolveTopicMediator" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="f009d648-dc15-6079-00cb-c4a0bbdbb509">
+      <Execution id="0d8fef1c-288d-467c-8553-d7e60cb727eb" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Effects.TopicMediatorTests" name="ShouldResolveTopicMediator" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldActivateComponent" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="fbad8ae3-e05d-1bb9-53d6-68c26a0aefde">
+      <Execution id="720d5585-a547-422c-94ab-a4a3751a63ac" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldActivateComponent" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveActiveComponent" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="e678b54b-69ca-1a44-9cf7-e428f7fa4f4d">
+      <Execution id="0a818aa7-0bfd-42a7-9ed5-32907ed377f4" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveActiveComponent" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.SpokeTests.Test1" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="8aaee8d6-fa47-616e-bf39-ddbcc4369892">
+      <Execution id="e8631758-b2be-4bed-9e2f-e73a4ade8232" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.SpokeTests" name="Test1" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpokeAsHostedService" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="1b38514d-9cd7-4e2f-7abf-02708bf6124f">
+      <Execution id="338f5320-e5e8-4efb-9dcd-9d1aed1f3954" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveSpokeAsHostedService" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveConsumer2" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="e1f8ca21-fb91-43de-9322-364b6ec20b07">
+      <Execution id="dd6ec580-9096-4408-b3fb-dbec3ec615aa" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveConsumer2" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldActivateSpoke" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="5ce7874a-77e3-0784-9256-54a5d57707a8">
+      <Execution id="efb4f6cd-9b10-4771-8bb6-5a08427f4972" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldActivateSpoke" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveSpoke" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="c12adbd2-8b2a-2ba1-2d22-900bdbf421cd">
+      <Execution id="ff39a35d-4f8e-4b96-8cb0-7e34a4445adf" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveSpoke" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Behavior.InjectFunctionsTests.ShouldResolveReceiver" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="926612c2-91f6-ad3e-cc70-a7d6a96d7671">
+      <Execution id="5f58495d-b3cd-4a54-ad59-f7e3db0e21fd" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Behavior.InjectFunctionsTests" name="ShouldResolveReceiver" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveProjector" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="92c3d9bf-109c-37de-e51d-d60eb0347cb2">
+      <Execution id="f24a78c3-b338-4ba3-83f9-35d70caa9187" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveProjector" />
+    </UnitTest>
+    <UnitTest name="DotCart.Context.Tests.Actors.ExchangeTests.ShouldResolveConsumer1" storage="/home/rl/work/github.com/discomco/dot-cart/src/dotcart.context.tests/bin/debug/net7.0/dotcart.context.tests.dll" id="fc883992-bc4d-3f6c-17e5-1eb7d4644ad7">
+      <Execution id="e016a4a3-ccd9-4b3a-802a-11e69eeb6325" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/src/DotCart.Context.Tests/bin/Debug/net7.0/DotCart.Context.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Context.Tests.Actors.ExchangeTests" name="ShouldResolveConsumer1" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="7dee401b-989e-cb3e-18a8-631139fc0bff" executionId="e677bae9-f13f-4d55-b3b2-c33eae18389c" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="c12adbd2-8b2a-2ba1-2d22-900bdbf421cd" executionId="ff39a35d-4f8e-4b96-8cb0-7e34a4445adf" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="6d4c566d-b38c-25be-c057-9f8847fa5484" executionId="f6eb3e0c-e9ef-46aa-8163-6eb6f25aeece" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f009d648-dc15-6079-00cb-c4a0bbdbb509" executionId="0d8fef1c-288d-467c-8553-d7e60cb727eb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="926612c2-91f6-ad3e-cc70-a7d6a96d7671" executionId="5f58495d-b3cd-4a54-ad59-f7e3db0e21fd" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e1f8ca21-fb91-43de-9322-364b6ec20b07" executionId="dd6ec580-9096-4408-b3fb-dbec3ec615aa" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fbad8ae3-e05d-1bb9-53d6-68c26a0aefde" executionId="720d5585-a547-422c-94ab-a4a3751a63ac" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0cb4a35e-115e-925f-6b30-182e8b011faa" executionId="44ed77aa-1c2d-4666-a539-f38ad0558ea0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="8aaee8d6-fa47-616e-bf39-ddbcc4369892" executionId="e8631758-b2be-4bed-9e2f-e73a4ade8232" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1b38514d-9cd7-4e2f-7abf-02708bf6124f" executionId="338f5320-e5e8-4efb-9dcd-9d1aed1f3954" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="e678b54b-69ca-1a44-9cf7-e428f7fa4f4d" executionId="0a818aa7-0bfd-42a7-9ed5-32907ed377f4" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="92c3d9bf-109c-37de-e51d-d60eb0347cb2" executionId="f24a78c3-b338-4ba3-83f9-35d70caa9187" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="acaa3234-50b3-46d0-7c8d-f3bfbeb0a845" executionId="451591d3-861c-4745-bb1b-e516332c8e4d" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="5ce7874a-77e3-0784-9256-54a5d57707a8" executionId="efb4f6cd-9b10-4771-8bb6-5a08427f4972" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="fc883992-bc4d-3f6c-17e5-1eb7d4644ad7" executionId="e016a4a3-ccd9-4b3a-802a-11e69eeb6325" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="15" executed="15" passed="15" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 7.0.0)
+[xUnit.net 00:00:00.74]   Discovering: DotCart.Context.Tests
+[xUnit.net 00:00:00.77]   Discovered:  DotCart.Context.Tests
+[xUnit.net 00:00:00.77]   Starting:    DotCart.Context.Tests
+[xUnit.net 00:00:03.00]   Finished:    DotCart.Context.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

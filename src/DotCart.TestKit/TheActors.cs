@@ -15,7 +15,7 @@ public static class TheActors
 
     [Name(TheConstants.StepName)]
     [Order(0)]
-    public class Step : StepT<TheContext.IPipeInfo,TheContract.Payload>
+    public class Step : StepT<TheContext.IPipeInfo, TheContract.Payload>
     {
         protected override string GetName()
         {

@@ -1,6 +1,6 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
-using Engine.Contract;
+using Engine.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engine.Api.Cmd.Controllers;
@@ -9,17 +9,17 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class StopController : ControllerBase
 {
-    private readonly IPipeT<Context.Stop.IHopeInPipe, Stop.Payload> _pipe;
+    private readonly IPipeT<Stop.IHopeInPipe, Contract.Stop.Payload> _pipe;
 
     public StopController(
-        IPipeBuilderT<Context.Stop.IHopeInPipe, Stop.Payload> pipeBuilder
+        IPipeBuilderT<Stop.IHopeInPipe, Contract.Stop.Payload> pipeBuilder
     )
     {
         _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Stop.Payload> hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Contract.Stop.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

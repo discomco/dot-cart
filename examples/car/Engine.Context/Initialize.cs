@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -33,7 +32,7 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeACLFuncs()
-            .AddHopeInPipe<IHopePipe,Contract.Initialize.Payload, EventMeta>()
+            .AddHopeInPipe<IHopePipe, Contract.Initialize.Payload, EventMeta>()
             .AddHostedSpokeT<Spoke>()
             .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, EventMeta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
@@ -128,7 +127,7 @@ public static class Initialize
         public FromNATS(
             INATSResponderDriverT<Contract.Initialize.Payload> driver,
             IExchange exchange,
-            IPipeBuilderT<IHopePipe, Contract.Initialize.Payload> builder) 
+            IPipeBuilderT<IHopePipe, Contract.Initialize.Payload> builder)
             : base(driver, exchange, builder)
         {
         }
@@ -143,18 +142,18 @@ public static class Initialize
     }
 
     [Name(FromRabbitMqRetro_v1)]
-    public class FromRabbitMqRetro:
-        ListenerT<Spoke, 
-            Contract.Initialize.Dummyload, 
-            EventMeta, 
-            Contract.Initialize.Payload, 
-            byte[], 
+    public class FromRabbitMqRetro :
+        ListenerT<Spoke,
+            Contract.Initialize.Dummyload,
+            EventMeta,
+            Contract.Initialize.Payload,
+            byte[],
             IRetroPipe>
     {
         public FromRabbitMqRetro(
             IRmqListenerDriverT<Contract.Initialize.Payload> driver,
             IExchange exchange,
-            IPipeBuilderT<IRetroPipe, Contract.Initialize.Payload> pipeBuilder) 
+            IPipeBuilderT<IRetroPipe, Contract.Initialize.Payload> pipeBuilder)
             : base(driver, exchange, pipeBuilder)
         {
         }

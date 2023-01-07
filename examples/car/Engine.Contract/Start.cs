@@ -23,5 +23,6 @@ public static class Start
     }
 
     public class Dummyload : IPayload
-    {}
+    {
+    }
 }

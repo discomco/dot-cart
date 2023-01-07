@@ -39,7 +39,7 @@ public class ShouldChangeDetailsOnInitializedTests
             EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), aggID.Id()).ToBytes()
         );
         // WHEN
-        var fdbk = await agg.ExecuteAsync(initCmd, null);
+        var fdbk = await agg.ExecuteAsync(initCmd);
         Assert.NotNull(fdbk);
         Assert.True(fdbk.IsSuccess);
         // THEN

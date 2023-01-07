@@ -16,7 +16,7 @@ minikube/
 BLD/
 BLD_PKG/
 packages/
-TST_RES/
+TST-RES/
 
 
 # Build results

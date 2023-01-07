@@ -3,8 +3,8 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface ICmdHandlerStep<TPipeInfo,TPayload> : IStepT<TPipeInfo,TPayload>
-    where TPayload : IPayload 
+public interface ICmdHandlerStep<TPipeInfo, TPayload> : IStepT<TPipeInfo, TPayload>
+    where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {
 }

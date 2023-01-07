@@ -2,7 +2,7 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface IPipeT<TPipeInfo,TPayload>
+public interface IPipeT<TPipeInfo, TPayload>
     where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {

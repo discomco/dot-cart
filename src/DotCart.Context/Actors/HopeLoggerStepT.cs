@@ -30,11 +30,12 @@ namespace DotCart.Context.Actors;
 
 [Name("HopeLogger")]
 [Order(0)]
-public class HopeLoggerStepT<TPipeInfo,TPayload> : StepT<TPipeInfo,TPayload> 
-    where TPayload : IPayload 
+public class HopeLoggerStepT<TPipeInfo, TPayload> : StepT<TPipeInfo, TPayload>
+    where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {
-    public override async Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback, CancellationToken cancellationToken = default)
+    public override async Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback,
+        CancellationToken cancellationToken = default)
     {
         var feedback = Feedback.New(msg.AggId, previousFeedback, Name);
         Log.Information($"{AppFacts.Received} hope {HopeTopicAtt.Get<TPayload>()}");

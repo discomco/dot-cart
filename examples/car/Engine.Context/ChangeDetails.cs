@@ -39,19 +39,19 @@ public static class ChangeDetails
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddNATSResponder<Spoke, 
-                FromNATS, 
-                Contract.ChangeDetails.Payload, 
+            .AddNATSResponder<Spoke,
+                FromNATS,
+                Contract.ChangeDetails.Payload,
                 EventMeta>()
-            .AddRabbitMqEmitter<Spoke, 
-                ToRabbitMq, 
-                Contract.ChangeDetails.Payload, 
+            .AddRabbitMqEmitter<Spoke,
+                ToRabbitMq,
+                Contract.ChangeDetails.Payload,
                 EventMeta>()
-            .AddRabbitMqListener<Spoke, 
-                FromRabbitMqRetro, 
-                Contract.ChangeDetails.Payload, 
+            .AddRabbitMqListener<Spoke,
+                FromRabbitMqRetro,
+                Contract.ChangeDetails.Payload,
                 Contract.ChangeDetails.DummyLoad,
-                EventMeta, 
+                EventMeta,
                 IRetroPipe>();
     }
 
@@ -163,6 +163,4 @@ public static class ChangeDetails
     public interface IRetroPipe : IPipeInfoB
     {
     }
-
-
 }

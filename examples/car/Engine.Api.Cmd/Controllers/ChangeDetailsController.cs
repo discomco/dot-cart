@@ -1,7 +1,6 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using Engine.Contract;
+using Engine.Context;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Engine.Api.Cmd.Controllers;
@@ -10,17 +9,17 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class ChangeDetailsController : ControllerBase
 {
-    private readonly IPipeT<Context.ChangeDetails.IHopePipe, ChangeDetails.Payload> _pipe;
+    private readonly IPipeT<ChangeDetails.IHopePipe, Contract.ChangeDetails.Payload> _pipe;
 
     public ChangeDetailsController(
-        IPipeBuilderT<Context.ChangeDetails.IHopePipe, ChangeDetails.Payload> pipeBuilder
-        )
+        IPipeBuilderT<ChangeDetails.IHopePipe, Contract.ChangeDetails.Payload> pipeBuilder
+    )
     {
         _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<ChangeDetails.Payload> hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Contract.ChangeDetails.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

@@ -10,7 +10,7 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
-public class HopePipeBuilderTests: PipeBuilderTestsT<Context.Stop.IHopeInPipe, Contract.Stop.Payload>
+public class HopePipeBuilderTests : PipeBuilderTestsT<Context.Stop.IHopeInPipe, Contract.Stop.Payload>
 {
     public HopePipeBuilderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -18,12 +18,10 @@ public class HopePipeBuilderTests: PipeBuilderTestsT<Context.Stop.IHopeInPipe, C
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
 using NATS.Client;
@@ -18,7 +17,7 @@ public class TheResponder
     : ResponderT<
         TheSpoke,
         TheContract.Payload,
-    TheContext.IPipeInfo>, ITheResponder
+        TheContext.IPipeInfo>, ITheResponder
 {
     public TheResponder(
         INATSResponderDriverT<TheContract.Payload> driver,

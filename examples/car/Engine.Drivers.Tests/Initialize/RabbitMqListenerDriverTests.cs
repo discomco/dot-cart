@@ -8,10 +8,10 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests.Initialize;
 
 public class RabbitMqListenerDriverTests
-: RabbitMqListenerDriverTestsT<
-    Contract.Initialize.Payload, 
-    EventMeta
-> 
+    : RabbitMqListenerDriverTestsT<
+        Contract.Initialize.Payload,
+        EventMeta
+    >
 {
     public RabbitMqListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -19,12 +19,10 @@ public class RabbitMqListenerDriverTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

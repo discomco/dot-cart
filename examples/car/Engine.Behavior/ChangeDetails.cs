@@ -107,7 +107,7 @@ public static class ChangeDetails
 
     private static readonly Msg2Fact<Contract.ChangeDetails.Payload, EventMeta, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.ChangeDetails.Payload, EventMeta>>(); 
+            msg => msg.FromBytes<FactT<Contract.ChangeDetails.Payload, EventMeta>>();
 
     private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
         _hope2Cmd =

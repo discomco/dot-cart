@@ -25,7 +25,7 @@ public static class Stop
         }
     }
 
-    public class Dummyload 
+    public class Dummyload
         : IPayload
     {
     }

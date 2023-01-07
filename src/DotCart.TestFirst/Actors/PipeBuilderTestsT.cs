@@ -6,10 +6,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
+public abstract class PipeBuilderTestsT<TPipeInfo, TPayload>
     : IoCTests
     where TPayload : IPayload
-    where TPipeInfo: IPipeInfoB
+    where TPipeInfo : IPipeInfoB
 {
     protected PipeBuilderTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -22,7 +22,7 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         // THEN
         Assert.NotNull(builder);
     }
@@ -32,7 +32,7 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         // WHEN
         var pipe = builder.Build();
         // THEN
@@ -43,11 +43,11 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
     public void ShouldContainSteps()
     {
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         var pipe = builder.Build();
         Assert.NotNull(pipe);
         // WHEN
-        var originalSteps = TestEnv.ResolveAll<IStepT<TPipeInfo,TPayload>>();
+        var originalSteps = TestEnv.ResolveAll<IStepT<TPipeInfo, TPayload>>();
         // THEN
         Assert.True(pipe.StepCount > 0);
     }
@@ -58,11 +58,11 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         var pipe = builder.Build();
         Assert.NotNull(pipe);
         // WHEN
-        var originalSteps = TestEnv.ResolveAll<IStepT<TPipeInfo,TPayload>>();
+        var originalSteps = TestEnv.ResolveAll<IStepT<TPipeInfo, TPayload>>();
         // THEN
         Assert.True(originalSteps.Count() >= pipe.StepCount);
     }
@@ -72,7 +72,7 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         // WHEN
         var seq = builder.Build();
         var name = seq.Name;
@@ -85,7 +85,7 @@ public abstract class PipeBuilderTestsT<TPipeInfo,TPayload>
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo,TPayload>>();
+        var builder = TestEnv.ResolveRequired<IPipeBuilderT<TPipeInfo, TPayload>>();
         var msg = A.Fake<IDtoT<TPayload>>();
         var seq = builder.Build();
         Assert.NotNull(seq);

@@ -18,12 +18,10 @@ public class HopePipeBuilderTests : PipeBuilderTestsT<Context.ChangeRpm.IHopePip
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -32,6 +30,5 @@ public class HopePipeBuilderTests : PipeBuilderTestsT<Context.ChangeRpm.IHopePip
             .AddTransient(_ => A.Fake<ICmdHandler>())
             .AddChangeRpmACLFuncs()
             .AddHopeInPipe<Context.ChangeRpm.IHopePipe, Contract.ChangeRpm.Payload, EventMeta>();
-
     }
 }

@@ -1,7 +1,6 @@
 using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -23,7 +22,7 @@ public static class Stop
 
     public const string ToRedisDoc_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.Stop.Topics.Evt_v1 + ":to_redis_list:v1";
-    
+
     public const string ToRabbitMq_v1 = Contract.Stop.Topics.Fact_v1 + ":to_rabbit_mq:v1";
     public const string FromRabbitMqRetro_v1 = Contract.Stop.Topics.Fact_v1 + ":from_rabbit_mq_retro:v1";
 
@@ -41,13 +40,13 @@ public static class Stop
                 .AddTransient<IActorT<Spoke>, ToRedisDoc>()
                 .AddTransient<IActorT<Spoke>, ToRedisList>()
                 .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-                .AddNATSResponder<Spoke, 
-                    FromNATS, 
-                    Contract.Stop.Payload, 
+                .AddNATSResponder<Spoke,
+                    FromNATS,
+                    Contract.Stop.Payload,
                     EventMeta>()
-                .AddRabbitMqEmitter<Spoke, 
-                    ToRabbitMq, 
-                    Contract.Stop.Payload, 
+                .AddRabbitMqEmitter<Spoke,
+                    ToRabbitMq,
+                    Contract.Stop.Payload,
                     EventMeta>()
                 .AddRabbitMqListener<Spoke,
                     FromRabbitMqRetro,

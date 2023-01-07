@@ -5,12 +5,12 @@ using Serilog;
 
 namespace DotCart.Context.Actors;
 
-public class PipeT<TPipeInfo,TPayload> : IPipeT<TPipeInfo,TPayload>
+public class PipeT<TPipeInfo, TPayload> : IPipeT<TPipeInfo, TPayload>
     where TPayload : IPayload where TPipeInfo : IPipeInfoB
 {
-    private readonly IEnumerable<IStepT<TPipeInfo,TPayload>> _steps;
+    private readonly IEnumerable<IStepT<TPipeInfo, TPayload>> _steps;
 
-    private PipeT(IEnumerable<IStepT<TPipeInfo,TPayload>> steps)
+    private PipeT(IEnumerable<IStepT<TPipeInfo, TPayload>> steps)
     {
         _steps = steps;
     }
@@ -44,9 +44,10 @@ public class PipeT<TPipeInfo,TPayload> : IPipeT<TPipeInfo,TPayload>
 
     public int StepCount => _steps.Count();
 
-    public static IPipeT<TPipeInfo,TPayload> New<TPayload>(IEnumerable<IStepT<TPipeInfo,TPayload>> steps) where TPayload : IPayload
+    public static IPipeT<TPipeInfo, TPayload> New<TPayload>(IEnumerable<IStepT<TPipeInfo, TPayload>> steps)
+        where TPayload : IPayload
     {
-        var seq = new PipeT<TPipeInfo,TPayload>(steps);
+        var seq = new PipeT<TPipeInfo, TPayload>(steps);
         foreach (var step in steps) step.SetPipe(seq);
         return seq;
     }

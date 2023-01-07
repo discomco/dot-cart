@@ -32,7 +32,7 @@ public static class Start
 
     private static readonly Msg2Fact<Contract.Start.Payload, EventMeta, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.Start.Payload, EventMeta>>(); 
+            msg => msg.FromBytes<FactT<Contract.Start.Payload, EventMeta>>();
 
     private static readonly Hope2Cmd<Contract.Start.Payload, EventMeta>
         _hope2Cmd =

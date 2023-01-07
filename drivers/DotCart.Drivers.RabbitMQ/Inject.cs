@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Defaults.RabbitMq;
@@ -55,15 +54,15 @@ public static class Inject
     }
 
     public static IServiceCollection AddRabbitMqListener<
-        TSpoke, 
-        TListener, 
-        TFactPayload, 
-        TCmdPayload, 
-        TMeta, 
+        TSpoke,
+        TListener,
+        TFactPayload,
+        TCmdPayload,
+        TMeta,
         TPipeInfo>(
-        this IServiceCollection services) 
-        where TMeta : IEventMeta 
-        where TFactPayload : IPayload 
+        this IServiceCollection services)
+        where TMeta : IEventMeta
+        where TFactPayload : IPayload
         where TListener : ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, byte[], TPipeInfo>
         where TSpoke : ISpokeT<TSpoke>
         where TPipeInfo : IPipeInfoB
@@ -74,4 +73,4 @@ public static class Inject
             .AddRabbitMqListenerDriverT<TFactPayload, TMeta>()
             .AddTransient<IActorT<TSpoke>, TListener>();
     }
-    }
+}

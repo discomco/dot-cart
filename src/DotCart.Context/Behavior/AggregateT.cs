@@ -188,6 +188,7 @@ internal class AggregateT<TInfo, TState> : IAggregate
         {
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 

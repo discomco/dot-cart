@@ -41,9 +41,6 @@ public abstract class StepT<TPipeInfo, TPayload>
 
     public Importance Level { get; set; }
 
-    public abstract Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback,
-        CancellationToken cancellationToken = default);
-
     public void SetPipe(IPipeT<TPipeInfo, TPayload> pipe)
     {
         Pipe = pipe;
@@ -56,6 +53,9 @@ public abstract class StepT<TPipeInfo, TPayload>
         Log.Information($"{AppFacts.Done} step {Name}({msg.GetType().Name}) ~> is_success:{f.IsSuccess}");
         return f;
     }
+
+    public abstract Task<Feedback> ExecuteAsync(IDto msg, Feedback? previousFeedback,
+        CancellationToken cancellationToken = default);
 
     protected abstract string GetName();
 

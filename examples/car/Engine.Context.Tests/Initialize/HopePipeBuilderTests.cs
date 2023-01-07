@@ -10,9 +10,9 @@ using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Initialize;
 
-public class HopePipeBuilderTests 
+public class HopePipeBuilderTests
     : PipeBuilderTestsT<
-        Context.Initialize.IHopePipe, 
+        Context.Initialize.IHopePipe,
         Contract.Initialize.Payload>
 {
     public HopePipeBuilderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -21,12 +21,10 @@ public class HopePipeBuilderTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

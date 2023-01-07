@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="3d0ef6ef-eb3c-463c-8453-aaf06d1ca8b1" name="@host00 2023-01-07 14:17:27" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-01-07T14:17:27.8929654+01:00" queuing="2023-01-07T14:17:27.8929654+01:00" start="2023-01-07T14:17:27.0703042+01:00" finish="2023-01-07T14:17:27.8997990+01:00" />
+  <TestSettings name="default" id="bd3f8f05-5b8a-4f30-a362-e647ca5e9819">
+    <Deployment runDeploymentRoot="_host00_2023-01-07_14_17_27" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="2d12ce1c-c2b6-4100-83f6-3e09229d5c00" testId="a66716dd-a787-81e0-9d03-edd979778468" testName="DotCart.Drivers.Console.Tests.UnitTest1.Test1" computerName="host00" duration="00:00:00.0021161" startTime="2023-01-07T14:17:27.7916841+01:00" endTime="2023-01-07T14:17:27.7917333+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="2d12ce1c-c2b6-4100-83f6-3e09229d5c00" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="DotCart.Drivers.Console.Tests.UnitTest1.Test1" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.console.tests/bin/debug/net7.0/dotcart.drivers.console.tests.dll" id="a66716dd-a787-81e0-9d03-edd979778468">
+      <Execution id="2d12ce1c-c2b6-4100-83f6-3e09229d5c00" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.Console.Tests/bin/Debug/net7.0/DotCart.Drivers.Console.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.Console.Tests.UnitTest1" name="Test1" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="a66716dd-a787-81e0-9d03-edd979778468" executionId="2d12ce1c-c2b6-4100-83f6-3e09229d5c00" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="1" executed="1" passed="1" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 7.0.0)
+[xUnit.net 00:00:00.29]   Discovering: DotCart.Drivers.Console.Tests
+[xUnit.net 00:00:00.31]   Discovered:  DotCart.Drivers.Console.Tests
+[xUnit.net 00:00:00.31]   Starting:    DotCart.Drivers.Console.Tests
+[xUnit.net 00:00:00.37]   Finished:    DotCart.Drivers.Console.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

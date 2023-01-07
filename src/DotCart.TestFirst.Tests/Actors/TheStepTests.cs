@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Drivers.RabbitMQ.Tests;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +23,6 @@ public class TheStepTests : StepTestsT<TheContext.IPipeInfo, TheActors.Step, The
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient<IStepT<TheContext.IPipeInfo,TheContract.Payload>, TheActors.Step>();
+            .AddTransient<IStepT<TheContext.IPipeInfo, TheContract.Payload>, TheActors.Step>();
     }
 }

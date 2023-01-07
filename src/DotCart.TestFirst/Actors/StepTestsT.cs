@@ -6,9 +6,9 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class StepTestsT<TPipeInfo,TStep, TPayload>
+public abstract class StepTestsT<TPipeInfo, TStep, TPayload>
     : IoCTests
-    where TStep : IStepT<TPipeInfo,TPayload>
+    where TStep : IStepT<TPipeInfo, TPayload>
     where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {
@@ -43,7 +43,7 @@ public abstract class StepTestsT<TPipeInfo,TStep, TPayload>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var step = TestEnv.ResolveRequired<IStepT<TPipeInfo,TPayload>>();
+        var step = TestEnv.ResolveRequired<IStepT<TPipeInfo, TPayload>>();
         // THEN
         Assert.NotNull(step);
     }

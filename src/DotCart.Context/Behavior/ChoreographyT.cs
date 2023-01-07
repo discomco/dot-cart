@@ -40,7 +40,7 @@ public class ChoreographyT<TCmdPayload, TEvtPayload, TMeta> : IChoreography
             Log.Information($"{AppVerbs.Enforcing} [{Name}]");
             var cmd = _evt2Cmd((Event)evt, _aggregate.GetState());
             if (cmd != null)
-                feedback = await _aggregate.ExecuteAsync(cmd, null);
+                feedback = await _aggregate.ExecuteAsync(cmd);
         }
         catch (Exception e)
         {

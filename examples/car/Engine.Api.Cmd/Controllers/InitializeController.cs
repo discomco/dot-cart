@@ -1,9 +1,8 @@
 using Ardalis.GuardClauses;
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Engine.Contract;
+using Engine.Context;
 using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
@@ -13,17 +12,17 @@ namespace Engine.Api.Cmd.Controllers;
 [Route("/api/engine/[controller]")]
 public class InitializeController : ControllerBase
 {
-    private readonly IPipeT<Context.Initialize.IHopePipe ,Initialize.Payload> _pipe;
+    private readonly IPipeT<Initialize.IHopePipe, Contract.Initialize.Payload> _pipe;
 
     public InitializeController(
-        IPipeBuilderT<Context.Initialize.IHopePipe, Initialize.Payload> pipeBuilder
-        )
+        IPipeBuilderT<Initialize.IHopePipe, Contract.Initialize.Payload> pipeBuilder
+    )
     {
         _pipe = pipeBuilder.Build();
     }
 
     [HttpPost]
-    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Initialize.Payload> hope)
+    public async Task<ActionResult<Feedback>> Post([FromBody] HopeT<Contract.Initialize.Payload> hope)
     {
         var feedback = Feedback.New(hope.AggId);
         try

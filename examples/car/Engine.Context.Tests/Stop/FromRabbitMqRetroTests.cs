@@ -6,10 +6,10 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.Stop;
 
 public class FromRabbitMqRetroTests
-: ListenerTestsT<
-    Context.Stop.Spoke, 
-    Context.Stop.FromRabbitMqRetro, 
-    Contract.Stop.Payload>
+    : ListenerTestsT<
+        Context.Stop.Spoke,
+        Context.Stop.FromRabbitMqRetro,
+        Contract.Stop.Payload>
 {
     public FromRabbitMqRetroTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -17,12 +17,10 @@ public class FromRabbitMqRetroTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

@@ -1,12 +1,11 @@
 using DotCart.Abstractions.Behavior;
-using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class ListenerDriverTestsT<TListenerDriver,TPayload, TMeta>
+public abstract class ListenerDriverTestsT<TListenerDriver, TPayload, TMeta>
     : BusDriverTestsB<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IEventMeta

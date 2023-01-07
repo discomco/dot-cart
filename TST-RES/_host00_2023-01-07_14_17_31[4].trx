@@ -1,0 +1,112 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TestRun id="5717c985-dc5b-404f-b186-c775a10c3729" name="@host00 2023-01-07 14:17:31" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+  <Times creation="2023-01-07T14:17:31.7138216+01:00" queuing="2023-01-07T14:17:31.7138217+01:00" start="2023-01-07T14:17:30.2499284+01:00" finish="2023-01-07T14:17:31.7639029+01:00" />
+  <TestSettings name="default" id="816847c3-e674-4f93-8e11-e67ad421d82f">
+    <Deployment runDeploymentRoot="_host00_2023-01-07_14_17_31" />
+  </TestSettings>
+  <Results>
+    <UnitTestResult executionId="563f1085-5f7f-4bdc-b7fc-7ab409351c69" testId="d277b680-01ec-bcef-b0e0-db67d1ecbf64" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveExchange" computerName="host00" duration="00:00:00.0012863" startTime="2023-01-07T14:17:31.6391824+01:00" endTime="2023-01-07T14:17:31.6391824+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="563f1085-5f7f-4bdc-b7fc-7ab409351c69" />
+    <UnitTestResult executionId="0bffd000-f826-4c75-8a03-80f2a6bc8bdb" testId="1a50cc82-e31e-e397-36e1-f0e2e432822b" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveAggregateBuilder" computerName="host00" duration="00:00:00.0007641" startTime="2023-01-07T14:17:31.6882568+01:00" endTime="2023-01-07T14:17:31.6882568+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="0bffd000-f826-4c75-8a03-80f2a6bc8bdb" />
+    <UnitTestResult executionId="1839d066-495a-4fe8-a56f-f616b5b10884" testId="f6f2c0f2-c449-0000-1742-ee562b4e6033" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveESDBDriver" computerName="host00" duration="00:00:00.0014341" startTime="2023-01-07T14:17:31.6483517+01:00" endTime="2023-01-07T14:17:31.6483518+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="1839d066-495a-4fe8-a56f-f616b5b10884" />
+    <UnitTestResult executionId="c1b8493a-fbe8-497e-a73d-20a4857980ca" testId="f11e77f7-eff9-31bb-4c4b-efed0a01d022" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveESDBPersistentSubscriptionsClient" computerName="host00" duration="00:00:00.0015394" startTime="2023-01-07T14:17:31.6378192+01:00" endTime="2023-01-07T14:17:31.6378193+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c1b8493a-fbe8-497e-a73d-20a4857980ca" />
+    <UnitTestResult executionId="f34024fc-2d44-4a2c-ba7e-d2153278c40e" testId="75d11762-a748-9df3-d071-d1845eb84e73" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveEventStore" computerName="host00" duration="00:00:00.0158269" startTime="2023-01-07T14:17:31.6325193+01:00" endTime="2023-01-07T14:17:31.6325193+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="f34024fc-2d44-4a2c-ba7e-d2153278c40e" />
+    <UnitTestResult executionId="27996161-43c7-408b-ae4f-ef723a81d7c1" testId="941a8b33-554d-3f22-a1eb-55bbfb87a23c" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveSubscriptionFilterOptions" computerName="host00" duration="00:00:00.0030150" startTime="2023-01-07T14:17:31.6362037+01:00" endTime="2023-01-07T14:17:31.6362038+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="27996161-43c7-408b-ae4f-ef723a81d7c1" />
+    <UnitTestResult executionId="12c76d5e-57a5-4d0f-a4a8-6e34cde4d1af" testId="568a9049-0e33-17ee-c032-a194785b4731" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveLogger" computerName="host00" duration="00:00:00.0007353" startTime="2023-01-07T14:17:31.6331091+01:00" endTime="2023-01-07T14:17:31.6331092+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="12c76d5e-57a5-4d0f-a4a8-6e34cde4d1af" />
+    <UnitTestResult executionId="ab09474a-2d13-4ce1-81c2-a3c3eb9ce51a" testId="0427499d-9e8d-3487-e6bf-6f861d9b0091" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveESDBEventSourcingClient" computerName="host00" duration="00:00:00.0009907" startTime="2023-01-07T14:17:31.6879878+01:00" endTime="2023-01-07T14:17:31.6879878+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="ab09474a-2d13-4ce1-81c2-a3c3eb9ce51a" />
+    <UnitTestResult executionId="64766627-a72d-49de-943b-641d4a150cc1" testId="b64e4224-ed5a-1ccc-1141-fce7f4bdafd2" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveEngineCtor" computerName="host00" duration="00:00:00.0008234" startTime="2023-01-07T14:17:31.6883368+01:00" endTime="2023-01-07T14:17:31.6883368+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="64766627-a72d-49de-943b-641d4a150cc1" />
+    <UnitTestResult executionId="c78caac6-b1dd-456d-843f-74ac2a5a189a" testId="b91748c5-f218-82ad-64cb-12b2d5c30959" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveHostExecutor" computerName="host00" duration="00:00:00.0443992" startTime="2023-01-07T14:17:31.6167986+01:00" endTime="2023-01-07T14:17:31.6168439+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c78caac6-b1dd-456d-843f-74ac2a5a189a" />
+    <UnitTestResult executionId="c2888789-c9ae-4357-9847-1e7506e66e48" testId="d1923cc4-8f62-824f-03ef-748c63afbc97" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveAggregate" computerName="host00" duration="00:00:00.0010039" startTime="2023-01-07T14:17:31.6881876+01:00" endTime="2023-01-07T14:17:31.6881877+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="c2888789-c9ae-4357-9847-1e7506e66e48" />
+    <UnitTestResult executionId="8fa40288-fa69-4234-9e49-cfdac4fc016a" testId="3d08e32c-f248-ede1-168c-eebdaad829a1" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveExchange" computerName="host00" duration="00:00:00.0011509" startTime="2023-01-07T14:17:31.6884025+01:00" endTime="2023-01-07T14:17:31.6884026+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="8fa40288-fa69-4234-9e49-cfdac4fc016a" />
+    <UnitTestResult executionId="fd8dcc76-24e9-431b-9e96-07121d8bb334" testId="ad239a79-fa78-cc5e-44e1-dbae15b06831" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveCmdHandler" computerName="host00" duration="00:00:00.0812622" startTime="2023-01-07T14:17:31.6468381+01:00" endTime="2023-01-07T14:17:31.6468381+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="fd8dcc76-24e9-431b-9e96-07121d8bb334" />
+    <UnitTestResult executionId="3d78cb43-9cb9-4c71-8719-46b9a2430cb0" testId="9c83725b-6a84-b7ad-a9fe-ebbece98c4f1" testName="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldSaveAggregate" computerName="host00" duration="00:00:00.0134339" startTime="2023-01-07T14:17:31.6618727+01:00" endTime="2023-01-07T14:17:31.6618728+01:00" testType="13cdc9d9-ddb5-4fa4-a97d-d965ccfc6d4b" outcome="Passed" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" relativeResultsDirectory="3d78cb43-9cb9-4c71-8719-46b9a2430cb0" />
+  </Results>
+  <TestDefinitions>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveLogger" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="568a9049-0e33-17ee-c032-a194785b4731">
+      <Execution id="12c76d5e-57a5-4d0f-a4a8-6e34cde4d1af" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveLogger" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveSubscriptionFilterOptions" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="941a8b33-554d-3f22-a1eb-55bbfb87a23c">
+      <Execution id="27996161-43c7-408b-ae4f-ef723a81d7c1" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveSubscriptionFilterOptions" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveEventStore" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="75d11762-a748-9df3-d071-d1845eb84e73">
+      <Execution id="f34024fc-2d44-4a2c-ba7e-d2153278c40e" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveEventStore" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveAggregate" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="d1923cc4-8f62-824f-03ef-748c63afbc97">
+      <Execution id="c2888789-c9ae-4357-9847-1e7506e66e48" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveAggregate" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveESDBDriver" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="f6f2c0f2-c449-0000-1742-ee562b4e6033">
+      <Execution id="1839d066-495a-4fe8-a56f-f616b5b10884" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveESDBDriver" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveESDBPersistentSubscriptionsClient" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="f11e77f7-eff9-31bb-4c4b-efed0a01d022">
+      <Execution id="c1b8493a-fbe8-497e-a73d-20a4857980ca" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveESDBPersistentSubscriptionsClient" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveESDBEventSourcingClient" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="0427499d-9e8d-3487-e6bf-6f861d9b0091">
+      <Execution id="ab09474a-2d13-4ce1-81c2-a3c3eb9ce51a" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveESDBEventSourcingClient" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveHostExecutor" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="b91748c5-f218-82ad-64cb-12b2d5c30959">
+      <Execution id="c78caac6-b1dd-456d-843f-74ac2a5a189a" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveHostExecutor" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests.ShouldResolveExchange" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="d277b680-01ec-bcef-b0e0-db67d1ecbf64">
+      <Execution id="563f1085-5f7f-4bdc-b7fc-7ab409351c69" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBProjectorTests" name="ShouldResolveExchange" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveAggregateBuilder" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="1a50cc82-e31e-e397-36e1-f0e2e432822b">
+      <Execution id="0bffd000-f826-4c75-8a03-80f2a6bc8bdb" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveAggregateBuilder" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveCmdHandler" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="ad239a79-fa78-cc5e-44e1-dbae15b06831">
+      <Execution id="fd8dcc76-24e9-431b-9e96-07121d8bb334" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveCmdHandler" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveExchange" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="3d08e32c-f248-ede1-168c-eebdaad829a1">
+      <Execution id="8fa40288-fa69-4234-9e49-cfdac4fc016a" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveExchange" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldSaveAggregate" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="9c83725b-6a84-b7ad-a9fe-ebbece98c4f1">
+      <Execution id="3d78cb43-9cb9-4c71-8719-46b9a2430cb0" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldSaveAggregate" />
+    </UnitTest>
+    <UnitTest name="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests.ShouldResolveEngineCtor" storage="/home/rl/work/github.com/discomco/dot-cart/drivers/dotcart.drivers.eventstoredb.tests/bin/debug/net7.0/dotcart.drivers.eventstoredb.tests.dll" id="b64e4224-ed5a-1ccc-1141-fce7f4bdafd2">
+      <Execution id="64766627-a72d-49de-943b-641d4a150cc1" />
+      <TestMethod codeBase="/home/rl/work/github.com/discomco/dot-cart/drivers/DotCart.Drivers.EventStoreDB.Tests/bin/Debug/net7.0/DotCart.Drivers.EventStoreDB.Tests.dll" adapterTypeName="executor://xunit/VsTestRunner2/netcoreapp" className="DotCart.Drivers.EventStoreDB.Tests.ESDBEventStoreTests" name="ShouldResolveEngineCtor" />
+    </UnitTest>
+  </TestDefinitions>
+  <TestEntries>
+    <TestEntry testId="d277b680-01ec-bcef-b0e0-db67d1ecbf64" executionId="563f1085-5f7f-4bdc-b7fc-7ab409351c69" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="1a50cc82-e31e-e397-36e1-f0e2e432822b" executionId="0bffd000-f826-4c75-8a03-80f2a6bc8bdb" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f6f2c0f2-c449-0000-1742-ee562b4e6033" executionId="1839d066-495a-4fe8-a56f-f616b5b10884" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="f11e77f7-eff9-31bb-4c4b-efed0a01d022" executionId="c1b8493a-fbe8-497e-a73d-20a4857980ca" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="75d11762-a748-9df3-d071-d1845eb84e73" executionId="f34024fc-2d44-4a2c-ba7e-d2153278c40e" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="941a8b33-554d-3f22-a1eb-55bbfb87a23c" executionId="27996161-43c7-408b-ae4f-ef723a81d7c1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="568a9049-0e33-17ee-c032-a194785b4731" executionId="12c76d5e-57a5-4d0f-a4a8-6e34cde4d1af" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="0427499d-9e8d-3487-e6bf-6f861d9b0091" executionId="ab09474a-2d13-4ce1-81c2-a3c3eb9ce51a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b64e4224-ed5a-1ccc-1141-fce7f4bdafd2" executionId="64766627-a72d-49de-943b-641d4a150cc1" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="b91748c5-f218-82ad-64cb-12b2d5c30959" executionId="c78caac6-b1dd-456d-843f-74ac2a5a189a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="d1923cc4-8f62-824f-03ef-748c63afbc97" executionId="c2888789-c9ae-4357-9847-1e7506e66e48" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="3d08e32c-f248-ede1-168c-eebdaad829a1" executionId="8fa40288-fa69-4234-9e49-cfdac4fc016a" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="ad239a79-fa78-cc5e-44e1-dbae15b06831" executionId="fd8dcc76-24e9-431b-9e96-07121d8bb334" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestEntry testId="9c83725b-6a84-b7ad-a9fe-ebbece98c4f1" executionId="3d78cb43-9cb9-4c71-8719-46b9a2430cb0" testListId="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+  </TestEntries>
+  <TestLists>
+    <TestList name="Results Not in a List" id="8c84fa94-04c1-424b-9868-57a2d4851a1d" />
+    <TestList name="All Loaded Results" id="19431567-8539-422a-85d7-44ee4e166bda" />
+  </TestLists>
+  <ResultSummary outcome="Completed">
+    <Counters total="14" executed="14" passed="14" failed="0" error="0" timeout="0" aborted="0" inconclusive="0" passedButRunAborted="0" notRunnable="0" notExecuted="0" disconnected="0" warning="0" completed="0" inProgress="0" pending="0" />
+    <Output>
+      <StdOut>[xUnit.net 00:00:00.00] xUnit.net VSTest Adapter v2.4.5+1caef2f33e (64-bit .NET 7.0.0)
+[xUnit.net 00:00:00.73]   Discovering: DotCart.Drivers.EventStoreDB.Tests
+[xUnit.net 00:00:00.75]   Discovered:  DotCart.Drivers.EventStoreDB.Tests
+[xUnit.net 00:00:00.76]   Starting:    DotCart.Drivers.EventStoreDB.Tests
+[xUnit.net 00:00:00.91]   Finished:    DotCart.Drivers.EventStoreDB.Tests
+</StdOut>
+    </Output>
+  </ResultSummary>
+</TestRun>

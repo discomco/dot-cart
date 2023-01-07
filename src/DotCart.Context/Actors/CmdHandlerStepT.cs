@@ -30,10 +30,9 @@ using Serilog;
 
 namespace DotCart.Context.Actors;
 
-
 [Name("CmdHandler")]
 [Order(int.MaxValue)]
-public class CmdHandlerStepT<TPipeInfo,TPayload, TMeta> : StepT<TPipeInfo,TPayload>
+public class CmdHandlerStepT<TPipeInfo, TPayload, TMeta> : StepT<TPipeInfo, TPayload>
     where TPayload : IPayload
     where TMeta : IEventMeta
     where TPipeInfo : IPipeInfoB

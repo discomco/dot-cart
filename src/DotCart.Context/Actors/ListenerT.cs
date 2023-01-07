@@ -45,7 +45,7 @@ public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPi
     protected ListenerT(
         IListenerDriverB driver,
         IExchange exchange,
-        IPipeBuilderT<TPipeInfo,TFactPayload> pipeBuilder) : base(exchange)
+        IPipeBuilderT<TPipeInfo, TFactPayload> pipeBuilder) : base(exchange)
     {
         Driver = driver;
         _pipeBuilder = pipeBuilder;

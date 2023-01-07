@@ -9,16 +9,16 @@
 
 
     <ItemGroup>
-        <PackageReference Include="RabbitMQ.Client.Core.DependencyInjection" Version="5.0.0" />
+        <PackageReference Include="RabbitMQ.Client.Core.DependencyInjection" Version="5.0.0"/>
     </ItemGroup>
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
     </ItemGroup>
 
 

@@ -36,7 +36,7 @@ public static class Initialize
 
     private static readonly Msg2Fact<Contract.Initialize.Payload, EventMeta, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.Initialize.Payload, EventMeta>>(); 
+            msg => msg.FromBytes<FactT<Contract.Initialize.Payload, EventMeta>>();
 
     private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>
         _hope2Cmd =
