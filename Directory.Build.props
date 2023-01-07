@@ -9,7 +9,7 @@
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>../../dot-cart.snk</AssemblyOriginatorKeyFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-        <PackageIcon>dotcart-favicon.png</PackageIcon>
+        <PackageIcon>discomco-favicon.png</PackageIcon>
         <PackageProjectUrl>https://github.com/discomco/dot-cart</PackageProjectUrl>
         <LangVersion>latest</LangVersion>
         <RepositoryUrl>https://github.com/discomco/dot-cart</RepositoryUrl>

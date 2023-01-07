@@ -5,6 +5,10 @@
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Server side base for the DotCart SDK</Title>
+        <Description>
+            The DotCart.Context assembly contains all the base classes 
+            for building Behaviors, Actors and Delivery components for DotCart Serrvices. 
+        </Description>
     </PropertyGroup>
 
     <ItemGroup>

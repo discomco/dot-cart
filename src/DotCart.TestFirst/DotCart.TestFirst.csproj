@@ -6,6 +6,11 @@
         <IsPackable>true</IsPackable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Helper classes for Test-first driven DotCart development.</Title>
+        <Description>
+            We strongly advocate a guided quality-first approach to developing DotCart Context Services.
+            For this purpose, we provide the development community with a series of abstract xUnit Test Classes
+            that, when implemented, produce the context services, in addition to a large number of essential tests.             
+        </Description>
     </PropertyGroup>
 
 
@@ -13,7 +18,6 @@
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.RabbitMQ\DotCart.Drivers.RabbitMQ.csproj"/>
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
-        <ProjectReference Include="..\..\examples\car\Engine.Behavior\Engine.Behavior.csproj"/>
         <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
         <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
         <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>

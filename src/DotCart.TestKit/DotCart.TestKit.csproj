@@ -6,6 +6,9 @@
         <IsPackable>true</IsPackable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Helper classes for writing tests for DotCart Applications</Title>
+        <Description>
+            The DotCart.TestKit contains the base classes that are used in the TestFirst assembly.
+        </Description>
     </PropertyGroup>
 
     <ItemGroup>

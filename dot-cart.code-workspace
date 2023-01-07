@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "../../rgfaber/compose-dev-stack"
+		},
+		{
+			"path": "../lemon-co"
 		}
 	],
 	"settings": {}
