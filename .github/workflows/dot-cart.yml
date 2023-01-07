@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - release
 env:
   REDIS_CONFIG: "redis:6379"
   EVENTSTORE_URI: "esdb+discover://eventstore:2113?tls=false"
@@ -31,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: master, release
+          ref: master
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -93,7 +92,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: master, release
+          ref: master
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -118,7 +117,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: release
+          ref: master
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
