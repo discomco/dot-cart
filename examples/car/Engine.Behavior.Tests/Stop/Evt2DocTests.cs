@@ -12,7 +12,7 @@ public class Evt2DocTests
         Schema.EngineID,
         Schema.Engine,
         Contract.Stop.Payload,
-        EventMeta>
+        Meta>
 {
     public Evt2DocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

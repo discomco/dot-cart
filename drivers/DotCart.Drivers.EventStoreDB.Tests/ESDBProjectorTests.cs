@@ -3,6 +3,7 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Context.Actors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
+using DotCart.TestKit.Mocks;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;

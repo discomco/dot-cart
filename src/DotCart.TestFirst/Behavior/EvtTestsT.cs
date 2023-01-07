@@ -9,7 +9,7 @@ namespace DotCart.TestFirst.Behavior;
 public abstract class EvtTestsT<TID, TPayload, TMeta> : IoCTests
     where TID : IID
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     protected EvtCtorT<TPayload, TMeta> _newEvt;
     protected IDCtorT<TID> _newID;

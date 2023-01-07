@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Contract.Tests.ChangeDetails;
 
 [Topic(Contract.ChangeDetails.Topics.Fact_v1)]
-public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDetails.Payload, EventMeta>
+public class FactTests : FactTestsT<Contract.Schema.EngineID, Contract.ChangeDetails.Payload, Meta>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

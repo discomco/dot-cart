@@ -10,7 +10,7 @@ namespace DotCart.TestFirst.Actors;
 public abstract class EmitterTestsT<TSpoke, TEmitter, TPayload, TMeta>
     : ActorTestsT<TSpoke, TEmitter>
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TSpoke : ISpokeT<TSpoke>
     where TEmitter : IActorT<TSpoke>
 {

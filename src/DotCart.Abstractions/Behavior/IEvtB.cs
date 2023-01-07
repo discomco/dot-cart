@@ -19,8 +19,8 @@ public interface IEvtB : IMsg
     void SetEventType(string eventType);
     void SetMetaData(byte[] metaData);
 
-    void SetMeta<TMeta>(TMeta meta) where TMeta : IEventMeta;
-    TMeta GetMeta<TMeta>() where TMeta : IEventMeta;
+    void SetMeta<TMeta>(TMeta meta) where TMeta : IMeta;
+    TMeta GetMeta<TMeta>() where TMeta : IMeta;
     TPayload GetPayload<TPayload>() where TPayload : IPayload;
     void SetPayload<TPayload>(TPayload payload) where TPayload : IPayload;
 }

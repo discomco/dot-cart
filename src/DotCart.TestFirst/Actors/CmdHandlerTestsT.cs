@@ -13,7 +13,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
     where TState : IState
     where TID : IID
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     protected static IDCtorT<TID> _newID;
     protected IAggregateStore _aggStore;

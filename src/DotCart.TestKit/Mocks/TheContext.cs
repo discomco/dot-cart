@@ -1,6 +1,6 @@
 using DotCart.Abstractions.Actors;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheContext
 {

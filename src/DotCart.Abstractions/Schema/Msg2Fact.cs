@@ -4,5 +4,5 @@ namespace DotCart.Abstractions.Schema;
 
 public delegate FactT<TPayload, TMeta> Msg2Fact<TPayload, TMeta, in TDriverMsg>(TDriverMsg msg)
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TDriverMsg : class;

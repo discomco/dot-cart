@@ -13,7 +13,7 @@ public abstract class AggregateTestsT<TID, TState, TPayload, TMeta> : IoCTests
     where TID : IID
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     protected IAggregate? _agg;
     protected IAggregateBuilder? _builder;

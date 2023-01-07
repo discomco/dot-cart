@@ -11,7 +11,7 @@ namespace DotCart.TestFirst.Behavior;
 public abstract class ChoreographyTestsT<TCmdPayload, TEvtPayload, TMeta> : IoCTests
     where TCmdPayload : IPayload
     where TEvtPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     private IAggregate _agg;
     private IAggregateBuilder _aggBuilder;

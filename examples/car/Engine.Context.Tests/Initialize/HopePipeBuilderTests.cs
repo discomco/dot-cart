@@ -32,6 +32,6 @@ public class HopePipeBuilderTests
         services
             .AddTransient(_ => A.Fake<ICmdHandler>())
             .AddInitializeACLFuncs()
-            .AddHopeInPipe<Context.Initialize.IHopePipe, Contract.Initialize.Payload, EventMeta>();
+            .AddHopeInPipe<Context.Initialize.IHopePipe, Contract.Initialize.Payload, Meta>();
     }
 }

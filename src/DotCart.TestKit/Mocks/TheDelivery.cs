@@ -1,4 +1,4 @@
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheDelivery
 {

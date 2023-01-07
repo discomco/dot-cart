@@ -15,7 +15,7 @@ public class ToRedisListTests
         Context.Stop.ToRedisList,
         Schema.EngineList,
         Contract.Stop.Payload,
-        EventMeta>
+        Meta>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

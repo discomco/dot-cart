@@ -4,6 +4,7 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
+using DotCart.TestKit.Mocks;
 using FakeItEasy;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;

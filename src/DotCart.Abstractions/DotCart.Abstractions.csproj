@@ -4,15 +4,16 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>A package that contains interfaces and abstract classes of the DotCart Toolbox</Title>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
-        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
     </ItemGroup>
 
     <ItemGroup>
-        <PackageReference Include="Serilog" Version="2.12.0"/>
+        <PackageReference Include="Serilog" Version="2.12.0" />
     </ItemGroup>
 
 </Project>

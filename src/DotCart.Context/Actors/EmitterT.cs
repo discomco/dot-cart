@@ -17,7 +17,7 @@ public interface IEmitterB : IActor
 public abstract class EmitterT<TSpoke, TPayload, TMeta>
     : ActorB, IActorT<TSpoke>, IEmitterT<TSpoke, TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly Evt2Fact<TPayload, TMeta> _evt2Fact;
@@ -84,6 +84,6 @@ public abstract class EmitterT<TSpoke, TPayload, TMeta>
 public interface IEmitterT<TSpoke, TPayload, TMeta>
     where TSpoke : ISpokeT<TSpoke>
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
 }

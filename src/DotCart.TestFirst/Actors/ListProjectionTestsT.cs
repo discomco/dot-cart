@@ -14,7 +14,7 @@ public abstract class
     where TProjection : IActorT<TSpoke>
     where TTargetDoc : IState
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     protected ListProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

@@ -48,14 +48,14 @@ public record Event(
 
     public byte[] MetaData { get; set; } = MetaData;
 
-    public void SetMeta<TMeta>(TMeta meta) where TMeta : IEventMeta
+    public void SetMeta<TMeta>(TMeta meta) where TMeta : IMeta
     {
         MetaData = meta == null
             ? Array.Empty<byte>()
             : meta.ToBytes();
     }
 
-    public TMeta GetMeta<TMeta>() where TMeta : IEventMeta
+    public TMeta GetMeta<TMeta>() where TMeta : IMeta
     {
         return MetaData == null
             ? default

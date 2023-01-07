@@ -9,7 +9,7 @@ public static partial class Inject
 {
     public static IServiceCollection AddHopeInPipe<TPipeInfo, THopePayload, TMeta>(this IServiceCollection services)
         where THopePayload : IPayload
-        where TMeta : IEventMeta
+        where TMeta : IMeta
         where TPipeInfo : IPipeInfoB
     {
         return services
@@ -21,7 +21,7 @@ public static partial class Inject
 
     public static IServiceCollection AddRetroPipe<TPipeInfo, TFactPayload, TMeta>(this IServiceCollection services)
         where TFactPayload : IPayload
-        where TMeta : IEventMeta
+        where TMeta : IMeta
         where TPipeInfo : IPipeInfoB
     {
         return services
@@ -31,7 +31,7 @@ public static partial class Inject
 
     public static IServiceCollection AddFactInPipe<TPipeInfo, TFactPayload, TMeta>(this IServiceCollection services)
         where TFactPayload : IPayload
-        where TMeta : IEventMeta
+        where TMeta : IMeta
         where TPipeInfo : IPipeInfoB
     {
         return services

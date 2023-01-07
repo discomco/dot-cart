@@ -125,9 +125,9 @@ internal class AggregateT<TInfo, TState> : IAggregate
         return _state;
     }
 
-    public EventMeta GetMeta()
+    public Meta GetMeta()
     {
-        return EventMeta.New(GetName(), GetID().Id());
+        return Meta.New(GetName(), GetID().Id());
     }
 
     public void ClearUncommittedEvents(ulong resNextExpectedVersion)

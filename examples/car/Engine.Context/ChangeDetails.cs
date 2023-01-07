@@ -34,7 +34,7 @@ public static class ChangeDetails
         return services
             .AddEngineBehavior()
             .AddChangeDetailsACLFuncs()
-            .AddHopeInPipe<IHopePipe, Contract.ChangeDetails.Payload, EventMeta>()
+            .AddHopeInPipe<IHopePipe, Contract.ChangeDetails.Payload, Meta>()
             .AddHostedSpokeT<Spoke>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
@@ -42,16 +42,16 @@ public static class ChangeDetails
             .AddNATSResponder<Spoke,
                 FromNATS,
                 Contract.ChangeDetails.Payload,
-                EventMeta>()
+                Meta>()
             .AddRabbitMqEmitter<Spoke,
                 ToRabbitMq,
                 Contract.ChangeDetails.Payload,
-                EventMeta>()
+                Meta>()
             .AddRabbitMqListener<Spoke,
                 FromRabbitMqRetro,
                 Contract.ChangeDetails.Payload,
                 Contract.ChangeDetails.DummyLoad,
-                EventMeta,
+                Meta,
                 IRetroPipe>();
     }
 
@@ -72,11 +72,11 @@ public static class ChangeDetails
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Contract.ChangeDetails.Payload, EventMeta>, IActorT<Spoke>
+        Contract.ChangeDetails.Payload, Meta>, IActorT<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, Meta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc) : base(exchange,
             docStore,
             evt2Doc,
@@ -91,12 +91,12 @@ public static class ChangeDetails
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.ChangeDetails.Payload, EventMeta>, IActorT<Spoke>
+        Contract.ChangeDetails.Payload, Meta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, Meta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -108,12 +108,12 @@ public static class ChangeDetails
         : EmitterT<
             Spoke,
             Contract.ChangeDetails.Payload,
-            EventMeta>
+            Meta>
     {
         public ToRabbitMq(
-            IRmqEmitterDriverT<Contract.ChangeDetails.Payload, EventMeta> driver,
+            IRmqEmitterDriverT<Contract.ChangeDetails.Payload, Meta> driver,
             IExchange exchange,
-            Evt2Fact<Contract.ChangeDetails.Payload, EventMeta> evt2Fact) : base(driver,
+            Evt2Fact<Contract.ChangeDetails.Payload, Meta> evt2Fact) : base(driver,
             exchange,
             evt2Fact)
         {
@@ -142,7 +142,7 @@ public static class ChangeDetails
         : ListenerT<
             Spoke,
             Contract.ChangeDetails.DummyLoad,
-            EventMeta,
+            Meta,
             Contract.ChangeDetails.Payload,
             byte[],
             IRetroPipe>

@@ -4,7 +4,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheContract
 {
@@ -79,7 +79,7 @@ public static class TheContract
     }
 
     public record Meta(string AggregateType, string AggregateId)
-        : EventMeta(AggregateType, AggregateId)
+        : Abstractions.Behavior.Meta(AggregateType, AggregateId)
     {
         public static Meta New(string aggType, string aggId)
         {

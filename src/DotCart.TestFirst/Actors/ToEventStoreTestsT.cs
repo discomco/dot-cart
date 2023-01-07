@@ -12,7 +12,7 @@ namespace DotCart.TestFirst.Actors;
 public abstract class ToEventStoreTestsT<TPayload, TMeta, TReadModelStore>
     : IoCTests
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     protected IAggregateBuilder _aggregateBuilder;
     protected ICmdHandler _cmdHandler;

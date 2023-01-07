@@ -11,7 +11,7 @@ public class FromNATSTests
         Context.Stop.Spoke,
         Context.Stop.FromNATS,
         Contract.Stop.Payload,
-        EventMeta>
+        Meta>
 {
     public FromNATSTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

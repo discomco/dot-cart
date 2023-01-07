@@ -11,7 +11,7 @@ public class FromNATSTests
         Context.ChangeDetails.Spoke,
         Context.ChangeDetails.FromNATS,
         Contract.ChangeDetails.Payload,
-        EventMeta>
+        Meta>
 {
     public FromNATSTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

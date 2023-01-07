@@ -9,8 +9,8 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests.Start;
 
 public class RabbitMqEmitterDriverTests
-    : RabbitMqEmitterDriverTestsT<IRmqEmitterDriverT<Contract.Start.Payload, EventMeta>, Contract.Start.Payload,
-        EventMeta>
+    : RabbitMqEmitterDriverTestsT<IRmqEmitterDriverT<Contract.Start.Payload, Meta>, Contract.Start.Payload,
+        Meta>
 {
     public RabbitMqEmitterDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

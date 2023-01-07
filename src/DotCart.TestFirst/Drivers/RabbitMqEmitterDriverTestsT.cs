@@ -10,7 +10,7 @@ namespace DotCart.TestFirst.Drivers;
 public abstract class RabbitMqEmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     : EmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TEmitterDriver : IEmitterDriverB
 {
     protected RabbitMqEmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv)

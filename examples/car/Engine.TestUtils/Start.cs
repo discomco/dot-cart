@@ -13,7 +13,7 @@ public static class Start
     public static readonly CmdCtorT<
             Contract.Schema.EngineID,
             Contract.Start.Payload,
-            EventMeta>
+            Meta>
         CmdCtor =
             (_, _, _) =>
             {
@@ -28,18 +28,18 @@ public static class Start
         HopeCtor =
             (_, _) => HopeT<Contract.Start.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.Start.Payload, EventMeta>
+    public static readonly FactCtorT<Contract.Start.Payload, Meta>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.Start.Payload, EventMeta>.New(
+                return FactT<Contract.Start.Payload, Meta>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
 
-    public static readonly EvtCtorT<Contract.Start.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.Start.Payload, Meta>
         EvtCtor =
             (_, _, _) => Behavior.Start._newEvt(
                 Schema.DocIDCtor(),

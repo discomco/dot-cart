@@ -12,7 +12,7 @@ public class ShouldStopOnZeroPowerTests
     : ChoreographyTestsT<
         Contract.Stop.Payload,
         Contract.ChangeRpm.Payload,
-        EventMeta>
+        Meta>
 {
     public ShouldStopOnZeroPowerTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

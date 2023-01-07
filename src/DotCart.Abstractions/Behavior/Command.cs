@@ -7,7 +7,7 @@ public record Command(
     IID AggregateID,
     string CmdType,
     byte[] Data,
-    byte[] MetaData) : ICmd
+    byte[] MetaData) : ICmdB
 {
     public string CmdType { get; } = CmdType;
 

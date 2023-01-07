@@ -32,18 +32,18 @@ public static class Initialize
         return services
             .AddEngineBehavior()
             .AddInitializeACLFuncs()
-            .AddHopeInPipe<IHopePipe, Contract.Initialize.Payload, EventMeta>()
+            .AddHopeInPipe<IHopePipe, Contract.Initialize.Payload, Meta>()
             .AddHostedSpokeT<Spoke>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, EventMeta>()
+            .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, Meta>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddRabbitMqEmitter<Spoke, ToRabbitMq, Contract.Initialize.Payload, EventMeta>()
+            .AddRabbitMqEmitter<Spoke, ToRabbitMq, Contract.Initialize.Payload, Meta>()
             .AddRabbitMqListener<Spoke,
                 FromRabbitMqRetro,
                 Contract.Initialize.Payload,
                 Contract.Initialize.Dummyload,
-                EventMeta,
+                Meta,
                 IRetroPipe>();
     }
 
@@ -54,14 +54,14 @@ public static class Initialize
             IRedisStore<Schema.Engine>,
             Schema.Engine,
             Contract.Initialize.Payload,
-            EventMeta
+            Meta
         >,
         IActorT<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Contract.Initialize.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.Initialize.Payload, Meta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -91,12 +91,12 @@ public static class Initialize
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
         Contract.Initialize.Payload,
-        EventMeta>, IActorT<Spoke>
+        Meta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, Meta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -105,12 +105,12 @@ public static class Initialize
 
     [Name(ToRabbitMq_v1)]
     public class ToRabbitMq
-        : EmitterT<Spoke, Contract.Initialize.Payload, EventMeta>
+        : EmitterT<Spoke, Contract.Initialize.Payload, Meta>
     {
         public ToRabbitMq(
-            IRmqEmitterDriverT<Contract.Initialize.Payload, EventMeta> driver,
+            IRmqEmitterDriverT<Contract.Initialize.Payload, Meta> driver,
             IExchange exchange,
-            Evt2Fact<Contract.Initialize.Payload, EventMeta> evt2Fact) : base(driver,
+            Evt2Fact<Contract.Initialize.Payload, Meta> evt2Fact) : base(driver,
             exchange,
             evt2Fact)
         {
@@ -145,7 +145,7 @@ public static class Initialize
     public class FromRabbitMqRetro :
         ListenerT<Spoke,
             Contract.Initialize.Dummyload,
-            EventMeta,
+            Meta,
             Contract.Initialize.Payload,
             byte[],
             IRetroPipe>

@@ -11,7 +11,7 @@ public class ToRabbitMqTests
         Context.ChangeDetails.Spoke,
         Context.ChangeDetails.ToRabbitMq,
         Contract.ChangeDetails.Payload,
-        EventMeta>
+        Meta>
 {
     public ToRabbitMqTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

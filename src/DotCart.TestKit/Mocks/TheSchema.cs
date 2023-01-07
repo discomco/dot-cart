@@ -2,7 +2,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheSchema
 {

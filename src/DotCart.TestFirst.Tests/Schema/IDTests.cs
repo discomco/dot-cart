@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
+using DotCart.TestKit.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 

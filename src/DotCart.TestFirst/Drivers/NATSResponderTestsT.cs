@@ -11,7 +11,7 @@ namespace DotCart.TestFirst.Drivers;
 public abstract class NATSResponderTestsT<TSpoke, TResponder, TPayload, TMeta>
     : ResponderTestsT<TSpoke, TResponder, TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TSpoke : ISpokeT<TSpoke>
     where TResponder : IActorT<TSpoke>
 {

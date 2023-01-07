@@ -14,7 +14,7 @@ public class ShouldChangeDetailsOnInitializedTests
     : ChoreographyTestsT<
         Contract.ChangeDetails.Payload,
         Contract.Initialize.Payload,
-        EventMeta>
+        Meta>
 {
     public ShouldChangeDetailsOnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output,
         testEnv)
@@ -36,7 +36,7 @@ public class ShouldChangeDetailsOnInitializedTests
         var initCmd = Command.New<Contract.Initialize.Payload>(
             aggID,
             initPld.ToBytes(),
-            EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), aggID.Id()).ToBytes()
+            Meta.New(NameAtt.Get<IEngineAggregateInfo>(), aggID.Id()).ToBytes()
         );
         // WHEN
         var fdbk = await agg.ExecuteAsync(initCmd);

@@ -8,7 +8,7 @@ namespace DotCart.Context.Behavior;
 
 public class ChoreographyT<TCmdPayload, TEvtPayload, TMeta> : IChoreography
     where TCmdPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
     private readonly Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> _evt2Cmd;
     private IAggregate _aggregate;

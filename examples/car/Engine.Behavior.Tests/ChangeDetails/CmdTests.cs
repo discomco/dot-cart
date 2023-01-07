@@ -13,7 +13,7 @@ public class CmdTests
     : CmdTestsT<
         Schema.EngineID,
         Contract.ChangeDetails.Payload,
-        EventMeta>
+        Meta>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

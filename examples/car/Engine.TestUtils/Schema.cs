@@ -17,9 +17,9 @@ public static class Schema
         ListIDCtor =
             value => Contract.Schema.EngineListID.New();
 
-    public static readonly MetaCtorT<EventMeta>
+    public static readonly MetaCtorT<Meta>
         MetaCtor =
-            _ => EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
+            _ => Meta.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
 
     public static readonly Contract.Schema.EngineListItem
         UnknownEngineListItem =

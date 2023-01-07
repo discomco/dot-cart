@@ -1,4 +1,5 @@
 using DotCart.TestKit;
+using DotCart.TestKit.Mocks;
 using NATS.Client;
 
 namespace DotCart.Drivers.NATS.Tests;

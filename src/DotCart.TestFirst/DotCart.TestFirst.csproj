@@ -5,6 +5,7 @@
         <Nullable>enable</Nullable>
         <IsPackable>true</IsPackable>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>Helper classes for Test-first driven DotCart development.</Title>
     </PropertyGroup>
 
 

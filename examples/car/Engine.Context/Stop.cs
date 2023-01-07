@@ -36,23 +36,23 @@ public static class Stop
                 .AddEngineBehavior()
                 .AddStopACLFuncs()
                 .AddHostedSpokeT<Spoke>()
-                .AddHopeInPipe<IHopeInPipe, Contract.Stop.Payload, EventMeta>()
+                .AddHopeInPipe<IHopeInPipe, Contract.Stop.Payload, Meta>()
                 .AddTransient<IActorT<Spoke>, ToRedisDoc>()
                 .AddTransient<IActorT<Spoke>, ToRedisList>()
                 .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
                 .AddNATSResponder<Spoke,
                     FromNATS,
                     Contract.Stop.Payload,
-                    EventMeta>()
+                    Meta>()
                 .AddRabbitMqEmitter<Spoke,
                     ToRabbitMq,
                     Contract.Stop.Payload,
-                    EventMeta>()
+                    Meta>()
                 .AddRabbitMqListener<Spoke,
                     FromRabbitMqRetro,
                     Contract.Stop.Payload,
                     Contract.Stop.Dummyload,
-                    EventMeta,
+                    Meta,
                     IRetroInPipe>()
             ;
     }
@@ -79,12 +79,12 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.Engine>,
             Schema.Engine,
-            Contract.Stop.Payload, EventMeta>, IActorT<Spoke>
+            Contract.Stop.Payload, Meta>, IActorT<Spoke>
     {
         public ToRedisDoc(
             IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Contract.Stop.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.Stop.Payload, Meta> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -98,12 +98,12 @@ public static class Stop
         : ProjectionT<
             IRedisStore<Schema.EngineList>,
             Schema.EngineList,
-            Contract.Stop.Payload, EventMeta>, IActorT<Spoke>
+            Contract.Stop.Payload, Meta>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList, Contract.Stop.Payload, EventMeta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.Stop.Payload, Meta> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -112,12 +112,12 @@ public static class Stop
 
     [Name(ToRabbitMq_v1)]
     public class ToRabbitMq
-        : EmitterT<Spoke, Contract.Stop.Payload, EventMeta>
+        : EmitterT<Spoke, Contract.Stop.Payload, Meta>
     {
         public ToRabbitMq(
-            IRmqEmitterDriverT<Contract.Stop.Payload, EventMeta> driver,
+            IRmqEmitterDriverT<Contract.Stop.Payload, Meta> driver,
             IExchange exchange,
-            Evt2Fact<Contract.Stop.Payload, EventMeta> evt2Fact)
+            Evt2Fact<Contract.Stop.Payload, Meta> evt2Fact)
             : base(driver, exchange, evt2Fact)
         {
         }
@@ -152,7 +152,7 @@ public static class Stop
         : ListenerT<
             Spoke,
             Contract.Stop.Dummyload,
-            EventMeta,
+            Meta,
             Contract.Stop.Payload,
             byte[],
             IRetroInPipe>

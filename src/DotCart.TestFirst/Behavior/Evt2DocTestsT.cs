@@ -21,7 +21,7 @@ public abstract class Evt2DocTestsT<
     TPayload,
     TMeta> : IoCTests
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TDoc : IState
     where TDocID : IID
 {

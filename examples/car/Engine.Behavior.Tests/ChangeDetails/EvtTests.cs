@@ -10,7 +10,7 @@ namespace Engine.Behavior.Tests.ChangeDetails;
 
 [Topic(Contract.ChangeDetails.Topics.Evt_v1)]
 public class EvtTests : EvtTestsT<Schema.EngineID, Contract.ChangeDetails.Payload,
-    EventMeta>
+    Meta>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

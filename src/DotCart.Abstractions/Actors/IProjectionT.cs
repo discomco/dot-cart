@@ -12,6 +12,6 @@ public interface IProjectionT<TDriver, TState, TPayload, TMeta> : IProjectionB
     where TDriver : IDocStore<TState>
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
 {
 }

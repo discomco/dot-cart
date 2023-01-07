@@ -19,26 +19,26 @@ public static class Initialize
 {
     public static readonly EvtCtorT<
             Contract.Initialize.Payload,
-            EventMeta>
+            Meta>
         _newEvt = Event.New<Contract.Initialize.Payload>;
 
-    private static readonly Evt2Fact<Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2Fact<Contract.Initialize.Payload, Meta>
         _evt2Fact =
-            evt => FactT<Contract.Initialize.Payload, EventMeta>.New(
+            evt => FactT<Contract.Initialize.Payload, Meta>.New(
                 evt.AggregateId,
                 evt.Data.FromBytes<Contract.Initialize.Payload>(),
-                evt.MetaData.FromBytes<EventMeta>()
+                evt.MetaData.FromBytes<Meta>()
             );
 
-    private static readonly Fact2Msg<byte[], Contract.Initialize.Payload, EventMeta>
+    private static readonly Fact2Msg<byte[], Contract.Initialize.Payload, Meta>
         _fact2Msg =
             fact => fact.ToBytes();
 
-    private static readonly Msg2Fact<Contract.Initialize.Payload, EventMeta, byte[]>
+    private static readonly Msg2Fact<Contract.Initialize.Payload, Meta, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.Initialize.Payload, EventMeta>>();
+            msg => msg.FromBytes<FactT<Contract.Initialize.Payload, Meta>>();
 
-    private static readonly Hope2Cmd<Contract.Initialize.Payload, EventMeta>
+    private static readonly Hope2Cmd<Contract.Initialize.Payload, Meta>
         _hope2Cmd =
             hope =>
             {
@@ -46,13 +46,13 @@ public static class Initialize
                 return Command.New<Contract.Initialize.Payload>(
                     id
                     , hope.Payload.ToBytes()
-                    , EventMeta.New(
+                    , Meta.New(
                         NameAtt.Get<IEngineAggregateInfo>(),
                         id.Id()).ToBytes()
                 );
             };
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.Initialize.Payload, Meta>
         _evt2Doc =
             (state, evt) =>
             {
@@ -65,12 +65,12 @@ public static class Initialize
                 return newState;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.Initialize.Payload, Meta>
         _evt2DocVal =
             (_, output, evt) => output.Id == evt.AggregateId
                                 && output.Status.HasFlagFast(Schema.EngineStatus.Initialized);
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.Initialize.Payload, Meta>
         _evt2List =
             (list, evt) =>
             {
@@ -92,7 +92,7 @@ public static class Initialize
                 return newList;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Initialize.Payload, Meta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -105,7 +105,7 @@ public static class Initialize
                 return result;
             };
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.Initialize.Payload, EventMeta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.Initialize.Payload, Meta>
         _guardFunc =
             (cmd, state) =>
             {
@@ -123,7 +123,7 @@ public static class Initialize
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine, Contract.Initialize.Payload, EventMeta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.Initialize.Payload, Meta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -158,7 +158,7 @@ public static class Initialize
             .AddRootDocCtors()
             .AddRootListCtors()
             .AddInitializeProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Initialize.Payload, EventMeta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Initialize.Payload, Meta>()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _newEvt);

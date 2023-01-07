@@ -33,7 +33,7 @@ namespace DotCart.Context.Actors;
 public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPipeInfo>
     : ActorT<TSpoke>, ISubscriber
     where TCmdPayload : IPayload
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TFactPayload : IPayload
     where TSpoke : ISpokeT<TSpoke>
     where TDriverMsg : class

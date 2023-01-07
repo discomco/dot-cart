@@ -6,7 +6,7 @@ namespace Engine.TestUtils;
 
 public static class Initialize
 {
-    public static readonly EvtCtorT<Contract.Initialize.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.Initialize.Payload, Meta>
         EvtCtor =
             (_, _, _) =>
                 Behavior.Initialize._newEvt(
@@ -27,7 +27,7 @@ public static class Initialize
     public static readonly CmdCtorT<
             Contract.Schema.EngineID,
             Contract.Initialize.Payload,
-            EventMeta>
+            Meta>
         CmdCtor =
             (_, _, _) =>
             {
@@ -47,12 +47,12 @@ public static class Initialize
                 PayloadCtor()
             );
 
-    public static readonly FactCtorT<Contract.Initialize.Payload, EventMeta>
+    public static readonly FactCtorT<Contract.Initialize.Payload, Meta>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.Initialize.Payload, EventMeta>.New(
+                return FactT<Contract.Initialize.Payload, Meta>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));

@@ -19,7 +19,7 @@ public static class ChangeDetails
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
-    private static readonly Evt2Cmd<Contract.ChangeDetails.Payload, Contract.Initialize.Payload, EventMeta>
+    private static readonly Evt2Cmd<Contract.ChangeDetails.Payload, Contract.Initialize.Payload, Meta>
         _shouldChangeDetailsOnInitialized =
             (evt, _) =>
             {
@@ -30,7 +30,7 @@ public static class ChangeDetails
                     evt.MetaData);
             };
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, Meta>
         _evt2Doc =
             (doc, evt) =>
             {
@@ -39,7 +39,7 @@ public static class ChangeDetails
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeDetails.Payload, Meta>
         _evt2DocVal =
             (input, output, evt) =>
             {
@@ -50,7 +50,7 @@ public static class ChangeDetails
                            || input.Details.Description != output.Details.Description);
             };
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeDetails.Payload, Meta>
         _evt2List =
             (doc, evt) =>
             {
@@ -61,12 +61,12 @@ public static class ChangeDetails
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeDetails.Payload, Meta>
         _evt2ListVal =
             (_, output, evt) =>
                 output.Items[evt.AggregateId].Name == evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeDetails.Payload, Meta>
         _guardFunc = (cmd, state) =>
         {
             var fbk = Feedback.New(cmd.AggregateID.Id());
@@ -83,14 +83,14 @@ public static class ChangeDetails
             return fbk;
         };
 
-    public static readonly EvtCtorT<Contract.ChangeDetails.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.ChangeDetails.Payload, Meta>
         _newEvt =
             (id, payload, meta) => Event.New<Contract.ChangeDetails.Payload>(
                 id,
                 payload,
                 meta);
 
-    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeDetails.Payload, Meta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -101,31 +101,31 @@ public static class ChangeDetails
             };
 
 
-    private static readonly Fact2Msg<byte[], Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Fact2Msg<byte[], Contract.ChangeDetails.Payload, Meta>
         _fact2Msg =
             fact => fact.ToBytes();
 
-    private static readonly Msg2Fact<Contract.ChangeDetails.Payload, EventMeta, byte[]>
+    private static readonly Msg2Fact<Contract.ChangeDetails.Payload, Meta, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.ChangeDetails.Payload, EventMeta>>();
+            msg => msg.FromBytes<FactT<Contract.ChangeDetails.Payload, Meta>>();
 
-    private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Hope2Cmd<Contract.ChangeDetails.Payload, Meta>
         _hope2Cmd =
             hope => Command.New<Contract.ChangeDetails.Payload>(
                 hope.AggId.IDFromIdString(),
                 hope.Payload.ToBytes(),
-                EventMeta.New(
+                Meta.New(
                     NameAtt.Get<IEngineAggregateInfo>(),
                     hope.AggId
                 ).ToBytes()
             );
 
-    private static readonly Evt2Fact<Contract.ChangeDetails.Payload, EventMeta>
+    private static readonly Evt2Fact<Contract.ChangeDetails.Payload, Meta>
         _evt2Fact =
-            evt => FactT<Contract.ChangeDetails.Payload, EventMeta>.New(
+            evt => FactT<Contract.ChangeDetails.Payload, Meta>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeDetails.Payload>(),
-                evt.GetMeta<EventMeta>()
+                evt.GetMeta<Meta>()
             );
 
     public static IServiceCollection AddChangeDetailsACLFuncs(this IServiceCollection services)
@@ -145,7 +145,7 @@ public static class ChangeDetails
             .AddRootDocCtors()
             .AddRootListCtors()
             .AddChangeDetailsProjectionFuncs()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeDetails.Payload, EventMeta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeDetails.Payload, Meta>()
             .AddChoreography(_shouldChangeDetailsOnInitialized)
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc)

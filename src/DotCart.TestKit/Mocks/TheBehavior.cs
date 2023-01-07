@@ -1,7 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Core;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheBehavior
 {

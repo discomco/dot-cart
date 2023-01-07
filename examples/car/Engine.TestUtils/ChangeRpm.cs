@@ -7,12 +7,12 @@ namespace Engine.TestUtils;
 
 public static class ChangeRpm
 {
-    public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeRpm.Payload, EventMeta>
+    public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeRpm.Payload, Meta>
         CmdCtor =
             (id, _, _) => Command.New<Contract.ChangeRpm.Payload>(
                 id,
                 PayloadCtor().ToBytes(),
-                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), id.Id()).ToBytes());
+                Meta.New(NameAtt.Get<IEngineAggregateInfo>(), id.Id()).ToBytes());
 
     public static readonly PayloadCtorT<Contract.ChangeRpm.Payload>
         PayloadCtor =
@@ -22,18 +22,18 @@ public static class ChangeRpm
         HopeCtor =
             (_, _) => HopeT<Contract.ChangeRpm.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.ChangeRpm.Payload, EventMeta>
+    public static readonly FactCtorT<Contract.ChangeRpm.Payload, Meta>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.ChangeRpm.Payload, EventMeta>.New(
+                return FactT<Contract.ChangeRpm.Payload, Meta>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
 
-    public static readonly EvtCtorT<Contract.ChangeRpm.Payload, EventMeta>
+    public static readonly EvtCtorT<Contract.ChangeRpm.Payload, Meta>
         EvtCtor =
             (_, _, _) =>
             {

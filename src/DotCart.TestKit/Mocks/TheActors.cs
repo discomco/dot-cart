@@ -3,7 +3,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
 
-namespace DotCart.TestKit;
+namespace DotCart.TestKit.Mocks;
 
 public static class TheActors
 {

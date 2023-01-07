@@ -60,7 +60,7 @@ public static class Inject
     public static IServiceCollection AddNATSResponder<TSpoke, TResponder, TPayload, TMeta>(
         this IServiceCollection services)
         where TPayload : IPayload
-        where TMeta : IEventMeta
+        where TMeta : IMeta
         where TResponder : class, IResponderT<TPayload>, IActorT<TSpoke>
     {
         return services

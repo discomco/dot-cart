@@ -11,7 +11,7 @@ namespace Engine.Context.Tests.Initialize;
 
 public class ToEventStoreTestsT : ToEventStoreTestsT<
     Contract.Initialize.Payload,
-    EventMeta,
+    Meta,
     IDocStore<Schema.Engine>>
 {
     public ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

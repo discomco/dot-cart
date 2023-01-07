@@ -12,7 +12,7 @@ public class ShouldStartOnInitializedTests
     : ChoreographyTestsT<
         Contract.Start.Payload,
         Contract.Initialize.Payload,
-        EventMeta>
+        Meta>
 {
     public ShouldStartOnInitializedTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

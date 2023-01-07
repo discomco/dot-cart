@@ -13,7 +13,7 @@ namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -23,7 +23,7 @@ public static class ChangeRpm
                 return res;
             };
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
         _guardFunc =
             (cmd, state) =>
             {
@@ -43,7 +43,7 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
         _evt2Doc =
             (doc, evt) =>
             {
@@ -53,7 +53,7 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
         _evt2DocVal =
             (input, output, evt) =>
             {
@@ -62,7 +62,7 @@ public static class ChangeRpm
             };
 
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, Meta>
         _evt2List =
             (doc, evt) =>
             {
@@ -79,7 +79,7 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeRpm.Payload, Meta>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -92,22 +92,22 @@ public static class ChangeRpm
             };
 
 
-    private static readonly Evt2Fact<Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Evt2Fact<Contract.ChangeRpm.Payload, Meta>
         _evt2Fact =
-            evt => FactT<Contract.ChangeRpm.Payload, EventMeta>.New(
+            evt => FactT<Contract.ChangeRpm.Payload, Meta>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeRpm.Payload>(),
-                evt.GetMeta<EventMeta>());
+                evt.GetMeta<Meta>());
 
-    private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, EventMeta>
+    private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, Meta>
         _hope2Cmd =
             hope => Command.New<Contract.ChangeRpm.Payload>(
                 hope.AggId.IDFromIdString(),
                 hope.Payload.ToBytes(),
-                EventMeta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
+                Meta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
             );
 
-    public static EvtCtorT<Contract.ChangeRpm.Payload, EventMeta>
+    public static EvtCtorT<Contract.ChangeRpm.Payload, Meta>
         _newEvt =
             (id, payload, meta)
                 => Event.New<Contract.ChangeRpm.Payload>(
@@ -138,7 +138,7 @@ public static class ChangeRpm
         return services
             .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeRpm.Payload, EventMeta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeRpm.Payload, Meta>()
             .AddChangeRpmProjectionFuncs()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc);

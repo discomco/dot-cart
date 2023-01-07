@@ -6,6 +6,7 @@ using DotCart.Context.Actors;
 using DotCart.Context.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
+using DotCart.TestKit.Mocks;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 

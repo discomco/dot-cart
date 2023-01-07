@@ -8,7 +8,7 @@ namespace DotCart.TestFirst.Drivers;
 
 public abstract class BusDriverTestsB<TPayload, TMeta>
     : IoCTests
-    where TMeta : IEventMeta
+    where TMeta : IMeta
     where TPayload : IPayload
 {
     protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

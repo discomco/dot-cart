@@ -10,7 +10,7 @@ namespace Engine.Behavior.Tests.Start;
 public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Schema.Engine,
-    Contract.Start.Payload, EventMeta
+    Contract.Start.Payload, Meta
 >
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
