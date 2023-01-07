@@ -24,6 +24,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Serilog;
 
 namespace DotCart.Context.Actors;
 
@@ -46,6 +47,14 @@ public abstract class StepT<TPipeInfo, TPayload>
     public void SetPipe(IPipeT<TPipeInfo, TPayload> pipe)
     {
         Pipe = pipe;
+    }
+
+    public async Task<Feedback> DoStepAsync(IDto msg, Feedback fbk, CancellationToken cancellationToken)
+    {
+        Log.Information($"{AppVerbs.Do} step {Name}({msg.GetType().Name})");
+        var f = await ExecuteAsync(msg, fbk, cancellationToken);
+        Log.Information($"{AppFacts.Done} step {Name}({msg.GetType().Name}) ~> is_success:{f.IsSuccess}");
+        return f;
     }
 
     protected abstract string GetName();

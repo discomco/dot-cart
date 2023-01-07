@@ -84,17 +84,17 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
     {
         while (_exchange.Status != ComponentStatus.Active)
         {
-            Log.Information($"{AppVerbs.Activating} [{NameAtt.Get(_exchange)}]");
+            Log.Information($"{AppVerbs.Activating} exchange [{NameAtt.Get(_exchange)}]");
             _exchange.Activate(cancellationToken).ConfigureAwait(false);
             if (_exchange.Status != ComponentStatus.Active)
             {
-                Log.Information($"{AppVerbs.Waiting1s} [{NameAtt.Get(_exchange)}]...");
+                Log.Information($"{AppVerbs.Waiting1s} exchange [{NameAtt.Get(_exchange)}]...");
                 Thread.Sleep(1);
 //                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
             }
             else
             {
-                Log.Information($"{AppFacts.Started} [{NameAtt.Get(_exchange)}]");
+                Log.Information($"{AppFacts.Started} exchange [{NameAtt.Get(_exchange)}]");
             }
         }
     }

@@ -25,7 +25,7 @@ public class PipeT<TPipeInfo,TPayload> : IPipeT<TPipeInfo,TPayload>
                 throw new Exception($"Pipe [{Name}] has no steps.");
             foreach (var step in _steps)
             {
-                fbk = await step.ExecuteAsync(msg, fbk, cancellationToken);
+                fbk = await step.DoStepAsync(msg, fbk, cancellationToken);
                 if (step.Level == Importance.Crucial && !fbk.IsSuccess) break;
             }
 

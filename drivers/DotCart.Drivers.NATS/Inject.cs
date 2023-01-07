@@ -23,6 +23,7 @@ public static class Inject
             // else
             .AddSingleton<Action<Options>>(_ => options =>
             {
+                options.Timeout = 5000;
                 options.AllowReconnect = true;
                 options.MaxReconnect = 10;
                 options.User = Config.User;

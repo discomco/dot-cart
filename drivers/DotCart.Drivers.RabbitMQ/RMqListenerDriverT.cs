@@ -73,12 +73,11 @@ public class RMqListenerDriverT<TFactPayload,TFactMeta>
             Guard.Against.Null(ea, nameof(ea));
             Guard.Against.Null(ea.Body, nameof(ea.Body));
             var fact = _msg2Fact(ea.Body.ToArray());
-//            Log.Debug($"{AppFacts.Received} Fact({FactTopicAtt.Get<TFactPayload>()})");
             await Cast(fact);
         }
         catch (Exception e)
         {
-            Log.Error(e.InnerAndOuter());
+            Log.Error(AppErrors.Error(e.InnerAndOuter()));
         }
     }
 }

@@ -53,10 +53,12 @@ public class AggregatePolicyT<TEvtPayload, TCmdPayload, TMeta> : ActorB, IAggreg
             var cmd = _evt2Cmd((Event)evt, Aggregate.GetState());
             if (cmd != null)
                 feedback = await Aggregate.ExecuteAsync(cmd, null);
+            Log.Information($"{AppFacts.Enforced} [{NameAtt.Get(this)}] on {evt.Topic}");
         }
         catch (Exception e)
         {
             feedback.SetError(e.AsError());
+            Log.Error($"{AppErrors.Error(e.InnerAndOuter())}");
         }
 
         return feedback;

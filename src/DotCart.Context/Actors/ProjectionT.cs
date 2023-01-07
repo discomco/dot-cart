@@ -30,7 +30,6 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
     private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
-
     protected ProjectionT(
         IExchange exchange,
         TIStore docStore,
@@ -55,7 +54,7 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
     private async Task Handler(IEvtB evtB, CancellationToken cancellationToken = default)
     {
         if (!evtB.IsCommitted) return;
-        Log.Information($"{AppVerbs.Projecting} [{evtB.AggregateId}::{evtB.Topic}] ~> [{GetType().Name}]");
+        Log.Information($"{AppVerbs.Projecting} [{evtB.AggregateId}::{evtB.Topic}] ~> [{Name}]");
         var docId = GetDocId(evtB);
         var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();

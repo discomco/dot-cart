@@ -39,7 +39,7 @@ public class ResponderT<TSpoke, TPayload, TPipeInfo> : ActorT<TSpoke>, IResponde
 
     protected override string GetName()
     {
-        return $"{Driver.GetType().Name}<{HopeTopicAtt.Get<TPayload>()}>";
+        return $"{HopeTopicAtt.Get<TPayload>()} ~> {Driver.GetType().Name}";
     }
 
 

@@ -35,11 +35,17 @@ public abstract class EmitterT<TSpoke, TPayload, TMeta>
 
     public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
     {
-        return Run(() =>
+        try
         {
             var fact = _evt2Fact((Event)msg);
+            Log.Information($"{AppVerbs.Emitting} [{fact.Topic}] ~> [{Driver.GetType().Name}]");
             return ((IEmitterDriverT<TPayload, TMeta>)Driver).EmitAsync(fact, cancellationToken);
-        }, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"{AppErrors.Error(e.InnerAndOuter())}");
+            return CompletedTask;
+        }
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)

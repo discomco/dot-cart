@@ -46,7 +46,6 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
     {
         return Task.Run(() =>
         {
-            Log.Information($"{AppVerbs.Emitting} [{Topic}] ~> RabbitMq");
             var body = _fact2Msg(fact);
             _channel.BasicPublish(Topic, "", null, body);
             return Task.CompletedTask;

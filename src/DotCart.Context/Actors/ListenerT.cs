@@ -26,6 +26,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Serilog;
 
 namespace DotCart.Context.Actors;
 
@@ -52,15 +53,28 @@ public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPi
 
     public override async Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
     {
-        var fact = (FactT<TFactPayload, TMeta>)msg;
-        var pipe = _pipeBuilder.Build();
-        var fdbk = await pipe.ExecuteAsync(fact, cancellationToken);
+        try
+        {
+            var fact = (FactT<TFactPayload, TMeta>)msg;
+            var pipe = _pipeBuilder.Build();
+            Log.Information($"{AppFacts.Received} fact({FactTopicAtt.Get<TFactPayload>()}) ~> [{Name}]");
+            var fdbk = await pipe.ExecuteAsync(fact, cancellationToken);
+        }
+        catch (Exception e)
+        {
+            Log.Error($"{AppErrors.Error(e.InnerAndOuter())}");
+        }
     }
 
     public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
     {
         return (Task<IMsg>)Task.CompletedTask;
     }
+
+    // protected override string GetName()
+    // {
+    //     return $"{FactTopicAtt.Get<TFactPayload>()} ~> {Name}";
+    // }
 
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
@@ -69,6 +83,7 @@ public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPi
 
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
+        Driver.SetActor(this);
         return ((IListenerDriverT<TFactPayload, TDriverMsg>)Driver).StartListeningAsync(cancellationToken);
     }
 

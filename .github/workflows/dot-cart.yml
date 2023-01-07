@@ -20,7 +20,6 @@ env:
 jobs:
   
   build:
-
     runs-on: ubuntu-latest
     environment: Production
     strategy:
@@ -29,6 +28,8 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: master, publish
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -39,25 +40,8 @@ jobs:
         run: dotnet restore
       - name: Build Packages
         run: dotnet build --configuration Release --no-restore
-  #      - name: Test Packages
-  #        run: dotnet test --no-restore --verbosity minimal
-  #      - name: Build Packages
-  #        run: ./cid/build.sh DotCart.root.sln
-  #      - name: Test Packages
-  #        run: ./cid/run_unit_tests.sh DotCart.root.sln
-  #      - name: Publish Packages
-  #        run: ./cid/pub_pkg.sh
-  #        env:
-  #          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-  #          NUGET_URL: https://api.nuget.org/v3/index.json
-  #      - name: Test Published Packages
-  #        run: ./cid/testpub.sh
-  #        env:
-  #          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
-  #          NUGET_URL: https://api.nuget.org/v3/index.json
 
   test:
-
     runs-on: ubuntu-latest
     environment: Production
     container: mcr.microsoft.com/dotnet/sdk
@@ -105,6 +89,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: master, publish
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -117,3 +103,30 @@ jobs:
         run: dotnet restore
       - name: Test Packages
         run: dotnet test --no-restore --verbosity minimal --logger trx --results-directory ./TST-RES
+
+  publish:
+    runs-on: ubuntu-latest
+    name: Publish Nuget Packages
+    environment: Production
+    container: mcr.microsoft.com/dotnet/sdk
+    strategy:
+      matrix:
+        dotnet-version: [ '7.0.x' ]
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: publish
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: ${{ matrix.dotnet-version }}
+      - name: Publish Packages
+        run: ./cid/pub_pkg.sh
+        env:
+          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+          NUGET_URL: https://api.nuget.org/v3/index.json
+      - name: Test Published Packages
+        run: ./cid/testpub.sh
+        env:
+          NUGET_API_KEY: ${{secrets.MACULA_NUGET_ORG_KEY}}
+          NUGET_URL: https://api.nuget.org/v3/index.json
