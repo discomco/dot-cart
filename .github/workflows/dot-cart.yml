@@ -29,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: master, publish
+          ref: master, release
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -90,7 +90,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: master, publish
+          ref: master, release
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
@@ -115,7 +115,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
         with:
-          ref: publish
+          ref: release
       - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
         uses: actions/setup-dotnet@v3
         with:
