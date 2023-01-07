@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - release
 env:
   REDIS_CONFIG: "redis:6379"
   EVENTSTORE_URI: "esdb+discover://eventstore:2113?tls=false"
