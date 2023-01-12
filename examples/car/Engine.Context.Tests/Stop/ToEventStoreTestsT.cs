@@ -11,7 +11,7 @@ namespace Engine.Context.Tests.Stop;
 
 public class ToEventStoreTestsT : ToEventStoreTestsT<
     Contract.Stop.Payload,
-    Meta,
+    MetaB,
     IDocStore<Schema.Engine>>
 {
     public ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

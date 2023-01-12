@@ -6,7 +6,7 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Core functionalities and general-purpose tools for DotCart</Title>
         <Description>
-            The DotCart.Core package contains a number support classes and utilities to work with schemas, 
+            The DotCart.Core package contains a number support classes and utilities to work with schemas,
             attributes and so on.
         </Description>
     </PropertyGroup>

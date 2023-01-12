@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -11,7 +12,8 @@ public class ToRabbitMqTests
         Context.Start.Spoke,
         Context.Start.ToRabbitMq,
         Contract.Start.Payload,
-        Meta>
+        MetaB,
+        Schema.EngineID>
 {
     public ToRabbitMqTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -27,7 +29,8 @@ public class ToRabbitMqTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        services
+        TestUtils.Start
+            .AddTestFuncs(services)
             .AddStartSpoke();
     }
 }

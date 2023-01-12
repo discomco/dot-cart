@@ -5,9 +5,9 @@ namespace DotCart.Abstractions.Drivers;
 
 public abstract class DriverB : IDriverB
 {
-    private IActor _actor;
+    private IActorB _actor;
 
-    public void SetActor(IActor actor)
+    public void SetActor(IActorB actor)
     {
         _actor = actor;
     }

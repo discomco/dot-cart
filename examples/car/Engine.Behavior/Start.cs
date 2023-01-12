@@ -16,35 +16,35 @@ public static class Start
     public const string OnInitialized_v1 = "engine:on_initialized:start:v1";
 
 
-    private static readonly Evt2Fact<Contract.Start.Payload, Meta>
+    private static readonly Evt2Fact<Contract.Start.Payload, MetaB>
         _evt2Fact =
             evt =>
-                FactT<Contract.Start.Payload, Meta>.New(
+                FactT<Contract.Start.Payload, MetaB>.New(
                     evt.AggregateId,
                     evt.GetPayload<Contract.Start.Payload>(),
-                    evt.GetMeta<Meta>()
+                    evt.GetMeta<MetaB>()
                 );
 
 
-    private static readonly Fact2Msg<byte[], Contract.Start.Payload, Meta>
+    private static readonly Fact2Msg<byte[], Contract.Start.Payload, MetaB>
         _fact2Msg =
             fact => fact.ToBytes();
 
-    private static readonly Msg2Fact<Contract.Start.Payload, Meta, byte[]>
+    private static readonly Msg2Fact<Contract.Start.Payload, MetaB, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.Start.Payload, Meta>>();
+            msg => msg.FromBytes<FactT<Contract.Start.Payload, MetaB>>();
 
-    private static readonly Hope2Cmd<Contract.Start.Payload, Meta>
+    private static readonly Hope2Cmd<Contract.Start.Payload, MetaB>
         _hope2Cmd =
             hope =>
                 Command.New<Contract.Start.Payload>(
                     hope.AggId.IDFromIdString(),
                     hope.Payload.ToBytes(),
-                    Meta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
+                    MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
                 );
 
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.Start.Payload, Meta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.Start.Payload, MetaB>
         _evt2Doc =
             (doc, _) =>
             {
@@ -55,14 +55,14 @@ public static class Start
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.Start.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.Start.Payload, MetaB>
         _evt2DocVal =
             (input, output, _)
                 => !input.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && output.Status.HasFlagFast(Schema.EngineStatus.Started)
                    && !output.Status.HasFlagFast(Schema.EngineStatus.Stopped);
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.Start.Payload, Meta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.Start.Payload, MetaB>
         _evt2List =
             (lst, evt) =>
             {
@@ -79,7 +79,7 @@ public static class Start
                 return newLst;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Start.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Start.Payload, MetaB>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -89,7 +89,7 @@ public static class Start
             };
 
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.Start.Payload, Meta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.Start.Payload, MetaB>
         _specFunc =
             (_, state) =>
             {
@@ -106,7 +106,7 @@ public static class Start
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine, Contract.Start.Payload, Meta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.Start.Payload, MetaB>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -117,17 +117,17 @@ public static class Start
             };
 
 
-    public static readonly EvtCtorT<Contract.Start.Payload, Meta>
+    public static readonly EvtCtorT<Contract.Start.Payload, MetaB>
         _newEvt =
             Event.New<Contract.Start.Payload>;
 
-    private static readonly Evt2Cmd<Contract.Start.Payload, Contract.Initialize.Payload, Meta>
+    private static readonly Evt2Cmd<Contract.Start.Payload, Contract.Initialize.Payload, MetaB>
         _shouldStartOnInitialized =
             (evt, _) =>
                 Command.New<Contract.Start.Payload>(
                     evt.AggregateId.IDFromIdString(),
                     Contract.Start.Payload.New.ToBytes(),
-                    Meta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes());
+                    MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes());
 
     public static IServiceCollection AddStartACLFuncs(this IServiceCollection services)
     {
@@ -144,7 +144,7 @@ public static class Start
         return services
             .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Start.Payload, Meta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Start.Payload, MetaB>()
             .AddChoreography(_shouldStartOnInitialized)
             .AddTransient(_ => _evt2Doc)
             .AddTransient(_ => _specFunc)

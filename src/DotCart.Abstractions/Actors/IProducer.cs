@@ -1,5 +1,5 @@
 namespace DotCart.Abstractions.Actors;
 
-public interface IProducer : IActor
+public interface IProducer : IActorB
 {
 }

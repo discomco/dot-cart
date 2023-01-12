@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Actors;
-using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using NATS.Client;
 
@@ -29,6 +28,6 @@ public class TheResponder
     }
 }
 
-public interface ITheResponder : IActor
+public interface ITheResponder : IActorB
 {
 }

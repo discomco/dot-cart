@@ -18,6 +18,6 @@ public static partial class Inject
         return services
             .AddRootDocCtors()
             .AddInitializeWithChangeRpmEvents()
-            .AddTransient<IActor, EventFeeder>();
+            .AddTransient<IActorB, EventFeeder>();
     }
 }

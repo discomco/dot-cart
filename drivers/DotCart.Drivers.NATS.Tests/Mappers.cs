@@ -1,7 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 
 namespace DotCart.Drivers.NATS.Tests;

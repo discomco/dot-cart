@@ -10,7 +10,7 @@ namespace Engine.Behavior.Tests.ChangeRpm;
 
 [Topic(Contract.ChangeRpm.Topics.Cmd_v1)]
 public class CmdTests
-    : CmdTestsT<Schema.EngineID, Contract.ChangeRpm.Payload, Meta>
+    : CmdTestsT<Schema.EngineID, Contract.ChangeRpm.Payload, MetaB>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

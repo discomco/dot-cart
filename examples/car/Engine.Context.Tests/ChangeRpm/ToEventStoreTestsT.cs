@@ -12,7 +12,7 @@ namespace Engine.Context.Tests.ChangeRpm;
 public class ToEventStoreTestsT
     : ToEventStoreTestsT<
         Contract.ChangeRpm.Payload,
-        Meta,
+        MetaB,
         IDocStore<Schema.Engine>>
 {
     public ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

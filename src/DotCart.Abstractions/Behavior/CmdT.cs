@@ -4,5 +4,4 @@ namespace DotCart.Abstractions.Behavior;
 
 public delegate Command Hope2Cmd<TPayload, TMeta>(HopeT<TPayload> hope)
     where TPayload : IPayload
-    where TMeta : IMeta;
-
+    where TMeta : IMetaB;

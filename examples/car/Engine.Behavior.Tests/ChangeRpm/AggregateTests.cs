@@ -11,7 +11,7 @@ public class AggregateTests : AggregateTestsT<
     Schema.EngineID,
     Schema.Engine,
     Contract.ChangeDetails.Payload,
-    Meta>
+    MetaB>
 {
     public AggregateTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

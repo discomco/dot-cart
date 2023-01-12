@@ -13,7 +13,7 @@ public class EvtTests
     : EvtTestsT<
         Schema.EngineID,
         Contract.Initialize.Payload,
-        Meta>
+        MetaB>
 {
     public EvtTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

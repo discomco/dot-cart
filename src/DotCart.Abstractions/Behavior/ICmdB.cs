@@ -8,5 +8,4 @@ public interface ICmdB
     string CmdType { get; }
     byte[] Data { get; }
     byte[] MetaData { get; }
-
 }

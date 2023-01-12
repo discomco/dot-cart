@@ -71,7 +71,7 @@ public static class ScenariosAndStreams
         var initializeCmd = Command.New<Contract.Initialize.Payload>(
             ID,
             initializePayload.ToBytes(),
-            Meta.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()).ToBytes()
+            MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()).ToBytes()
         );
 //        initializeCmd.SetID(ID);
         return new[] { initializeCmd };

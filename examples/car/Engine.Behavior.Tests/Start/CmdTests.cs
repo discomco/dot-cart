@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Behavior.Tests.Start;
 
 [Topic(Contract.Start.Topics.Cmd_v1)]
-public class CmdTests : CmdTestsT<Schema.EngineID, Contract.Start.Payload, Meta>
+public class CmdTests : CmdTestsT<Schema.EngineID, Contract.Start.Payload, MetaB>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

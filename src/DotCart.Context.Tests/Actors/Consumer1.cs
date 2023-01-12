@@ -2,13 +2,12 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
-using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using Serilog;
 
 namespace DotCart.Context.Tests.Actors;
 
-public interface IConsumer1 : IActor
+public interface IConsumer1 : IActorB
 {
 }
 

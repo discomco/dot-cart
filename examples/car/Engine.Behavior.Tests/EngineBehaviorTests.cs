@@ -81,7 +81,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         var startCmd = Command.New<Contract.Start.Payload>(
             _ID,
             TestUtils.Initialize.PayloadCtor().ToBytes(),
-            Meta.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id()).ToBytes()
+            MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id()).ToBytes()
         );
 //        _agg.SetID(_ID);
         // WHEN

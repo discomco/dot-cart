@@ -9,7 +9,7 @@ namespace DotCart.TestFirst.Behavior;
 public abstract class CmdTestsT<TID, TPayload, TMeta> : IoCTests
     where TID : IID
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     protected CmdCtorT<TID, TPayload, TMeta> _newCmd;
     protected IDCtorT<TID> _newID;

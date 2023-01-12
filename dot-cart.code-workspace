@@ -11,6 +11,12 @@
 		},
 		{
 			"path": "../lemon-co"
+		},
+		{
+			"path": "../dot-serra"
+		},
+		{
+			"path": "../../rgfaber/discomco-site"
 		}
 	],
 	"settings": {}

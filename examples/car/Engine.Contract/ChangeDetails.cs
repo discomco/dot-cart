@@ -26,8 +26,4 @@ public static class ChangeDetails
             return new Payload(details);
         }
     }
-
-    public record DummyLoad : IPayload
-    {
-    }
 }

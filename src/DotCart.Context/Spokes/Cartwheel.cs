@@ -6,7 +6,7 @@ namespace DotCart.Context.Spokes;
 
 public class Cartwheel : BackgroundService
 {
-    private readonly IEnumerable<IActor> _actors;
+    private readonly IEnumerable<IActorB> _actors;
     private readonly IExchange _exchange;
     private readonly IProjector _projector;
 
@@ -16,7 +16,7 @@ public class Cartwheel : BackgroundService
     public Cartwheel(
         IExchange exchange
         , IProjector projector
-        , IEnumerable<IActor> actors
+        , IEnumerable<IActorB> actors
     )
     {
         _exchange = exchange;

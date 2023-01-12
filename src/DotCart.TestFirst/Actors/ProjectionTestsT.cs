@@ -18,7 +18,7 @@ public abstract class ProjectionTestsT<
     where TState : IState
     where TSpoke : ISpokeT<TSpoke>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     private Evt2Doc<TState, TPayload, TMeta> _evt2State;
 

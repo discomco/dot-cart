@@ -11,7 +11,7 @@ public class FromNATSTests
         Context.ChangeRpm.Spoke,
         Context.ChangeRpm.FromNATS,
         Contract.ChangeRpm.Payload,
-        Meta>
+        MetaB>
 {
     public FromNATSTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

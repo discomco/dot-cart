@@ -1,5 +1,5 @@
 namespace DotCart.Abstractions.Actors;
 
-public interface ISubscriber : IActor
+public interface IListenerB : IActorB
 {
 }

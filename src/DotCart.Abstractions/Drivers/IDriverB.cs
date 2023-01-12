@@ -4,5 +4,5 @@ namespace DotCart.Abstractions.Drivers;
 
 public interface IDriverB : IDisposable
 {
-    void SetActor(IActor actor);
+    void SetActor(IActorB actor);
 }

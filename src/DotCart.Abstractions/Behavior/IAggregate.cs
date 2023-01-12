@@ -26,6 +26,6 @@ public interface IAggregate
     void Load(IEnumerable<IEvtB>? events);
     void ClearUncommittedEvents();
     IState GetState();
-    Meta GetMeta();
+    MetaB GetMeta();
     void ClearUncommittedEvents(ulong resNextExpectedVersion);
 }

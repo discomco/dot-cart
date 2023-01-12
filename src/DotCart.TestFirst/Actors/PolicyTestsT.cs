@@ -11,7 +11,7 @@ namespace DotCart.TestFirst.Actors;
 public abstract class PolicyTestsT<TPolicy, TCmdPayload, TEvtPayload, TMeta> : IoCTests
     where TPolicy : IAggregatePolicy
     where TCmdPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     protected Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> _evt2Cmd;
     protected IExchange _exchange;

@@ -9,7 +9,7 @@ public class ApplyEvtT<TState, TPayload, TMeta>
     : IApply<TState, TPayload, TMeta>
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     private readonly Evt2Doc<TState, TPayload, TMeta> _evt2State;
 

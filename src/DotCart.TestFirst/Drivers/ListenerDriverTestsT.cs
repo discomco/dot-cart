@@ -8,7 +8,7 @@ namespace DotCart.TestFirst.Drivers;
 public abstract class ListenerDriverTestsT<TListenerDriver, TPayload, TMeta>
     : BusDriverTestsB<TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     protected ListenerDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

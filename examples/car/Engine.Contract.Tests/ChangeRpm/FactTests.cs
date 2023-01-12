@@ -11,7 +11,7 @@ namespace Engine.Contract.Tests.ChangeRpm;
 public class FactTests : FactTestsT<
     Contract.Schema.EngineID,
     Contract.ChangeRpm.Payload,
-    Meta>
+    MetaB>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

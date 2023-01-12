@@ -26,7 +26,7 @@ public class ESDBStore : IEventStore
     private readonly IESDBEventSourcingClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
-    private IActor _actor;
+    private IActorB _actor;
 
     public ESDBStore(
         IESDBEventSourcingClient client,
@@ -46,7 +46,7 @@ public class ESDBStore : IEventStore
     }
 
 
-    public void SetActor(IActor actor)
+    public void SetActor(IActorB actor)
     {
         _actor = actor;
     }

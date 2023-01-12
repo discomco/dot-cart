@@ -24,7 +24,7 @@ public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
     where TIStore : IDocStore<TDoc>
     where TDoc : IState
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     private readonly TIStore _docStore;
     private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;

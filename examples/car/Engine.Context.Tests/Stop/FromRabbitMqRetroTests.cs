@@ -1,15 +1,20 @@
+using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
+using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
 namespace Engine.Context.Tests.Stop;
 
 public class FromRabbitMqRetroTests
-    : ListenerTestsT<
+    : RetroListenerTestsT<
         Context.Stop.Spoke,
         Context.Stop.FromRabbitMqRetro,
-        Contract.Stop.Payload>
+        Contract.Stop.Payload,
+        MetaB,
+        Context.Stop.IRetroInPipe,
+        Schema.EngineID>
 {
     public FromRabbitMqRetroTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -25,7 +30,8 @@ public class FromRabbitMqRetroTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        services
+        TestUtils.Stop
+            .AddTestFuncs(services)
             .AddStopSpoke();
     }
 }

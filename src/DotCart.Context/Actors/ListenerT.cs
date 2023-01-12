@@ -30,13 +30,12 @@ using Serilog;
 
 namespace DotCart.Context.Actors;
 
-public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPipeInfo>
-    : ActorT<TSpoke>, ISubscriber
+public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TPipeInfo>
+    : ActorT<TSpoke>, IListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TPipeInfo>
     where TCmdPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TFactPayload : IPayload
     where TSpoke : ISpokeT<TSpoke>
-    where TDriverMsg : class
     where TPipeInfo : IPipeInfoB
 {
     private readonly Fact2Cmd<TCmdPayload, TMeta, TFactPayload> _fact2Cmd;
@@ -71,11 +70,6 @@ public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPi
         return (Task<IMsg>)Task.CompletedTask;
     }
 
-    // protected override string GetName()
-    // {
-    //     return $"{FactTopicAtt.Get<TFactPayload>()} ~> {Name}";
-    // }
-
     protected override Task CleanupAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
@@ -84,11 +78,11 @@ public class ListenerT<TSpoke, TCmdPayload, TMeta, TFactPayload, TDriverMsg, TPi
     protected override Task StartActingAsync(CancellationToken cancellationToken = default)
     {
         Driver.SetActor(this);
-        return ((IListenerDriverT<TFactPayload, TDriverMsg>)Driver).StartListeningAsync(cancellationToken);
+        return ((IListenerDriverB)Driver).StartListeningAsync(cancellationToken);
     }
 
     protected override Task StopActingAsync(CancellationToken cancellationToken = default)
     {
-        return ((IListenerDriverT<TFactPayload, TDriverMsg>)Driver).StopListeningAsync(cancellationToken);
+        return ((IListenerDriverB)Driver).StopListeningAsync(cancellationToken);
     }
 }

@@ -7,19 +7,20 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <Title>Contains the drivers for the default DotCart backing services</Title>
         <Description>DotCart toolbox offers out-of-the-box support for:
-- EventStoreDB 
-- Redis
-- RabbitMQ
-- Core NATS (async request/reply)</Description>
+            - EventStoreDB
+            - Redis
+            - RabbitMQ
+            - Core NATS (async request/reply)
+        </Description>
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj" />
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
-        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj" />
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.EventStoreDB\DotCart.Drivers.EventStoreDB.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Microsoft\DotCart.Drivers.Microsoft.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
     </ItemGroup>
 
 

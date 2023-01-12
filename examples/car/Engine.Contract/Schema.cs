@@ -69,6 +69,16 @@ public static class Schema
         return (value & flag) != 0;
     }
 
+    public record Rpm(int Value) : IValueObject
+    {
+        public int Value { get; } = Value;
+
+        public static Rpm? New(int value)
+        {
+            return new Rpm(value);
+        }
+    }
+
     [DbName(DbConstants.DocRedisDbName)]
     public record Engine : IState
     {
@@ -76,15 +86,16 @@ public static class Schema
         {
             Details = new Details();
             Status = EngineStatus.Unknown;
+            Rpm = new Rpm(0);
         }
 
         [JsonConstructor]
-        public Engine(string id, EngineStatus status, Details details)
+        public Engine(string id, EngineStatus status, Details details, Rpm rpm)
         {
             Id = id;
             Status = status;
             Details = details;
-            Power = 0;
+            Rpm = rpm;
         }
 
         private Engine(string id)
@@ -92,18 +103,20 @@ public static class Schema
             Id = id;
             Status = EngineStatus.Unknown;
             Details = Details.New("New Engine");
+            Rpm = Rpm.New(0);
         }
 
         [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         public string Id { get; set; }
 
         public EngineStatus Status { get; set; }
-        public int Power { get; set; }
+
+        public Rpm Rpm { get; set; }
         public Details Details { get; set; }
 
-        public static Engine New(string id, EngineStatus status, Details details)
+        public static Engine New(string id, EngineStatus status, Details details, Rpm rpm)
         {
-            return new Engine(id, status, details);
+            return new Engine(id, status, details, rpm);
         }
     }
 

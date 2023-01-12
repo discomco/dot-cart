@@ -1,12 +1,13 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
 
 public static class Initialize
 {
-    public static readonly EvtCtorT<Contract.Initialize.Payload, Meta>
+    public static readonly EvtCtorT<Contract.Initialize.Payload, MetaB>
         EvtCtor =
             (_, _, _) =>
                 Behavior.Initialize._newEvt(
@@ -27,7 +28,7 @@ public static class Initialize
     public static readonly CmdCtorT<
             Contract.Schema.EngineID,
             Contract.Initialize.Payload,
-            Meta>
+            MetaB>
         CmdCtor =
             (_, _, _) =>
             {
@@ -47,14 +48,24 @@ public static class Initialize
                 PayloadCtor()
             );
 
-    public static readonly FactCtorT<Contract.Initialize.Payload, Meta>
+    public static readonly FactCtorT<Contract.Initialize.Payload, MetaB>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.Initialize.Payload, Meta>.New(
+                return FactT<Contract.Initialize.Payload, MetaB>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
+
+
+    public static IServiceCollection AddTestFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Schema.DocIDCtor)
+            .AddTransient(_ => Schema.MetaCtor)
+            .AddTransient(_ => PayloadCtor)
+            .AddTransient(_ => FactCtor);
+    }
 }

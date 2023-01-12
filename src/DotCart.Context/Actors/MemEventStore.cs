@@ -35,7 +35,7 @@ internal class MemEventStore : IMemEventStore
 
     private readonly object saveMutex = new();
 
-    private IActor _actor;
+    private IActorB _actor;
 
 
     private IImmutableDictionary<string, IEnumerable<IEvtB>?> Streams =
@@ -88,7 +88,7 @@ internal class MemEventStore : IMemEventStore
         return AppendResult.New((ulong)(evts.Length + 1));
     }
 
-    public void SetActor(IActor actor)
+    public void SetActor(IActorB actor)
     {
         _actor = actor;
     }

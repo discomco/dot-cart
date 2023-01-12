@@ -10,7 +10,7 @@ public class FromNATSTests : NATSResponderTestsT<
     Context.Start.Spoke,
     Context.Start.FromNATS,
     Contract.Start.Payload,
-    Meta>
+    MetaB>
 {
     public FromNATSTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

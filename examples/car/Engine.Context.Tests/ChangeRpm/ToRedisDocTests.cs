@@ -12,7 +12,7 @@ public class ToRedisDocTests : ProjectionTestsT<
     Context.ChangeRpm.ToRedisDoc,
     Schema.Engine,
     Contract.ChangeRpm.Payload,
-    Meta>
+    MetaB>
 {
     public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

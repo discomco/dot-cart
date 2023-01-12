@@ -29,6 +29,6 @@ public class HopePipeBuilderTests : PipeBuilderTestsT<Context.Stop.IHopeInPipe, 
         services
             .AddTransient(_ => A.Fake<ICmdHandler>())
             .AddStopACLFuncs()
-            .AddHopeInPipe<Context.Stop.IHopeInPipe, Contract.Stop.Payload, Meta>();
+            .AddHopeInPipe<Context.Stop.IHopeInPipe, Contract.Stop.Payload, MetaB>();
     }
 }

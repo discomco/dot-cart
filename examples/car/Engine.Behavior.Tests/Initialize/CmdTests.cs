@@ -10,7 +10,7 @@ namespace Engine.Behavior.Tests.Initialize;
 
 [Topic(Contract.Initialize.Topics.Cmd_v1)]
 public class CmdTests
-    : CmdTestsT<Schema.EngineID, Contract.Initialize.Payload, Meta>
+    : CmdTestsT<Schema.EngineID, Contract.Initialize.Payload, MetaB>
 {
     public CmdTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

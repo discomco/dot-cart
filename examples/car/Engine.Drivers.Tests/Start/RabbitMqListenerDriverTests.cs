@@ -10,7 +10,7 @@ namespace Engine.Drivers.Tests.Start;
 public class RabbitMqListenerDriverTests
     : RabbitMqListenerDriverTestsT<
         Contract.Start.Payload,
-        Meta>
+        MetaB>
 {
     public RabbitMqListenerDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

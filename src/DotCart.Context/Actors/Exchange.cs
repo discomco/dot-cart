@@ -22,15 +22,15 @@ internal class Exchange : ActiveComponent, IExchange
 {
     private readonly object _subMutex = new();
 
-    private ImmutableDictionary<string, ImmutableList<IActor>> _topics =
-        ImmutableDictionary<string, ImmutableList<IActor>>.Empty;
+    private ImmutableDictionary<string, ImmutableList<IActorB>> _topics =
+        ImmutableDictionary<string, ImmutableList<IActorB>>.Empty;
 
-    public void Subscribe(string topic, IActor consumer)
+    public void Subscribe(string topic, IActorB consumer)
     {
         lock (_subMutex)
         {
             if (!_topics.ContainsKey(topic))
-                _topics = _topics.Add(topic, ImmutableList<IActor>.Empty);
+                _topics = _topics.Add(topic, ImmutableList<IActorB>.Empty);
             var lst = _topics[topic];
             lst = lst.All(a => a.Name != consumer.Name)
                 ? lst.Add(consumer)
@@ -40,7 +40,7 @@ internal class Exchange : ActiveComponent, IExchange
     }
 
 
-    public void Unsubscribe(string topic, IActor consumer)
+    public void Unsubscribe(string topic, IActorB consumer)
     {
         if (!_topics.ContainsKey(topic))
             return;

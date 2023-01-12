@@ -31,8 +31,8 @@ public static class ChangeRpm
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddHopeInPipe<IHopePipe, Contract.ChangeRpm.Payload, Meta>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeRpm.Payload, Meta>();
+            .AddHopeInPipe<IHopePipe, Contract.ChangeRpm.Payload, MetaB>()
+            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeRpm.Payload, MetaB>();
     }
 
     [Name(ToRedisDoc_v1)]
@@ -40,11 +40,11 @@ public static class ChangeRpm
     public class ToRedisDoc : ProjectionT<
         IRedisStore<Schema.Engine>,
         Schema.Engine,
-        Contract.ChangeRpm.Payload, Meta>, IActorT<Spoke>
+        Contract.ChangeRpm.Payload, MetaB>, IActorT<Spoke>
     {
         public ToRedisDoc(IExchange exchange,
             IRedisStore<Schema.Engine> docStore,
-            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, Meta> evt2Doc,
+            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
             StateCtorT<Schema.Engine> newDoc)
             : base(exchange, docStore, evt2Doc, newDoc)
         {
@@ -68,12 +68,12 @@ public static class ChangeRpm
     public class ToRedisList : ProjectionT<
         IRedisStore<Schema.EngineList>,
         Schema.EngineList,
-        Contract.ChangeRpm.Payload, Meta>, IActorT<Spoke>
+        Contract.ChangeRpm.Payload, MetaB>, IActorT<Spoke>
     {
         public ToRedisList(
             IExchange exchange,
             IRedisStore<Schema.EngineList> docStore,
-            Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, Meta> evt2Doc,
+            Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
             StateCtorT<Schema.EngineList> newDoc) : base(exchange, docStore, evt2Doc, newDoc)
         {
         }

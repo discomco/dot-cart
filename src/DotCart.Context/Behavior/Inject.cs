@@ -13,7 +13,7 @@ public static partial class Inject
         Evt2Cmd<TCmdPayload, TEvtPayload, TMeta> evt2Cmd)
         where TCmdPayload : IPayload
         where TEvtPayload : IPayload
-        where TMeta : IMeta
+        where TMeta : IMetaB
     {
         return services
             .AddTransient<IChoreography, ChoreographyT<TCmdPayload, TEvtPayload, TMeta>>()
@@ -25,7 +25,7 @@ public static partial class Inject
         where TState : IState
         where TAggregateInfo : IAggregateInfoB
         where TPayload : IPayload
-        where TMeta : IMeta
+        where TMeta : IMetaB
     {
         return services
             .AddConsoleLogger()

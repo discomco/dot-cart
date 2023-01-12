@@ -10,7 +10,7 @@ public interface IEmitterDriverB : IDriverB
 
 public interface IEmitterDriverT<TPayload, TMeta> : IEmitterDriverB
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     Task EmitAsync(FactT<TPayload, TMeta> fact, CancellationToken cancellationToken = default);
 }

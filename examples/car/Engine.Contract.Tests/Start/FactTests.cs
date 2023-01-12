@@ -12,7 +12,7 @@ public class FactTests
     : FactTestsT<
         Contract.Schema.EngineID,
         Contract.Start.Payload,
-        Meta>
+        MetaB>
 {
     public FactTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

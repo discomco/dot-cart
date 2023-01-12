@@ -2,7 +2,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
-using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using Serilog;
 
@@ -49,6 +48,6 @@ public class Consumer2 : ActorB, IActorT<TheSpoke>, IConsumer2
     }
 }
 
-public interface IConsumer2 : IActor
+public interface IConsumer2 : IActorB
 {
 }

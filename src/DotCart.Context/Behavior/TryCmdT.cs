@@ -8,7 +8,7 @@ namespace DotCart.Context.Behavior;
 public class TryCmdT<TState, TPayload, TMeta> : ITry<TState, TPayload, TMeta>
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     private readonly RaiseFuncT<TState, TPayload, TMeta> _raise;
     private readonly GuardFuncT<TState, TPayload, TMeta> _specify;

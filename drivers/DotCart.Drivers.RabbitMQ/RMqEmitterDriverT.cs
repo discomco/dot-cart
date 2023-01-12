@@ -10,7 +10,7 @@ namespace DotCart.Drivers.RabbitMQ;
 
 public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     private readonly int _backoff = 100;
     private readonly IConnectionFactory _connFact;

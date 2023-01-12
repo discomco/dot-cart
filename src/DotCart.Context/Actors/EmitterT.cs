@@ -10,14 +10,14 @@ using static System.Threading.Tasks.Task;
 
 namespace DotCart.Context.Actors;
 
-public interface IEmitterB : IActor
+public interface IEmitterB : IActorB
 {
 }
 
 public abstract class EmitterT<TSpoke, TPayload, TMeta>
     : ActorB, IActorT<TSpoke>, IEmitterT<TSpoke, TPayload, TMeta>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly Evt2Fact<TPayload, TMeta> _evt2Fact;
@@ -79,11 +79,4 @@ public abstract class EmitterT<TSpoke, TPayload, TMeta>
             return CompletedTask;
         }, cancellationToken);
     }
-}
-
-public interface IEmitterT<TSpoke, TPayload, TMeta>
-    where TSpoke : ISpokeT<TSpoke>
-    where TPayload : IPayload
-    where TMeta : IMeta
-{
 }

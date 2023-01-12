@@ -14,7 +14,7 @@ public class ToRedisListTests : ListProjectionTestsT<
     Context.Initialize.ToRedisList,
     Schema.EngineList,
     Contract.Initialize.Payload,
-    Meta>
+    MetaB>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

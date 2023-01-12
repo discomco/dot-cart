@@ -12,7 +12,7 @@ public interface ITry
 public interface ITry<in TState, TPayload, TMeta> : ITry
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     IFeedback Verify(Command cmd, TState state);
     IEnumerable<IEvtB> Raise(Command cmd, TState state);

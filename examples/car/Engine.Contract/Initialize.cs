@@ -27,9 +27,4 @@ public static class Initialize
             return new Payload(details);
         }
     }
-
-    public record Dummyload
-        : IPayload
-    {
-    }
 }

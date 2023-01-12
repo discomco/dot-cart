@@ -9,9 +9,9 @@ namespace Engine.Behavior;
 
 public static partial class Inject
 {
-    private static readonly MetaCtorT<Meta>
+    private static readonly MetaCtorT<MetaB>
         _newMeta =
-            id => Meta.New(NameAtt.Get<IEngineAggregateInfo>(), id);
+            id => MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), id);
 
     public static IServiceCollection AddMetaCtor(this IServiceCollection services)
     {

@@ -5,7 +5,7 @@ namespace DotCart.Context.Actors;
 
 public class MemProjectorDriver : IProjectorDriver
 {
-    private IActor _projector;
+    private IActorB _projector;
 
     public MemProjectorDriver(IExchange exchange)
     {
@@ -26,7 +26,7 @@ public class MemProjectorDriver : IProjectorDriver
         throw new NotImplementedException();
     }
 
-    public void SetActor(IActor actor)
+    public void SetActor(IActorB actor)
     {
         _projector = actor;
     }

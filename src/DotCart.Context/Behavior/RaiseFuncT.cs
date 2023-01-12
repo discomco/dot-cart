@@ -6,4 +6,4 @@ namespace DotCart.Context.Behavior;
 public delegate IEnumerable<IEvtB> RaiseFuncT<in TState, TPayload, TMeta>(Command cmd, TState state)
     where TState : IState
     where TPayload : IPayload
-    where TMeta : IMeta;
+    where TMeta : IMetaB;

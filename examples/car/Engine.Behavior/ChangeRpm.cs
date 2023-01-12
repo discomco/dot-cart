@@ -13,7 +13,7 @@ namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, MetaB>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -23,7 +23,7 @@ public static class ChangeRpm
                 return res;
             };
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.ChangeRpm.Payload, MetaB>
         _guardFunc =
             (cmd, state) =>
             {
@@ -43,33 +43,32 @@ public static class ChangeRpm
                 return fbk;
             };
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB>
         _evt2Doc =
             (doc, evt) =>
             {
                 var newDoc = doc with { };
-                var newPower = calcPower(newDoc.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
-                newDoc.Power = newPower;
+                newDoc.Rpm = calcRpm(newDoc.Rpm.Value, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.ChangeRpm.Payload, MetaB>
         _evt2DocVal =
             (input, output, evt) =>
             {
-                var newPower = calcPower(input.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
-                return output.Power == newPower;
+                var newPower = calcRpm(input.Rpm.Value, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
+                return output.Rpm.Value == newPower.Value;
             };
 
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, MetaB>
         _evt2List =
             (doc, evt) =>
             {
                 if (doc.Items.All(item => item.Key != evt.AggregateId))
                     return doc;
                 var newItem = doc.Items[evt.AggregateId] with { };
-                newItem.Power = calcPower(newItem.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta);
+                newItem.Power = calcRpm(newItem.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta).Value;
                 var newDoc = doc with
                 {
                     Items = ImmutableDictionary.CreateRange(doc.Items)
@@ -79,7 +78,7 @@ public static class ChangeRpm
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.ChangeRpm.Payload, MetaB>
         _evt2ListVal =
             (input, output, evt) =>
             {
@@ -88,26 +87,26 @@ public static class ChangeRpm
                 if (input.Items.All(item => item.Key != evt.AggregateId))
                     return false;
                 var d = evt.GetPayload<Contract.ChangeRpm.Payload>().Delta;
-                return output.Items[evt.AggregateId].Power == calcPower(input.Items[evt.AggregateId].Power, d);
+                return output.Items[evt.AggregateId].Power == calcRpm(input.Items[evt.AggregateId].Power, d).Value;
             };
 
 
-    private static readonly Evt2Fact<Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2Fact<Contract.ChangeRpm.Payload, MetaB>
         _evt2Fact =
-            evt => FactT<Contract.ChangeRpm.Payload, Meta>.New(
+            evt => FactT<Contract.ChangeRpm.Payload, MetaB>.New(
                 evt.AggregateId,
                 evt.GetPayload<Contract.ChangeRpm.Payload>(),
-                evt.GetMeta<Meta>());
+                evt.GetMeta<MetaB>());
 
-    private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, Meta>
+    private static readonly Hope2Cmd<Contract.ChangeRpm.Payload, MetaB>
         _hope2Cmd =
             hope => Command.New<Contract.ChangeRpm.Payload>(
                 hope.AggId.IDFromIdString(),
                 hope.Payload.ToBytes(),
-                Meta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
+                MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes()
             );
 
-    public static EvtCtorT<Contract.ChangeRpm.Payload, Meta>
+    public static EvtCtorT<Contract.ChangeRpm.Payload, MetaB>
         _newEvt =
             (id, payload, meta)
                 => Event.New<Contract.ChangeRpm.Payload>(
@@ -138,18 +137,18 @@ public static class ChangeRpm
         return services
             .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeRpm.Payload, Meta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.ChangeRpm.Payload, MetaB>()
             .AddChangeRpmProjectionFuncs()
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc);
     }
 
-    private static int calcPower(int power, int delta)
+    private static Schema.Rpm calcRpm(int original, int delta)
     {
-        var newPower = power + delta;
+        var newPower = original + delta;
         if (newPower <= 0)
             newPower = 0;
-        return newPower;
+        return Schema.Rpm.New(newPower);
     }
 
 

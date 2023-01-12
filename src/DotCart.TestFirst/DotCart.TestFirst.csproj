@@ -9,7 +9,7 @@
         <Description>
             We strongly advocate a guided quality-first approach to developing DotCart Context Services.
             For this purpose, we provide the development community with a series of abstract xUnit Test Classes
-            that, when implemented, produce the context services, in addition to a large number of essential tests.             
+            that, when implemented, produce the context services, in addition to a large number of essential tests.
         </Description>
     </PropertyGroup>
 

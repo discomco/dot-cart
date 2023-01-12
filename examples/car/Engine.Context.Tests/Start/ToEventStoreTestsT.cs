@@ -12,7 +12,7 @@ namespace Engine.Context.Tests.Start;
 public class ToEventStoreTestsT
     : ToEventStoreTestsT<
         Contract.Start.Payload,
-        Meta,
+        MetaB,
         IDocStore<Schema.Engine>>
 {
     public ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

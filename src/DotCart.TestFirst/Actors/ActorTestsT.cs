@@ -21,12 +21,15 @@ public abstract class ActorTestsT<TSpoke, TActor>
     public void ShouldResolveExchange()
     {
         // GIVEN
+        Assert.NotNull(TestEnv);
         // WHEN
+        var exchange = TestEnv.ResolveRequired<IExchange>();
         // THEN
+        Assert.NotNull(exchange);
     }
 
     [Fact]
-    public void ShouldResolveEmitter()
+    public void ShouldResolveActor()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -50,7 +53,6 @@ public abstract class ActorTestsT<TSpoke, TActor>
     [Fact]
     public async Task ShouldActivateActor()
     {
-        //var ts = new CancellationTokenSource();
         // GIVEN
         var ts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
         Assert.NotNull(TestEnv);

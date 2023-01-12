@@ -16,16 +16,16 @@ public static class Stop
 {
     public const string OnZeroPower_v1 = "engine:on_zero_power:stop:v1";
 
-    private static readonly Evt2Fact<Contract.Stop.Payload, Meta>
+    private static readonly Evt2Fact<Contract.Stop.Payload, MetaB>
         _evt2Fact =
-            evt => FactT<Contract.Stop.Payload, Meta>
+            evt => FactT<Contract.Stop.Payload, MetaB>
                 .New(
                     evt.AggregateId,
                     evt.GetPayload<Contract.Stop.Payload>(),
-                    evt.GetMeta<Meta>()
+                    evt.GetMeta<MetaB>()
                 );
 
-    private static readonly Evt2Doc<Schema.Engine, Contract.Stop.Payload, Meta>
+    private static readonly Evt2Doc<Schema.Engine, Contract.Stop.Payload, MetaB>
         _evt2Doc =
             (doc, _) =>
             {
@@ -36,14 +36,14 @@ public static class Stop
                 return newDoc;
             };
 
-    private static readonly Evt2DocValidator<Schema.Engine, Contract.Stop.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.Engine, Contract.Stop.Payload, MetaB>
         _evt2DocVal =
             (_, output, _)
                 => output.Status.HasFlagFast(Schema.EngineStatus.Stopped)
                    && !output.Status.HasFlagFast(Schema.EngineStatus.Started);
 
 
-    private static readonly Evt2Doc<Schema.EngineList, Contract.Stop.Payload, Meta>
+    private static readonly Evt2Doc<Schema.EngineList, Contract.Stop.Payload, MetaB>
         _evt2List =
             (lst, evt) =>
             {
@@ -63,15 +63,15 @@ public static class Stop
                 return newList;
             };
 
-    private static readonly Hope2Cmd<Contract.Stop.Payload, Meta>
+    private static readonly Hope2Cmd<Contract.Stop.Payload, MetaB>
         _hope2Cmd =
             hope =>
                 Command.New<Contract.Stop.Payload>(
                     hope.AggId.IDFromIdString(),
                     hope.Payload.ToBytes(),
-                    Meta.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes());
+                    MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), hope.AggId).ToBytes());
 
-    private static readonly GuardFuncT<Schema.Engine, Contract.Stop.Payload, Meta>
+    private static readonly GuardFuncT<Schema.Engine, Contract.Stop.Payload, MetaB>
         _guardFunc =
             (cmd, state) =>
             {
@@ -92,7 +92,7 @@ public static class Stop
                 return fbk;
             };
 
-    private static readonly RaiseFuncT<Schema.Engine, Contract.Stop.Payload, Meta>
+    private static readonly RaiseFuncT<Schema.Engine, Contract.Stop.Payload, MetaB>
         _raiseFunc =
             (cmd, _) =>
             {
@@ -102,34 +102,34 @@ public static class Stop
                 };
             };
 
-    public static readonly EvtCtorT<Contract.Stop.Payload, Meta>
+    public static readonly EvtCtorT<Contract.Stop.Payload, MetaB>
         _newEvt =
             Event.New<Contract.Stop.Payload>;
 
-    public static readonly Fact2Msg<byte[], Contract.Stop.Payload, Meta>
+    public static readonly Fact2Msg<byte[], Contract.Stop.Payload, MetaB>
         _fact2Msg =
             fact => fact.ToBytes();
 
-    private static readonly Msg2Fact<Contract.Stop.Payload, Meta, byte[]>
+    private static readonly Msg2Fact<Contract.Stop.Payload, MetaB, byte[]>
         _msg2Fact =
-            msg => msg.FromBytes<FactT<Contract.Stop.Payload, Meta>>();
+            msg => msg.FromBytes<FactT<Contract.Stop.Payload, MetaB>>();
 
-    private static readonly Evt2Cmd<Contract.Stop.Payload, Contract.ChangeRpm.Payload, Meta>
+    private static readonly Evt2Cmd<Contract.Stop.Payload, Contract.ChangeRpm.Payload, MetaB>
         _shouldStopOnZeroPower =
             (evt, state) =>
             {
                 var eng = (Schema.Engine)state;
                 var pld = evt.GetPayload<Contract.ChangeRpm.Payload>();
-                return (eng.Power + pld.Delta <= 0
+                return (eng.Rpm.Value + pld.Delta <= 0
                     ? Command.New<Contract.Stop.Payload>(
                         evt.AggregateID,
                         Contract.Stop.Payload.New().ToBytes(),
-                        Meta.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes()
+                        MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), evt.AggregateId).ToBytes()
                     )
                     : null)!;
             };
 
-    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Stop.Payload, Meta>
+    private static readonly Evt2DocValidator<Schema.EngineList, Contract.Stop.Payload, MetaB>
         _evt2ListVal =
             (_, output, evt) =>
             {
@@ -144,7 +144,7 @@ public static class Stop
         return services
             .AddMetaCtor()
             .AddRootDocCtors()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Stop.Payload, Meta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, Contract.Stop.Payload, MetaB>()
             .AddChoreography(_shouldStopOnZeroPower)
             .AddStopProjectionFuncs()
             .AddTransient(_ => _newEvt)

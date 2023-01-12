@@ -16,7 +16,7 @@ namespace Engine.Context.Tests;
 
 public abstract class
     EngineCmdHandlerTests<TPayload>
-    : CmdHandlerTestsT<Schema.EngineID, Schema.Engine, TPayload, Meta>
+    : CmdHandlerTestsT<Schema.EngineID, Schema.Engine, TPayload, MetaB>
     where TPayload : IPayload
 {
     public EngineCmdHandlerTests(ITestOutputHelper output, IoCTestContainer testEnv)
@@ -28,7 +28,7 @@ public abstract class
     {
         services
             .AddESDBStore()
-            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, TPayload, Meta>()
+            .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, TPayload, MetaB>()
             .AddCmdHandler()
             .AddTestIDCtor()
             .AddRootDocCtors();

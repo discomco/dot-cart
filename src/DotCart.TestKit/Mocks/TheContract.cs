@@ -79,7 +79,7 @@ public static class TheContract
     }
 
     public record Meta(string AggregateType, string AggregateId)
-        : Abstractions.Behavior.Meta(AggregateType, AggregateId)
+        : MetaB(AggregateType, AggregateId)
     {
         public static Meta New(string aggType, string aggId)
         {

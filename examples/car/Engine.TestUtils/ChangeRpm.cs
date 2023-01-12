@@ -2,17 +2,18 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Engine.Behavior;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
 
 public static class ChangeRpm
 {
-    public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeRpm.Payload, Meta>
+    public static readonly CmdCtorT<Contract.Schema.EngineID, Contract.ChangeRpm.Payload, MetaB>
         CmdCtor =
             (id, _, _) => Command.New<Contract.ChangeRpm.Payload>(
                 id,
                 PayloadCtor().ToBytes(),
-                Meta.New(NameAtt.Get<IEngineAggregateInfo>(), id.Id()).ToBytes());
+                MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), id.Id()).ToBytes());
 
     public static readonly PayloadCtorT<Contract.ChangeRpm.Payload>
         PayloadCtor =
@@ -22,18 +23,18 @@ public static class ChangeRpm
         HopeCtor =
             (_, _) => HopeT<Contract.ChangeRpm.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.ChangeRpm.Payload, Meta>
+    public static readonly FactCtorT<Contract.ChangeRpm.Payload, MetaB>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.ChangeRpm.Payload, Meta>.New(
+                return FactT<Contract.ChangeRpm.Payload, MetaB>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
 
-    public static readonly EvtCtorT<Contract.ChangeRpm.Payload, Meta>
+    public static readonly EvtCtorT<Contract.ChangeRpm.Payload, MetaB>
         EvtCtor =
             (_, _, _) =>
             {
@@ -44,4 +45,13 @@ public static class ChangeRpm
                     Schema.MetaCtor(ID.Id()).ToBytes()
                 );
             };
+
+    public static IServiceCollection AddTestFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Schema.DocIDCtor)
+            .AddTransient(_ => Schema.MetaCtor)
+            .AddTransient(_ => PayloadCtor)
+            .AddTransient(_ => FactCtor);
+    }
 }

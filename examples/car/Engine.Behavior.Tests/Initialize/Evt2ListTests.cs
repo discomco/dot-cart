@@ -12,7 +12,7 @@ public class Evt2ListTests
         Schema.EngineListID,
         Schema.EngineList,
         Contract.Initialize.Payload,
-        Meta>
+        MetaB>
 {
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

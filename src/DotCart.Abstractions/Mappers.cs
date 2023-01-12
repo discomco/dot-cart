@@ -5,11 +5,11 @@ namespace DotCart.Abstractions;
 
 public delegate Command Evt2Cmd<TCmdPayload, TEvtPayload, TMeta>(Event Evt, IState state)
     where TCmdPayload : IPayload
-    where TMeta : IMeta;
+    where TMeta : IMetaB;
 
 public delegate Command Fact2Cmd<TCmdPayload, TMeta, TFactPayload>(FactT<TFactPayload, TMeta> fact)
     where TCmdPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TFactPayload : IPayload;
 
 /// <summary>
@@ -21,14 +21,14 @@ public delegate Command Fact2Cmd<TCmdPayload, TMeta, TFactPayload>(FactT<TFactPa
 /// <typeparam name="TIEvt">The IEvt Injection Discriminator (Injector) that uniquely identifies the Event</typeparam>
 public delegate bool Evt2DocValidator<in TDoc, TPayload, TMeta>(TDoc input, TDoc output, Event evt)
     where TDoc : IState
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TPayload : IPayload;
 
 public delegate TDoc Evt2Doc<TDoc, TPayload, TMeta>(TDoc doc, Event evt)
     where TDoc : IState
     where TPayload : IPayload
-    where TMeta : IMeta;
+    where TMeta : IMetaB;
 
 public delegate FactT<TPayload, TMeta> Evt2Fact<TPayload, TMeta>(Event evt)
     where TPayload : IPayload
-    where TMeta : IMeta;
+    where TMeta : IMetaB;

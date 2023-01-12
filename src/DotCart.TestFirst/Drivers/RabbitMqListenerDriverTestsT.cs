@@ -10,7 +10,7 @@ namespace DotCart.TestFirst.Drivers;
 public abstract class RabbitMqListenerDriverTestsT<TFactPayload, TMeta>
     : ListenerDriverTestsT<IRmqListenerDriverT<TFactPayload>, TFactPayload, TMeta>
     where TFactPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
 {
     protected RabbitMqListenerDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

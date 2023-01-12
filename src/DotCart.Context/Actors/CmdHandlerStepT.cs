@@ -34,7 +34,7 @@ namespace DotCart.Context.Actors;
 [Order(int.MaxValue)]
 public class CmdHandlerStepT<TPipeInfo, TPayload, TMeta> : StepT<TPipeInfo, TPayload>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TPipeInfo : IPipeInfoB
 {
     private readonly ICmdHandler _cmdHandler;

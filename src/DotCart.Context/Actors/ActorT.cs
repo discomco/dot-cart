@@ -36,7 +36,7 @@ public abstract class ActorT<TSpoke> : ActorB, IActorT<TSpoke>
     }
 }
 
-public abstract class ActorB : ActiveComponent, IActor
+public abstract class ActorB : ActiveComponent, IActorB
 {
     protected readonly IExchange _exchange;
     private ISpokeB _spoke;

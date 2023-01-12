@@ -1,4 +1,3 @@
-using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using NATS.Client;
 

@@ -2,12 +2,12 @@ using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface IActorT<in TSpoke> : IActor
+public interface IActorT<in TSpoke> : IActorB
 {
     void SetSpoke(ISpokeB spoke);
 }
 
-public interface IActor : IActiveComponent
+public interface IActorB : IActiveComponent
 {
     Task HandleCast(IMsg msg, CancellationToken cancellationToken = default);
     Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default);

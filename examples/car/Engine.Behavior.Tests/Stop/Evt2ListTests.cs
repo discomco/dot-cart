@@ -11,7 +11,7 @@ public class Evt2ListTests
     : Evt2DocTestsT<Schema.EngineListID,
         Schema.EngineList,
         Contract.Stop.Payload,
-        Meta>
+        MetaB>
 {
     public Evt2ListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

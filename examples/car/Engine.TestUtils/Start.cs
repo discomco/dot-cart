@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
 
@@ -13,7 +14,7 @@ public static class Start
     public static readonly CmdCtorT<
             Contract.Schema.EngineID,
             Contract.Start.Payload,
-            Meta>
+            MetaB>
         CmdCtor =
             (_, _, _) =>
             {
@@ -28,18 +29,18 @@ public static class Start
         HopeCtor =
             (_, _) => HopeT<Contract.Start.Payload>.New(Schema.DocIDCtor().Id(), PayloadCtor());
 
-    public static readonly FactCtorT<Contract.Start.Payload, Meta>
+    public static readonly FactCtorT<Contract.Start.Payload, MetaB>
         FactCtor =
             (_, _, _) =>
             {
                 var ID = Schema.DocIDCtor();
-                return FactT<Contract.Start.Payload, Meta>.New(
+                return FactT<Contract.Start.Payload, MetaB>.New(
                     ID.Id(),
                     PayloadCtor(),
                     Schema.MetaCtor(ID.Id()));
             };
 
-    public static readonly EvtCtorT<Contract.Start.Payload, Meta>
+    public static readonly EvtCtorT<Contract.Start.Payload, MetaB>
         EvtCtor =
             (_, _, _) => Behavior.Start._newEvt(
                 Schema.DocIDCtor(),
@@ -52,5 +53,15 @@ public static class Start
             () => Contract.Schema.Engine.New(
                 Schema.DocIDCtor().Id(),
                 Contract.Schema.EngineStatus.Initialized,
-                Contract.Schema.Details.New("Engine #32", "An Initialized Engine"));
+                Contract.Schema.Details.New("Engine #32", "An Initialized Engine"),
+                Contract.Schema.Rpm.New(0));
+
+    public static IServiceCollection AddTestFuncs(this IServiceCollection services)
+    {
+        return services
+            .AddTransient(_ => Schema.DocIDCtor)
+            .AddTransient(_ => Schema.MetaCtor)
+            .AddTransient(_ => PayloadCtor)
+            .AddTransient(_ => FactCtor);
+    }
 }

@@ -13,7 +13,7 @@ namespace DotCart.Drivers.RabbitMQ;
 public class RMqListenerDriverT<TFactPayload, TFactMeta>
     : DriverB, IRmqListenerDriverT<TFactPayload>
     where TFactPayload : IPayload
-    where TFactMeta : IMeta
+    where TFactMeta : IMetaB
 {
     private readonly IConnectionFactory _connFact;
     private readonly Msg2Fact<TFactPayload, TFactMeta, byte[]> _msg2Fact;

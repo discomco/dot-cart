@@ -17,9 +17,9 @@ public static class Schema
         ListIDCtor =
             value => Contract.Schema.EngineListID.New();
 
-    public static readonly MetaCtorT<Meta>
+    public static readonly MetaCtorT<MetaB>
         MetaCtor =
-            _ => Meta.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
+            _ => MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
 
     public static readonly Contract.Schema.EngineListItem
         UnknownEngineListItem =
@@ -47,7 +47,13 @@ public static class Schema
     public static readonly ValueObjectCtorT<Contract.Schema.Details>
         OldDetailsCtor = () => Contract.Schema.Details.New("engine #309", "Some Old Engine");
 
+    public static readonly ValueObjectCtorT<Contract.Schema.Rpm>
+        OldRpmCtor = () => Contract.Schema.Rpm.New(0);
+
     public static readonly StateCtorT<Contract.Schema.Engine>
         DocCtor = () =>
-            Contract.Schema.Engine.New(DocIDCtor().Id(), Contract.Schema.EngineStatus.Initialized, OldDetailsCtor());
+            Contract.Schema.Engine.New(DocIDCtor().Id(),
+                Contract.Schema.EngineStatus.Initialized,
+                OldDetailsCtor(),
+                OldRpmCtor());
 }

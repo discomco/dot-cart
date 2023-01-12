@@ -29,6 +29,6 @@ public class HopePipeBuilderTests : PipeBuilderTestsT<Context.ChangeRpm.IHopePip
         services
             .AddTransient(_ => A.Fake<ICmdHandler>())
             .AddChangeRpmACLFuncs()
-            .AddHopeInPipe<Context.ChangeRpm.IHopePipe, Contract.ChangeRpm.Payload, Meta>();
+            .AddHopeInPipe<Context.ChangeRpm.IHopePipe, Contract.ChangeRpm.Payload, MetaB>();
     }
 }

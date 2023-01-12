@@ -8,7 +8,7 @@ namespace DotCart.TestFirst.Actors;
 
 public abstract class ResponderTestsT<TSpoke, TActor, TPayload, TMeta> : ActorTestsT<TSpoke, TActor>
     where TPayload : IPayload
-    where TMeta : IMeta
+    where TMeta : IMetaB
     where TActor : IActorT<TSpoke>
     where TSpoke : ISpokeT<TSpoke>
 {
