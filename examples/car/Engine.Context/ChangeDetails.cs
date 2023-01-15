@@ -9,6 +9,7 @@ using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.Defaults;
 using DotCart.Defaults.RabbitMq;
+using DotCart.Drivers.CouchDB;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
@@ -22,7 +23,7 @@ public static class ChangeDetails
 {
     public const string Spoke_v1 = "engine:change_details:spoke:v1";
 
-
+    public const string ToCouchDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_couch_doc:v1";
     public const string ToRedisDoc_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
     public const string ToRedisList_v1 = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
     public const string ToRabbitMq_v1 = Contract.ChangeDetails.Topics.Fact_v1 + ":to_rabbit_mq:v1";
@@ -38,11 +39,17 @@ public static class ChangeDetails
             .AddChangeDetailsACLFuncs()
             .AddHopeInPipe<IHopePipe, Contract.ChangeDetails.Payload, MetaB>()
             .AddHostedSpokeT<Spoke>()
-            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
-            .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+
+            .AddDotCouch<ICouchDocDbInfo, Schema.Engine, Schema.EngineID>()
+            .AddTransient<IActorT<Spoke>, ToCouchDoc>()
+
             .AddDotRedis<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID>()
             .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
+            .AddTransient<IActorT<Spoke>, ToRedisDoc>()
+            .AddTransient<IActorT<Spoke>, ToRedisList>()
+
+            
             .AddNATSResponder<Spoke,
                 FromNATS,
                 Contract.ChangeDetails.Payload,
@@ -167,5 +174,26 @@ public static class ChangeDetails
 
     public interface IRetroPipe : IPipeInfoB
     {
+    }
+
+
+    [Name(ToCouchDoc_v1)]
+    [DbName(DbConstants.CouchDocDbName)]
+    public class ToCouchDoc
+        : ProjectionT<
+            ICouchDocDbInfo,
+            Schema.Engine,
+            Contract.ChangeDetails.Payload,
+            MetaB,
+            Schema.EngineID>, IActorT<Spoke>
+    {
+        public ToCouchDoc(
+            IExchange exchange,
+            IStoreBuilderT<ICouchDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
+            Evt2Doc<Schema.Engine, Contract.ChangeDetails.Payload, MetaB> evt2Doc,
+            StateCtorT<Schema.Engine> newDoc)
+            : base(exchange, storeBuilder, evt2Doc, newDoc)
+        {
+        }
     }
 }
