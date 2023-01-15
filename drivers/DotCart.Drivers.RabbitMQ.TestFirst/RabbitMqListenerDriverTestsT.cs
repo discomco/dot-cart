@@ -1,11 +1,13 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Defaults.RabbitMq;
+using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
 using RabbitMQ.Client;
+using Xunit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Drivers;
+namespace DotCart.Drivers.RabbitMQ.TestFirst;
 
 public abstract class RabbitMqListenerDriverTestsT<TFactPayload, TMeta>
     : ListenerDriverTestsT<IRmqListenerDriverT<TFactPayload>, TFactPayload, TMeta>

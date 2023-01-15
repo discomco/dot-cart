@@ -61,6 +61,6 @@ public abstract class ActorTestsT<TSpoke, TActor>
         // WHEN
         await ac.Activate(ts.Token);
         // THEN
-        Assert.True(ac.Status.HasFlag(ComponentStatus.Active));
+        Assert.True(ac.Status == ComponentStatus.Active);
     }
 }

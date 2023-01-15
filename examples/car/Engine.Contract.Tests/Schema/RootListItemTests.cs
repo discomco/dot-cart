@@ -31,7 +31,7 @@ public class RootListItemTests : EntityTestsT<Contract.Schema.EngineID, Contract
     {
         return new Contract.Schema.EngineListItem
         {
-            EngineId = _idCtor().Id(),
+            Id = _idCtor().Id(),
             Name = "Test Engine",
             Status = Contract.Schema.EngineStatus.Initialized,
             Power = 42

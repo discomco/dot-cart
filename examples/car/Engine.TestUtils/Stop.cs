@@ -68,7 +68,7 @@ public static class Stop
             {
                 var lst = Contract.Schema.EngineList.New();
                 lst.Items = lst.Items.Add(
-                    StartedEngineListItem.EngineId,
+                    StartedEngineListItem.Id,
                     StartedEngineListItem);
                 return lst;
             };

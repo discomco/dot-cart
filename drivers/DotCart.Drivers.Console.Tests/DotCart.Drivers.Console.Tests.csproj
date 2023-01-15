@@ -21,4 +21,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\DotCart.Drivers.Console\DotCart.Drivers.Console.csproj"/>
+    </ItemGroup>
+
 </Project>

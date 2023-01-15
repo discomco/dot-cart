@@ -1,30 +1,32 @@
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public class RedisConnectionFactory<TDoc> : IRedisConnectionFactory<TDoc>
+public class RedisConnectionFactory<TDbInfo, TDoc>
+    : IRedisConnectionFactory<TDbInfo, TDoc>
     where TDoc : IState
+    where TDbInfo : IDbInfoB
 {
-    private ConfigurationOptions _options;
+    private readonly ConfigurationOptions _options;
 
-    public RedisConnectionFactory(ConfigurationOptions options)
+    public RedisConnectionFactory(Func<ConfigurationOptions> options)
     {
-        _options = options;
+        _options = options();
     }
 
-    public IConnectionMultiplexer Connect(ConfigurationOptions options = null)
+    public IConnectionMultiplexer Connect()
     {
-        if (options != null)
-            _options = options;
-        _options.DefaultDatabase = Convert.ToInt32(DbNameAtt.Get<TDoc>());
+        _options.DefaultDatabase = Convert.ToInt32(DbNameAtt.Get<TDbInfo>());
         return ConnectionMultiplexer.Connect(_options);
     }
 }
 
-public interface IRedisConnectionFactory<TDoc>
+public interface IRedisConnectionFactory<TDbInfo, TDoc>
     where TDoc : IState
+    where TDbInfo : IDbInfoB
 {
-    IConnectionMultiplexer Connect(ConfigurationOptions options = null);
+    IConnectionMultiplexer Connect();
 }

@@ -2,7 +2,7 @@
 
 namespace DotCart.Drivers.Redis;
 
-public static class IRedisDbExtensions
+public static class RedisDbExtensions
 {
     public static bool IsConnected(this ISimpleRedisDb redisDb, string keyName)
     {

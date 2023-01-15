@@ -1,5 +1,5 @@
-using DotCart.Defaults;
-using DotCart.TestFirst.Drivers;
+using DotCart.Drivers.Redis;
+using DotCart.Drivers.Redis.TestFirst;
 using DotCart.TestKit;
 using Engine.Context;
 using Engine.Contract;
@@ -8,12 +8,13 @@ using Xunit.Abstractions;
 
 namespace Engine.Drivers.Tests;
 
-public class RedisStoreRootDocDriverTests
-    : RedisStoreDriverTestsT<Schema.EngineID, Schema.Engine>
+public class RedisStoreRootDocTests
+    : RedisStoreTestsT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>
 {
-    public RedisStoreRootDocDriverTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RedisStoreRootDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
+
 
     protected override void SetEnVars()
     {
@@ -23,6 +24,6 @@ public class RedisStoreRootDocDriverTests
     {
         services
             .AddRootDocCtors()
-            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>();
+            .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>();
     }
 }

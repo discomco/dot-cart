@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
@@ -8,13 +9,15 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Actors;
 
 public abstract class
-    ListProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
-    : ProjectionTestsT<TSpoke, TProjection, TTargetDoc, TPayload, TMeta>
+    ListProjectionTestsT<TSpoke, TDbInfo, TProjection, TTargetDoc, TPayload, TMeta, TID>
+    : ProjectionTestsT<TSpoke, TDbInfo, TProjection, TTargetDoc, TPayload, TMeta, TID>
     where TSpoke : ISpokeT<TSpoke>
     where TProjection : IActorT<TSpoke>
     where TTargetDoc : IState
     where TPayload : IPayload
     where TMeta : IMetaB
+    where TID : IID
+    where TDbInfo : IDbInfoB
 {
     protected ListProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

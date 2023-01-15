@@ -9,10 +9,12 @@ namespace Engine.Context.Tests.ChangeRpm;
 
 public class ToRedisDocTests : ProjectionTestsT<
     Context.ChangeRpm.Spoke,
+    IRedisDocDbInfo,
     Context.ChangeRpm.ToRedisDoc,
     Schema.Engine,
     Contract.ChangeRpm.Payload,
-    MetaB>
+    MetaB,
+    Schema.EngineID>
 {
     public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <IsPackable>true</IsPackable>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Title>TestFirst package for Redis</Title>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Redis\DotCart.Drivers.Redis.csproj"/>
+    </ItemGroup>
+
+</Project>

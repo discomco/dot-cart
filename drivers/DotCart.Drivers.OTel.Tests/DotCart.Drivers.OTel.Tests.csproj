@@ -21,4 +21,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\DotCart.Drivers.OTel\DotCart.Drivers.OTel.csproj"/>
+    </ItemGroup>
+
 </Project>

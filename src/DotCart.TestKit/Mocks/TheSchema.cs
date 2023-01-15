@@ -6,9 +6,11 @@ namespace DotCart.TestKit.Mocks;
 
 public static class TheSchema
 {
-    public static IServiceCollection AddTheIDCtor(this IServiceCollection services)
+    public static IServiceCollection AddTheDocCtors(this IServiceCollection services)
     {
-        return services.AddTransient(_ => ID.Ctor);
+        return services
+            .AddTransient(_ => ID.Ctor)
+            .AddTransient(_ => Doc.Rand);
     }
 
 
@@ -16,6 +18,8 @@ public static class TheSchema
     public record Doc(string Id, string Name, int Age, double Height) : IState
     {
         public static StateCtorT<Doc> Rand => RandomTheDoc;
+
+        public string Prev { get; set; }
 
 
         private static Doc RandomTheDoc()

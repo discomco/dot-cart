@@ -21,6 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.NATS.TestFirst\DotCart.Drivers.NATS.TestFirst.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
         <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>

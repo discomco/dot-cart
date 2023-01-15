@@ -4,9 +4,10 @@ using DotCart.Abstractions.Schema;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using NATS.Client;
+using Xunit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Drivers;
+namespace DotCart.Drivers.NATS.TestFirst;
 
 public abstract class NATSResponderTestsT<TSpoke, TResponder, TPayload, TMeta>
     : ResponderTestsT<TSpoke, TResponder, TPayload, TMeta>

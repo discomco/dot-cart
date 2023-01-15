@@ -2,7 +2,7 @@
 
 public static class GlobalConfig
 {
-    public static bool IsTest => Convert.ToBoolean(Environment.GetEnvironmentVariable(EnVars.DOTCART_IS_TEST));
+    public static bool IsTest => Convert.ToBoolean(DotEnv.Get(EnVars.DOTCART_IS_TEST));
 }
 
 public static class EnVars

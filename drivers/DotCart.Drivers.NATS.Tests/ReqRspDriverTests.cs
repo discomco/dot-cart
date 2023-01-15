@@ -151,7 +151,7 @@ public class ReqRspDriverTests : IoCTests
             .AddSingletonExchange()
             .AddSingleton(_ => A.Fake<ICmdHandler>())
             .AddTransient(_ => A.Fake<IAggregateStore>())
-            .AddTheIDCtor()
+            .AddTheDocCtors()
             .AddTransient(_ => TheSchema.Doc.Rand)
             .AddTransient<IRequesterT<TheContract.Payload>, TheRequester>()
             .AddTransient<IResponderDriverT<TheContract.Payload>, TheResponderDriver>()

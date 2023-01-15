@@ -12,10 +12,12 @@ namespace Engine.Context.Tests.Stop;
 public class ToRedisListTests
     : ListProjectionTestsT<
         Context.Stop.Spoke,
+        IRedisListDbInfo,
         Context.Stop.ToRedisList,
         Schema.EngineList,
         Contract.Stop.Payload,
-        MetaB>
+        MetaB,
+        Schema.EngineListID>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

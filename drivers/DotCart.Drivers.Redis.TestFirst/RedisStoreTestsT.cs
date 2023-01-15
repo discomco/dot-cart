@@ -1,82 +1,74 @@
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Drivers.Redis;
+using DotCart.Defaults.Redis;
+using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;
+using Microsoft.Extensions.DependencyInjection;
 using StackExchange.Redis;
+using Xunit;
 using Xunit.Abstractions;
 
-namespace DotCart.TestFirst.Drivers;
+namespace DotCart.Drivers.Redis.TestFirst;
 
-public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
+public abstract class RedisStoreTestsT<TDbInfo, TDoc, TID>
+    : StoreTestsT<TDbInfo, TDoc, TID>
     where TDoc : IState
     where TID : IID
+    where TDbInfo : IRedisDbInfoB
 {
+    private IRedisStoreBuilder<TDbInfo, TDoc, TID> _builder;
     protected IConnectionMultiplexer _connection;
-    protected IDCtorT<TID> _newID;
-    protected StateCtorT<TDoc> _newState;
-    protected IRedisDbT<TDoc> _redisDB;
+    protected IRedisConnectionFactory<TDbInfo, TDoc> _connFact;
     protected IDocStore<TDoc> _redisStore;
 
 
-    public RedisStoreDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RedisStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 
-
-    [Fact]
-    public void ShouldResolveIDCtor()
+    protected override void InjectDependencies(IServiceCollection services)
     {
-        // GIVEN
+        services
+            .AddDotRedis<TDbInfo, TDoc, TID>();
+    }
+
+    protected override void Initialize()
+    {
         Assert.NotNull(TestEnv);
-        // WHEN
+        _connFact = TestEnv.ResolveRequired<IRedisConnectionFactory<TDbInfo, TDoc>>();
+        Assert.NotNull(_connFact);
+        _builder = TestEnv.ResolveRequired<IRedisStoreBuilder<TDbInfo, TDoc, TID>>();
+        Assert.NotNull(_builder);
+        _redisStore = _builder.Build();
+        Assert.NotNull(_redisStore);
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
-        // THEN
         Assert.NotNull(_newID);
-    }
-
-    [Fact]
-    public void ShouldResolveDocCtor()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
         _newState = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        // THEN
-        Assert.NotNull(_newState);
     }
 
 
     [Fact]
-    public void ShouldResolveRedisDB()
+    public void ShouldResolveRedisConnectionFactory()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _redisDB = TestEnv.ResolveRequired<IRedisDbT<TDoc>>();
+        _connFact = TestEnv.ResolveRequired<IRedisConnectionFactory<TDbInfo, TDoc>>();
         // THEN
-        Assert.NotNull(_redisDB);
+        Assert.NotNull(_connFact);
     }
 
+
     [Fact]
-    public void ShouldResolveConnectionMultiplexer()
+    public void ShouldConnect()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _connection = TestEnv.ResolveRequired<IConnectionMultiplexer>();
+        _connFact = TestEnv.ResolveRequired<IRedisConnectionFactory<TDbInfo, TDoc>>();
+        _connection = _connFact.Connect();
         // THEN
         Assert.NotNull(_connection);
-    }
-
-    [Fact]
-    public void ShouldResolveRedisStoreDriver()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
-        // THEN
-        Assert.NotNull(_redisStore);
     }
 
 
@@ -84,9 +76,9 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
     public async Task ShouldSetDocToRedisStore()
     {
         // GIVEN
-        Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
         Assert.NotNull(_redisStore);
+        Assert.NotNull(_newState);
+        Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
@@ -100,9 +92,11 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
     [Fact]
     public async Task ShouldDeleteDocFromRedisStore()
     {
-        Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
+        // GIVEN
+        // GIVEN
         Assert.NotNull(_redisStore);
+        Assert.NotNull(_newState);
+        Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
@@ -118,9 +112,10 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
     [Fact]
     public async Task ShouldCheckIfDocExists()
     {
-        Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
+        // GIVEN
         Assert.NotNull(_redisStore);
+        Assert.NotNull(_newState);
+        Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
@@ -136,9 +131,10 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
     [Fact]
     public async Task ShouldGetDocFromRedisStore()
     {
-        Assert.NotNull(TestEnv);
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
+        // GIVEN
         Assert.NotNull(_redisStore);
+        Assert.NotNull(_newState);
+        Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
@@ -150,15 +146,5 @@ public abstract class RedisStoreDriverTestsT<TID, TDoc> : IoCTests
         Assert.NotNull(getDoc);
         Assert.Equal(getDoc, doc);
         await _redisStore.DeleteAsync(ID.Id()).ConfigureAwait(false);
-    }
-
-
-    protected override void Initialize()
-    {
-        _redisStore = TestEnv.ResolveRequired<IDocStore<TDoc>>();
-        _connection = TestEnv.ResolveRequired<IConnectionMultiplexer>();
-        _redisDB = TestEnv.ResolveRequired<IRedisDbT<TDoc>>();
-        _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
-        _newState = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
     }
 }

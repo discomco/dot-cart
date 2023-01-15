@@ -8,10 +8,12 @@ public interface IProjectionB : IActorB
 {
 }
 
-public interface IProjectionT<TDriver, TState, TPayload, TMeta> : IProjectionB
-    where TDriver : IDocStore<TState>
-    where TState : IState
+public interface IProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
+    : IProjectionB
+    where TDoc : IState
     where TPayload : IPayload
     where TMeta : IMetaB
+    where TDbInfo : IDbInfoB
+    where TID : IID
 {
 }

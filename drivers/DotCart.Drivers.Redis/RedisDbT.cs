@@ -24,24 +24,27 @@ public interface IRedisDb : ISimpleRedisDb, IClose, IDisposable, IAsyncDisposabl
     Task DeleteTrackedKeys();
 }
 
-public interface IRedisDbT<TDoc> : IRedisDb
+public interface IRedisDbT<TDbInfo, TDoc> : IRedisDb
     where TDoc : IState
 {
 }
 
-public class RedisDbT<TDoc> : IRedisDbT<TDoc>
+public class RedisDbT<TDbInfo, TDoc>
+    : IRedisDbT<TDbInfo, TDoc>
     where TDoc : IState
+    where TDbInfo : IDbInfoB
 {
     private readonly IConnectionMultiplexer _connection;
-    private readonly IRedisConnectionFactory<TDoc> _connFact;
+    private readonly IRedisConnectionFactory<TDbInfo, TDoc> _connFact;
     private readonly Dictionary<string, RedisObject> _trackedObjects = new();
     private readonly bool _trackObjects;
 
-    public RedisDbT(IRedisConnectionFactory<TDoc> connFact, string keyNameSpace = "", bool trackObjects = true)
+    private RedisDbT(IRedisConnectionFactory<TDbInfo, TDoc> connFact)
     {
-        KeyNameSpace = keyNameSpace;
+        // TODO: Implement TDbInfo for Redis
+        KeyNameSpace = "";
+        _trackObjects = false;
         _connFact = connFact;
-        _trackObjects = trackObjects;
         _connection = _connFact.Connect();
         Database = _connection.GetDatabase();
     }
@@ -75,7 +78,8 @@ public class RedisDbT<TDoc> : IRedisDbT<TDoc>
     /// <typeparam name="T"></typeparam>
     /// <param name="obj"></param>
     /// <returns></returns>
-    public T AddToContainer<T>(T obj) where T : RedisObject
+    public T AddToContainer<T>(T obj)
+        where T : RedisObject
     {
         obj.Db = this;
         obj.KeyName = string.IsNullOrWhiteSpace(KeyNameSpace)
@@ -191,5 +195,11 @@ public class RedisDbT<TDoc> : IRedisDbT<TDoc>
     public Task CloseAsync(bool allowCommandsToComplete)
     {
         return _connection.CloseAsync(allowCommandsToComplete);
+    }
+
+
+    public static RedisDbT<TDbInfo, TDoc> New(IRedisConnectionFactory<TDbInfo, TDoc> connFact)
+    {
+        return new RedisDbT<TDbInfo, TDoc>(connFact);
     }
 }

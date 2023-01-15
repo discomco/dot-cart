@@ -25,6 +25,7 @@
         <ProjectReference Include="..\..\drivers\DotCart.Drivers.RabbitMQ\DotCart.Drivers.RabbitMQ.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.RabbitMQ.TestFirst\DotCart.Drivers.RabbitMQ.TestFirst.csproj"/>
     </ItemGroup>
 
 </Project>

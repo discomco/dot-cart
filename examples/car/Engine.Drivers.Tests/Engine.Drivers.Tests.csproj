@@ -22,6 +22,8 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.RabbitMQ.TestFirst\DotCart.Drivers.RabbitMQ.TestFirst.csproj"/>
+        <ProjectReference Include="..\..\..\drivers\DotCart.Drivers.Redis.TestFirst\DotCart.Drivers.Redis.TestFirst.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
         <ProjectReference Include="..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>

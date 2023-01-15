@@ -2,6 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Context.Spokes;
@@ -35,10 +36,12 @@ public static class Start
             .AddStartACLFuncs()
             .AddStartProjectionFuncs()
             .AddHopeInPipe<IHopePipe, Contract.Start.Payload, MetaB>()
+            .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
+            .AddHostedSpokeT<Spoke>()
+            .AddDotRedis<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID>()
+            .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
-            .AddDefaultDrivers<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-            .AddHostedSpokeT<Spoke>()
             .AddNATSResponder<Spoke, FromNATS, Contract.Start.Payload, MetaB>()
             .AddRabbitMqEmitter<Spoke, ToRabbitMq, Contract.Start.Payload, MetaB>()
             .AddRabbitMqListener<Spoke,
@@ -54,17 +57,19 @@ public static class Start
     }
 
     [Name(ToRedisDoc_v1)]
-    [DbName(DbConstants.DocRedisDbName)]
+    [DbName(DbConstants.RedisDocDbName)]
     public class ToRedisDoc : ProjectionT<
-        IRedisStore<Schema.Engine>,
+        IRedisDocDbInfo,
         Schema.Engine,
-        Contract.Start.Payload, MetaB>, IToRedisDoc
+        Contract.Start.Payload, MetaB, Schema.EngineID>, IToRedisDoc
     {
         public ToRedisDoc(IExchange exchange,
-            IRedisStore<Schema.Engine> docStore,
+            IStoreBuilderT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
             Evt2Doc<Schema.Engine, Contract.Start.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.Engine> newDoc)
-            : base(exchange, docStore, evt2Doc, newDoc)
+            StateCtorT<Schema.Engine> newDoc) : base(exchange,
+            storeBuilder,
+            evt2Doc,
+            newDoc)
         {
         }
     }
@@ -79,21 +84,23 @@ public static class Start
         }
     }
 
-    [DbName(DbConstants.ListRedisDbName)]
+    [DbName(DbConstants.RedisListDbName)]
     [DocId(IDConstants.EngineListId)]
     [Name(ToRedisList_v1)]
     public class ToRedisList
         : ProjectionT<
-            IRedisStore<Schema.EngineList>,
+            IRedisListDbInfo,
             Schema.EngineList,
             Contract.Start.Payload,
-            MetaB>, IActorT<Spoke>
+            MetaB, Schema.EngineListID>, IActorT<Spoke>
     {
         public ToRedisList(IExchange exchange,
-            IRedisStore<Schema.EngineList> docStore,
+            IStoreBuilderT<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID> storeBuilder,
             Evt2Doc<Schema.EngineList, Contract.Start.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.EngineList> newDoc)
-            : base(exchange, docStore, evt2Doc, newDoc)
+            StateCtorT<Schema.EngineList> newDoc) : base(exchange,
+            storeBuilder,
+            evt2Doc,
+            newDoc)
         {
         }
     }

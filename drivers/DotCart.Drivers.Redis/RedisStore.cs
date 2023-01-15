@@ -4,16 +4,17 @@ using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;
 
-public class RedisStore<TDoc> : IRedisStore<TDoc> where TDoc : IState
+public class RedisStore<TDbInfo, TDoc> : IRedisStore<TDoc>
+    where TDoc : IState
 {
     private readonly object _delMutex = new();
-    private readonly IRedisDbT<TDoc> _redisDb;
+    private readonly IRedisDbT<TDbInfo, TDoc> _redisDb;
 
     private readonly object _setMutex = new();
 
     private object _getMutex = new();
 
-    public RedisStore(IRedisDbT<TDoc> redisDb)
+    protected RedisStore(IRedisDbT<TDbInfo, TDoc> redisDb)
     {
         _redisDb = redisDb;
     }
@@ -78,9 +79,9 @@ public class RedisStore<TDoc> : IRedisStore<TDoc> where TDoc : IState
         }, cancellationToken);
     }
 
-    public Task<bool> HasData(CancellationToken cancellationToken = default)
+    public async Task<bool> HasData(CancellationToken cancellationToken = default)
     {
-        throw new NotImplementedException();
+        return _redisDb.Database != null;
     }
 
     public ValueTask DisposeAsync()
@@ -91,5 +92,11 @@ public class RedisStore<TDoc> : IRedisStore<TDoc> where TDoc : IState
     public Task CloseAsync(bool allowCommandsToComplete)
     {
         return _redisDb.CloseAsync(allowCommandsToComplete);
+    }
+
+
+    public static RedisStore<TDbInfo, TDoc> New(IRedisDbT<TDbInfo, TDoc> redisDb)
+    {
+        return new RedisStore<TDbInfo, TDoc>(redisDb);
     }
 }

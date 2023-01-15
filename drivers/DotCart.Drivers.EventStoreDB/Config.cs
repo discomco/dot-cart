@@ -19,7 +19,8 @@ public static class Config
     public static bool UseTls
         => Convert.ToBoolean(DotEnv.Get(EnVars.EVENTSTORE_USE_TLS) ?? Defaults.False);
 
-    public static bool Insecure => Convert.ToBoolean(DotEnv.Get(EnVars.EVENTSTORE_INSECURE) ?? Defaults.True);
+    public static bool Insecure
+        => Convert.ToBoolean(DotEnv.Get(EnVars.EVENTSTORE_INSECURE) ?? Defaults.True);
 
     private static class Defaults
     {

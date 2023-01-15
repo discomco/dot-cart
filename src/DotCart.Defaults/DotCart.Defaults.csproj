@@ -23,5 +23,9 @@
         <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+        <Folder Include="NATS"/>
+    </ItemGroup>
+
 
 </Project>

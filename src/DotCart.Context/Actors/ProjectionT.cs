@@ -19,24 +19,25 @@ namespace DotCart.Context.Actors;
 /// </typeparam>
 /// <typeparam name="TDoc">The type of the document that is being projected to.</typeparam>
 /// <typeparam name="TIEvt">The type of the Event that is being projected</typeparam>
-public abstract class ProjectionT<TIStore, TDoc, TPayload, TMeta>
-    : ActorB, IProjectionT<TIStore, TDoc, TPayload, TMeta>
-    where TIStore : IDocStore<TDoc>
+public abstract class ProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
+    : ActorB, IProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
     where TDoc : IState
     where TPayload : IPayload
     where TMeta : IMetaB
+    where TID : IID
+    where TDbInfo : IDbInfoB
 {
-    private readonly TIStore _docStore;
+    private readonly IDocStore<TDoc> _docStore;
     private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
     protected ProjectionT(
         IExchange exchange,
-        TIStore docStore,
+        IStoreBuilderT<TDbInfo, TDoc, TID> storeBuilder,
         Evt2Doc<TDoc, TPayload, TMeta> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
-        _docStore = docStore;
+        _docStore = storeBuilder.Build();
         _evt2Doc = evt2Doc;
         _newDoc = newDoc;
     }

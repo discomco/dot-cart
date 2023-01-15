@@ -17,5 +17,9 @@ public static class TheConstants
     public const string AggregateName = "the_aggregate";
     public const string StepName = "the_step";
     public const string PipeName = "the_pipe";
+    public const string CouchDocDbName = "the_doc_db";
+    public const string CouchListDbName = "the_list_db";
+    public const string RedisDocDbName = "3";
+    public const string RedisListDbName = "2";
     public static readonly Guid Guid = Guid.Parse(GuidUtils.TEST_GUID);
 }

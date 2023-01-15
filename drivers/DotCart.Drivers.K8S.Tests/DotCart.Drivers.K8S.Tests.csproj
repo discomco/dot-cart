@@ -21,4 +21,8 @@
         </PackageReference>
     </ItemGroup>
 
+    <ItemGroup>
+        <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj"/>
+    </ItemGroup>
+
 </Project>

@@ -25,6 +25,7 @@
         <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Redis.TestFirst\DotCart.Drivers.Redis.TestFirst.csproj"/>
     </ItemGroup>
 
 </Project>

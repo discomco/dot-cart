@@ -9,10 +9,11 @@ namespace Engine.Context.Tests.Initialize;
 
 public class ToRedisDocTests : ProjectionTestsT<
     Context.Initialize.Spoke,
+    IRedisDocDbInfo,
     Context.Initialize.ToRedisDoc,
     Schema.Engine,
     Contract.Initialize.Payload,
-    MetaB>
+    MetaB, Schema.EngineID>
 {
     public ToRedisDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

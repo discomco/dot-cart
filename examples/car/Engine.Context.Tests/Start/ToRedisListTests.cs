@@ -12,10 +12,12 @@ namespace Engine.Context.Tests.Start;
 public class ToRedisListTests
     : ListProjectionTestsT<
         Context.Start.Spoke,
+        IRedisListDbInfo,
         Context.Start.ToRedisList,
         Schema.EngineList,
         Contract.Start.Payload,
-        MetaB>
+        MetaB,
+        Schema.EngineListID>
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

@@ -11,10 +11,12 @@ namespace Engine.Context.Tests.ChangeRpm;
 [DocId(IDConstants.EngineListId)]
 public class ToRedisListTests
     : ListProjectionTestsT<Context.ChangeRpm.Spoke,
+        IRedisListDbInfo,
         Context.ChangeRpm.ToRedisList,
         Schema.EngineList,
         Contract.ChangeRpm.Payload,
-        MetaB
+        MetaB,
+        Schema.EngineListID
     >
 {
     public ToRedisListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

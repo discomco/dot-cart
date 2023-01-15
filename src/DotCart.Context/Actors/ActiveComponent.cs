@@ -38,34 +38,35 @@ public abstract class ActiveComponent : IActiveComponent
 
     public ComponentStatus Status { get; private set; }
 
-    public Task Activate(CancellationToken stoppingToken = default)
+    public async Task Activate(CancellationToken stoppingToken = default)
     {
         if (Status == ComponentStatus.Active)
-            return CompletedTask;
-        lock (activateMutex)
+            return;
+        // lock (activateMutex)
+        // {
+        _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
+        // return Run(async () =>
+        // {
+
+        try
         {
-            _cts = CancellationTokenSource.CreateLinkedTokenSource(stoppingToken);
-            return Run(async () =>
-            {
-                await PrepareAsync(_cts.Token).ConfigureAwait(false);
-                try
-                {
-                    await StartAsync(_cts.Token).ConfigureAwait(false);
-                    if (Status == ComponentStatus.Active)
-                        LoopAsync(_cts.Token);
-                }
-                catch (OperationCanceledException e)
-                {
-                    Status = ComponentStatus.Inactive;
-                    Log.Information($"{AppFacts.Cancelled} [{GetType().Name}]");
-                }
-                catch (Exception e)
-                {
-                    Log.Fatal(e.InnerAndOuter());
-                    Status = ComponentStatus.Inactive;
-                }
-            }, stoppingToken);
+            await PrepareAsync(_cts.Token).ConfigureAwait(false);
+            await StartAsync(_cts.Token).ConfigureAwait(false);
+            if (Status == ComponentStatus.Active)
+                LoopAsync(_cts.Token);
         }
+        catch (OperationCanceledException e)
+        {
+            Status = ComponentStatus.Inactive;
+            Log.Information($"{AppFacts.Cancelled} [{GetType().Name}]");
+        }
+        catch (Exception e)
+        {
+            Log.Fatal(e.InnerAndOuter());
+            Status = ComponentStatus.Inactive;
+        }
+        // }, stoppingToken);
+        // }
     }
 
     public Task Deactivate(CancellationToken cancellationToken = default)

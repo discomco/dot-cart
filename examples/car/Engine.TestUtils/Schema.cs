@@ -35,7 +35,7 @@ public static class Schema
             {
                 var lst = Contract.Schema.EngineList.New();
                 lst.Items = lst.Items.Add(
-                    UnknownEngineListItem.EngineId,
+                    UnknownEngineListItem.Id,
                     UnknownEngineListItem);
                 return lst;
             };

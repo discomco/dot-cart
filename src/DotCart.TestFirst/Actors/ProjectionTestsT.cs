@@ -11,14 +11,19 @@ namespace DotCart.TestFirst.Actors;
 
 public abstract class ProjectionTestsT<
     TSpoke,
+    TDbInfo,
     TProjection,
     TState,
-    TPayload, TMeta> : IoCTests
+    TPayload,
+    TMeta,
+    TID> : IoCTests
     where TProjection : IActorT<TSpoke>
     where TState : IState
     where TSpoke : ISpokeT<TSpoke>
     where TPayload : IPayload
     where TMeta : IMetaB
+    where TDbInfo : IDbInfoB
+    where TID : IID
 {
     private Evt2Doc<TState, TPayload, TMeta> _evt2State;
 
@@ -109,12 +114,26 @@ public abstract class ProjectionTestsT<
     }
 
     [Fact]
+    public void ShouldResolveStoreBuilder()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+
+        // WHEN
+        var sb = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TState, TID>>();
+        // THEN
+        Assert.NotNull(sb);
+    }
+
+
+    [Fact]
     public void ShouldResolveReadModelStore()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
+        var sb = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TState, TID>>();
         // WHEN
-        var rms = TestEnv.ResolveRequired<IDocStore<TState>>();
+        var rms = sb.Build();
         // THEN
         Assert.NotNull(rms);
     }
