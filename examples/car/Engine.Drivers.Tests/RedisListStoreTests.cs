@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 
 namespace Engine.Drivers.Tests;
 
-public class RedisStoreRootListTests
+public class RedisListStoreTests
     : RedisStoreTestsT<
         IRedisListDbInfo,
         Schema.EngineList,
         Schema.EngineListID>
 {
-    public RedisStoreRootListTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RedisListStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

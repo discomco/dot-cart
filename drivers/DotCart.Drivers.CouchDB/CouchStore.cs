@@ -27,9 +27,9 @@ public class CouchStore<TDbInfo, TDoc, TId>
         bool withConflicts = false, CancellationToken cancellationToken = default)
     {
         Guard.Against.Null(entity, nameof(entity));
-        Guard.Against.NullOrWhiteSpace(entity.Id, nameof(entity));
+        Guard.Against.NullOrWhiteSpace(id, nameof(id));
         TDoc res;
-        var couchDoc = CreateCDoc(entity.Id, entity, entity.Prev);
+        var couchDoc = CreateCDoc(id, entity, entity.Prev);
         try
         {
             var oldDoc = await Db.FindAsync(couchDoc.Id, withConflicts, cancellationToken);

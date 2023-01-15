@@ -15,10 +15,12 @@ public interface IRedisListDbInfo : IRedisDbInfoB
 {
 }
 
+[DbName(DbConstants.CouchDocDbName)]
 public interface ICouchDocDbInfo : ICouchDbInfoB
 {
 }
 
+[DbName(DbConstants.CouchListDbName)]
 public interface ICouchListDbInfo : ICouchDbInfoB
 {
 }
