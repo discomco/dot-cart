@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests;
 
 public class RedisListStoreTests
-    : RedisStoreTestsT<
+    : RedisDocStoreTestsT<
         IRedisListDbInfo,
         Schema.EngineList,
         Schema.EngineListID>

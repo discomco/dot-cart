@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests;
 
 public class CouchDocStoreTests
-: CouchStoreTestsT<Context.ICouchDocDbInfo, 
+: CouchDocStoreTestsT<Context.ICouchDocDbInfo, 
     Schema.Engine, 
     Schema.EngineID>
 {

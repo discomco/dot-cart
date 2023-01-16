@@ -7,13 +7,13 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.CouchDB.TestFirst;
 
-public abstract class CouchStoreTestsT<TDbInfo, TDoc, TID>
-    : StoreTestsT<TDbInfo, TDoc, TID>
+public abstract class CouchDocStoreTestsT<TDbInfo, TDoc, TID>
+    : DocStoreTestsT<TDbInfo, TDoc, TID>
     where TID : IID
     where TDoc : IState
     where TDbInfo : ICouchDbInfoB
 {
-    protected CouchStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+    protected CouchDocStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }

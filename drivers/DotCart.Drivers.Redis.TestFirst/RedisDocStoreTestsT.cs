@@ -10,8 +10,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.Redis.TestFirst;
 
-public abstract class RedisStoreTestsT<TDbInfo, TDoc, TID>
-    : StoreTestsT<TDbInfo, TDoc, TID>
+public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
+    : DocStoreTestsT<TDbInfo, TDoc, TID>
     where TDoc : IState
     where TID : IID
     where TDbInfo : IRedisDbInfoB
@@ -22,7 +22,7 @@ public abstract class RedisStoreTestsT<TDbInfo, TDoc, TID>
     protected IDocStore<TDoc> _redisStore;
 
 
-    public RedisStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public RedisDocStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

@@ -6,13 +6,13 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.Redis.Tests;
 
-public class TheRedisStoreTests
-    : RedisStoreTestsT<
+public class TheRedisDocStoreTests
+    : RedisDocStoreTestsT<
         TheContext.IRedisDocDbInfo,
         TheSchema.Doc,
         TheSchema.ID>
 {
-    public TheRedisStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public TheRedisDocStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

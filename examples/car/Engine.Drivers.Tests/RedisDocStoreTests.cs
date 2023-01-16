@@ -9,7 +9,7 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests;
 
 public class RedisDocStoreTests
-    : RedisStoreTestsT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>
+    : RedisDocStoreTestsT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>
 {
     public RedisDocStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {

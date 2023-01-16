@@ -15,11 +15,11 @@
 
 
     <ItemGroup>
-        <ProjectReference Include="..\..\drivers\DotCart.Drivers.CouchDB\DotCart.Drivers.CouchDB.csproj"/>
-        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj"/>
-        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj"/>
-        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj"/>
+        <ProjectReference Include="..\..\drivers\DotCart.Drivers.CouchDB\DotCart.Drivers.CouchDB.csproj" />
+        <ProjectReference Include="..\DotCart.Abstractions\DotCart.Abstractions.csproj" />
+        <ProjectReference Include="..\DotCart.Context\DotCart.Context.csproj" />
+        <ProjectReference Include="..\DotCart.Core\DotCart.Core.csproj" />
+        <ProjectReference Include="..\DotCart.TestKit\DotCart.TestKit.csproj" />
     </ItemGroup>
 
 

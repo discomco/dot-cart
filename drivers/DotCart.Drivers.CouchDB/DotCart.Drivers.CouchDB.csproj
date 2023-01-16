@@ -9,14 +9,14 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="CouchDB.NET.DependencyInjection" Version="3.3.1"/>
+        <PackageReference Include="CouchDB.NET.DependencyInjection" Version="3.3.1" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj" />
     </ItemGroup>
 
 </Project>

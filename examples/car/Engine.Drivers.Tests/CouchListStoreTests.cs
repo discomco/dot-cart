@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace Engine.Drivers.Tests;
 
 public class CouchListStoreTests
-: CouchStoreTestsT<Context.ICouchListDbInfo, Schema.EngineList, Schema.EngineListID>
+: CouchDocStoreTestsT<Context.ICouchListDbInfo, Schema.EngineList, Schema.EngineListID>
 {
     public CouchListStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
