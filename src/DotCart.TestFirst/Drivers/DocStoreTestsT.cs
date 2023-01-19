@@ -108,7 +108,7 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
     }
 
     [Fact]
-    public async Task ShouldCheckExists()
+    public async Task ShouldCheckDocExists()
     {
         // GIVEN
         Assert.NotNull(TestEnv);

@@ -27,7 +27,7 @@ public abstract class ProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
     where TID : IID
     where TDbInfo : IDbInfoB
 {
-    private readonly IDocStore<TDoc> _docStore;
+    private readonly IDocStoreT<TDoc> _docStore;
     private readonly Evt2Doc<TDoc, TPayload, TMeta> _evt2Doc;
     private readonly StateCtorT<TDoc> _newDoc;
 
@@ -59,13 +59,13 @@ public abstract class ProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
         var docId = GetDocId(evtB);
         var doc = await _docStore.GetByIdAsync(docId, cancellationToken).ConfigureAwait(false)
                   ?? _newDoc();
-
-//        var evtT = _event2EvtT((Event)evtB);
         doc = _evt2Doc(doc, (Event)evtB);
 
         // TODO: Call ProjectionValidationFunc here
 
-        await _docStore.SetAsync(docId, doc, cancellationToken).ConfigureAwait(false);
+        await _docStore
+            .SetAsync(docId, doc, cancellationToken)
+            .ConfigureAwait(false);
     }
 
     private string GetDocId(IEvtB evt)

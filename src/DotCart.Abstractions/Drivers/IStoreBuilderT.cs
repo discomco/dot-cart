@@ -10,10 +10,6 @@ public interface IStoreBuilderT<TDbInfo, TDoc, TID>
     where TDoc : IState
     where TID : IID
 {
-    IDocStore<TDoc> Build();
+    IDocStoreT<TDoc> Build();
 }
 
-public interface IAdminStoreBuilderT<TDbInfo> 
-    : IStoreBuilderB
-    where TDbInfo : IDbInfoB
-{}

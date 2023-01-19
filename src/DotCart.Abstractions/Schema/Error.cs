@@ -1,4 +1,5 @@
-﻿using System.Text.Json;
+﻿using System.Net;
+using System.Text.Json;
 
 namespace DotCart.Abstractions.Schema;
 
@@ -96,12 +97,11 @@ public enum ErrorCode
 
 public record Error
 {
-    public ErrorCode Code { get; set; }
+    public HttpStatusCode Code { get; set; }
     public string Subject { get; set; }
     public string Content { get; set; }
     public string Stack { get; set; }
     public string Source { get; set; }
-    public ErrorCode StatusCode { get; set; }
     public string Server { get; set; }
     public string ProtocolVersion { get; set; }
     public string Method { get; set; }
@@ -110,6 +110,8 @@ public record Error
     public string ErrorMessage { get; set; }
     public string ResponseStatus { get; set; }
     public Error InnerError { get; set; }
+
+    public static Error Empty => new();
 
     public override string ToString()
     {

@@ -10,15 +10,17 @@ public interface IFeedback : IDto
     string Step { get; }
     void SetError(Error error);
     void SetPayload<TState>(TState state) where TState : IState;
+    void AddWarning(string warning);
+    void AddInfo(string info);
 }
 
 public record Feedback(string AggId, IFeedback Previous = null, string Step = "") : IFeedback
 {
     public static Feedback Empty => New("");
-    public IState Payload { get; set; }
+    public IState Payload { get; private set; }
     public ErrorState ErrState { get; } = new();
-    public IEnumerable<string> Warnings { get; } = Array.Empty<string>();
-    public IEnumerable<string> Infos { get; } = Array.Empty<string>();
+    public IEnumerable<string> Warnings { get; private set; } = Array.Empty<string>();
+    public IEnumerable<string> Infos { get; private set; } = Array.Empty<string>();
     public bool IsSuccess => ErrState.IsSuccessful;
 
     public string AggId { get; set; } = AggId;
@@ -40,4 +42,13 @@ public record Feedback(string AggId, IFeedback Previous = null, string Step = ""
     {
         return new Feedback(Id, previous, step);
     }
+    public void AddWarning(string warning)
+    {
+        Warnings = Warnings.Append(warning);
+    }
+    public void AddInfo(string info)
+    {
+        Infos = Infos.Append(info);
+    }
+
 }

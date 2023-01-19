@@ -19,7 +19,7 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
     private IRedisStoreBuilder<TDbInfo, TDoc, TID> _builder;
     protected IConnectionMultiplexer _connection;
     protected IRedisConnectionFactory<TDbInfo, TDoc> _connFact;
-    protected IDocStore<TDoc> _redisStore;
+    protected IDocStoreT<TDoc> RedisStoreT;
 
 
     public RedisDocStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -39,8 +39,8 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
         Assert.NotNull(_connFact);
         _builder = TestEnv.ResolveRequired<IRedisStoreBuilder<TDbInfo, TDoc, TID>>();
         Assert.NotNull(_builder);
-        _redisStore = _builder.Build();
-        Assert.NotNull(_redisStore);
+        RedisStoreT = _builder.Build();
+        Assert.NotNull(RedisStoreT);
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         Assert.NotNull(_newID);
         _newState = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
@@ -76,17 +76,17 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
     public async Task ShouldSetDocToRedisStore()
     {
         // GIVEN
-        Assert.NotNull(_redisStore);
+        Assert.NotNull(RedisStoreT);
         Assert.NotNull(_newState);
         Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
-        var res = await _redisStore.SetAsync(ID.Id(), doc).ConfigureAwait(false);
+        var res = await RedisStoreT.SetAsync(ID.Id(), doc).ConfigureAwait(false);
         // THEN
         Assert.NotNull(res);
         Assert.Equal(res, doc);
-        await _redisStore.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
     }
 
     [Fact]
@@ -94,17 +94,17 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
     {
         // GIVEN
         // GIVEN
-        Assert.NotNull(_redisStore);
+        Assert.NotNull(RedisStoreT);
         Assert.NotNull(_newState);
         Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
-        var res = await _redisStore.SetAsync(ID.Id(), doc);
+        var res = await RedisStoreT.SetAsync(ID.Id(), doc);
         Assert.NotNull(res);
         Assert.Equal(res, doc);
         // THEN
-        var delDoc = await _redisStore.DeleteAsync(ID.Id());
+        var delDoc = await RedisStoreT.DeleteAsync(ID.Id());
         Assert.Equal(res, delDoc);
     }
 
@@ -113,38 +113,38 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
     public async Task ShouldCheckIfDocExists()
     {
         // GIVEN
-        Assert.NotNull(_redisStore);
+        Assert.NotNull(RedisStoreT);
         Assert.NotNull(_newState);
         Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
-        var res = await _redisStore.SetAsync(ID.Id(), doc);
+        var res = await RedisStoreT.SetAsync(ID.Id(), doc);
         Assert.NotNull(res);
         Assert.Equal(res, doc);
         // THEN
-        var exists = await _redisStore.Exists(ID.Id()).ConfigureAwait(false);
+        var exists = await RedisStoreT.Exists(ID.Id()).ConfigureAwait(false);
         Assert.True(exists);
-        await _redisStore.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
     }
 
     [Fact]
     public async Task ShouldGetDocFromRedisStore()
     {
         // GIVEN
-        Assert.NotNull(_redisStore);
+        Assert.NotNull(RedisStoreT);
         Assert.NotNull(_newState);
         Assert.NotNull(_newID);
         // WHEN
         var ID = _newID();
         var doc = _newState();
-        var res = await _redisStore.SetAsync(ID.Id(), doc);
+        var res = await RedisStoreT.SetAsync(ID.Id(), doc);
         Assert.NotNull(res);
         Assert.Equal(res, doc);
         // THEN
-        var getDoc = await _redisStore.GetByIdAsync(ID.Id()).ConfigureAwait(false);
+        var getDoc = await RedisStoreT.GetByIdAsync(ID.Id()).ConfigureAwait(false);
         Assert.NotNull(getDoc);
         Assert.Equal(getDoc, doc);
-        await _redisStore.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
     }
 }

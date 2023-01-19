@@ -18,6 +18,13 @@ public static class LogFormatExtensions
     {
         return Output.Background.Rgb(16, 16, 128, Output.Black($"::{value}::"));
     }
+    
+    public static string AsWarning(this string value)
+    {
+        return Output.Background.Rgb(16, 16, 0, Output.Black($"::{value}::"));
+    }
+    
+    
 
     public static string AsEnforcing(this string value)
     {
@@ -74,10 +81,22 @@ public static class AppVerbs
     public static readonly string Emitting = "EMITTING".AsVerb();
     public static readonly string Running = "RUNNING".AsRunning();
     public static readonly string Do = "DO".AsDo();
+    public static readonly string CreatingV = "CREATING".AsVerb();
+    public static readonly string WarningV = "WARNING".AsWarning();
 
     public static string Looping(string activity, int counter)
     {
         return $"LOOPING({activity}, {counter})".AsVerb();
+    }
+
+    public static string Creating(string resourceName)
+    {
+        return $"{CreatingV} ~> {resourceName}";
+    }
+
+    public static string Warning(string warning)
+    {
+        return $"{WarningV} ~> {warning}";
     }
 }
 
@@ -85,7 +104,7 @@ public static class AppErrors
 {
     public static string Error(string error)
     {
-        return "ERROR".AsError() + $"~> ({error})";
+        return "ERROR".AsError() + $" ~> [{error}]";
     }
 }
 

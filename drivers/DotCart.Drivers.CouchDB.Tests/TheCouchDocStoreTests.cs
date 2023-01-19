@@ -27,6 +27,5 @@ public class TheCouchDocStoreTests
         services
             .AddTheDocCtors()
             .AddDotCouch<TheContext.ICouchDocDbInfo, TheSchema.Doc, TheSchema.ID>();
-        //.AddCouchDBStore<TheContext.ICouchDbInfo, TheSchema.ID, TheSchema.Doc>();
     }
 }

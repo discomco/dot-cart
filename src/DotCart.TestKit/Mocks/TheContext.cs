@@ -12,11 +12,13 @@ public static class TheContext
     }
 
     [DbName(TheConstants.CouchDocDbName)]
+    [Replicate(false)]
     public interface ICouchDocDbInfo : ICouchDbInfoB
     {
     }
 
     [DbName(TheConstants.CouchListDbName)]
+    [Replicate(false)]
     public interface ICouchListDbInfo : ICouchDbInfoB
     {
     }

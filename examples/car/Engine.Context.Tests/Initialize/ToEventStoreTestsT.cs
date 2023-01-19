@@ -12,7 +12,7 @@ namespace Engine.Context.Tests.Initialize;
 public class ToEventStoreTestsT : ToEventStoreTestsT<
     Contract.Initialize.Payload,
     MetaB,
-    IDocStore<Schema.Engine>>
+    IDocStoreT<Schema.Engine>>
 {
     public ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -26,7 +26,7 @@ public class ToEventStoreTestsT : ToEventStoreTestsT<
     {
         services
             .AddTransient(_ => A.Fake<IAggregateStore>())
-            .AddTransient(_ => A.Fake<IDocStore<Schema.Engine>>())
+            .AddTransient(_ => A.Fake<IDocStoreT<Schema.Engine>>())
             .AddInitializeSpoke();
     }
 }

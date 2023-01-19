@@ -16,9 +16,9 @@ public class RedisStoreBuilder<TDbInfo, TDoc, TID>
         _connectionFactory = connectionFactory;
     }
 
-    public IDocStore<TDoc> Build()
+    public IDocStoreT<TDoc> Build()
     {
         var db = RedisDbT<TDbInfo, TDoc>.New(_connectionFactory);
-        return RedisStore<TDbInfo, TDoc>.New(db);
+        return RedisStoreT<TDbInfo, TDoc>.New(db);
     }
 }
