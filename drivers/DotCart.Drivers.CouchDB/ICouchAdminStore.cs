@@ -1,13 +1,11 @@
-using System.Threading;
-using System.Threading.Tasks;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Defaults.CouchDb;
 
 namespace DotCart.Drivers.CouchDB;
 
-public interface ICouchAdminStore<TDbInfo> 
-    : IAdminStore<TDbInfo> 
+public interface ICouchAdminStore<TDbInfo>
+    : IAdminStore<TDbInfo>
     where TDbInfo : ICouchDbInfoB
 {
     Task<Feedback> OpenDbAsync(string filterDoc = "", CancellationToken cancellationToken = default);

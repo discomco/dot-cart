@@ -66,7 +66,7 @@ public static class Stop
         StartedListCtor =
             () =>
             {
-                var lst = Contract.Schema.EngineList.New();
+                var lst = Schema.EmptyListCtor();
                 lst.Items = lst.Items.Add(
                     StartedEngineListItem.Id,
                     StartedEngineListItem);

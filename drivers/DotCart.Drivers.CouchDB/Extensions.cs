@@ -3,14 +3,13 @@ using DotCart.Abstractions.Schema;
 using DotCart.Defaults.CouchDb;
 using MyCouch.Responses;
 
-
 namespace DotCart.Drivers.CouchDB;
 
 public static class Extensions
 {
-    public static ICouchDocStoreT<TDbInfo, TDoc, TID> AsCouchDocStore<TDbInfo, TDoc, TID>(this IDocStoreB dbStore) 
-        where TID : IID 
-        where TDoc : IState 
+    public static ICouchDocStoreT<TDbInfo, TDoc, TID> AsCouchDocStore<TDbInfo, TDoc, TID>(this IDocStoreB dbStore)
+        where TID : IID
+        where TDoc : IState
         where TDbInfo : ICouchDbInfoB
     {
         return (ICouchDocStoreT<TDbInfo, TDoc, TID>)dbStore;

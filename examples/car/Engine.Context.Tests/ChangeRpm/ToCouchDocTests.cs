@@ -8,13 +8,13 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeRpm;
 
 public class ToCouchDocTests
-: ProjectionTestsT<Context.ChangeRpm.Spoke,
-    Context.ICouchDocDbInfo,
-    Context.ChangeRpm.ToCouchDoc,
-    Schema.Engine,
-    Contract.ChangeRpm.Payload,
-    MetaB,
-    Schema.EngineID>
+    : ProjectionTestsT<Context.ChangeRpm.Spoke,
+        ICouchDocDbInfo,
+        Context.ChangeRpm.ToCouchDoc,
+        Schema.Engine,
+        Contract.ChangeRpm.Payload,
+        MetaB,
+        Schema.EngineID>
 {
     public ToCouchDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -22,12 +22,10 @@ public class ToCouchDocTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()
     {
-        
     }
 
     protected override void InjectDependencies(IServiceCollection services)

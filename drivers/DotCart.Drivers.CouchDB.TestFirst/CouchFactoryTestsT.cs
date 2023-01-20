@@ -1,4 +1,3 @@
-using System.Security.Cryptography;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit;
@@ -6,10 +5,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.CouchDB.TestFirst;
 
-public abstract class MyCouchFactoryTestsT<TDbInfo> 
+public abstract class CouchFactoryTestsT<TDbInfo>
     : IoCTests
 {
-    public MyCouchFactoryTestsT(ITestOutputHelper output, IoCTestContainer testEnv) 
+    public CouchFactoryTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }
@@ -76,8 +75,4 @@ public abstract class MyCouchFactoryTestsT<TDbInfo>
         // THEN
         Assert.NotNull(resp);
     }
-    
-    
-    
-    
 }

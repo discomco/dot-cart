@@ -6,15 +6,15 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.CouchDB.TestFirst;
 
-public abstract class CouchAdminTestsT<TDbInfo> : 
-    AdminStoreTestsT<TDbInfo> 
+public abstract class CouchAdminTestsT<TDbInfo> :
+    AdminStoreTestsT<TDbInfo>
     where TDbInfo : ICouchDbInfoB
 {
     protected CouchAdminTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
-    
-    
+
+
     [Fact]
     public async Task ShouldOpenDb()
     {
@@ -28,7 +28,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         var rsp = await admin.OpenDbAsync();
         Assert.True(rsp.IsSuccess);
     }
-    
+
     [Fact]
     public void ShouldBuildAdminStore()
     {
@@ -41,8 +41,8 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // THEN
         Assert.NotNull(adminStore);
     }
-    
-    
+
+
     [Fact]
     public async Task ShouldCreateDb()
     {
@@ -54,7 +54,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // THEN
         Assert.True(fbk.IsSuccess);
     }
-    
+
     [Fact]
     public async Task ShouldCheckIfDbExists()
     {
@@ -68,10 +68,4 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // THEN
         Assert.True(true);
     }
-
-
-
-
-
-
 }

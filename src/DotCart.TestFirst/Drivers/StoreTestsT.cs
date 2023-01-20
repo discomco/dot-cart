@@ -4,14 +4,14 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
 
-public abstract class StoreTestsT<TDbInfo> 
+public abstract class StoreTestsT<TDbInfo>
     : IoCTests
 {
-    protected StoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) 
+    protected StoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }
-    
+
     [Fact]
     public void ShouldKnowDbNameAtt()
     {
@@ -22,5 +22,4 @@ public abstract class StoreTestsT<TDbInfo>
         // THEN
         Assert.NotEmpty(name);
     }
-    
 }

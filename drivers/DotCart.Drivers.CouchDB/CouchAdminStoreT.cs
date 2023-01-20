@@ -1,6 +1,3 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.Defaults.CouchDb;
@@ -14,13 +11,12 @@ public class CouchAdminStoreT<TDbInfo>
     : ICouchAdminStore<TDbInfo>
     where TDbInfo : ICouchDbInfoB
 {
-    private readonly IMyCouchFactory _myCouchFactory;
-    private readonly IMyCouchServerClient _server;
-    
     private static readonly string _dbName = DbNameAtt.Get<TDbInfo>().ToLower();
     private static readonly bool _canReplicate = ReplicateAtt.Get<TDbInfo>();
     private static readonly string _upstreamReplicationId = $"up:{_dbName}";
-    
+    private readonly IMyCouchFactory _myCouchFactory;
+    private readonly IMyCouchServerClient _server;
+
     public CouchAdminStoreT(IMyCouchFactory myCouchFactory)
     {
         _myCouchFactory = myCouchFactory;
@@ -46,7 +42,7 @@ public class CouchAdminStoreT<TDbInfo>
         return Task.CompletedTask;
     }
 
-    public async Task<Feedback> OpenDbAsync(string filterDoc="", CancellationToken cancellationToken = default)
+    public async Task<Feedback> OpenDbAsync(string filterDoc = "", CancellationToken cancellationToken = default)
     {
         var res = Feedback.Empty;
         try
@@ -56,13 +52,11 @@ public class CouchAdminStoreT<TDbInfo>
                 var existsFeedback = await DbExistsAsync(cancellationToken)
                     .ConfigureAwait(false);
                 if (!existsFeedback.IsSuccess)
-                {
                     res = await CreateDbAsync(cancellationToken)
                         .ConfigureAwait(false);
-                }
                 if (_canReplicate)
                 {
-                    if (_dbName == CouchConstants.ReplicatorDbName) 
+                    if (_dbName == CouchConstants.ReplicatorDbName)
                         return res;
                     res = await InitializeAsync(filterDoc)
                         .ConfigureAwait(false);
@@ -79,25 +73,8 @@ public class CouchAdminStoreT<TDbInfo>
         {
             await Log.CloseAndFlushAsync().ConfigureAwait(false);
         }
-        return res;
-    }
 
-    public async Task<Feedback> ReplicationExistsAsync(string repId, CancellationToken cancellationToken = default)
-    {
-        var fbk = Feedback.Empty;
-        try
-        {
-            using (var replicationStore = _myCouchFactory.Client(CouchConstants.ReplicatorDbName))
-            {
-                var rsp = await replicationStore.Documents.HeadAsync(repId, cancellationToken: cancellationToken);
-            }
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw;
-        }
-        return fbk;
+        return res;
     }
 
 
@@ -138,6 +115,7 @@ public class CouchAdminStoreT<TDbInfo>
                     Config.SetDbExists(_dbName);
                     return fbk;
                 }
+
                 fbk.SetError(crr.AsError());
             }
         }
@@ -150,7 +128,7 @@ public class CouchAdminStoreT<TDbInfo>
         return fbk;
     }
 
-    public async Task<Feedback> ReplicateAsync(string filterDoc = "", CancellationToken cancellationToken=default)
+    public async Task<Feedback> ReplicateAsync(string filterDoc = "", CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try
@@ -162,6 +140,7 @@ public class CouchAdminStoreT<TDbInfo>
                 Log.Warning(AppVerbs.Warning(warning));
                 return fbk;
             }
+
             if (_dbName.ToLower() == CouchConstants.ReplicatorDbName) return null;
             if (Config.LocalSource == Config.ClusterSource) return null;
             var existsFbk = await ReplicationExistsAsync(_upstreamReplicationId, cancellationToken)
@@ -172,6 +151,7 @@ public class CouchAdminStoreT<TDbInfo>
                 fbk.AddWarning(AppVerbs.Warning(warning));
                 return fbk;
             }
+
             var source = $"{Config.LocalhostUrl}/{_dbName}";
             var target = $"{Config.ClusterUrl}/{_dbName}";
             var request = new ReplicateDatabaseRequest(_upstreamReplicationId, source, target)
@@ -186,6 +166,7 @@ public class CouchAdminStoreT<TDbInfo>
                 var msg = $"Replication [{_upstreamReplicationId}] could not be registered. Reason: {res.Reason}";
                 throw new Exception(msg);
             }
+
             var info = $"Replication [{_upstreamReplicationId}] registered successfully.";
             fbk.AddInfo(info);
             return fbk;
@@ -195,6 +176,7 @@ public class CouchAdminStoreT<TDbInfo>
             Log.Error(AppErrors.Error(e.InnerAndOuter()));
             fbk.SetError(e.AsError());
         }
+
         return fbk;
     }
 
@@ -264,5 +246,24 @@ public class CouchAdminStoreT<TDbInfo>
         //     .BuildAdmin("_replicator")
         //     .DocExists(id);
         // return res;
+    }
+
+    public async Task<Feedback> ReplicationExistsAsync(string repId, CancellationToken cancellationToken = default)
+    {
+        var fbk = Feedback.Empty;
+        try
+        {
+            using (var replicationStore = _myCouchFactory.Client(CouchConstants.ReplicatorDbName))
+            {
+                var rsp = await replicationStore.Documents.HeadAsync(repId, cancellationToken: cancellationToken);
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+        return fbk;
     }
 }

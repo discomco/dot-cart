@@ -5,7 +5,6 @@ namespace DotCart.Drivers.CouchDB.Tests;
 
 public class ConfigTests
 {
-
     [Fact]
     public void ShouldSetDbExists()
     {

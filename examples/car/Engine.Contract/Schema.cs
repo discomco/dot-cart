@@ -1,5 +1,4 @@
 using System.Collections.Immutable;
-using System.Text.Json.Serialization;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 
@@ -36,11 +35,11 @@ public static class Schema
 
     public static readonly StateCtorT<Engine>
         RootCtor =
-            () => new Engine();
+            Engine.New;
 
     public static readonly StateCtorT<EngineList>
         ListCtor =
-            EngineList.New;
+            () => EngineList.New(ListIDCtor().Id());
 
 
     private static readonly object _setFlagMutex = new();
@@ -80,45 +79,51 @@ public static class Schema
     }
 
     [DbName(DbConstants.RedisDocDbName)]
-    public record Engine : IState
+    public record Engine(string Id, EngineStatus Status, Details Details, Rpm Rpm) : IState
     {
-        public Engine()
-        {
-            Details = new Details();
-            Status = EngineStatus.Unknown;
-            Rpm = new Rpm(0);
-        }
+        // private Engine()
+        // {
+        //     Details = new Details();
+        //     Status = EngineStatus.Unknown;
+        //     Rpm = new Rpm(0);
+        // }
+        //
+        // [JsonConstructor]
+        // public Engine(string Id, EngineStatus Status, Details Details, Rpm Rpm)
+        // {
+        //     Id = Id;
+        //     Status = Status;
+        //     Details = Details;
+        //     Rpm = Rpm;
+        // }
 
-        [JsonConstructor]
-        public Engine(string id, EngineStatus status, Details details, Rpm rpm)
-        {
-            Id = id;
-            Status = status;
-            Details = details;
-            Rpm = rpm;
-        }
+        // private Engine(string id)
+        // {
+        //     Id = id;
+        //     Status = EngineStatus.Unknown;
+        //     Details = Details.New("New Engine");
+        //     Rpm = Rpm.New(0);
+        // }
 
-        private Engine(string id)
-        {
-            Id = id;
-            Status = EngineStatus.Unknown;
-            Details = Details.New("New Engine");
-            Rpm = Rpm.New(0);
-        }
+        public EngineStatus Status { get; set; } = Status;
 
-        public EngineStatus Status { get; set; }
+        public Rpm Rpm { get; set; } = Rpm;
+        public Details Details { get; set; } = Details;
+        public string Id { get; set; } = Id;
 
-        public Rpm Rpm { get; set; }
-        public Details Details { get; set; }
+        // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
+        // public string Id { get; set; }
 
-        [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
-        public string Id { get; set; }
-
-        public string Prev { get; set; }
+        public string Prev { get; set; } = "";
 
         public static Engine New(string id, EngineStatus status, Details details, Rpm rpm)
         {
             return new Engine(id, status, details, rpm);
+        }
+
+        public static Engine New()
+        {
+            return new(string.Empty, EngineStatus.Unknown, Details.New("New Engine"), Rpm.New(0));
         }
     }
 
@@ -154,16 +159,16 @@ public static class Schema
     }
 
     [DbName(DbConstants.RedisListDbName)]
-    public record EngineList(ImmutableDictionary<string, EngineListItem> Items) : IListState
+    public record EngineList(string Id, ImmutableDictionary<string, EngineListItem> Items) : IListState
     {
         public ImmutableDictionary<string, EngineListItem> Items { get; set; } = Items;
 
-        public string Id { get; }
+        public string Id { get; } = Id;
         public string Prev { get; set; }
 
-        public static EngineList New()
+        public static EngineList New(string id)
         {
-            return new EngineList(ImmutableDictionary<string, EngineListItem>.Empty);
+            return new EngineList(id, ImmutableDictionary<string, EngineListItem>.Empty);
         }
     }
 

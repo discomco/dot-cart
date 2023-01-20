@@ -8,7 +8,6 @@ using MyCouch.Net;
 
 namespace DotCart.Drivers.CouchDB;
 
-
 public static class ServerInfo
 {
     public static readonly Func<ServerConnectionInfo>
@@ -32,11 +31,7 @@ public static class ServerInfo
                 };
                 return res;
             };
-
-
 }
-
-
 
 public static class Inject
 {
@@ -47,7 +42,7 @@ public static class Inject
     {
         services.TryAddSingleton(ServerInfo.LocalFromConfig);
         services.TryAddSingleton<IMyCouchFactory, MyCouchClientFactory>();
-        services.TryAddSingleton<ICouchAdminBuilderT<TDbInfo>, CouchStoreBuilderT<TDbInfo,TDoc,TID>>();
+        services.TryAddSingleton<ICouchAdminBuilderT<TDbInfo>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
 //        services.TryAddSingleton<ICouchStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
         services.TryAddSingleton<IStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
         return services;

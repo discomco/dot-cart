@@ -26,7 +26,7 @@ using DotCart.Drivers.Ardalis;
 
 namespace DotCart.Core;
 
-[AttributeUsage( AttributeTargets.Interface)]
+[AttributeUsage(AttributeTargets.Interface)]
 public class ReplicateAttribute : Attribute
 {
     public ReplicateAttribute(bool doIt)

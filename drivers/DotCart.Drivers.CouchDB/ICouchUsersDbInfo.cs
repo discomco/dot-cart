@@ -7,5 +7,4 @@ namespace DotCart.Drivers.CouchDB;
 [Replicate(false)]
 public interface ICouchUsersDbInfo : ICouchDbInfoB
 {
-    
 }

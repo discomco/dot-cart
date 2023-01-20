@@ -4,7 +4,7 @@ using Engine.Contract;
 
 namespace Engine.Context;
 
-[DbName(DbConstants.RedisDocDbName)]
-public interface IRedisDocDbInfo : IRedisDbInfoB
+[DbName(DbConstants.RedisListDbName)]
+public interface IRedisListDbInfo : IRedisDbInfoB
 {
 }

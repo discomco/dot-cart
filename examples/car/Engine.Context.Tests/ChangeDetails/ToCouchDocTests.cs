@@ -5,37 +5,33 @@ using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
-namespace Engine.Context.Tests.ChangeDetails
+namespace Engine.Context.Tests.ChangeDetails;
+
+public class ToCouchDocTests
+    : ProjectionTestsT<
+        Context.ChangeDetails.Spoke,
+        ICouchDocDbInfo,
+        Context.ChangeDetails.ToCouchDoc,
+        Schema.Engine,
+        Contract.ChangeDetails.Payload,
+        MetaB,
+        Schema.EngineID>
 {
-    public class ToCouchDocTests
-        : ProjectionTestsT<
-            Context.ChangeDetails.Spoke,
-            Context.ICouchDocDbInfo,
-            Context.ChangeDetails.ToCouchDoc,
-            Schema.Engine,
-            Contract.ChangeDetails.Payload,
-            MetaB,
-            Schema.EngineID>
+    public ToCouchDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
-        public ToCouchDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
-        {
-        }
+    }
 
-        protected override void Initialize()
-        {
-            
-        }
+    protected override void Initialize()
+    {
+    }
 
-        protected override void SetEnVars()
-        {
-         
-        }
+    protected override void SetEnVars()
+    {
+    }
 
-        protected override void InjectDependencies(IServiceCollection services)
-        {
-            services
-                .AddChangeDetailsSpoke();
-        }
+    protected override void InjectDependencies(IServiceCollection services)
+    {
+        services
+            .AddChangeDetailsSpoke();
     }
 }
-

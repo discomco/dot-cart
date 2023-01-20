@@ -2,7 +2,6 @@ using MyCouch;
 
 namespace DotCart.Drivers.CouchDB;
 
-
 public record ReplicationCouchInfo(CouchInfo LocalInfo, CouchInfo RemoteInfo)
 {
     public CouchInfo LocalInfo { get; } = LocalInfo;

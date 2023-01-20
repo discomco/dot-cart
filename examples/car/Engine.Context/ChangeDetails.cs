@@ -40,16 +40,12 @@ public static class ChangeDetails
             .AddHopeInPipe<IHopePipe, Contract.ChangeDetails.Payload, MetaB>()
             .AddHostedSpokeT<Spoke>()
             .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-
             .AddDotCouch<ICouchDocDbInfo, Schema.Engine, Schema.EngineID>()
             .AddTransient<IActorT<Spoke>, ToCouchDoc>()
-
             .AddDotRedis<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID>()
             .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
-
-            
             .AddNATSResponder<Spoke,
                 FromNATS,
                 Contract.ChangeDetails.Payload,

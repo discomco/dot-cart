@@ -2,12 +2,11 @@
 
 namespace DotCart.Abstractions.Drivers;
 
-
 public interface IDocStoreB : IClose, IDisposable, IAsyncDisposable, ICloseAsync
-{ }
+{
+}
 
-
-public interface IDocStoreT<TDoc> 
+public interface IDocStoreT<TDoc>
     : IDocStoreB
     where TDoc : IState
 {
@@ -16,5 +15,4 @@ public interface IDocStoreT<TDoc>
     Task<bool> Exists(string id, CancellationToken cancellationToken = default);
     Task<TDoc?> GetByIdAsync(string id, CancellationToken cancellationToken = default);
     Task<bool> HasData(CancellationToken cancellationToken = default);
-
 }

@@ -112,16 +112,15 @@ public static class ChangeRpm
     {
     }
 
-    
 
     [Name(ToCouchDoc_v1)]
     [DbName(DbConstants.CouchDocDbName)]
     public class ToCouchDoc
-    : ProjectionT<Context.ICouchDocDbInfo,
-        Schema.Engine,
-        Contract.ChangeRpm.Payload,
-        MetaB,
-        Schema.EngineID>, IActorT<Spoke>
+        : ProjectionT<ICouchDocDbInfo,
+            Schema.Engine,
+            Contract.ChangeRpm.Payload,
+            MetaB,
+            Schema.EngineID>, IActorT<Spoke>
     {
         public ToCouchDoc(IExchange exchange,
             IStoreBuilderT<ICouchDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
@@ -131,6 +130,6 @@ public static class ChangeRpm
             evt2Doc,
             newDoc)
         {
-        }        
+        }
     }
 }

@@ -2,7 +2,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Defaults.CouchDb;
 
-
 namespace DotCart.Drivers.CouchDB;
 
 public class CouchStoreBuilderT<TDbInfo, TDoc, TID>
@@ -18,13 +17,13 @@ public class CouchStoreBuilderT<TDbInfo, TDoc, TID>
         _factory = factory;
     }
 
-    public IDocStoreT<TDoc> Build()
-    {
-        return new CouchDocStoreT<TDbInfo, TDoc, TID>(_factory);
-    }
-
     public ICouchAdminStore<TDbInfo> BuildAdmin()
     {
         return new CouchAdminStoreT<TDbInfo>(_factory);
+    }
+
+    public IDocStoreT<TDoc> Build()
+    {
+        return new CouchDocStoreT<TDbInfo, TDoc, TID>(_factory);
     }
 }

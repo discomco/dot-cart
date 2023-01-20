@@ -33,7 +33,7 @@ public static class Schema
         FilledListCtor =
             () =>
             {
-                var lst = Contract.Schema.EngineList.New();
+                var lst = EmptyListCtor();
                 lst.Items = lst.Items.Add(
                     UnknownEngineListItem.Id,
                     UnknownEngineListItem);
@@ -42,10 +42,12 @@ public static class Schema
 
     public static readonly StateCtorT<Contract.Schema.EngineList>
         EmptyListCtor =
-            Contract.Schema.EngineList.New;
+            () => Contract.Schema.EngineList.New(ListIDCtor().Id());
+
 
     public static readonly ValueObjectCtorT<Contract.Schema.Details>
-        OldDetailsCtor = () => Contract.Schema.Details.New("engine #309", "Some Old Engine");
+        OldDetailsCtor =
+            () => Contract.Schema.Details.New("engine #309", "Some Old Engine");
 
     public static readonly ValueObjectCtorT<Contract.Schema.Rpm>
         OldRpmCtor = () => Contract.Schema.Rpm.New(0);

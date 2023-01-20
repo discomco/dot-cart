@@ -38,17 +38,18 @@ public record Feedback(string AggId, IFeedback Previous = null, string Step = ""
 
     public IFeedback? Previous { get; } = Previous;
 
-    public static Feedback New(string Id, IFeedback? previous = null, string step = "")
-    {
-        return new Feedback(Id, previous, step);
-    }
     public void AddWarning(string warning)
     {
         Warnings = Warnings.Append(warning);
     }
+
     public void AddInfo(string info)
     {
         Infos = Infos.Append(info);
     }
 
+    public static Feedback New(string Id, IFeedback? previous = null, string step = "")
+    {
+        return new Feedback(Id, previous, step);
+    }
 }

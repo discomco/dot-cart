@@ -30,7 +30,7 @@ public abstract class
             .AddESDBStore()
             .AddBaseBehavior<IEngineAggregateInfo, Schema.Engine, TPayload, MetaB>()
             .AddCmdHandler()
-            .AddTestIDCtor()
+            .AddTestDocIDCtor()
             .AddRootDocCtors();
     }
 }

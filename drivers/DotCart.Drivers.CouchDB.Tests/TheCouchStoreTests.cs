@@ -6,10 +6,10 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.CouchDB.Tests;
 
-public class TheCouchDocStoreTests
-    : CouchDocStoreTestsT<TheContext.ICouchDocDbInfo, TheSchema.Doc, TheSchema.ID>
+public class TheCouchStoreTests
+    : CouchStoreTestsT<TheContext.ICouchDocDbInfo, TheSchema.Doc, TheSchema.ID>
 {
-    public TheCouchDocStoreTests(ITestOutputHelper output, IoCTestContainer testEnv)
+    public TheCouchStoreTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }

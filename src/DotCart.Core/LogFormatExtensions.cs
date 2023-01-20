@@ -18,13 +18,12 @@ public static class LogFormatExtensions
     {
         return Output.Background.Rgb(16, 16, 128, Output.Black($"::{value}::"));
     }
-    
+
     public static string AsWarning(this string value)
     {
         return Output.Background.Rgb(16, 16, 0, Output.Black($"::{value}::"));
     }
-    
-    
+
 
     public static string AsEnforcing(this string value)
     {
