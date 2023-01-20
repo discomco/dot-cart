@@ -53,6 +53,14 @@ jobs:
 
     services:
       
+      couchdb:
+        image: couchdb
+        env:
+          COUCHDB_USER: root
+          COUCHDB_PASSWORD: toor
+        ports:
+          - "5984:5984"
+      
       rabbitmq:
         image: rabbitmq:3-management-alpine
         ports:
