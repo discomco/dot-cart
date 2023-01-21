@@ -20,7 +20,7 @@ public class ESDBEventStoreTests : IoCTests
     private IEventStore? _eventStore;
     private IExchange _exchange;
     private StateCtorT<TheSchema.Doc> _newDoc;
-    private IDCtorT<TheSchema.ID> _newID;
+    private IDCtorT<TheSchema.DocID> _newID;
 
 
     public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -132,7 +132,7 @@ public class ESDBEventStoreTests : IoCTests
     {
         _eventStore = TestEnv.ResolveRequired<IEventStore>();
         _newDoc = TestEnv.ResolveRequired<StateCtorT<TheSchema.Doc>>();
-        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.ID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.DocID>>();
         _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
         _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
         _aggregate = _aggregateBuilder.Build();
@@ -149,7 +149,7 @@ public class ESDBEventStoreTests : IoCTests
 //            .AddTransient<IAggregate, TheAggregate>()
             .AddSingletonAggregateBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
             .AddTransient(_ => TheSchema.Doc.Rand)
-            .AddTransient(_ => TheSchema.ID.Ctor)
+            .AddTransient(_ => TheSchema.DocID.Ctor)
             .AddSingleton<IAggregateStore, ESDBStore>()
             .AddSingleton<IEventStore, ESDBStore>()
             .AddSingletonExchange()

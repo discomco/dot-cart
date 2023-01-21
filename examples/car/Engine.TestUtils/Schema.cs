@@ -58,4 +58,9 @@ public static class Schema
                 Contract.Schema.EngineStatus.Initialized,
                 OldDetailsCtor(),
                 OldRpmCtor());
+
+    public static readonly ValueObjectCtorT<Contract.Schema.Details>
+        DocDetailsCtor = 
+            () => Contract.Schema.Details.New("John Lennon", "John Lennon of the Beatles");
+
 }

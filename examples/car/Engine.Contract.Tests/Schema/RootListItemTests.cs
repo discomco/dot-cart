@@ -6,7 +6,8 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Schema;
 
-public class RootListItemTests : EntityTestsT<Contract.Schema.EngineID, Contract.Schema.EngineListItem>
+public class RootListItemTests 
+    : ValueObjectTestsT<Contract.Schema.EngineListItem>
 {
     public RootListItemTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -27,14 +28,4 @@ public class RootListItemTests : EntityTestsT<Contract.Schema.EngineID, Contract
             .AddRootListCtors();
     }
 
-    protected override Contract.Schema.EngineListItem CreateEntity(IDCtorT<Contract.Schema.EngineID> idCtor)
-    {
-        return new Contract.Schema.EngineListItem
-        {
-            Id = _idCtor().Id(),
-            Name = "Test Engine",
-            Status = Contract.Schema.EngineStatus.Initialized,
-            Power = 42
-        };
-    }
 }

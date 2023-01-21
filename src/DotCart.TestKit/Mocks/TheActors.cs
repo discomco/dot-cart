@@ -8,7 +8,7 @@ namespace DotCart.TestKit.Mocks;
 public static class TheActors
 {
     [GroupName(TheConstants.SubscriptionGroup)]
-    [IDPrefix(TheConstants.IDPrefix)]
+    [IDPrefix(TheConstants.DocIDPrefix)]
     public interface IProjectorInfo : IProjectorInfoB
     {
     }

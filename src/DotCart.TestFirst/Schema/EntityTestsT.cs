@@ -6,7 +6,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class EntityTestsT<TID, TEntity> : IoCTests
+public abstract class EntityTestsT<TID, TEntity> 
+    : IoCTests
     where TID : IID
     where TEntity : IEntityT<TID>
 {
@@ -52,12 +53,50 @@ public abstract class EntityTestsT<TID, TEntity> : IoCTests
         Assert.NotNull(_idCtor);
         var entity = CreateEntity(_idCtor);
         // AND
+        var bytes = entity.ToBytes();
         var json = entity.ToJson();
         // WHEN
         var deserialized = json.FromJson<TEntity>();
+        var deserializedBtes = bytes.FromBytes<TEntity>();
         // THEN
         Assert.Equivalent(entity, deserialized);
     }
 
-    protected abstract TEntity CreateEntity(IDCtorT<TID> idCtor);
+    [Fact]
+    public void ShouldResolveEntityCtor()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var entityCtor = TestEnv.ResolveRequired<EntityCtorT<TID>>();
+        // THEN
+        Assert.NotNull(entityCtor);
+    }
+
+ 
+    
+
+    [Fact]
+    public void ShouldCreateEntity()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        var newEntity = TestEnv.ResolveRequired<EntityCtorT<TID>>();
+        var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
+        // WHEN
+        var ID = newID();
+        var entity = newEntity(ID);
+        // THEN
+        Assert.NotNull(entity);
+        Assert.IsAssignableFrom<IEntityT<TID>>(entity);
+    }
+
+
+    private TEntity CreateEntity(IDCtorT<TID> idCtor)
+    {
+        Assert.NotNull(TestEnv);
+        var newEntity = TestEnv.ResolveRequired<EntityCtorT<TID>>();
+        var id = idCtor();
+        return (TEntity)newEntity(id);
+    } 
 }

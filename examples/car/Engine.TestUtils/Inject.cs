@@ -22,6 +22,7 @@ public static partial class Inject
     public static IServiceCollection AddTestDocCtors(this IServiceCollection services)
     {
         return services
+            .AddTransient(_ => Schema.DocDetailsCtor)
             .AddTransient(_ => Schema.DocIDCtor)
             .AddTransient(_ => Schema.DocCtor);
     }

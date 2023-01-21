@@ -8,7 +8,6 @@ namespace Engine.Contract.Tests.Schema;
 public class RootListDocTests : ListDocTestsT<
     Contract.Schema.EngineListID,
     Contract.Schema.EngineList,
-    Contract.Schema.EngineID,
     Contract.Schema.EngineListItem>
 {
     public RootListDocTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

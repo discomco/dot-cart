@@ -5,7 +5,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class TypedIDTests<TID> : IoCTests where TID : IID
+public abstract class TypedIDTests<TID> 
+    : IoCTests where TID : IID
 {
     protected NewTypedID<TID> NewTypedId;
 

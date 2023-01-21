@@ -9,13 +9,18 @@ public record CDoc<T>
     public DateTime TimeStamp { get; set; }
     public string _id { get; set; }
     public string _rev { get; set; }
+}
 
-    public static CDoc<TDoc> From<TDoc>(TDoc doc) where TDoc : IState
+public static partial class Extensions
+{
+    public static CDoc<TDoc> AsCDoc<TDoc>(this TDoc doc) where TDoc : IState
     {
         return new CDoc<TDoc>
         {
             _id = doc.Id,
-            _rev = doc.Prev == "" ? null : doc.Prev,
+            _rev = doc.Rev == "" 
+                ? null 
+                : doc.Rev,
             Data = doc,
             TimeStamp = DateTime.UtcNow
         };

@@ -5,7 +5,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class PayloadTestsT<TPayload> : IoCTests
+public abstract class PayloadTestsT<TPayload> 
+    : IoCTests
     where TPayload : IPayload
 {
     private PayloadCtorT<TPayload> _newPayload;

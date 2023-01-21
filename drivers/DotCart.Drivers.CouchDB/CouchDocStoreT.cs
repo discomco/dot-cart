@@ -50,10 +50,10 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
         {
             await OpenDbAsync(cancellationToken: cancellationToken)
                 .ConfigureAwait(false);
-            var cDoc = CDoc<TDoc>.From(doc);
+            var cDoc = doc.AsCDoc();
             var rsp = await _store.SetAsync(cDoc, cancellationToken)
                 .ConfigureAwait(false);
-            rsp.Data.Prev = rsp._rev;
+            rsp.Data.Rev = rsp._rev;
             return rsp.Data;
         }
         catch (Exception e)
@@ -76,7 +76,7 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
                 return default;
             var doc = await GetByIdAsync(id, cancellationToken)
                 .ConfigureAwait(true);
-            var delReq = new DeleteDocumentRequest(id, doc.Prev);
+            var delReq = new DeleteDocumentRequest(id, doc.Rev);
             var resp = await _client.Documents
                 .DeleteAsync(delReq, cancellationToken)
                 .ConfigureAwait(false);
@@ -119,7 +119,7 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
             {
                 var jObj = JObject.Parse(rsp.Content);
                 var doc = jObj["data"].ToObject<TDoc>();
-                doc.Prev = rsp.Rev;
+                doc.Rev = rsp.Rev;
                 return doc;
             }
         }

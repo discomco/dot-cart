@@ -10,7 +10,7 @@ public class TheRedisDocStoreTests
     : RedisDocStoreTestsT<
         TheContext.IRedisDocDbInfo,
         TheSchema.Doc,
-        TheSchema.ID>
+        TheSchema.DocID>
 {
     public TheRedisDocStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
@@ -24,6 +24,6 @@ public class TheRedisDocStoreTests
     {
         services
             .AddTheDocCtors()
-            .AddDotRedis<TheContext.IRedisDocDbInfo, TheSchema.Doc, TheSchema.ID>();
+            .AddDotRedis<TheContext.IRedisDocDbInfo, TheSchema.Doc, TheSchema.DocID>();
     }
 }

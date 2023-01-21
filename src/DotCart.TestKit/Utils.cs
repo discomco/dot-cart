@@ -5,7 +5,7 @@ namespace DotCart.TestKit;
 
 public static class Utils
 {
-    public static IDCtorT<TheSchema.ID>
+    public static IDCtorT<TheSchema.DocID>
         IDCtor =
-            value => TheSchema.ID.New;
+            value => TheSchema.DocID.New;
 }

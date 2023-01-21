@@ -38,7 +38,13 @@ public abstract class ValueObjectTestsT<TValueObject> : IoCTests
         Assert.Equal(valueObject, deserialized);
     }
 
-    protected abstract TValueObject CreateValueObject();
+    private TValueObject CreateValueObject()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        var newValueObject = TestEnv.ResolveRequired<ValueObjectCtorT<TValueObject>>();
+        return newValueObject();
+    }
 
 
     [Fact]

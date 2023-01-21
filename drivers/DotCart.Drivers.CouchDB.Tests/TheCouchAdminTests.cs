@@ -25,6 +25,6 @@ public class TheCouchAdminTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddDotCouch<TheContext.ICouchDocDbInfo, TheSchema.Doc, TheSchema.ID>();
+            .AddDotCouch<TheContext.ICouchDocDbInfo, TheSchema.Doc, TheSchema.DocID>();
     }
 }

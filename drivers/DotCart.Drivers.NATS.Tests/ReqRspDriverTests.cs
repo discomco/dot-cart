@@ -15,7 +15,7 @@ namespace DotCart.Drivers.NATS.Tests;
 public class ReqRspDriverTests : IoCTests
 {
     protected IEncodedConnection _encodedConnection;
-    protected IDCtorT<TheSchema.ID> _newID;
+    protected IDCtorT<TheSchema.DocID> _newID;
     protected IRequesterT<TheContract.Payload> _theRequester;
     protected IResponderT<TheContract.Payload> _theResponder;
 
@@ -70,7 +70,7 @@ public class ReqRspDriverTests : IoCTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.ID>>();
+        _newID = TestEnv.ResolveRequired<IDCtorT<TheSchema.DocID>>();
         // THEN
         Assert.NotNull(_newID);
     }

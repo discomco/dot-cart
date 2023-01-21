@@ -17,7 +17,7 @@ public static class IDExtensions
     {
         if (string.IsNullOrEmpty(prefix)) return DefaultPrefix;
         var match = PrefixRegex.IsMatch(prefix);
-        return !match ? "invalid" : prefix;
+        return !match ? "no_regex_match" : prefix;
     }
 
     public static string CheckValue(this string value)

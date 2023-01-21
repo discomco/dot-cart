@@ -5,7 +5,7 @@ using MyCouch.Responses;
 
 namespace DotCart.Drivers.CouchDB;
 
-public static class Extensions
+public static partial class Extensions
 {
     public static ICouchDocStoreT<TDbInfo, TDoc, TID> AsCouchDocStore<TDbInfo, TDoc, TID>(this IDocStoreB dbStore)
         where TID : IID

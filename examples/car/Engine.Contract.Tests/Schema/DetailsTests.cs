@@ -1,5 +1,6 @@
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
+using Engine.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -22,11 +23,7 @@ public class DetailsTests : ValueObjectTestsT<Contract.Schema.Details>
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddRootDocCtors();
+            .AddTestDocCtors();
     }
 
-    protected override Contract.Schema.Details CreateValueObject()
-    {
-        return Contract.Schema.Details.New("John Lennon", "John Lennon of the Beatles");
-    }
 }

@@ -114,7 +114,7 @@ public static class Schema
         // [JsonIgnore(Condition = JsonIgnoreCondition.WhenWritingNull)]
         // public string Id { get; set; }
 
-        public string Prev { get; set; } = "";
+        public string Rev { get; set; } = "";
 
         public static Engine New(string id, EngineStatus status, Details details, Rpm rpm)
         {
@@ -128,13 +128,13 @@ public static class Schema
     }
 
 
-    public record EngineListItem : IValueObject, IEntityT<EngineID>, IState
+    public record EngineListItem : IValueObject, IState
     {
         public string Name { get; set; }
         public EngineStatus Status { get; set; }
         public int Power { get; set; }
         public string Id { get; set; }
-        public string Prev { get; set; }
+        public string Rev { get; set; }
 
         public static EngineListItem New(string aggId, string name, EngineStatus status, int power)
         {
@@ -164,7 +164,7 @@ public static class Schema
         public ImmutableDictionary<string, EngineListItem> Items { get; set; } = Items;
 
         public string Id { get; } = Id;
-        public string Prev { get; set; }
+        public string Rev { get; set; }
 
         public static EngineList New(string id)
         {
