@@ -9,7 +9,11 @@ public interface IFeedback : IDto
     IFeedback? Previous { get; }
     string Step { get; }
     void SetError(Error error);
-    void SetPayload<TState>(TState state) where TState : IState;
+    void SetPayload<TPayload>(TPayload state) 
+        where TPayload : IPayload;
+
+    TPayload GetPayload<TPayload>() 
+        where TPayload : IPayload;
     void AddWarning(string warning);
     void AddInfo(string info);
 }
@@ -17,7 +21,7 @@ public interface IFeedback : IDto
 public record Feedback(string AggId, IFeedback Previous = null, string Step = "") : IFeedback
 {
     public static Feedback Empty => New("");
-    public IState Payload { get; private set; }
+    public IPayload Payload { get; private set; }
     public ErrorState ErrState { get; } = new();
     public IEnumerable<string> Warnings { get; private set; } = Array.Empty<string>();
     public IEnumerable<string> Infos { get; private set; } = Array.Empty<string>();
@@ -31,9 +35,16 @@ public record Feedback(string AggId, IFeedback Previous = null, string Step = ""
         ErrState.Errors.Add(error.Code.ToString(), error);
     }
 
-    public void SetPayload<TState>(TState state) where TState : IState
+    public void SetPayload<TPayload>(TPayload state) 
+        where TPayload : IPayload
     {
         Payload = state;
+    }
+
+    public TPayload GetPayload<TPayload>() 
+        where TPayload : IPayload
+    {
+        return (TPayload)Payload;
     }
 
     public IFeedback? Previous { get; } = Previous;

@@ -7,7 +7,7 @@ namespace DotCart.Drivers.CouchDB;
 
 public static partial class Extensions
 {
-    public static ICouchDocStoreT<TDbInfo, TDoc, TID> AsCouchDocStore<TDbInfo, TDoc, TID>(this IDocStoreB dbStore)
+    public static ICouchDocStoreT<TDbInfo, TDoc, TID> AsCouchDocStore<TDbInfo, TDoc, TID>(this IStoreB dbStore)
         where TID : IID
         where TDoc : IState
         where TDbInfo : ICouchDbInfoB

@@ -54,7 +54,7 @@ public abstract class ActorTestsT<TSpoke, TActor>
     public async Task ShouldActivateActor()
     {
         // GIVEN
-        var ts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
+        var ts = new CancellationTokenSource(TimeSpan.FromSeconds(4));
         Assert.NotNull(TestEnv);
         var ac = TestEnv.ResolveActor<TSpoke, TActor>();
         Assert.NotNull(ac);

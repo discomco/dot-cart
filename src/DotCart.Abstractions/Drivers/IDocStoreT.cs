@@ -2,12 +2,12 @@
 
 namespace DotCart.Abstractions.Drivers;
 
-public interface IDocStoreB : IClose, IDisposable, IAsyncDisposable, ICloseAsync
+public interface IStoreB : IClose, IDisposable, IAsyncDisposable, ICloseAsync
 {
 }
 
 public interface IDocStoreT<TDoc>
-    : IDocStoreB
+    : IStoreB
     where TDoc : IState
 {
     Task<TDoc> SetAsync(string id, TDoc doc, CancellationToken cancellationToken = default);
