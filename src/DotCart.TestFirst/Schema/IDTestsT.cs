@@ -1,5 +1,7 @@
+using System.Threading.Tasks;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
