@@ -16,31 +16,31 @@ public static class TheSchema
             .AddTransient(_ => Doc.Rand);
     }
 
-    
-    [IDPrefix(TheConstants.EntityIDPrefix)]
-    public record EntityID: IDB
-    {
-        [JsonConstructor]
-        public EntityID(string value = "") 
-            : base(IDPrefixAtt.Get<EntityID>(), value)
-        {
-        }
 
+    [IDPrefix(TheConstants.EntityIDPrefix)]
+    public record EntityID : IDB
+    {
         public static readonly IDCtorT<EntityID>
             Ctor =
                 _ => new EntityID("B1750D90-1E6B-415B-B631-CD8301BF48BD");
+
+        [JsonConstructor]
+        public EntityID(string value = "")
+            : base(IDPrefixAtt.Get<EntityID>(), value)
+        {
+        }
     }
 
 
-    public record Entity(string Id, string Name) 
+    public record Entity(string Id, string Name)
         : IEntityT<EntityID>
     {
         // public string Id { get; } = Id;
         //
         // public string Name { get; } = Name;
 
-        public static readonly EntityCtorT<EntityID> 
-            Rand = 
+        public static readonly EntityCtorT<EntityID>
+            Rand =
                 _ => new Entity(EntityID.Ctor().Id(), "Some Random Name");
     }
 

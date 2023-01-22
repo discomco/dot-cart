@@ -1,7 +1,9 @@
+using System.Threading.Tasks;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
@@ -15,7 +17,8 @@ public abstract class EvtTestsT<TID, TPayload, TMeta> : IoCTests
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
-    public EvtTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected EvtTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

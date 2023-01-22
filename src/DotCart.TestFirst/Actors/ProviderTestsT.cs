@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -10,9 +11,10 @@ public abstract class ProviderTestsT<TProvider, TQuery>
     where TProvider : IProviderT<TQuery>
     where TQuery : IQueryB
 {
-    protected ProviderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) 
+    protected ProviderTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
-    {}
+    {
+    }
 
     [Fact]
     public void ShouldResolveProvider()
@@ -25,6 +27,4 @@ public abstract class ProviderTestsT<TProvider, TQuery>
         Assert.NotNull(provider);
         Assert.IsType<TProvider>(provider);
     }
-    
-    
 }

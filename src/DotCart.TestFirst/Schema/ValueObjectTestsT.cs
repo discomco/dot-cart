@@ -2,6 +2,7 @@ using System.Reflection;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
@@ -11,7 +12,8 @@ public abstract class ValueObjectTestsT<TValueObject> : IoCTests
 {
     private ValueObjectCtorT<TValueObject> _ctor;
 
-    protected ValueObjectTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ValueObjectTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

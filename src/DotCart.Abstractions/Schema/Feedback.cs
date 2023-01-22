@@ -9,11 +9,13 @@ public interface IFeedback : IDto
     IFeedback? Previous { get; }
     string Step { get; }
     void SetError(Error error);
-    void SetPayload<TPayload>(TPayload state) 
+
+    void SetPayload<TPayload>(TPayload state)
         where TPayload : IPayload;
 
-    TPayload GetPayload<TPayload>() 
+    TPayload GetPayload<TPayload>()
         where TPayload : IPayload;
+
     void AddWarning(string warning);
     void AddInfo(string info);
 }
@@ -35,13 +37,13 @@ public record Feedback(string AggId, IFeedback Previous = null, string Step = ""
         ErrState.Errors.Add(error.Code.ToString(), error);
     }
 
-    public void SetPayload<TPayload>(TPayload state) 
+    public void SetPayload<TPayload>(TPayload state)
         where TPayload : IPayload
     {
         Payload = state;
     }
 
-    public TPayload GetPayload<TPayload>() 
+    public TPayload GetPayload<TPayload>()
         where TPayload : IPayload
     {
         return (TPayload)Payload;

@@ -1,3 +1,6 @@
+using System;
+using System.Threading;
+using System.Threading.Tasks;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
@@ -5,6 +8,7 @@ using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -27,7 +31,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
     protected StateCtorT<TState> _newState;
 
 
-    public CmdHandlerTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+    protected CmdHandlerTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
         TestEnv.Services

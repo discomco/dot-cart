@@ -1,12 +1,8 @@
 namespace DotCart.Core.Tests;
 
-
-
 public record TestRecord(string Id, string Name, string Description)
 {
 }
-
-
 
 public class JsonTests
 {
@@ -30,7 +26,6 @@ public class JsonTests
         // WHEN
         var des = json.FromJson<TestRecord>();
         // THEN
-        Assert.Equivalent(rec,des);
+        Assert.Equivalent(rec, des);
     }
-    
 }

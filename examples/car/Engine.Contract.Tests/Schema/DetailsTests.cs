@@ -25,5 +25,4 @@ public class DetailsTests : ValueObjectTestsT<Contract.Schema.Details>
         services
             .AddTestDocCtors();
     }
-
 }

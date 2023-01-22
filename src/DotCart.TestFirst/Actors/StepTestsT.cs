@@ -2,6 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -12,7 +13,8 @@ public abstract class StepTestsT<TPipeInfo, TStep, TPayload>
     where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {
-    protected StepTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected StepTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

@@ -5,7 +5,7 @@ using Serilog;
 
 namespace DotCart.Context.Actors;
 
-public class ProviderT<TDriver, TQuery> 
+public class ProviderT<TDriver, TQuery>
     : IProviderT<TQuery>
     where TQuery : IQueryB
     where TDriver : IQueryStoreT<TQuery>
@@ -30,6 +30,7 @@ public class ProviderT<TDriver, TQuery>
             Log.Error(AppErrors.Error(e.InnerAndOuter()));
             feedback.SetError(e.AsError());
         }
+
         return feedback;
     }
 }

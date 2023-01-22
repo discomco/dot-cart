@@ -3,6 +3,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -16,7 +17,8 @@ public abstract class RetroListenerTestsT<TSpoke, TActor, TFactPayload, TMeta, T
     where TPipeInfo : IPipeInfoB
     where TID : IID
 {
-    protected RetroListenerTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected RetroListenerTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

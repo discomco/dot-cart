@@ -2,6 +2,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
@@ -11,7 +12,8 @@ public abstract class BusDriverTestsB<TPayload, TMeta>
     where TMeta : IMetaB
     where TPayload : IPayload
 {
-    protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected BusDriverTestsB(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

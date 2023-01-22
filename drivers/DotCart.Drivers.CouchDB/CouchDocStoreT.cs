@@ -20,6 +20,13 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
     private readonly IMyCouchServerClient _server;
     private readonly IMyCouchStore _store;
 
+    public CouchDocStoreT(IMyCouchFactory myCouchFactory) : base(myCouchFactory)
+    {
+        _myCouchFactory = myCouchFactory;
+        _client = myCouchFactory.Client(_dbName);
+        _server = myCouchFactory.Server();
+        _store = myCouchFactory.Store(_dbName);
+    }
 
 
     public void Dispose()
@@ -67,9 +74,6 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
     {
         try
         {
-            
-            
-            
             var exists = await Exists(id, cancellationToken)
                 .ConfigureAwait(false);
             if (!exists)
@@ -146,13 +150,5 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
             Log.Error(AppErrors.Error(e.InnerAndOuter()));
             throw;
         }
-    }
-
-    public CouchDocStoreT(IMyCouchFactory myCouchFactory) : base(myCouchFactory)
-    {
-        _myCouchFactory = myCouchFactory;
-        _client = myCouchFactory.Client(_dbName);
-        _server = myCouchFactory.Server();
-        _store = myCouchFactory.Store(_dbName);
     }
 }

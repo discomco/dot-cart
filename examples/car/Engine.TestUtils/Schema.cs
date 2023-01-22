@@ -20,7 +20,7 @@ public static class Schema
             _ => MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), DocIDCtor().Id());
 
     public static readonly Contract.Schema.EngineListItem
-        UnknownEngineListItem = 
+        UnknownEngineListItem =
             Contract.Schema.EngineListItem.New(
                 DocIDCtor().Id(),
                 "A Fine Engine",

@@ -1,11 +1,12 @@
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class PayloadTestsT<TPayload> 
+public abstract class PayloadTestsT<TPayload>
     : IoCTests
     where TPayload : IPayload
 {
@@ -13,7 +14,8 @@ public abstract class PayloadTestsT<TPayload>
     private TPayload _payload;
 
 
-    protected PayloadTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected PayloadTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

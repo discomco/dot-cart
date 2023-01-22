@@ -5,6 +5,7 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Behavior;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
@@ -20,7 +21,8 @@ public abstract class ToEventStoreTestsT<TPayload, TMeta, TReadModelStore>
     protected IAggregateStore AggregateStore;
 
 
-    protected ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ToEventStoreTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

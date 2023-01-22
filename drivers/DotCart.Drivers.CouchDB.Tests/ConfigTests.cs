@@ -1,5 +1,4 @@
 using DotCart.Core;
-using DotCart.TestKit.Mocks;
 
 namespace DotCart.Drivers.CouchDB.Tests;
 

@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using DotCart.Core;
 
 namespace DotCart.Abstractions.Schema;
@@ -11,9 +10,11 @@ public interface IID
 
 public record IDB : IID
 {
-    public IDB() {}
-    
-    
+    public IDB()
+    {
+    }
+
+
     protected IDB(string prefix, string value = "")
     {
         if (value == string.Empty)
@@ -21,7 +22,7 @@ public record IDB : IID
         Prefix = prefix.CheckPrefix();
         Value = value.CheckValue();
     }
-    
+
     public string Prefix { get; set; }
     public string Value { get; set; }
 

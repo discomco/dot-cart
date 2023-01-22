@@ -8,7 +8,7 @@ using Xunit.Abstractions;
 namespace DotCart.TestFirst.Tests.Schema;
 
 [IDPrefix(TheConstants.DocIDPrefix)]
-public class TheDocIDTests 
+public class TheDocIDTests
     : IDTestsT<TheSchema.DocID>
 {
     public TheDocIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
@@ -17,7 +17,6 @@ public class TheDocIDTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()

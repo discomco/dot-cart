@@ -2,6 +2,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
@@ -15,7 +16,7 @@ public abstract class FactTestsT<TID, TPayload, TMeta> : IoCTests
     private MetaCtorT<TMeta> _newMeta;
     protected PayloadCtorT<TPayload> _newPayload;
 
-    public FactTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected FactTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
 

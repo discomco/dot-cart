@@ -30,7 +30,7 @@ public static class JsonUtils
         var jsonUtfReader = new Utf8JsonReader(data);
         return JsonSerializer.Deserialize<T>(ref jsonUtfReader);
     }
-    
+
     public static byte[] ToBytes<T>(this T obj)
     {
         return obj == null

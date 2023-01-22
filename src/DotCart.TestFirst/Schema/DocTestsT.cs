@@ -1,6 +1,7 @@
 using System.Text.Json;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
@@ -14,7 +15,8 @@ public abstract class DocTestsT<TID, TState> : IoCTests
     protected IDCtorT<TID> NewId;
     protected StateCtorT<TState> NewState;
 
-    protected DocTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected DocTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

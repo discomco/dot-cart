@@ -2,6 +2,7 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;
@@ -12,7 +13,8 @@ public abstract class EmitterDriverTestsT<TEmitterDriver, TPayload, TMeta>
     where TMeta : IMetaB
     where TEmitterDriver : IEmitterDriverB
 {
-    protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected EmitterDriverTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

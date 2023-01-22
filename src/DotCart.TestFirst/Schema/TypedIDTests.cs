@@ -1,16 +1,15 @@
+using System;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class TypedIDTests<TID> 
+public abstract class TypedIDTests<TID>
     : IoCTests where TID : IID
 {
-    protected NewTypedID<TID> NewTypedId;
-
-
     protected TypedIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
     {
     }
@@ -20,6 +19,7 @@ public abstract class TypedIDTests<TID>
     {
         // GIVEN
         Assert.NotNull(TestEnv);
+        var NewTypedId = TestEnv.ResolveRequired<NewTypedID<TID>>();
         // WHEN
         var ID = NewTypedId();
         // THEN 
@@ -31,6 +31,8 @@ public abstract class TypedIDTests<TID>
     public void ShouldCreateID()
     {
         // GIVEN
+        Assert.NotNull(TestEnv);
+        var NewTypedId = TestEnv.ResolveRequired<NewTypedID<TID>>();
         Assert.NotNull(NewTypedId);
         // WHEN
         var ID = NewTypedId();
@@ -42,7 +44,10 @@ public abstract class TypedIDTests<TID>
     public void ShouldBeAbleToCreateAnIDFromNew()
     {
         // GIVEN
+        Assert.NotNull(TestEnv);
+        var NewTypedId = TestEnv.ResolveRequired<NewTypedID<TID>>();
         Assert.NotNull(NewTypedId);
+
         // WHEN
         var ID = NewTypedId();
         // THEN
@@ -70,10 +75,6 @@ public abstract class TypedIDTests<TID>
         // GIVEN
     }
 
-    protected override void Initialize()
-    {
-        NewTypedId = TestEnv.ResolveRequired<NewTypedID<TID>>();
-    }
 
     private record PrefixLessTypedId : TypedID<PrefixLessTypedId>
     {

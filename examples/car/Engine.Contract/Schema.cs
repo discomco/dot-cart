@@ -123,7 +123,7 @@ public static class Schema
 
         public static Engine New()
         {
-            return new(string.Empty, EngineStatus.Unknown, Details.New("New Engine"), Rpm.New(0));
+            return new Engine(string.Empty, EngineStatus.Unknown, Details.New("New Engine"), Rpm.New(0));
         }
     }
 

@@ -1,11 +1,13 @@
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Contract;
 
-public abstract class HopeTestsT<TID, TPayload> : IoCTests
+public abstract class HopeTestsT<TID, TPayload>
+    : IoCTests
     where TID : IID
     where TPayload : IPayload
 
@@ -14,7 +16,8 @@ public abstract class HopeTestsT<TID, TPayload> : IoCTests
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
-    public HopeTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected HopeTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

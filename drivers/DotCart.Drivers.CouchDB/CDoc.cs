@@ -18,8 +18,8 @@ public static partial class Extensions
         return new CDoc<TDoc>
         {
             _id = doc.Id,
-            _rev = doc.Rev == "" 
-                ? null 
+            _rev = doc.Rev == ""
+                ? null
                 : doc.Rev,
             Data = doc,
             TimeStamp = DateTime.UtcNow

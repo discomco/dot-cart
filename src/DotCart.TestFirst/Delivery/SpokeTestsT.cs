@@ -1,7 +1,13 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Delivery;
@@ -15,7 +21,8 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
     protected string _name;
     protected TSpoke _spoke;
 
-    public SpokeTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected SpokeTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

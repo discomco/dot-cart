@@ -1,12 +1,15 @@
+using System.Threading.Tasks;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;
 
-public abstract class ResponderTestsT<TSpoke, TActor, TPayload, TMeta> : ActorTestsT<TSpoke, TActor>
+public abstract class ResponderTestsT<TSpoke, TActor, TPayload, TMeta>
+    : ActorTestsT<TSpoke, TActor>
     where TPayload : IPayload
     where TMeta : IMetaB
     where TActor : IActorT<TSpoke>
@@ -14,7 +17,8 @@ public abstract class ResponderTestsT<TSpoke, TActor, TPayload, TMeta> : ActorTe
 {
     private IResponderT<TPayload> _responder;
 
-    public ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ResponderTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

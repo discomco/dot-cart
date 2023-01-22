@@ -17,7 +17,6 @@ public class TheEntityIDTests
 
     protected override void Initialize()
     {
-        
     }
 
     protected override void SetEnVars()

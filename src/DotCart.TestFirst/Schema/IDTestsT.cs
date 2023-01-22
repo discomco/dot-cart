@@ -6,12 +6,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class IDTestsT<TID> 
-    : IoCTests 
+public abstract class IDTestsT<TID>
+    : IoCTests
     where TID : IID
 {
-
-    public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) 
+    public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
     {
     }
@@ -37,7 +36,7 @@ public abstract class IDTestsT<TID>
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var ID = newID();
         Assert.IsAssignableFrom<TID>(ID);
-        
+
         var expected = IDPrefixAtt.Get(this);
         // WHEN
         var actual = IDPrefixAtt.Get<TID>();
@@ -88,8 +87,4 @@ public abstract class IDTestsT<TID>
         Assert.NotNull(newerID);
         Assert.Equal(newID.Id(), newerID.Id());
     }
-    
-  
-
-
 }

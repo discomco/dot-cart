@@ -1,19 +1,22 @@
 using System.Reflection;
+using System.Threading.Tasks;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
+using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class EntityTestsT<TID, TEntity> 
+public abstract class EntityTestsT<TID, TEntity>
     : IoCTests
     where TID : IID
     where TEntity : IEntityT<TID>
 {
     protected IDCtorT<TID> _idCtor;
 
-    protected EntityTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected EntityTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 
@@ -73,8 +76,6 @@ public abstract class EntityTestsT<TID, TEntity>
         Assert.NotNull(entityCtor);
     }
 
- 
-    
 
     [Fact]
     public void ShouldCreateEntity()
@@ -98,5 +99,5 @@ public abstract class EntityTestsT<TID, TEntity>
         var newEntity = TestEnv.ResolveRequired<EntityCtorT<TID>>();
         var id = idCtor();
         return (TEntity)newEntity(id);
-    } 
+    }
 }
