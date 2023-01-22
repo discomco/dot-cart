@@ -13,6 +13,10 @@ public class RootListIDTests : IDTestsT<Contract.Schema.EngineListID>
     {
     }
 
+    protected override void Initialize()
+    {
+    }
+
     protected override void SetEnVars()
     {
     }

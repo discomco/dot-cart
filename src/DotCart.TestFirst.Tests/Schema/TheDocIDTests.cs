@@ -15,6 +15,11 @@ public class TheDocIDTests
     {
     }
 
+    protected override void Initialize()
+    {
+        
+    }
+
     protected override void SetEnVars()
     {
     }

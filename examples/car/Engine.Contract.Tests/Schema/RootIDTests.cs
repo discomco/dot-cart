@@ -15,7 +15,6 @@ public class RootIDTests : IDTestsT<Contract.Schema.EngineID>
 
     protected override void Initialize()
     {
-        _newID = TestEnv.ResolveRequired<IDCtorT<Contract.Schema.EngineID>>();
     }
 
     protected override void SetEnVars()

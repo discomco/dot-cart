@@ -10,10 +10,9 @@ public abstract class IDTestsT<TID>
     : IoCTests 
     where TID : IID
 {
-    protected IDCtorT<TID> _newID;
 
-
-    public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public IDTestsT(ITestOutputHelper output, IoCTestContainer testEnv) 
+        : base(output, testEnv)
     {
     }
 
@@ -21,7 +20,7 @@ public abstract class IDTestsT<TID>
     public Task ShouldTestHaveIDPrefix()
     {
         // GIVEN
-        Assert.NotNull(this);
+        Assert.IsAssignableFrom<IDTestsT<TID>>(this);
         // WHEN
         var idPrefix = IDPrefixAtt.Get(this);
         // THEN
@@ -34,7 +33,11 @@ public abstract class IDTestsT<TID>
     public Task ShouldHaveIDPrefix()
     {
         // GIVEN
-        Assert.NotNull(this);
+        Assert.NotNull(TestEnv);
+        var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
+        var ID = newID();
+        Assert.IsAssignableFrom<TID>(ID);
+        
         var expected = IDPrefixAtt.Get(this);
         // WHEN
         var actual = IDPrefixAtt.Get<TID>();
@@ -59,7 +62,8 @@ public abstract class IDTestsT<TID>
     public void ShouldCreateID()
     {
         // GIVEN
-        Assert.NotNull(_newID);
+        Assert.NotNull(TestEnv);
+        var _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         // WHEN
         var newID = _newID();
         // THEN
@@ -76,7 +80,8 @@ public abstract class IDTestsT<TID>
     public void ShouldCreateFromIdString()
     {
         // GIVEN
-        Assert.NotNull(_newID);
+        Assert.NotNull(TestEnv);
+        var _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         // WHEN
         var newID = _newID();
         var newerID = newID.Id().IDFromIdString();
@@ -84,10 +89,7 @@ public abstract class IDTestsT<TID>
         Assert.Equal(newID.Id(), newerID.Id());
     }
     
-    
+  
 
-    protected override void Initialize()
-    {
-        _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
-    }
+
 }
