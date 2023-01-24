@@ -9,9 +9,11 @@ DotEnv.FromEmbedded();
 var builder = WebApplication
     .CreateBuilder(args);
 
-builder.Host.ConfigureLogging(logging => logging
-        .ClearProviders()
-        .AddSerilog())
+builder.Host.ConfigureLogging(
+        logging => logging
+            .ClearProviders()
+            .AddSerilog()
+    )
     .UseSerilog(Inject.CreateSerilogConsoleLogger());
 
 
@@ -21,7 +23,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(config
-    => config.CustomSchemaIds(x => x.FullName.Replace("+", "_")));
+    => config.CustomSchemaIds(x => x.FullName?.Replace("+", "_")));
 
 builder.Services.AddConsoleLogger();
 

@@ -1,3 +1,4 @@
+using DockTrace.TestKit;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
 using DotCart.TestFirst.Actors;
@@ -14,7 +15,7 @@ public class ExchangeTests
     private IConsumer1 _consumer1;
     private IConsumer2 _consumer2;
     private IProducer _producer;
-    private IProjector _projector;
+    private IProjector? _projector;
     private TheSpoke _spoke;
     private ISpokeBuilder<TheSpoke> _spokeBuilder;
     private IHostedService _spokeHost;

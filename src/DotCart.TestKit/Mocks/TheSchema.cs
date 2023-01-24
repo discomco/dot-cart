@@ -50,7 +50,7 @@ public static class TheSchema
     {
         public static StateCtorT<Doc> Rand => RandomTheDoc;
 
-        public string Rev { get; set; }
+        public string? Rev { get; set; }
 
 
         private static Doc RandomTheDoc()
@@ -84,7 +84,7 @@ public static class TheSchema
         {
         }
 
-        public static DocID New => new("FD1A9876-158F-4EF5-A5B5-468465404551");
+        public new static DocID New => new("FD1A9876-158F-4EF5-A5B5-468465404551");
     }
 
     [Topic(TheConstants.MsgTopic)]

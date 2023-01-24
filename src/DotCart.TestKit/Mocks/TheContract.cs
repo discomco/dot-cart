@@ -14,7 +14,7 @@ public static class TheContract
 
     private static readonly Msg2Fact<Payload, Meta, byte[]>
         _bytes2Fact =
-            msg => msg.FromBytes<FactT<Payload, Meta>>();
+            msg => msg.FromBytes<FactT<Payload, Meta>>()!;
 
     private static readonly Fact2Msg<byte[], Payload, Meta>
         _fact2bytes =
@@ -33,7 +33,7 @@ public static class TheContract
     public record Hope(string AggId, Payload Payload) : HopeT<Payload>(AggId, Payload),
         IHopeT<Payload>
     {
-        public static Hope New(string aggId, Payload payload)
+        public new static Hope New(string aggId, Payload payload)
         {
             return new Hope(aggId, payload);
         }
@@ -47,11 +47,12 @@ public static class TheContract
     public record Payload : IPayload
     {
         [JsonConstructor]
-        public Payload(string material, decimal weight, DateTime arrival)
+        public Payload(string material, decimal weight, DateTime arrival, string id)
         {
             Material = material;
             Weight = weight;
             Arrival = arrival;
+            Id = id;
         }
 
         public string Material { get; }
@@ -59,14 +60,16 @@ public static class TheContract
         public DateTime Arrival { get; }
         public string Id { get; }
 
-        public static Payload New(string material, decimal weight, DateTime arrival)
+        public static Payload New(string id, string material, decimal weight, DateTime arrival)
         {
-            return new Payload(material, weight, arrival);
+            return new Payload(material, weight, arrival, id);
         }
 
         public static Payload Random()
         {
-            return New(TheSchema.Materials.Random(),
+            return New(
+                GuidUtils.LowerCaseGuid,
+                TheSchema.Materials.Random(),
                 System.Random.Shared.Next(1, 100),
                 DateTime.UtcNow);
         }

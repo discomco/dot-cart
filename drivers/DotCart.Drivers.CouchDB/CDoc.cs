@@ -8,7 +8,7 @@ public record CDoc<T>
     public T Data { get; set; }
     public DateTime TimeStamp { get; set; }
     public string _id { get; set; }
-    public string _rev { get; set; }
+    public string? _rev { get; set; }
 }
 
 public static partial class Extensions

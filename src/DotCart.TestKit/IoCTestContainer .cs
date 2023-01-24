@@ -20,17 +20,18 @@ public class IoCTestContainer : IDisposable
     }
 
 
-    public T Resolve<T>()
+    public T? Resolve<T>()
     {
         return Provider.GetService<T>();
     }
 
-    public T ResolveRequired<T>()
+    public T ResolveRequired<T>() 
+        where T : notnull
     {
         return Provider.GetRequiredService<T>();
     }
 
-    public T ResolveHosted<T>()
+    public T? ResolveHosted<T>()
     {
         var candidates = Provider.GetServices<IHostedService>();
         foreach (var candidate in candidates)

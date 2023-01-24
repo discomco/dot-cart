@@ -1,3 +1,4 @@
+using DockTrace.TestKit;
 using DotCart.Drivers.Serilog;
 using DotCart.TestKit.Interfaces;
 using Microsoft.Extensions.DependencyInjection;

@@ -2,6 +2,7 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.Core;
+using Serilog;
 
 namespace DotCart.TestKit.Mocks;
 
@@ -26,8 +27,7 @@ public static class TheActors
             CancellationToken cancellationToken = default)
         {
             var feedback = Feedback.New(msg.AggId, previousFeedback, Name);
-
-
+            Log.Information($"{AppVerbs.Executing} step [{msg}]");
             return feedback;
         }
     }

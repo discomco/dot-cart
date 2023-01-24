@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using DockTrace.TestKit;
 using DotCart.Abstractions.Actors;
 using DotCart.Context.Spokes;
 using DotCart.Core;
@@ -16,10 +17,10 @@ public abstract class SpokeTestsT<TSpoke> : IoCTests
     where TSpoke : ISpokeT<TSpoke>
 {
     protected IEnumerable<IActorT<TSpoke>> _actors;
-    protected ISpokeBuilder<TSpoke> _builder;
+    protected ISpokeBuilder<TSpoke?> _builder;
     protected Exception _caught;
     protected string _name;
-    protected TSpoke _spoke;
+    protected TSpoke? _spoke;
 
     protected SpokeTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)

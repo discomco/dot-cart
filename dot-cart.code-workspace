@@ -17,6 +17,12 @@
 		},
 		{
 			"path": "../../rgfaber/discomco-site"
+		},
+		{
+			"path": "../../../../farmtrace/ftdp-docktrace"
+		},
+		{
+			"path": "../../rgfaber/trxer"
 		}
 	],
 	"settings": {}
