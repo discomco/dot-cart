@@ -19,8 +19,7 @@ public static class Inject
                     http.DefaultRequestHeaders.Add("X-DotCart", "value");
                     return http;
                 };
-            }))
-            .StartWithHost();
+            }));
         return services;
     }
 }

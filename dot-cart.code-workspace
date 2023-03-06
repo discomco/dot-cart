@@ -23,6 +23,9 @@
 		},
 		{
 			"path": "../../rgfaber/trxer"
+		},
+		{
+			"path": "../../rgfaber/Scrutor"
 		}
 	],
 	"settings": {}
