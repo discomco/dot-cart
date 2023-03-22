@@ -101,7 +101,7 @@ public static class StreamUtils
             _file = file;
             _length = file.Length;
             _bytesRead = 0;
-//            DoProgressChanged(_bytesRead, _length);
+            //            DoProgressChanged(_bytesRead, _length);
         }
 
         public override bool CanRead => true;

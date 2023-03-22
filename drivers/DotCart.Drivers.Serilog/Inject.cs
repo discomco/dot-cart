@@ -44,7 +44,7 @@ public static class Inject
         }
 
         Log.Logger = new LoggerConfiguration()
-//            .MinimumLevel.Verbose()
+            //            .MinimumLevel.Verbose()
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
@@ -58,14 +58,14 @@ public static class Inject
                 theme: AnsiConsoleTheme.Code
             )
             .WriteTo.FastConsole(
-                new FastConsoleSinkOptions {UseJson = true},
+                new FastConsoleSinkOptions { UseJson = true },
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
                 new MessageTemplateTextFormatter("{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
                 )
             .CreateLogger();
         return Log.Logger;
     }
-    
+
     public static ILogger CreateSerilogFastConsoleLogger(bool enableSelfLog = false)
     {
         var level = DotEnv.Get(EnVars.LOG_LEVEL_MIN);
@@ -76,14 +76,14 @@ public static class Inject
         }
 
         Log.Logger = new LoggerConfiguration()
-//            .MinimumLevel.Verbose()
+            //            .MinimumLevel.Verbose()
             .MinimumLevel.Debug()
             .MinimumLevel.Override("Microsoft", LogEventLevel.Debug)
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .WriteTo.FastConsole(
-                new FastConsoleSinkOptions {UseJson = true},
+                new FastConsoleSinkOptions { UseJson = true },
                 outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
                 new MessageTemplateTextFormatter("{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
             )
@@ -91,8 +91,8 @@ public static class Inject
         return Log.Logger;
     }
 
-    
-    
+
+
 
     /// <summary>
     ///     Adds Serilog for Elasticsearch.
@@ -121,6 +121,6 @@ public static class Inject
             .CreateLogger();
         return Log.Logger;
     }
-    
-    
+
+
 }

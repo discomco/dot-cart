@@ -9,12 +9,12 @@ DotEnv.FromEmbedded();
 var builder = WebApplication
     .CreateBuilder(args);
 
-builder.Host.ConfigureLogging(
-        logging => logging
-            .ClearProviders()
-            .AddSerilog()
-    )
+builder.Logging
+    .ClearProviders()
+    .AddSerilog();
+builder.Host
     .UseSerilog(Inject.CreateSerilogConsoleLogger());
+    
 
 
 // Add services to the container.

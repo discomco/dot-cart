@@ -35,7 +35,7 @@ public class Projector<TInfo>
     : ActorB, IProjector, IProducer
     where TInfo : IProjectorInfoB
 {
-//    private readonly IProjectorDriverT<TInfo> _projectorDriver;
+    //    private readonly IProjectorDriverT<TInfo> _projectorDriver;
     public Projector(
         IExchange exchange,
         IProjectorDriverT<TInfo> projectorDriver)

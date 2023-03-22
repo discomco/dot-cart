@@ -43,7 +43,7 @@ public static class Inject
         services.TryAddSingleton(ServerInfo.LocalFromConfig);
         services.TryAddSingleton<IMyCouchFactory, MyCouchClientFactory>();
         services.TryAddSingleton<ICouchAdminBuilderT<TDbInfo>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
-//        services.TryAddSingleton<ICouchStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
+        //        services.TryAddSingleton<ICouchStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
         services.TryAddSingleton<IStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
         return services;
     }

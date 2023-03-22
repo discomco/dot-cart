@@ -96,6 +96,6 @@ internal class Exchange : ActiveComponent, IExchange
     protected override Task StopActingAsync(CancellationToken cancellationToken)
     {
         return CompletedTask;
-//        return Run(() => { Log.Information($"{AppVerbs.Stopping} [{GetType().Name}]"); }, cancellationToken);
+        //        return Run(() => { Log.Information($"{AppVerbs.Stopping} [{GetType().Name}]"); }, cancellationToken);
     }
 }

@@ -25,7 +25,7 @@ public class IoCTestContainer : IDisposable
         return Provider.GetService<T>();
     }
 
-    public T ResolveRequired<T>() 
+    public T ResolveRequired<T>()
         where T : notnull
     {
         return Provider.GetRequiredService<T>();

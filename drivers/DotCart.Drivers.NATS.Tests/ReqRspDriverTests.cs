@@ -35,7 +35,8 @@ public class ReqRspDriverTests : IoCTests
     //     Assert.NotNull(_responderActor);
     // }
 
-//    [Fact]
+    //    [Fact]
+    [Fact]
     public void ShouldResolveOptionsAction()
     {
         Assert.NotNull(TestEnv);
@@ -43,7 +44,8 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(opt);
     }
 
-//    [Fact]
+    //    [Fact]
+    [Fact]
     public void ShouldResolveConnectionFactory()
     {
         // GIVEN
@@ -54,7 +56,8 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(_encodedConnection);
     }
 
-//    [Fact]
+    //    [Fact]
+    [Fact]
     public void ShouldResolveTheRequester()
     {
         // GIVEN
@@ -65,6 +68,7 @@ public class ReqRspDriverTests : IoCTests
         Assert.NotNull(_theRequester);
     }
 
+    [Fact]
     public void ShouldResolveIDCtor()
     {
         // GIVEN
@@ -88,7 +92,8 @@ public class ReqRspDriverTests : IoCTests
 
 
     // TODO: make this green
-//    [Fact]
+    //    [Fact]
+    [Fact]
     public async Task ShouldStartResponder()
     {
         // GIVEN

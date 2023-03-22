@@ -73,7 +73,7 @@ public static class ScenariosAndStreams
             initializePayload.ToBytes(),
             MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), ID.Id()).ToBytes()
         );
-//        initializeCmd.SetID(ID);
+        //        initializeCmd.SetID(ID);
         return new[] { initializeCmd };
     }
 

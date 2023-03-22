@@ -90,7 +90,7 @@ public abstract class SpokeT<TSpoke> : BackgroundService, ISpokeT<TSpoke> where 
             {
                 Log.Information($"{AppVerbs.Waiting1s} exchange [{NameAtt.Get(_exchange)}]...");
                 Thread.Sleep(1);
-//                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
+                //                await Task.Delay(1000, cancellationToken).ConfigureAwait(false);
             }
             else
             {

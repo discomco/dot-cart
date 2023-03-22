@@ -58,10 +58,10 @@ public class CmdHandlerStepT<TPipeInfo, TPayload, TMeta> : StepT<TPipeInfo, TPay
         var feedback = Feedback.New(msg.AggId, previousFeedback, Name);
         try
         {
-//            Log.Information($"{AppVerbs.Executing} {Name}");
+            //            Log.Information($"{AppVerbs.Executing} {Name}");
             var cmd = _hope2Cmd((HopeT<TPayload>)msg);
             feedback = await _cmdHandler.HandleAsync(cmd, previousFeedback, cancellationToken);
-//            Log.Information($"{AppFacts.Executed} {Name}");
+            //            Log.Information($"{AppFacts.Executed} {Name}");
         }
         catch (Exception e)
         {

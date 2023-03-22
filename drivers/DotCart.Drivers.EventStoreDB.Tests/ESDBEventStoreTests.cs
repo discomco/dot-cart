@@ -146,7 +146,7 @@ public class ESDBEventStoreTests : IoCTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services.AddCmdHandler()
-//            .AddTransient<IAggregate, TheAggregate>()
+            //            .AddTransient<IAggregate, TheAggregate>()
             .AddSingletonAggregateBuilder<TheBehavior.IAggregateInfo, TheSchema.Doc>()
             .AddTransient(_ => TheSchema.Doc.Rand)
             .AddTransient(_ => TheSchema.DocID.Ctor)

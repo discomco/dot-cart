@@ -65,7 +65,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT
         Assert.True(feedback.IsSuccess);
         var isInitialized = state.Status.HasFlag(Schema.EngineStatus.Initialized);
         Assert.True(isInitialized);
-//        Thread.Sleep(1_000);
+        //        Thread.Sleep(1_000);
         state = (Schema.Engine)_agg.GetState();
         Output.WriteLine($"{state}");
     }
@@ -83,7 +83,7 @@ public class EngineBehaviorTests : FullBehaviorTestsT
             TestUtils.Initialize.PayloadCtor().ToBytes(),
             MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id()).ToBytes()
         );
-//        _agg.SetID(_ID);
+        //        _agg.SetID(_ID);
         // WHEN
         var feedback = await _agg.ExecuteAsync(startCmd);
         var state = (Schema.Engine)feedback.Payload;
