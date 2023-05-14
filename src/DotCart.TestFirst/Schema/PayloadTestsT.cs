@@ -58,4 +58,50 @@ public abstract class PayloadTestsT<TPayload>
         Assert.NotNull(deserialized);
         Assert.Equal(_payload, deserialized);
     }
+
+        [Fact]
+    public void ShouldHaveHopeTopic()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var topic = HopeTopicAtt.Get<TPayload>();
+        // THEN
+        Assert.NotEmpty(topic);
+    }
+    
+    [Fact]
+    public void ShouldHaveFactTopic()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var topic = FactTopicAtt.Get<TPayload>();
+        // THEN
+        Assert.NotEmpty(topic);
+    }
+    
+    
+    [Fact]
+    public void ShouldHaveEvtTopic()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var topic = EvtTopicAtt.Get<TPayload>();
+        // THEN
+        Assert.NotEmpty(topic);
+    }
+
+    [Fact]
+    public void ShouldHaveCmdTopic()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var topic = EvtTopicAtt.Get<TPayload>();
+        // THEN
+        Assert.NotEmpty(topic);
+    }
+
 }

@@ -3,6 +3,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Serilog;
 using static System.Threading.Tasks.Task;
 
@@ -12,8 +13,8 @@ public static partial class Inject
 {
     public static IServiceCollection AddSingletonExchange(this IServiceCollection services)
     {
-        return services
-            .AddSingleton<IExchange, Exchange>();
+        services.TryAddSingleton<IExchange, Exchange>();
+        return services;
     }
 }
 

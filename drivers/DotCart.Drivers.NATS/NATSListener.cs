@@ -61,8 +61,6 @@ namespace DotCart.Drivers.NATS
                 _logger?.Debug(_logMessage);
                 _bus.Disconnect();
             }
-
-            ;
         }
 
 
