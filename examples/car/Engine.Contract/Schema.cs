@@ -79,7 +79,8 @@ public static class Schema
     }
 
     [DbName(DbConstants.RedisDocDbName)]
-    public record Engine(string Id, EngineStatus Status, Details Details, Rpm Rpm) : IState
+    public record Engine(string Id, EngineStatus Status, Details Details, Rpm Rpm) 
+        : IState
     {
         // private Engine()
         // {
@@ -128,7 +129,8 @@ public static class Schema
     }
 
 
-    public record EngineListItem : IValueObject, IState
+    public record EngineListItem 
+        : IValueObject, IState
     {
         public string Name { get; set; }
         public EngineStatus Status { get; set; }
@@ -150,7 +152,8 @@ public static class Schema
 
 
     [IDPrefix(IDConstants.EngineListIDPrefix)]
-    public record EngineListID() : IDB(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
+    public record EngineListID() 
+        : IDB(IDConstants.EngineListIDPrefix, IDConstants.EngineListIDValue)
     {
         public static EngineListID New()
         {
@@ -159,7 +162,8 @@ public static class Schema
     }
 
     [DbName(DbConstants.RedisListDbName)]
-    public record EngineList(string Id, ImmutableDictionary<string, EngineListItem> Items) : IListState
+    public record EngineList(string Id, ImmutableDictionary<string, EngineListItem> Items) 
+        : IListState
     {
         public ImmutableDictionary<string, EngineListItem> Items { get; set; } = Items;
 
@@ -173,9 +177,11 @@ public static class Schema
     }
 
     [IDPrefix(IDConstants.EngineIDPrefix)]
-    public record EngineID : IDB
+    public record EngineID 
+        : IDB
     {
-        public EngineID(string value = "") : base(IDPrefixAtt.Get<EngineID>(), value)
+        public EngineID(string value = "") 
+            : base(IDPrefixAtt.Get<EngineID>(), value)
         {
         }
 
@@ -187,7 +193,8 @@ public static class Schema
         }
     }
 
-    public record Details : IValueObject
+    public record Details 
+        : IValueObject
     {
         public string Name { get; set; }
         public string Description { get; set; }
