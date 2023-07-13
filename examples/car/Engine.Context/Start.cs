@@ -42,7 +42,7 @@ public static class Start
             .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()
             .AddTransient<IActorT<Spoke>, ToRedisList>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.Start.Payload, MetaB>()
+            .AddNATSResponderT<Spoke, FromNATS, Contract.Start.Payload, MetaB>()
             .AddRabbitMqEmitter<Spoke, ToRabbitMq, Contract.Start.Payload, MetaB>()
             .AddRabbitMqListener<Spoke,
                 FromRabbitMqRetro,

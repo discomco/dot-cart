@@ -39,7 +39,7 @@ public static class ChangeRpm
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddHopeInPipe<IHopePipe, Contract.ChangeRpm.Payload, MetaB>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.ChangeRpm.Payload, MetaB>();
+            .AddNATSResponderT<Spoke, FromNATS, Contract.ChangeRpm.Payload, MetaB>();
     }
 
     [Name(ToRedisDoc_v1)]

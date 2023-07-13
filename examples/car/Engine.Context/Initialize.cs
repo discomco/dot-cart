@@ -38,7 +38,7 @@ public static class Initialize
             .AddInitializeACLFuncs()
             .AddHopeInPipe<IHopePipe, Contract.Initialize.Payload, MetaB>()
             .AddHostedSpokeT<Spoke>()
-            .AddNATSResponder<Spoke, FromNATS, Contract.Initialize.Payload, MetaB>()
+            .AddNATSResponderT<Spoke, FromNATS, Contract.Initialize.Payload, MetaB>()
             .AddDotRedis<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID>()
             .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
             .AddTransient<IActorT<Spoke>, ToRedisDoc>()

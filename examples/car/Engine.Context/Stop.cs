@@ -44,7 +44,7 @@ public static class Stop
                 .AddDotRedis<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID>()
                 .AddDotRedis<IRedisDocDbInfo, Schema.Engine, Schema.EngineID>()
                 .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
-                .AddNATSResponder<Spoke,
+                .AddNATSResponderT<Spoke,
                     FromNATS,
                     Contract.Stop.Payload,
                     MetaB>()

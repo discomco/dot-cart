@@ -1,102 +1,116 @@
+﻿using DotCart.Abstractions.Schema;
+using DotCart.Core;
 using Microsoft.Extensions.Hosting;
+using NATS.Client;
+using Serilog;
 
-namespace DotCart.Drivers.NATS
+namespace DotCart.Drivers.NATS;
+
+public delegate Task ProcessFactAsync<in TPayload>(TPayload fact, CancellationToken cancellationToken)
+    where TPayload : IPayload;
+
+public class NATSListener<TPayload>
+    : BackgroundService
+    where TPayload : IPayload
 {
-    public abstract class NATSListener<TAggregateId, TEvent> : BackgroundService
-        where TAggregateId : IAggregateID
-        where TEvent : IEvent<TAggregateId>
+    private readonly Action<Options> _configureOptions;
+    private readonly INatsClientConnectionFactory _connectionFactory;
+    private readonly ILogger _logger;
+    private readonly ProcessFactAsync<TPayload> _processFunc;
+    private IEncodedConnection? _bus;
+    private string? _logMessage;
+    private IAsyncSubscription? _subscription;
+
+    public NATSListener(
+        INatsClientConnectionFactory connectionFactory,
+        Action<Options> configureOptions,
+        ILogger logger,
+        ProcessFactAsync<TPayload> processFunc)
     {
-        private readonly INatsClient _bus;
-        private readonly IEnumerable<IAggregateEventHandler<TAggregateId, TEvent>> _handlers;
-        private readonly ILogger _logger;
+        _connectionFactory = connectionFactory;
+        _configureOptions = configureOptions;
+        _logger = logger;
+        _processFunc = processFunc;
+    }
 
-        private string _logMessage;
-        private ISubscription _subscription;
-
-        protected NATSListener(INatsClient bus,
-            IEnumerable<IAggregateEventHandler<TAggregateId, TEvent>> handlers,
-            ILogger logger)
+    public override async Task StartAsync(CancellationToken cancellationToken)
+    {
+        try
         {
-            _bus = bus;
-            _handlers = handlers;
-            _logger = logger;
+            await ConnectAsync(cancellationToken)
+                .ConfigureAwait(false);
+            _logger.Information($"::SUBSCRIBE ::Topic: [{FactTopicAtt.Get<TPayload>()}] on bus [{_bus.ConnectedId}]");
+            _subscription = _bus.SubscribeAsync(
+                FactTopicAtt.Get<TPayload>(),
+                async (_, args) =>
+                {
+                    var fact = (TPayload)args.ReceivedObject;
+                    try
+                    {
+                        _logger.Information($"::RECEIVED: {fact}");
+                        await _processFunc(fact, cancellationToken)
+                            .ConfigureAwait(false);
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.Error($"::ERROR: {e.InnerAndOuter()}");
+                    }
+
+                    _logger.Debug($"::COMPLETED: {fact}");
+                });
+        }
+        catch (Exception e)
+        {
+            _logger.Fatal($"::EXCEPTION: {e.Message})");
+            throw;
+        }
+    }
+
+
+    protected override Task ExecuteAsync(CancellationToken stoppingToken)
+    {
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            Thread.Sleep(100);
         }
 
-        private string EventTopic => GetTopic();
+        return Task.CompletedTask;
+    }
 
-        private static string GetTopic()
-        {
-            var atts = (TopicAttribute[]) typeof(TEvent).GetCustomAttributes(typeof(TopicAttribute), true);
-            if (atts.Length == 0) throw new Exception($"Attribute 'Topic' is not defined on {typeof(TEvent)}!");
-            return atts[0].Id;
-        }
-
-
-        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-        {
-            while (!stoppingToken.IsCancellationRequested)
-            {
-            }
-        }
-
-        public override async Task StartAsync(CancellationToken cancellationToken)
-        {
-            await StartProcessing(cancellationToken);
-        }
+    private object DeserializeFact(byte[] data)
+    {
+        return data.FromBytes<TPayload>();
+    }
 
 
-        public override async Task StopAsync(CancellationToken cancellationToken)
-        {
-            await StopProcessing(cancellationToken);
-        }
-
-        private async Task StopProcessing(CancellationToken cancellationToken)
-        {
-            if (_bus.IsConnected)
-            {
-                _logMessage = $"::UNSUBSCRIBING ::Topic: [{EventTopic}]";
-                _logger?.Debug(_logMessage);
-                await _bus.UnsubAsync(_subscription);
-                _logMessage = $"::DISCONNECTING ::Bus: [{_bus.Id}]";
-                _logger?.Debug(_logMessage);
-                _bus.Disconnect();
-            }
-        }
-
-
-        private async Task StartProcessing(CancellationToken cancellationToken)
+    private Task ConnectAsync(CancellationToken cancellationToken)
+    {
+        return Task.Run(async () =>
         {
             try
             {
-                var request = string.Empty;
-                if (!_bus.IsConnected)
+                _bus = _connectionFactory.CreateEncodedConnection(_configureOptions);
+                while (_bus.IsClosed())
                 {
-                    _logger?.Debug($"::CONNECT ::Bus [{_bus?.Id}]");
-                    await _bus.ConnectAsync();
+                    _logMessage = $"CONNECTING NATS [{_bus.ConnectedId}]";
+                    Thread.Sleep(2_000);
                 }
 
-                _logger?.Debug($"::SUBSCRIBE ::Topic: [{EventTopic}] on bus [{_bus?.Id}]");
-                _subscription = await _bus.SubAsync(EventTopic,
-                    stream => stream.SubscribeSafe(
-                        async msg =>
-                        {
-                            var evt = msg.Payload.NatsDecode<TEvent>();
-                            request = $"{EventTopic} - [{evt.EventId}]";
-                            _logger?.Debug($"::RECEIVED: {request} ::Payload: {evt.EventId}");
-                            foreach (var handler in _handlers)
-                            {
-                                _logger?.Debug($"::HANDLING ::Event: {evt.EventId} Handler: {handler.GetType()}");
-                                await handler.HandleAsync(evt);
-                            }
-                        },
-                        exception => { _logger?.Error($"::ERROR: {request}  {exception.Message} "); },
-                        () => { _logger?.Debug($"::COMPLETED: {request}"); }));
+                _logMessage = $"CONNECTED NATS [{_bus.ConnectedId}]";
+                _logger.Information(_logMessage);
+                _bus.OnDeserialize += DeserializeFact;
             }
             catch (Exception e)
             {
-                _logger?.Fatal($"::EXCEPTION {e.Message})");
+                _logger.Fatal(e.InnerAndOuter());
                 throw;
             }
-        }
+        }, cancellationToken);
+    }
+
+    public override void Dispose()
+    {
+        _subscription.Dispose();
+        _bus.Dispose();
     }
 }

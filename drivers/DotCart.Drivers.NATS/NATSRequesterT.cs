@@ -6,16 +6,18 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IPayload
+public class NATSRequesterT<TPayload> 
+    : RequesterT<TPayload> , INATSRequesterT<TPayload>
+    where TPayload : IPayload
 {
-    private readonly Action<Options> _configureOptions;
+    private readonly Action<Options> _options;
     private readonly INatsClientConnectionFactory _connectionFactory;
     private IEncodedConnection _bus;
 
-    protected NATSRequesterT(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)
+    public NATSRequesterT(INatsClientConnectionFactory connectionFactory, Action<Options> options)
     {
         _connectionFactory = connectionFactory;
-        _configureOptions = configureOptions;
+        _options = options;
     }
 
 
@@ -44,7 +46,7 @@ public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IP
         var res = Feedback.New(hope.AggId);
         try
         {
-            _bus = _connectionFactory.CreateEncodedConnection(_configureOptions);
+            _bus = _connectionFactory.CreateEncodedConnection(_options);
             if (!_bus.IsClosed())
                 Log.Debug($"::CONNECT bus: {_bus.ConnectedId}");
             Log.Debug($"::REQUEST hope: AggId:{hope.AggId} on topic {TopicAtt.Get(hope)}.");
@@ -59,4 +61,10 @@ public class NATSRequesterT<TPayload> : RequesterT<TPayload> where TPayload : IP
 
         return res;
     }
+}
+
+public interface INATSRequesterT<TPayload> 
+    : IRequesterT<TPayload> 
+    where TPayload : IPayload
+{
 }

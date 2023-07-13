@@ -1,55 +1,78 @@
+﻿using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using Microsoft.Extensions.Logging;
+using NATS.Client;
+using Serilog;
 
-namespace DotCart.Drivers.NATS
+namespace DotCart.Drivers.NATS;
+
+public class NATSEmitter<TPayload, TMeta>
+    : INATSEmitter<TPayload, TMeta>, IDisposable
+    where TPayload : IPayload
+    where TMeta : IMetaB
 {
-    public abstract class NATSEmitter<TAggregateId, TEvent> : IEventEmitter<TAggregateId, TEvent>
-        where TEvent : Event<TAggregateId>
-        where TAggregateId : IAggregateID
+    private readonly IEncodedConnection _bus;
+    private readonly ILogger _logger;
+
+    public NATSEmitter(ILogger logger,
+        INatsClientConnectionFactory connectionFactory,
+        Action<Options> configureOptions)
     {
-        private readonly INatsClient _bus;
-        private readonly ILogger _logger;
-        private string _logMessage;
+        _logger = logger;
+        _bus = connectionFactory.CreateEncodedConnection(configureOptions);
+        _bus.OnSerialize += SerializeRequest;
+        _bus.OnDeserialize += DeserializeResponse;
+    }
 
-        protected NATSEmitter(INatsClient bus, ILogger logger)
-        {
-            _bus = bus;
-            _logger = logger;
-        }
 
-        private string Topic => GetTopic();
-
-        public async Task HandleAsync(TEvent @event)
+    public Task EmitAsync(FactT<TPayload, TMeta> fact)
+    {
+        return Task.Run(() =>
         {
             try
             {
-                if (_bus != null)
+                if (!_bus.IsClosed())
                 {
-                    if (!_bus.IsConnected)
-                    {
-                        _logMessage = $"::CONNECT ::Bus [{_bus?.Id}]";
-                        _logger?.Debug(_logMessage);
-                        await _bus.ConnectAsync();
-                    }
-                    _logMessage = $"::EMIT ::Event: [{Topic}] on bus [{_bus?.Id}] ::Payload: {@event.EventId}";
-                    _logger?.Debug(_logMessage);
-                    await _bus.PubAsync(Topic, @event.NatsEncode());
+                    _logger.Debug($"::C!(NATS):: {_bus.ConnectedId}");
                 }
+
+                _logger.Debug($"::PUB(NATS):: [{fact.Payload}] ~> [{FactTopicAtt.Get<TPayload>()}].");
+                _bus.Publish(FactTopicAtt.Get<TPayload>(), fact);
             }
             catch (Exception e)
             {
-                _logger?.Fatal(
-                    $"::EXCEPTION :: [{@event.EventId}] ::Exception {JsonConvert.SerializeObject(e)}");
-                throw;
+                _logger.Fatal($"::ERROR:: [{GetType()}] = {e.InnerAndOuter()}");
             }
-        }
-
-
-        private static string GetTopic()
-        {
-            var atts = (TopicAttribute[]) typeof(TEvent).GetCustomAttributes(typeof(TopicAttribute), true);
-            if (atts.Length == 0) throw new Exception($"Attribute 'Topic' is not defined on {typeof(TEvent)}!");
-            return atts[0].Id;
-        }
+        });
     }
+
+    public void Dispose()
+    {
+        if (_bus == null)
+        {
+            return;
+        }
+
+        _bus.OnSerialize -= SerializeRequest;
+        _bus.OnDeserialize -= DeserializeResponse;
+        _bus.Dispose();
+    }
+
+    private byte[] SerializeRequest(object obj)
+    {
+        return obj.ToBytes();
+    }
+
+    private object DeserializeResponse(byte[] data)
+    {
+        var rsp = data.FromBytes<Feedback>();
+        return rsp;
+    }
+}
+
+public interface INATSEmitter<TPayload, TMeta>
+    where TPayload : IPayload
+    where TMeta : IMetaB
+{
+    Task EmitAsync(FactT<TPayload, TMeta> fact);
 }

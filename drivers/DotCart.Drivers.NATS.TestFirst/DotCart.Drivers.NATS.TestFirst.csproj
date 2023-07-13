@@ -10,8 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+        <ProjectReference Include="..\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
     </ItemGroup>
 
 </Project>
