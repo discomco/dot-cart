@@ -1,7 +1,6 @@
 using DotCart.Abstractions.Schema;
 using DotCart.Context.Actors;
 using DotCart.TestKit;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Actors;

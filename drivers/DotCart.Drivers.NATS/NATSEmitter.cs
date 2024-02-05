@@ -24,6 +24,15 @@ public class NATSEmitter<TPayload, TMeta>
         _bus.OnDeserialize += DeserializeResponse;
     }
 
+    public void Dispose()
+    {
+        if (_bus == null) return;
+
+        _bus.OnSerialize -= SerializeRequest;
+        _bus.OnDeserialize -= DeserializeResponse;
+        _bus.Dispose();
+    }
+
 
     public Task EmitAsync(FactT<TPayload, TMeta> fact)
     {
@@ -31,10 +40,7 @@ public class NATSEmitter<TPayload, TMeta>
         {
             try
             {
-                if (!_bus.IsClosed())
-                {
-                    _logger.Debug($"::C!(NATS):: {_bus.ConnectedId}");
-                }
+                if (!_bus.IsClosed()) _logger.Debug($"::C!(NATS):: {_bus.ConnectedId}");
 
                 _logger.Debug($"::PUB(NATS):: [{fact.Payload}] ~> [{FactTopicAtt.Get<TPayload>()}].");
                 _bus.Publish(FactTopicAtt.Get<TPayload>(), fact);
@@ -44,18 +50,6 @@ public class NATSEmitter<TPayload, TMeta>
                 _logger.Fatal($"::ERROR:: [{GetType()}] = {e.InnerAndOuter()}");
             }
         });
-    }
-
-    public void Dispose()
-    {
-        if (_bus == null)
-        {
-            return;
-        }
-
-        _bus.OnSerialize -= SerializeRequest;
-        _bus.OnDeserialize -= DeserializeResponse;
-        _bus.Dispose();
     }
 
     private byte[] SerializeRequest(object obj)

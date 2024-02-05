@@ -2,7 +2,6 @@ using System.Reflection;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;

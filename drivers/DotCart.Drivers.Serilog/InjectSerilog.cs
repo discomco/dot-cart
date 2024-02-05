@@ -66,10 +66,7 @@ public static class InjectSerilog
         }
 
         var logFileTemplate = $"logs/{appLogPrefix}-.log";
-        if (!string.IsNullOrWhiteSpace(appLogDir))
-        {
-            logFileTemplate = $"logs/{appLogDir}/{appLogPrefix}-.log";
-        }
+        if (!string.IsNullOrWhiteSpace(appLogDir)) logFileTemplate = $"logs/{appLogDir}/{appLogPrefix}-.log";
 
         var logConfig = new LoggerConfiguration();
 #pragma warning disable CA1305
@@ -114,10 +111,7 @@ public static class InjectSerilog
             .AddJsonFile("appsettings.json")
             .Build();
         var logFileTemplate = $"logs/{appLogPrefix}-.log";
-        if (!string.IsNullOrWhiteSpace(appLogDir))
-        {
-            logFileTemplate = $"logs/{appLogDir}/{appLogPrefix}-.log";
-        }
+        if (!string.IsNullOrWhiteSpace(appLogDir)) logFileTemplate = $"logs/{appLogDir}/{appLogPrefix}-.log";
 
         var logConfig = new LoggerConfiguration();
         var dontShowCleanup = "Contains(@m, 'cleanup cycle')";

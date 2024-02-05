@@ -77,7 +77,7 @@ public abstract class NATSTestsB
     {
         services
             .AddSeriloggersFromCode()
-            .AddCoreNATS(options => 
+            .AddCoreNATS(options =>
             {
                 options.User = "a";
                 options.Password = "a";

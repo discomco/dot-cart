@@ -10,6 +10,7 @@ using Serilog.Sinks.FastConsole;
 using Serilog.Sinks.SystemConsole.Themes;
 
 namespace DotCart.Drivers.Serilog;
+
 public static class Inject
 {
     public static IServiceCollection AddConsoleLogger(this IServiceCollection services, bool enableSelfLog = false)
@@ -59,9 +60,10 @@ public static class Inject
             )
             .WriteTo.FastConsole(
                 new FastConsoleSinkOptions { UseJson = true },
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                new MessageTemplateTextFormatter("{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
-                )
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                new MessageTemplateTextFormatter(
+                    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
+            )
             .CreateLogger();
         return Log.Logger;
     }
@@ -84,14 +86,13 @@ public static class Inject
             .Enrich.WithThreadId()
             .WriteTo.FastConsole(
                 new FastConsoleSinkOptions { UseJson = true },
-                outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
-                new MessageTemplateTextFormatter("{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
+                "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",
+                new MessageTemplateTextFormatter(
+                    "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}")
             )
             .CreateLogger();
         return Log.Logger;
     }
-
-
 
 
     /// <summary>
@@ -121,6 +122,4 @@ public static class Inject
             .CreateLogger();
         return Log.Logger;
     }
-
-
 }

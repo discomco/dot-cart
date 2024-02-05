@@ -5,7 +5,7 @@ namespace DotCart.Drivers.NATS.Tests;
 
 [FactTopic(TestConstants.FactTopicV1)]
 public class MyPayload
-    :  IPayload
+    : IPayload
 {
     public static readonly PayloadCtorT<MyPayload> New =
         () => new MyPayload();

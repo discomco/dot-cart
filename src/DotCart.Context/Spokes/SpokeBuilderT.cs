@@ -2,7 +2,7 @@ using DotCart.Abstractions.Actors;
 
 namespace DotCart.Context.Spokes;
 
-public class SpokeBuilderT<TSpoke> 
+public class SpokeBuilderT<TSpoke>
     : ISpokeBuilder<TSpoke>
     where TSpoke : ISpokeT<TSpoke>
 {

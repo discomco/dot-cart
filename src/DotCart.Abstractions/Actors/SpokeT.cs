@@ -5,8 +5,8 @@ using Serilog;
 
 namespace DotCart.Abstractions.Actors;
 
-public abstract class SpokeT<TSpoke> 
-    : BackgroundService, ISpokeT<TSpoke> 
+public abstract class SpokeT<TSpoke>
+    : BackgroundService, ISpokeT<TSpoke>
     where TSpoke : ISpokeT<TSpoke>
 {
     private readonly IExchange _exchange;

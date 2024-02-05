@@ -52,8 +52,7 @@ public static class ChangeDetails
                 Schema.MetaCtor(null).ToBytes());
 
 
-    [Tag(StateTags.Invalid)]
-    public static readonly StateCtorT<Contract.Schema.Engine>
+    [Tag(StateTags.Invalid)] public static readonly StateCtorT<Contract.Schema.Engine>
         InvalidEngineCtor =
             () => Contract.Schema.Engine.New(
                 Schema.DocIDCtor().Id(),
@@ -62,8 +61,7 @@ public static class ChangeDetails
                     $"This is an INVALID Engine for ChangeDetails because state is [{Contract.Schema.EngineStatus.Unknown}]"),
                 Contract.Schema.Rpm.New(0));
 
-    [Tag(StateTags.Valid)]
-    public static readonly StateCtorT<Contract.Schema.Engine>
+    [Tag(StateTags.Valid)] public static readonly StateCtorT<Contract.Schema.Engine>
         ValidEngineCtor =
             () => Contract.Schema.Engine.New(
                 Schema.DocIDCtor().Id(),

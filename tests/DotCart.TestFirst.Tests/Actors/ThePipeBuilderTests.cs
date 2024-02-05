@@ -8,9 +8,11 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Tests.Actors;
 
-public class ThePipeBuilderTests : PipeBuilderTestsT<TheContext.IPipeInfo, TheContract.Payload>
+public class ThePipeBuilderTests
+    : PipeBuilderTestsT<TheContext.IPipeInfo, TheContract.Payload>
 {
-    public ThePipeBuilderTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ThePipeBuilderTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

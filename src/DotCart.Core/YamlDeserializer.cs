@@ -4,7 +4,8 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace DotCart.Core;
 
-internal class YamlDeserializer : IYamlDeserializer
+internal class YamlDeserializer
+    : IYamlDeserializer
 {
     public T Deserialize<T>(string input)
     {
@@ -22,6 +23,15 @@ internal class YamlDeserializer : IYamlDeserializer
             .WithNamingConvention(UnderscoredNamingConvention.Instance)
             .Build();
         return deserializer.Deserialize<T>(input);
+    }
+
+    public object? Deserialize(string input)
+    {
+        var deserializer = new DeserializerBuilder()
+            .WithNamingConvention(PascalCaseNamingConvention.Instance)
+            .WithNamingConvention(UnderscoredNamingConvention.Instance)
+            .Build();
+        return deserializer.Deserialize(input);
     }
 
     public object? Deserialize(TextReader input)
@@ -79,6 +89,7 @@ internal class YamlDeserializer : IYamlDeserializer
     }
 }
 
-public interface IYamlDeserializer : IDeserializer
+public interface IYamlDeserializer
+    : IDeserializer
 {
 }

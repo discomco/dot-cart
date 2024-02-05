@@ -4,8 +4,17 @@ using YamlDotNet.Serialization.NamingConventions;
 
 namespace DotCart.Core;
 
-internal class YamlSerializer : IYamlSerializer
+internal class YamlSerializer
+    : IYamlSerializer
 {
+    public string Serialize(object? graph, Type type)
+    {
+        var serializer = new SerializerBuilder()
+            .WithNamingConvention(PascalCaseNamingConvention.Instance)
+            .Build();
+        return serializer.Serialize(graph, type);
+    }
+
     public void Serialize(TextWriter writer, object graph)
     {
         var serializer = new SerializerBuilder()

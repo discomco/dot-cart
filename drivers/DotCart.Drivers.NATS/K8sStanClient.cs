@@ -1,5 +1,4 @@
 using DotCart.Drivers.K8S;
-using NATS.Client;
 
 namespace DotCart.Drivers.NATS;
 

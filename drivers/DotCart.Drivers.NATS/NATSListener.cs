@@ -69,10 +69,7 @@ public class NATSListener<TPayload>
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            Thread.Sleep(100);
-        }
+        while (!stoppingToken.IsCancellationRequested) Thread.Sleep(100);
 
         return Task.CompletedTask;
     }

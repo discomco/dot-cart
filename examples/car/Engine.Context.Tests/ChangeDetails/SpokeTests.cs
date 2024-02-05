@@ -7,7 +7,7 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeDetails;
 
 [Name(Context.ChangeDetails.Spoke_v1)]
-public class SpokeTests 
+public class SpokeTests
     : SpokeTestsT<Context.ChangeDetails.Spoke>
 {
     public SpokeTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)

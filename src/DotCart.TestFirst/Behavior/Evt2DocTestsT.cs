@@ -1,10 +1,8 @@
-using System.Threading.Tasks;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;

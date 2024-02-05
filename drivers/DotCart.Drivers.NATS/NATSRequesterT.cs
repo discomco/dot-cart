@@ -6,29 +6,18 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public class NATSRequesterT<TPayload> 
-    : RequesterT<TPayload> , INATSRequesterT<TPayload>
+public class NATSRequesterT<TPayload>
+    : RequesterT<TPayload>, INATSRequesterT<TPayload>
     where TPayload : IPayload
 {
-    private readonly Action<Options> _options;
     private readonly INatsClientConnectionFactory _connectionFactory;
+    private readonly Action<Options> _options;
     private IEncodedConnection _bus;
 
     public NATSRequesterT(INatsClientConnectionFactory connectionFactory, Action<Options> options)
     {
         _connectionFactory = connectionFactory;
         _options = options;
-    }
-
-
-    private byte[] OnSerialize(object obj)
-    {
-        return obj.ToBytes();
-    }
-
-    private object OnDeserialize(byte[] data)
-    {
-        return data.FromBytes<HopeT<TPayload>>();
     }
 
     public override void Dispose()
@@ -61,10 +50,21 @@ public class NATSRequesterT<TPayload>
 
         return res;
     }
+
+
+    private byte[] OnSerialize(object obj)
+    {
+        return obj.ToBytes();
+    }
+
+    private object OnDeserialize(byte[] data)
+    {
+        return data.FromBytes<HopeT<TPayload>>();
+    }
 }
 
-public interface INATSRequesterT<TPayload> 
-    : IRequesterT<TPayload> 
+public interface INATSRequesterT<TPayload>
+    : IRequesterT<TPayload>
     where TPayload : IPayload
 {
 }

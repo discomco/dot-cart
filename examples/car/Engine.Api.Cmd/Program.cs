@@ -14,7 +14,6 @@ builder.Logging
     .AddSerilog();
 builder.Host
     .UseSerilog(Inject.CreateSerilogConsoleLogger());
-    
 
 
 // Add services to the container.

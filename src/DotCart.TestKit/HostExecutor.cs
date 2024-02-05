@@ -52,13 +52,13 @@ public class HostExecutor : IHostExecutor
                 exceptions ??= new List<Exception>();
                 exceptions.Add(ex);
             }
+
         // Throw an aggregate exception if there were any exceptions
         if (exceptions != null)
             throw new AggregateException(exceptions);
         return Task.CompletedTask;
     }
 }
-
 
 // using Microsoft.Extensions.DependencyInjection;
 // using Microsoft.Extensions.DependencyInjection.Extensions;

@@ -1,7 +1,6 @@
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
@@ -59,7 +58,7 @@ public abstract class PayloadTestsT<TPayload>
         Assert.Equal(_payload, deserialized);
     }
 
-        [Fact]
+    [Fact]
     public void ShouldHaveHopeTopic()
     {
         // GIVEN
@@ -69,7 +68,7 @@ public abstract class PayloadTestsT<TPayload>
         // THEN
         Assert.NotEmpty(topic);
     }
-    
+
     [Fact]
     public void ShouldHaveFactTopic()
     {
@@ -80,8 +79,8 @@ public abstract class PayloadTestsT<TPayload>
         // THEN
         Assert.NotEmpty(topic);
     }
-    
-    
+
+
     [Fact]
     public void ShouldHaveEvtTopic()
     {
@@ -103,5 +102,4 @@ public abstract class PayloadTestsT<TPayload>
         // THEN
         Assert.NotEmpty(topic);
     }
-
 }

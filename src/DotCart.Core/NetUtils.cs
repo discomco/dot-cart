@@ -79,8 +79,8 @@ public static class NetUtils
 
             // Loop through IP address collection.
             addr.AddRange(from ip in ips
-                          where ip.Address.AddressFamily == AddressFamily.InterNetwork
-                          select ip.Address);
+                where ip.Address.AddressFamily == AddressFamily.InterNetwork
+                select ip.Address);
         }
 
         return addr.ToArray();

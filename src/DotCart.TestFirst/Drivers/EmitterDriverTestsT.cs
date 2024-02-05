@@ -2,7 +2,6 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.TestKit;
-using Xunit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Drivers;

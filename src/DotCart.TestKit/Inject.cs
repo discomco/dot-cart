@@ -8,7 +8,7 @@ using Xunit.Sdk;
 
 namespace DotCart.TestKit;
 
-public static partial class Inject
+public static class Inject
 {
     public static IServiceCollection AddBaseTestEnv(this IServiceCollection services)
     {

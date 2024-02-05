@@ -14,7 +14,6 @@ public static class NATSHandlers
 
 public static class Inject
 {
-    
     public static IServiceCollection AddCoreNATS(this IServiceCollection services,
         Action<Options>? configureOptions = null,
         ServiceLifetime connectionServiceLifeTime = ServiceLifetime.Transient)
@@ -28,6 +27,7 @@ public static class Inject
                     connectionServiceLifeTime
                 );
         }
+
         services.TryAddSingleton<Action<Options>>(_ =>
             options =>
             {
@@ -45,7 +45,7 @@ public static class Inject
             .AddNatsClient(optionsAction, connectionServiceLifeTime);
     }
 
-    
+
     // public static IServiceCollection AddCoreNATSOld(this IServiceCollection services)
     // {
     //     services
@@ -95,7 +95,7 @@ public static class Inject
             .AddSingleton<IResponderT<TPayload>, TResponder>()
             .AddSingleton<IActorT<TSpoke>, TResponder>();
     }
-    
+
     public static IServiceCollection AddNATSListenerDriverT<TFactPayload, TMeta>(this IServiceCollection services,
         Action<Options>? configureOptions = null)
         where TFactPayload : IPayload
@@ -105,7 +105,7 @@ public static class Inject
             .AddCoreNATS(configureOptions)
             .AddTransient<INATSListenerDriverT<TFactPayload>, NATSListenerDriverT<TFactPayload, TMeta>>();
     }
-    
+
     public static IServiceCollection AddNATSListenerT<
         TSpoke,
         TListener,
@@ -137,14 +137,14 @@ public static class Inject
             .AddTransient<INATSResponderDriverT<THopePayload>, NATSResponderDriverT<THopePayload>>();
     }
 
-    
+
     public static IServiceCollection AddNATSRequesterT<TPayload>(this IServiceCollection services)
         where TPayload : IPayload
     {
         return services
             .AddTransient<INATSRequesterT<TPayload>, NATSRequesterT<TPayload>>();
     }
-    
+
     public static IServiceCollection AddNATSListener<TFactPayload>(this IServiceCollection services,
         ProcessFactAsync<TFactPayload> processFact)
         where TFactPayload : IPayload
@@ -153,7 +153,7 @@ public static class Inject
             .AddTransient(_ => processFact)
             .AddHostedService<NATSListener<TFactPayload>>();
     }
-    
+
     public static IServiceCollection AddNATSEmitter<TPayload, TMeta>(this IServiceCollection services)
         where TPayload : IPayload
         where TMeta : IMetaB
@@ -162,6 +162,4 @@ public static class Inject
             .AddCoreNATS()
             .AddTransient<INATSEmitter<TPayload, TMeta>, NATSEmitter<TPayload, TMeta>>();
     }
-
-
 }

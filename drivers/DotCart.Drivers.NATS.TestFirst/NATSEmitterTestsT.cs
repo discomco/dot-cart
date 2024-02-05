@@ -123,10 +123,7 @@ public abstract class NATSEmitterTestsT<TPayload, TMeta>
         base.InjectDependencies(services);
         services
             .AddHostExecutor()
-            .AddNATSListener<TPayload>(async (_, _) =>
-            {
-                _processedFact = true;
-            })
+            .AddNATSListener<TPayload>(async (_, _) => { _processedFact = true; })
             .AddNATSEmitter<TPayload, TMeta>();
     }
 }

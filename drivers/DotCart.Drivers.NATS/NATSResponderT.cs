@@ -90,10 +90,7 @@ public class NATSResponderT<TPayload>
                 HopeTopicAtt.Get<TPayload>(),
                 async (_, args) =>
                 {
-                    if (args.ReceivedObject is not HopeT<TPayload> req)
-                    {
-                        return;
-                    }
+                    if (args.ReceivedObject is not HopeT<TPayload> req) return;
 
                     _logger.Debug($"[{HopeTopicAtt.Get<TPayload>()}]-Request {req}");
 
@@ -116,10 +113,7 @@ public class NATSResponderT<TPayload>
 
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        while (!stoppingToken.IsCancellationRequested)
-        {
-            Thread.Sleep(1_000);
-        }
+        while (!stoppingToken.IsCancellationRequested) Thread.Sleep(1_000);
 
         return Task.CompletedTask;
     }
@@ -129,10 +123,7 @@ public class NATSResponderT<TPayload>
         return Task.Run(() =>
         {
             _logger.Information($"Gracefully shutting down {GetType()}");
-            if (_subscription.PendingMessages > 0)
-            {
-                _subscription.Drain();
-            }
+            if (_subscription.PendingMessages > 0) _subscription.Drain();
 
             _subscription.Unsubscribe();
             _bus.OnDeserialize -= DeserializeRequest;

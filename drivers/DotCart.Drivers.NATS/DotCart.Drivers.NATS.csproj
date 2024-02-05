@@ -9,21 +9,21 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="NATS.Client" Version="1.0.7" />
-        <PackageReference Include="Serilog" Version="3.0.1" />
+        <PackageReference Include="NATS.Client" Version="1.1.2"/>
+        <PackageReference Include="Serilog" Version="3.1.1"/>
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj" />
-        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj" />
-        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj" />
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj"/>
+        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
     </ItemGroup>
 
     <ItemGroup>
-        <Compile Remove="ResponderDriver.cs" />
-        <Compile Remove="STANRequester.cs" />
+        <Compile Remove="ResponderDriver.cs"/>
+        <Compile Remove="STANRequester.cs"/>
     </ItemGroup>
 
 </Project>
