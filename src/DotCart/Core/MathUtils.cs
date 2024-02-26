@@ -6,8 +6,6 @@ namespace DotCart.Core;
 /// </summary>
 public static class MathUtils
 {
-
-
     /// <summary>
     ///     Determines whether the specified STR text entry is numeric.
     /// </summary>

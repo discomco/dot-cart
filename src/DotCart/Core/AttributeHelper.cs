@@ -30,5 +30,8 @@ public static class NameAtt2
         Importance level,
         string stepName,
         string payloadTopic
-    ) => $"[{level}] step {stepName}({payloadTopic})";
+    )
+    {
+        return $"[{level}] step {stepName}({payloadTopic})";
+    }
 }

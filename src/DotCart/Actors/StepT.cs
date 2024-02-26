@@ -26,7 +26,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.Schema;
 using Serilog;
 
 namespace DotCart.Actors;
@@ -54,13 +53,13 @@ public abstract class StepT<TPipeInfo, TPayload>
         CancellationToken cancellationToken)
     {
         Log.Information(
-            messageTemplate: "{v} step {n}({t})",
+            "{v} step {n}({t})",
             AppVerbs.Do,
             Name,
             msg.GetType().Name);
         var f = await ExecuteAsync(msg, fbk, cancellationToken);
         Log.Information(
-            messageTemplate: "{f} step {n}({mt}) ~> is_success: {r}",
+            "{f} step {n}({mt}) ~> is_success: {r}",
             AppFacts.Done,
             Name,
             msg.GetType().Name,

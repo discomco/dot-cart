@@ -2,8 +2,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
-using DotCart.Schema;
 
 namespace DotCart.Actors;
 

@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
-using DotCart.Schema;
 
 namespace DotCart.Actors;
 

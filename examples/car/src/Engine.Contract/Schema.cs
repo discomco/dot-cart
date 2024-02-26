@@ -95,7 +95,8 @@ public static class Schema
 
         public static Engine New()
         {
-            return new Engine(string.Empty, Flags.Unknown, Details.New("New Engine"), Rpm.New(0));
+            var ID = EngineID.New();
+            return new Engine(ID.Id(), Flags.Unknown, Details.New("New Engine"), Rpm.New(0));
         }
     }
 

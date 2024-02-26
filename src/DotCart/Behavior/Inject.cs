@@ -1,9 +1,7 @@
-using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
 using DotCart.Logging;
-using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Behavior;

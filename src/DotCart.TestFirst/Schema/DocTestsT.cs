@@ -5,7 +5,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Schema;
 
-public abstract class DocTestsT<TID, TState> : IoCTests
+public abstract class DocTestsT<TID, TState>
+    : IoCTests
     where TID : IID
     where TState : IState
 {

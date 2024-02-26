@@ -29,7 +29,6 @@ using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 using DotCart.Behavior;
 using DotCart.Core;
-using DotCart.Schema;
 using Serilog;
 
 namespace DotCart.Actors;

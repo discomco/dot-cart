@@ -20,14 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
-using DotCart.Schema;
 using Serilog;
 
 namespace DotCart.Actors;

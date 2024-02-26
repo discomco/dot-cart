@@ -1,6 +1,5 @@
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
-using DotCart.Core;
 
 namespace DotCart.Schema;
 

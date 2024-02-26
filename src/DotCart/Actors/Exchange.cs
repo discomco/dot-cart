@@ -23,13 +23,12 @@ public static partial class Inject
 internal class Exchange
     : ActiveComponent, IExchange
 {
-    private readonly object _subMutex = new();
+    private static IExchange _instance;
     private readonly object _createMutex = new();
+    private readonly object _subMutex = new();
 
     private ImmutableDictionary<string, ImmutableList<IActorB>> _topics =
         ImmutableDictionary<string, ImmutableList<IActorB>>.Empty;
-
-    private static IExchange _instance;
 
     public static IExchange Instance => _instance ??= new Exchange();
 
