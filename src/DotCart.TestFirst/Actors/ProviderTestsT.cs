@@ -1,5 +1,5 @@
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 

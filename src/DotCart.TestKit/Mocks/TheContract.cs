@@ -1,7 +1,10 @@
 using System.Text.Json.Serialization;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
+using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.TestKit.Mocks;

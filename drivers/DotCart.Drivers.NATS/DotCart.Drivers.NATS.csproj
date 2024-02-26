@@ -15,10 +15,8 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
         <ProjectReference Include="..\DotCart.Drivers.K8S\DotCart.Drivers.K8S.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

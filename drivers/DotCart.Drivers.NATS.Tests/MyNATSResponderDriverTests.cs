@@ -1,5 +1,5 @@
 ﻿using DotCart.Drivers.NATS.TestFirst;
-using DotCart.Drivers.Serilog;
+using DotCart.Logging;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;

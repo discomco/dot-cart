@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.CouchDB\DotCart.Drivers.CouchDB.csproj" />
+        <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.RabbitMQ\DotCart.Drivers.RabbitMQ.csproj" />
+        <ProjectReference Include="..\..\..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
+        <ProjectReference Include="..\Engine.Behavior\Engine.Behavior.csproj" />
+    </ItemGroup>
+
+
+</Project>

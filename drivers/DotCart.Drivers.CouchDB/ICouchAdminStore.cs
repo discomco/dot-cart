@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Defaults.CouchDb;
@@ -8,13 +9,14 @@ public interface ICouchAdminStore<TDbInfo>
     : IAdminStore<TDbInfo>
     where TDbInfo : ICouchDbInfoB
 {
-    Task<Feedback> OpenDbAsync(string filterDoc = "", CancellationToken cancellationToken = default);
-    Task<Feedback> DbExistsAsync(CancellationToken cancellationToken = default);
-    Task<Feedback> CreateDbAsync(CancellationToken cancellationToken = default);
-    Task<Feedback> ReplicateAsync(string filterDoc = "", CancellationToken cancellationToken = default);
-    Task<Feedback> CompactAsync();
-    Task<Feedback> DeleteAsync();
-    Task<Feedback> InitializeAsync(string filterDoc = "");
+    Task<IFeedback> OpenDbAsync(string filterDoc = "", CancellationToken cancellationToken = default);
+    Task<IFeedback> DbExistsAsync(CancellationToken cancellationToken = default);
+    Task<IFeedback> CreateDbAsync(CancellationToken cancellationToken = default);
+    Task<IFeedback> ReplicateAsync(string filterDoc = "", CancellationToken cancellationToken = default);
+    Task<IFeedback> CompactAsync();
+    Task<IFeedback> DeleteAsync();
+    Task<IFeedback> InitializeAsync(string filterDoc = "");
     Task<bool> ClearReplication(string id);
     Task<bool> ReplicationExists(string id);
+    Task<IFeedback> ReplicationExistsAsync(string repId, CancellationToken cancellationToken = default);
 }

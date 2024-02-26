@@ -1,6 +1,7 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.TestKit.Mocks;
 using Serilog;
@@ -8,18 +9,21 @@ using Serilog;
 namespace DotCart.Context.Tests.Actors;
 
 [Name("NamedConsumer2")]
-public class NamedConsumer2 : ActorB, IActorT<TheSpoke>, INamedConsumer
+public class NamedConsumer2
+    : ActorB, IActorT<TheSpoke>, INamedConsumer
 {
     public NamedConsumer2(IExchange exchange) : base(exchange)
     {
     }
 
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken = default)
+    public override Task HandleCast(IMsg msg,
+        CancellationToken cancellationToken = default)
     {
         return Task.CompletedTask;
     }
 
-    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    public override Task<IMsg> HandleCall(IMsg msg,
+        CancellationToken cancellationToken = default)
     {
         return (Task<IMsg>)Task.CompletedTask;
     }

@@ -1,6 +1,5 @@
-using DockTrace.TestKit;
 using DotCart.Abstractions.Actors;
-using DotCart.Context.Spokes;
+using DotCart.Spokes;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
@@ -113,7 +112,7 @@ public class ExchangeTests
         Assert.NotNull(executor);
 
         // WHEN
-        await executor.StartAsync(ts.Token).ConfigureAwait(false);
+        await executor.StartAsync(ts.Token);
         _spoke = executor.Services.ToArray()[0] as TheSpoke;
         Assert.NotNull(_spoke);
         // THEN
@@ -125,7 +124,7 @@ public class ExchangeTests
                 while (_spoke.Status != ComponentStatus.Active) Thread.Sleep(1);
                 return Task.CompletedTask;
             }, ts.Token)
-            .ConfigureAwait(false);
+;
 
         Assert.Equal(ComponentStatus.Active, _spoke.Status);
 
@@ -134,7 +133,7 @@ public class ExchangeTests
             await Task.Delay(3, ts.Token).ConfigureAwait(false);
             ts.Cancel(); // THEN
             executor.StopAsync(ts.Token);
-        }, ts.Token).ConfigureAwait(false);
+        }, ts.Token);
         Thread.Sleep(2000);
         Assert.NotEqual(ComponentStatus.Active, _spoke.Status);
     }

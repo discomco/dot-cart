@@ -1,6 +1,6 @@
 ﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Drivers.EventStoreDB;
 using Microsoft.Extensions.DependencyInjection;
 

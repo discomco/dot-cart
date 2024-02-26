@@ -1,4 +1,4 @@
-﻿using DotCart.Drivers.Serilog;
+﻿using DotCart.Logging;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -11,10 +11,9 @@ namespace DotCart.Drivers.NATS.TestFirst;
 public abstract class NATSTestsB
     : IoCTests
 {
-    protected NATSTestsB(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
-    }
+
+
+
 
     [Fact]
     [Trait("Category", "Integration")]
@@ -64,6 +63,11 @@ public abstract class NATSTestsB
         Assert.NotNull(factory);
     }
 
+    protected NATSTestsB(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
+    {
+    }
+
 
     protected override void Initialize()
     {
@@ -76,7 +80,7 @@ public abstract class NATSTestsB
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSeriloggersFromCode()
+            .AddSeriloggersFromSettingsOnly()
             .AddCoreNATS(options =>
             {
                 options.User = "a";

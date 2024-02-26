@@ -26,7 +26,7 @@ public static class InjectionExtensions
     public static IServiceCollection AddNatsClient(this IServiceCollection services,
         Action<Options>? configureOptions = null, ServiceLifetime connectionServiceLifeTime = ServiceLifetime.Transient)
     {
-//        configureOptions ??= _ => ConnectionFactory.GetDefaultOptions();
+        //        configureOptions ??= _ => ConnectionFactory.GetDefaultOptions();
         var defaultOptions = ConnectionFactory.GetDefaultOptions();
         configureOptions?.Invoke(defaultOptions);
         services.AddSingleton(defaultOptions);

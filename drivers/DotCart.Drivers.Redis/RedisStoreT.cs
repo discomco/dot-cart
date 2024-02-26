@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using StackExchange.Redis;
@@ -43,7 +44,7 @@ public class RedisStoreT<TDbInfo, TDoc> : IRedisStoreT<TDoc>
     }
 
 
-    public Task<TDoc> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public Task<TDoc?> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {

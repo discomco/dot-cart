@@ -1,8 +1,10 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
+using DotCart.Behavior;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
@@ -19,7 +21,7 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
     protected IAggregateStore _aggStore;
     protected Command _cmd;
     protected ICmdHandler _cmdHandler;
-    protected Feedback _feedback;
+    protected IFeedback _feedback;
 
     protected CmdCtorT<TID, TPayload, TMeta> _newCmd;
     private MetaCtorT<TMeta> _newMeta;
@@ -125,7 +127,9 @@ public abstract class CmdHandlerTestsT<TID, TState, TPayload, TMeta> : IoCTests
         // AND
         try
         {
-            _feedback = await _cmdHandler.HandleAsync(_cmd, null, cts.Token);
+            _feedback = await _cmdHandler
+                .HandleAsync(_cmd, null, cts.Token)
+                .ConfigureAwait(true);
         }
         catch (Exception e)
         {

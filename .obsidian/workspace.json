@@ -1,0 +1,161 @@
+{
+  "main": {
+    "id": "8f0025748395cec7",
+    "type": "split",
+    "children": [
+      {
+        "id": "96e0df08e22924dc",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5047df09331b932",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "6206a6eea69e8329",
+    "type": "split",
+    "children": [
+      {
+        "id": "02c4b004197eb79b",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "4553dd9ca44f34b5",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "8cd9e6480f16ef77",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "e1da1cef0653c696",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "e26f9ace48ebd88a",
+    "type": "split",
+    "children": [
+      {
+        "id": "51513a91d7f22a61",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "1b3402191c3bb946",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "59871b880f460fed",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "d6c29263df76691a",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "2a6d51f2c3373e8b",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "a5047df09331b932",
+  "lastOpenFiles": [
+    "examples/car/src/Engine.Cmd/obj/d00d1b57-50a9-4626-b8e5-334f8e9f052c.tmp",
+    "drivers/DotCart.Drivers.CouchDB/obj/89c4808d-ccb4-4014-ad41-91875c2a09d5.tmp",
+    "drivers/DotCart.Drivers.ElasticSearch/obj/2c4fd42f-eb56-41f7-8da8-65d523cc3513.tmp",
+    "drivers/DotCart.Drivers.ElasticSearch.Tests/obj/56c73c17-582d-4ad3-8f22-1bcd587e0431.tmp",
+    "examples/car/src/Engine.Context/obj/5a3cba23-ab6f-41ea-998e-7a1266df9b8c.tmp",
+    "examples/car/src/Engine.TestUtils/obj/c30fbe0a-a13c-4c7b-b115-18172f610a67.tmp",
+    "drivers/DotCart.Drivers.RabbitMQ/obj/a6ca4937-a4c1-4a56-8b72-be869400608f.tmp",
+    "drivers/DotCart.Drivers.K8S/obj/9831902c-3665-40a1-b78e-db9c4336e530.tmp",
+    "drivers/DotCart.Drivers.K8S.Tests/obj/63924db0-cc45-4b8a-84cf-7148f141eb8b.tmp",
+    "drivers/DotCart.Drivers.K8S/obj/4d0bb10c-78a9-4730-8e22-f9a3a1012599.tmp",
+    "drivers/DotCart.Drivers.Kafka/obj/ba79e68c-7a33-4646-b219-b19f632e9a7b.tmp",
+    "image/README/cartwheel-arch.png",
+    "cartwheel-arch.png",
+    "image.png",
+    "image/README/write-spoke.png",
+    "write-spoke.png",
+    "image/README/image.png"
+  ]
+}

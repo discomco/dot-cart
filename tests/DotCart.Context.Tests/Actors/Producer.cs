@@ -1,24 +1,29 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.TestKit.Mocks;
 
 namespace DotCart.Context.Tests.Actors;
 
 [Name("Producer")]
-public class Producer : ActorB, IActorT<TheSpoke>, IProducer
+public class Producer
+    : ActorB, IActorT<TheSpoke>, IProducer
 {
-    public Producer(IExchange exchange) : base(exchange)
+    public Producer(IExchange exchange)
+        : base(exchange)
     {
     }
 
-    public override Task HandleCast(IMsg msg, CancellationToken cancellationToken)
+    public override Task HandleCast(IMsg msg,
+        CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
 
-    public override Task<IMsg> HandleCall(IMsg msg, CancellationToken cancellationToken = default)
+    public override Task<IMsg> HandleCall(IMsg msg,
+        CancellationToken cancellationToken = default)
     {
         return (Task<IMsg>)Task.CompletedTask;
     }

@@ -10,7 +10,8 @@ public abstract class CouchAdminTestsT<TDbInfo> :
     AdminStoreTestsT<TDbInfo>
     where TDbInfo : ICouchDbInfoB
 {
-    protected CouchAdminTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected CouchAdminTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 
@@ -64,7 +65,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         var builder = TestEnv.ResolveRequired<ICouchAdminBuilderT<TDbInfo>>();
         var admin = builder.BuildAdmin();
         // WHEN
-        var fbk = await admin.DbExistsAsync(cts.Token).ConfigureAwait(false);
+        var fbk = await admin.DbExistsAsync(cts.Token);
         // THEN
         Assert.True(true);
     }

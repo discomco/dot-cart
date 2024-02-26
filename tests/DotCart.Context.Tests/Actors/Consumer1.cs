@@ -1,18 +1,19 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.TestKit.Mocks;
 using Serilog;
 
 namespace DotCart.Context.Tests.Actors;
 
-public interface IConsumer1 : IActorB
-{
-}
+public interface IConsumer1
+    : IActorB;
 
 [Name("Consumer1")]
-public class Consumer1 : ActorB, IActorT<TheSpoke>, IConsumer1
+public class Consumer1
+    : ActorB, IActorT<TheSpoke>, IConsumer1
 {
     public Consumer1(IExchange exchange) : base(exchange)
     {

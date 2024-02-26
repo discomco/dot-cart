@@ -1,6 +1,7 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.TestKit.Mocks;
 using Serilog;
@@ -8,7 +9,8 @@ using Serilog;
 namespace DotCart.Context.Tests.Actors;
 
 [Name("NamedConsumer1")]
-public class NamedConsumer1 : ActorB, IActorT<TheSpoke>, INamedConsumer
+public class NamedConsumer1
+    : ActorB, IActorT<TheSpoke>, INamedConsumer
 {
     public NamedConsumer1(IExchange exchange) : base(exchange)
     {

@@ -20,7 +20,7 @@ public class AssemblyUtilsTests
         // GIVEN
         var assy = Assembly.GetAssembly(GetType());
         // WHEN
-        var version = AssemblyUtils.GetVersion(assy);
+        var version = assy.GetVersion();
         // THEN
         Assert.NotEmpty(version);
     }
@@ -31,7 +31,7 @@ public class AssemblyUtilsTests
         // GIVEN
         var assy = Assembly.GetAssembly(GetType());
         // WHEN
-        var shortName = AssemblyUtils.ShortName(assy);
+        var shortName = assy.ShortName();
         // THEN
         Assert.NotEmpty(shortName);
         Assert.Equal("DotCart.Core.Tests", shortName);

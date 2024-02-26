@@ -1,4 +1,6 @@
 using DotCart.Abstractions.Clients;
+using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using NATS.Client;
@@ -29,7 +31,7 @@ public class NATSRequesterT<TPayload>
         _bus.Dispose();
     }
 
-    public override async Task<Feedback> RequestAsync(HopeT<TPayload> hope,
+    public override async Task<IFeedback> RequestAsync(IHopeT<TPayload> hope,
         CancellationToken cancellationToken = default)
     {
         var res = Feedback.New(hope.AggId);

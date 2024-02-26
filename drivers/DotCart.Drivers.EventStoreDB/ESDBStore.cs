@@ -2,6 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,7 +22,8 @@ public static partial class Inject
     }
 }
 
-public class ESDBStore : IEventStore
+public class ESDBStore
+    : IEventStore
 {
     private readonly IESDBEventSourcingClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
@@ -63,7 +65,11 @@ public class ESDBStore : IEventStore
 
     public async Task<AppendResult> SaveAsync(IAggregate aggregate, CancellationToken cancellationToken = default)
     {
-        var res = await AppendEventsAsync(aggregate.ID, aggregate.UncommittedEvents, cancellationToken);
+        var res = await AppendEventsAsync(
+                aggregate.ID,
+                aggregate.UncommittedEvents,
+                cancellationToken)
+            .ConfigureAwait(false);
         aggregate.ClearUncommittedEvents(res.NextExpectedVersion);
         return res;
     }

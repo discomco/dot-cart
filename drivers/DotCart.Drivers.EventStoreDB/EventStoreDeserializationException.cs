@@ -4,7 +4,8 @@ using System.Text;
 namespace DotCart.Drivers.EventStoreDB;
 
 [Serializable]
-public class EventStoreDeserializationException : EventStoreException
+public class EventStoreDeserializationException
+    : EventStoreException
 {
     public EventStoreDeserializationException(string message, byte[] data, Exception inner) : base(message, inner)
     {

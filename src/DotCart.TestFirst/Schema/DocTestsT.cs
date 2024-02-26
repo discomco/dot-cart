@@ -76,7 +76,7 @@ public abstract class DocTestsT<TID, TState> : IoCTests
         var state1 = newState();
         var state2 = newState();
         // THEN
-        Assert.NotSame(state1, state2);
+        Assert.NotEqual(state1, state2);
     }
 
     [Fact]

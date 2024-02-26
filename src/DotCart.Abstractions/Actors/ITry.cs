@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
@@ -14,6 +15,6 @@ public interface ITry<in TState, TPayload, TMeta> : ITry
     where TPayload : IPayload
     where TMeta : IMetaB
 {
-    IFeedback Verify(Command cmd, TState state);
-    IEnumerable<IEvtB> Raise(Command cmd, TState state);
+    IFeedback Verify(ICmdB cmd, TState state);
+    IEnumerable<IEvtB> Raise(ICmdB cmd, TState state);
 }

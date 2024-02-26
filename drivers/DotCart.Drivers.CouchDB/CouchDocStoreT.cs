@@ -70,7 +70,7 @@ public class CouchDocStoreT<TDbInfo, TDoc, TID>
         }
     }
 
-    public async Task<TDoc> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<TDoc?> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         try
         {

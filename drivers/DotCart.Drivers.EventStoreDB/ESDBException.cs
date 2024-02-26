@@ -2,13 +2,15 @@ using System.Runtime.Serialization;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public class ESDBException : Exception
+public class ESDBException
+    : Exception
 {
     public ESDBException()
     {
     }
 
-    protected ESDBException(SerializationInfo info, StreamingContext context) : base(info, context)
+    protected ESDBException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
     }
 

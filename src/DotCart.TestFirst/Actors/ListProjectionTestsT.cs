@@ -19,7 +19,8 @@ public abstract class
     where TID : IID
     where TDbInfo : IDbInfoB
 {
-    protected ListProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ListProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

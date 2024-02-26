@@ -1,12 +1,6 @@
-using DotCart.Core;
+using DotCart.Abstractions.Core;
 
 namespace DotCart.Abstractions.Schema;
-
-public interface IID
-{
-    string Value { get; }
-    string Id();
-}
 
 public record IDB : IID
 {
@@ -17,7 +11,7 @@ public record IDB : IID
 
     protected IDB(string prefix, string value = "")
     {
-        if (value == string.Empty)
+        if (string.IsNullOrEmpty(value))
             value = GuidUtils.LowerCaseGuid;
         Prefix = prefix.CheckPrefix();
         Value = value.CheckValue();

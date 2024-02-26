@@ -1,7 +1,6 @@
-using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Behavior;
+using DotCart.Behavior;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
@@ -40,7 +39,8 @@ public abstract class ChoreographyTestsT<TCmdPayload, TEvtPayload, TMeta> : IoCT
         Assert.NotNull(TestEnv);
         // WHEN
         _rule = TestEnv.ResolveAll<IChoreography>()
-            .First(x => x.Name == NameAtt.ChoreographyName<TEvtPayload, TCmdPayload>());
+            .First(x =>
+                x.Name == NameAtt2.ChoreographyName<TEvtPayload, TCmdPayload>());
         // THEN
         Assert.NotNull(_rule);
     }
@@ -65,7 +65,8 @@ public abstract class ChoreographyTestsT<TCmdPayload, TEvtPayload, TMeta> : IoCT
         Assert.NotNull(_aggBuilder);
         // WHEN
         _agg = _aggBuilder.Build();
-        var isKnown = _agg.KnowsChoreography(NameAtt.ChoreographyName<TEvtPayload, TCmdPayload>());
+        var isKnown = _agg.KnowsChoreography(
+            NameAtt2.ChoreographyName<TEvtPayload, TCmdPayload>());
         // THEN
         Assert.True(isKnown);
     }

@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+      <ProjectReference Include="..\..\src\Engine.Client\Engine.Client.csproj" />
+    </ItemGroup>
+
+
+</Project>

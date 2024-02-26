@@ -1,6 +1,6 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Context.Actors;
-using DotCart.Context.Spokes;
+using DotCart.Actors;
+using DotCart.Spokes;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Tests.Actors;

@@ -1,5 +1,5 @@
 using System.Text.RegularExpressions;
-using DotCart.Core;
+using DotCart.Abstractions.Core;
 
 namespace DotCart.Abstractions.Schema;
 

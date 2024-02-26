@@ -1,7 +1,6 @@
-﻿using DockTrace.TestKit;
-using DotCart.Abstractions.Behavior;
+﻿using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -52,7 +51,7 @@ public abstract class NATSListenerTestsT<TPayload, TMeta>
         var cts = new CancellationTokenSource(15_000);
         var executor = TestEnv.ResolveRequired<IHostExecutor>();
         // WHEN
-        await executor.StartAsync(cts.Token).ConfigureAwait(false);
+        await executor.StartAsync(cts.Token);
         // THEN
     }
 

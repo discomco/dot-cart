@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 
 namespace DotCart.Abstractions.Behavior;
 

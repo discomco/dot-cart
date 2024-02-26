@@ -1,7 +1,8 @@
 ﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.EventStoreDB.Interfaces;
-using DotCart.Drivers.Polly;
+using DotCart.Polly;
+using DotCart.Schema;
 using EventStore.Client;
 using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;

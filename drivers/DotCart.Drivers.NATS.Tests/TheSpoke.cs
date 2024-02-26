@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Actors;
 
 namespace DotCart.Drivers.NATS.Tests;
 

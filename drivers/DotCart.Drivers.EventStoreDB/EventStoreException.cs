@@ -3,7 +3,8 @@
 namespace DotCart.Drivers.EventStoreDB;
 
 [Serializable]
-public class EventStoreException : Exception
+public class EventStoreException
+    : Exception
 {
     public EventStoreException()
     {

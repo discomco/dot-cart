@@ -1,6 +1,7 @@
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Schema;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
@@ -16,7 +17,8 @@ public abstract class ListenerTestsT<TSpoke, TActor, TCmdPayload, TMeta, TFactPa
     where TID : IID
     where TPipeInfo : IPipeInfoB
 {
-    protected ListenerTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ListenerTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

@@ -60,7 +60,7 @@ public class ElasticStoreTT<TDoc> : IElasticStoreT<TDoc>
         throw new NotImplementedException();
     }
 
-    public Task<TDoc> DeleteAsync(string id, CancellationToken cancellationToken = default)
+    public Task<TDoc?> DeleteAsync(string id, CancellationToken cancellationToken = default)
     {
         throw new NotImplementedException();
     }

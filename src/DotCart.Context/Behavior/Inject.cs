@@ -2,7 +2,7 @@ using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Drivers.Serilog;
+using DotCart.Core.Logging;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Context.Behavior;

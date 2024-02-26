@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Immutable;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.TestKit;
@@ -9,27 +10,32 @@ using Xunit.Abstractions;
 
 namespace DotCart.Context.Tests.Behavior;
 
-public delegate Feedback MyFunc<in TDis>(TDis dis) where TDis : IEvtB;
+public delegate IFeedback MyFunc<in TDis>(TDis dis)
+    where TDis : IEvtB;
 
 public static class MyFuncs
 {
-    [Topic("Event1")] public static readonly MyFunc<IEvtB> _doFunc1 = evt => Feedback.New($"blabla1, {evt.EventId}");
+    [Topic("Event1")]
+    public static readonly MyFunc<IEvtB> _doFunc1 =
+        evt => Feedback.New($"blabla1, {evt.EventId}");
 
-    [Topic("Event2")] public static readonly MyFunc<IEvtB> _doFunc2 = evt => Feedback.New($"blabla2, {evt.EventId}");
+    [Topic("Event2")]
+    public static readonly MyFunc<IEvtB> _doFunc2
+        = evt => Feedback.New($"blabla2, {evt.EventId}");
 
-    public interface IEvt1 : IEvtB
-    {
-    }
+    public interface IEvt1
+        : IEvtB;
 
-    public interface IEvt2 : IEvtB
-    {
-    }
+    public interface IEvt2
+        : IEvtB;
 }
 
-public class Receiver : IReceiver
+public class Receiver
+    : IReceiver
 {
     public readonly IEnumerable<MyFunc<IEvtB>> _funcs;
-    private IImmutableDictionary<string, MyFunc<IEvtB>> _funcsDict = ImmutableDictionary<string, MyFunc<IEvtB>>.Empty;
+    private IImmutableDictionary<string, MyFunc<IEvtB>> _funcsDict
+        = ImmutableDictionary<string, MyFunc<IEvtB>>.Empty;
 
     public Receiver(IEnumerable<MyFunc<IEvtB>> funcs)
     {
@@ -57,7 +63,8 @@ public interface IReceiver
 
 public class InjectFunctionsTests : IoCTests
 {
-    public InjectFunctionsTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public InjectFunctionsTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

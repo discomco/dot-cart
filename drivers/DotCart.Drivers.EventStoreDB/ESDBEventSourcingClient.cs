@@ -5,7 +5,8 @@ using Polly.Retry;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-internal class ESDBEventSourcingClient : IESDBEventSourcingClient
+internal class ESDBEventSourcingClient
+    : IESDBEventSourcingClient
 {
     private readonly EventStoreClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
@@ -15,6 +16,7 @@ internal class ESDBEventSourcingClient : IESDBEventSourcingClient
     public ESDBEventSourcingClient(EventStoreClient client, AsyncRetryPolicy? retryPolicy = null)
     {
         _client = client;
+
         _retryPolicy = retryPolicy
                        ?? Policy
                            .Handle<Exception>()

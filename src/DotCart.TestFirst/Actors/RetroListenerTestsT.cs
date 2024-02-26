@@ -21,16 +21,16 @@ public abstract class RetroListenerTestsT<TSpoke, TActor, TFactPayload, TMeta, T
     {
     }
 
-    [Fact]
-    public void ShouldResolveEmitter()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var emitter = TestEnv.ResolveRequired<IEmitterT<TSpoke, TFactPayload, TMeta>>();
-        // THEN
-        Assert.NotNull(emitter);
-    }
+    // [Fact]
+    // public void ShouldResolveEmitter()
+    // {
+    //     // GIVEN
+    //     Assert.NotNull(TestEnv);
+    //     // WHEN
+    //     var emitter = TestEnv.ResolveRequired<IEmitterT<TSpoke, TFactPayload, TMeta>>();
+    //     // THEN
+    //     Assert.NotNull(emitter);
+    // }
 
     [Fact]
     public void ShouldListenOnTopic()

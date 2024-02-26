@@ -1,5 +1,5 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.TestKit.Mocks;
 using NATS.Client;
 

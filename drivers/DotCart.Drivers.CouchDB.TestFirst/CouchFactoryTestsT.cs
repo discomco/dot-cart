@@ -71,7 +71,7 @@ public abstract class CouchFactoryTestsT<TDbInfo>
         var server = fact.Server();
         Assert.NotNull(server);
         // WHEN
-        var resp = await server.Databases.HeadAsync(DbNameAtt.Get<TDbInfo>()).ConfigureAwait(false);
+        var resp = await server.Databases.HeadAsync(DbNameAtt.Get<TDbInfo>());
         // THEN
         Assert.NotNull(resp);
     }

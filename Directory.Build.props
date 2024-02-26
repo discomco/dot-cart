@@ -5,7 +5,7 @@
         <Authors>macula.io</Authors>
         <Company>DisComCo Sp.z.o.o</Company>
         <Copyright>Copyright (c)2019-2024 by DisComCo</Copyright>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile>../../dot-cart.snk</AssemblyOriginatorKeyFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>

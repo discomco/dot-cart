@@ -82,11 +82,11 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var ID = _newID();
         var doc = _newState();
-        var res = await RedisStoreT.SetAsync(ID.Id(), doc).ConfigureAwait(false);
+        var res = await RedisStoreT.SetAsync(ID.Id(), doc);
         // THEN
         Assert.NotNull(res);
         Assert.Equal(res, doc);
-        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id());
     }
 
     [Fact]
@@ -123,9 +123,9 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
         Assert.NotNull(res);
         Assert.Equal(res, doc);
         // THEN
-        var exists = await RedisStoreT.Exists(ID.Id()).ConfigureAwait(false);
+        var exists = await RedisStoreT.Exists(ID.Id());
         Assert.True(exists);
-        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id());
     }
 
     [Fact]
@@ -142,9 +142,9 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
         Assert.NotNull(res);
         Assert.Equal(res, doc);
         // THEN
-        var getDoc = await RedisStoreT.GetByIdAsync(ID.Id()).ConfigureAwait(false);
+        var getDoc = await RedisStoreT.GetByIdAsync(ID.Id());
         Assert.NotNull(getDoc);
         Assert.Equal(getDoc, doc);
-        await RedisStoreT.DeleteAsync(ID.Id()).ConfigureAwait(false);
+        await RedisStoreT.DeleteAsync(ID.Id());
     }
 }

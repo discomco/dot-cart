@@ -19,10 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Ardalis\DotCart.Drivers.Ardalis.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Serilog\DotCart.Drivers.Serilog.csproj"/>
+        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
     </ItemGroup>
 
 

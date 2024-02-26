@@ -1,6 +1,5 @@
 ﻿using DotCart.Abstractions.Behavior;
 using DotCart.Drivers.NATS.TestFirst;
-using DotCart.Drivers.Serilog;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
@@ -26,7 +25,6 @@ public class MyNATSListenerDriverTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSeriloggersFromCode()
             .AddNATSListenerDriverT<MyPayload, MetaB>();
     }
 }

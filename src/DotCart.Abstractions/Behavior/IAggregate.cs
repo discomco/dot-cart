@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Behavior;
@@ -17,7 +18,7 @@ public interface IAggregate
     bool KnowsApply(string evtType);
     void InjectTryFuncs(IEnumerable<ITry> tryFuncs);
     void InjectApplyFuncs(IEnumerable<IApply> applyFuncs);
-    Task<Feedback> ExecuteAsync(ICmdB cmd, IFeedback previous = null);
+    Task<IFeedback> ExecuteAsync(ICmdB cmd, IFeedback previous = null);
     IAggregate SetID(IID ID);
     string Id();
     string GetName();

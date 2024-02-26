@@ -1,10 +1,12 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB;
+using DotCart.Schema;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 

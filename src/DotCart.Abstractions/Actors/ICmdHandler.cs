@@ -1,15 +1,18 @@
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 
 namespace DotCart.Abstractions.Actors;
 
-public interface ICmdHandlerStep<TPipeInfo, TPayload> : IStepT<TPipeInfo, TPayload>
+public interface ICmdHandlerStep<TPipeInfo, TPayload>
+    : IStepT<TPipeInfo, TPayload>
     where TPayload : IPayload
-    where TPipeInfo : IPipeInfoB
-{
-}
+    where TPipeInfo : IPipeInfoB;
 
 public interface ICmdHandler
 {
-    Task<Feedback> HandleAsync(ICmdB cmd, Feedback previous, CancellationToken cancellationToken = default);
+    Task<IFeedback> HandleAsync(
+        ICmdB cmd,
+        IFeedback previous,
+        CancellationToken cancellationToken = default);
 }

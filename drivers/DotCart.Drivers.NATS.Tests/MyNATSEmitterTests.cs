@@ -1,6 +1,8 @@
 ﻿using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
 using DotCart.Drivers.NATS.TestFirst;
+using DotCart.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;

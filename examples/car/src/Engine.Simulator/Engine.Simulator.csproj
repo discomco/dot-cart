@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <UserSecretsId>dotnet-Engine.Simulator-0da5a99a-b6a7-4baa-b6d4-4563e259eae1</UserSecretsId>
+    </PropertyGroup>
+
+
+    <ItemGroup>
+        <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <None Remove=".env"/>
+        <EmbeddedResource Include=".env"/>
+    </ItemGroup>
+</Project>

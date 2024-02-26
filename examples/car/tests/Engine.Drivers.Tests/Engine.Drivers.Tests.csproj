@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.CouchDB.TestFirst\DotCart.Drivers.CouchDB.TestFirst.csproj" />
+      <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.RabbitMQ.TestFirst\DotCart.Drivers.RabbitMQ.TestFirst.csproj" />
+      <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.Redis.TestFirst\DotCart.Drivers.Redis.TestFirst.csproj" />
+      <ProjectReference Include="..\..\src\Engine.Context\Engine.Context.csproj" />
+      <ProjectReference Include="..\..\src\Engine.TestUtils\Engine.TestUtils.csproj" />
+    </ItemGroup>
+
+
+</Project>

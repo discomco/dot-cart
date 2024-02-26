@@ -1,8 +1,9 @@
-﻿using DotCart.Abstractions.Schema;
-using DotCart.Core;
-using DotCart.Drivers.Serilog;
+﻿using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Schema;
+using DotCart.Logging;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
+using Serilog;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -12,10 +13,7 @@ public abstract class NATSRequesterTestsT<TPayload>
     : NATSTestsB
     where TPayload : IPayload
 {
-    protected NATSRequesterTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
-    }
+
 
     [Fact]
     public void ShouldRequestHaveHopeTopic()
@@ -40,11 +38,17 @@ public abstract class NATSRequesterTestsT<TPayload>
         Assert.NotNull(requester);
     }
 
+
+    protected NATSRequesterTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
+    {
+    }
+
+
     protected override void InjectDependencies(IServiceCollection services)
     {
         base.InjectDependencies(services);
         services
-            .AddSeriloggersFromCode()
             .AddNATSRequesterT<TPayload>();
     }
 }

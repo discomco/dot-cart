@@ -1,4 +1,6 @@
-﻿using DotCart.Abstractions.Schema;
+﻿using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Core;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.Hosting;
 using NATS.Client;

@@ -16,10 +16,7 @@
 
     <ItemGroup>
         <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Context\DotCart.Context.csproj"/>
-        <ProjectReference Include="..\..\src\DotCart.Core\DotCart.Core.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
-        <ProjectReference Include="..\DotCart.Drivers.Polly\DotCart.Drivers.Polly.csproj"/>
     </ItemGroup>
 
 

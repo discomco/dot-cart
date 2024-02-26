@@ -1,14 +1,17 @@
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.Defaults.RabbitMq;
+using DotCart.Schema;
 using RabbitMQ.Client;
 using Serilog;
 
 namespace DotCart.Drivers.RabbitMQ;
 
-public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
+public class RMqEmitterDriverT<TPayload, TMeta>
+    : DriverB, IRmqEmitterDriverT<TPayload, TMeta>
     where TPayload : IPayload
     where TMeta : IMetaB
 {
@@ -31,7 +34,7 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
 
     public string Topic => FactTopicAtt.Get<TPayload>();
 
-    public Task ConnectAsync()
+    public Task ConnectAsync(CancellationToken cancellationToken = default)
     {
         return Task.Run(() =>
         {
@@ -39,7 +42,7 @@ public class RMqEmitterDriverT<TPayload, TMeta> : DriverB, IRmqEmitterDriverT<TP
             _connection = _connFact.CreateConnection();
             _channel = _connection.CreateModel();
             _channel.ExchangeDeclare(FactTopicAtt.Get<TPayload>(), ExchangeType.Fanout);
-        });
+        }, cancellationToken);
     }
 
     public Task EmitAsync(FactT<TPayload, TMeta> fact, CancellationToken cancellationToken = default)

@@ -1,12 +1,14 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Behavior;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;
 
 namespace DotCart.TestFirst.Behavior;
 
-public abstract class CmdTestsT<TID, TPayload, TMeta> : IoCTests
+public abstract class CmdTestsT<TID, TPayload, TMeta>
+    : IoCTests
     where TID : IID
     where TPayload : IPayload
     where TMeta : IMetaB
@@ -15,7 +17,8 @@ public abstract class CmdTestsT<TID, TPayload, TMeta> : IoCTests
     protected IDCtorT<TID> _newID;
     protected PayloadCtorT<TPayload> _newPayload;
 
-    public CmdTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public CmdTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

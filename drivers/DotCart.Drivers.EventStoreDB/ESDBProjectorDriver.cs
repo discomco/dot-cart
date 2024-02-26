@@ -1,8 +1,10 @@
+using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Schema;
 using EventStore.Client;
 using Grpc.Core;
 using Polly;
@@ -11,7 +13,8 @@ using Serilog;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public class ESDBProjectorDriver<TInfo> : DriverB, IProjectorDriverT<TInfo> where TInfo : IProjectorInfoB
+public class ESDBProjectorDriver<TInfo>
+    : DriverB, IProjectorDriverT<TInfo> where TInfo : IProjectorInfoB
 {
     private readonly IESDBPersistentSubscriptionsClient _client;
     private readonly SubscriptionFilterOptions _filterOptions;

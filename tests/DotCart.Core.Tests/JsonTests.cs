@@ -1,3 +1,5 @@
+using DotCart.Abstractions.Core;
+
 namespace DotCart.Core.Tests;
 
 public record TestRecord(string Id, string Name, string Description)

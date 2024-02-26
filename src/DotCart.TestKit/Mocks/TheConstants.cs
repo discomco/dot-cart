@@ -1,3 +1,5 @@
+using DotCart.Abstractions.Core;
+using DotCart.Abstractions.Schema;
 using DotCart.Core;
 
 namespace DotCart.TestKit.Mocks;

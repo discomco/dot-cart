@@ -1,5 +1,6 @@
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
+using DotCart.Behavior;
 using DotCart.Core;
 using DotCart.TestKit;
 using Xunit.Abstractions;

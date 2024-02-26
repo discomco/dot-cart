@@ -1,7 +1,6 @@
-using DockTrace.TestKit;
 using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Drivers;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
@@ -12,7 +11,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
-public class ESDBProjectorTests : IoCTests
+public class ESDBProjectorTests
+    : IoCTests
 {
     private IESDBPersistentSubscriptionsClient? _client;
     private IProjectorDriver? _driver;
@@ -23,7 +23,8 @@ public class ESDBProjectorTests : IoCTests
     private IDocStoreT<TheSchema.Doc>? _memStore;
     private SubscriptionFilterOptions? _subOptions;
 
-    public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

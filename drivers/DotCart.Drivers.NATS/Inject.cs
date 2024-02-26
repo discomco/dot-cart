@@ -1,17 +1,12 @@
 ﻿using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using NATS.Client;
 
 namespace DotCart.Drivers.NATS;
-
-public static class NATSHandlers
-{
-}
-
 public static class Inject
 {
     public static IServiceCollection AddCoreNATS(this IServiceCollection services,

@@ -1,5 +1,3 @@
 namespace DotCart.Abstractions.Schema;
 
-public interface IMsg
-{
-}
+public interface IMsg;

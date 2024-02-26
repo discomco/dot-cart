@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+
+        <IsPackable>false</IsPackable>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <EmbeddedResource Include=".env"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
+        <ProjectReference Include="..\..\src\Engine.Behavior\Engine.Behavior.csproj"/>
+        <ProjectReference Include="..\..\src\Engine.Contract\Engine.Contract.csproj"/>
+        <ProjectReference Include="..\..\src\Engine.TestUtils\Engine.TestUtils.csproj"/>
+        <ProjectReference Include="..\Engine.TestUtils\Engine.TestUtils.csproj" />
+    </ItemGroup>
+
+</Project>

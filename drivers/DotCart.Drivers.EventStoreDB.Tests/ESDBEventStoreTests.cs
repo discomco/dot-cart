@@ -2,8 +2,8 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
-using DotCart.Context.Behavior;
+using DotCart.Actors;
+using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
@@ -12,7 +12,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
-public class ESDBEventStoreTests : IoCTests
+public class ESDBEventStoreTests
+    : IoCTests
 {
     private IAggregate? _aggregate;
     private IAggregateBuilder? _aggregateBuilder;
@@ -23,7 +24,8 @@ public class ESDBEventStoreTests : IoCTests
     private IDCtorT<TheSchema.DocID> _newID;
 
 
-    public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public ESDBEventStoreTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

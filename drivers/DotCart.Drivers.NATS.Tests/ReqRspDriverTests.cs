@@ -2,7 +2,7 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Clients;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Context.Actors;
+using DotCart.Actors;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using FakeItEasy;
@@ -12,7 +12,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.NATS.Tests;
 
-public class ReqRspDriverTests : IoCTests
+public class ReqRspDriverTests
+    : IoCTests
 {
     protected IEncodedConnection _encodedConnection;
     protected IDCtorT<TheSchema.DocID> _newID;
@@ -101,7 +102,7 @@ public class ReqRspDriverTests : IoCTests
         var cts = new CancellationTokenSource(2_000);
         // WHEN
         _theResponder = TestEnv.ResolveRequired<IResponderT<TheContract.Payload>>();
-        await _theResponder.Activate(cts.Token).ConfigureAwait(false);
+        await _theResponder.Activate(cts.Token);
         // THEN
         // while (!cts.Token.IsCancellationRequested)
         // {
@@ -160,9 +161,7 @@ public class ReqRspDriverTests : IoCTests
             .AddTransient(_ => TheSchema.Doc.Rand)
             .AddTransient<IRequesterT<TheContract.Payload>, TheRequester>()
             .AddTransient<IResponderDriverT<TheContract.Payload>, TheResponderDriver>()
-            .AddTransient<
-                IResponderT<TheContract.Payload>,
-                ResponderT<TheSpoke, TheContract.Payload, TheContext.IPipeInfo>>()
+            .AddTransient<IResponderT<TheContract.Payload>, ResponderT<TheSpoke, TheContract.Payload, TheContext.IPipeInfo>>()
             .AddPipeBuilder<TheContext.IPipeInfo, TheContract.Payload>()
             .AddTransient(_ => Mappers._hope2Cmd);
     }

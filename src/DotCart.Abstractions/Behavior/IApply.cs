@@ -10,6 +10,8 @@ public interface IApply
 
 public interface IApply<TState, TPayload, TMeta> : IApply
     where TState : IState
+    where TPayload : IPayload
+    where TMeta : IMetaB
 {
-    TState Apply(TState state, Event evt);
+    TState Apply(TState state, IEvtB evt);
 }

@@ -1,6 +1,5 @@
 ﻿using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 using DotCart.Defaults.CouchDb;
 using DotCart.TestFirst.Drivers;
 using DotCart.TestKit;

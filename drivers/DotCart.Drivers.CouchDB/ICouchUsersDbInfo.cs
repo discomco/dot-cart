@@ -1,3 +1,4 @@
+using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Defaults.CouchDb;
 
@@ -5,6 +6,7 @@ namespace DotCart.Drivers.CouchDB;
 
 [DbName(CouchConstants.UsersDbName)]
 [Replicate(false)]
-public interface ICouchUsersDbInfo : ICouchDbInfoB
+public interface ICouchUsersDbInfo
+    : ICouchDbInfoB
 {
 }

@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using Microsoft.Extensions.Hosting;
@@ -6,9 +8,6 @@ using NATS.Client;
 using Serilog;
 
 namespace DotCart.Drivers.NATS;
-
-public delegate Task<Feedback> ProcessHopeAsync<TPayload>(HopeT<TPayload> hope)
-    where TPayload : IPayload;
 
 public class NATSResponderT<TPayload>
     : BackgroundService
@@ -90,7 +89,7 @@ public class NATSResponderT<TPayload>
                 HopeTopicAtt.Get<TPayload>(),
                 async (_, args) =>
                 {
-                    if (args.ReceivedObject is not HopeT<TPayload> req) return;
+                    if (args.ReceivedObject is not IHopeT<TPayload> req) return;
 
                     _logger.Debug($"[{HopeTopicAtt.Get<TPayload>()}]-Request {req}");
 

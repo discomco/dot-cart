@@ -1,9 +1,11 @@
 using Ardalis.GuardClauses;
 using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
 using DotCart.Defaults.RabbitMq;
+using DotCart.Schema;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using Serilog;

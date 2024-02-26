@@ -1,4 +1,5 @@
-using DotCart.Abstractions.Schema;
+using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Drivers;
 using DotCart.Core;
 using DotCart.Defaults.CouchDb;
 using MyCouch;
@@ -15,6 +16,7 @@ public class CouchAdminStoreT<TDbInfo>
     private static readonly bool _canReplicate = ReplicateAtt.Get<TDbInfo>();
     private static readonly string _upstreamReplicationId = $"up:{_dbName}";
     private readonly IMyCouchFactory _myCouchFactory;
+
     private readonly IMyCouchServerClient _server;
 
     public CouchAdminStoreT(IMyCouchFactory myCouchFactory)
@@ -42,7 +44,8 @@ public class CouchAdminStoreT<TDbInfo>
         return Task.CompletedTask;
     }
 
-    public async Task<Feedback> OpenDbAsync(string filterDoc = "", CancellationToken cancellationToken = default)
+    public async Task<IFeedback> OpenDbAsync(string filterDoc = "",
+        CancellationToken cancellationToken = default)
     {
         var res = Feedback.Empty;
         try
@@ -78,7 +81,8 @@ public class CouchAdminStoreT<TDbInfo>
     }
 
 
-    public async Task<Feedback> DbExistsAsync(CancellationToken cancellationToken = default)
+    public async Task<IFeedback> DbExistsAsync(
+        CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try
@@ -98,7 +102,8 @@ public class CouchAdminStoreT<TDbInfo>
         return fbk;
     }
 
-    public async Task<Feedback> CreateDbAsync(CancellationToken cancellationToken = default)
+    public async Task<IFeedback> CreateDbAsync(
+        CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try
@@ -128,7 +133,8 @@ public class CouchAdminStoreT<TDbInfo>
         return fbk;
     }
 
-    public async Task<Feedback> ReplicateAsync(string filterDoc = "", CancellationToken cancellationToken = default)
+    public async Task<IFeedback> ReplicateAsync(string filterDoc = "",
+        CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try
@@ -181,7 +187,7 @@ public class CouchAdminStoreT<TDbInfo>
     }
 
 
-    public Task<Feedback> CompactAsync()
+    public Task<IFeedback> CompactAsync()
     {
         throw new NotImplementedException();
         // using var client = new MyCouchServerClient(StoreConfig.LocalServer);
@@ -190,7 +196,7 @@ public class CouchAdminStoreT<TDbInfo>
         // return res.ToXResponse();
     }
 
-    public Task<Feedback> DeleteAsync()
+    public Task<IFeedback> DeleteAsync()
     {
         throw new NotImplementedException();
         // using var client = new MyCouchServerClient(StoreConfig.LocalServer);
@@ -198,7 +204,7 @@ public class CouchAdminStoreT<TDbInfo>
         // return res.ToXResponse();
     }
 
-    public Task<Feedback> InitializeAsync(string filterDoc = "")
+    public Task<IFeedback> InitializeAsync(string filterDoc = "")
     {
         throw new NotImplementedException();
         // if (DbName.ToLower() == "_replicator") return null;
@@ -248,7 +254,7 @@ public class CouchAdminStoreT<TDbInfo>
         // return res;
     }
 
-    public async Task<Feedback> ReplicationExistsAsync(string repId, CancellationToken cancellationToken = default)
+    public async Task<IFeedback> ReplicationExistsAsync(string repId, CancellationToken cancellationToken = default)
     {
         var fbk = Feedback.Empty;
         try

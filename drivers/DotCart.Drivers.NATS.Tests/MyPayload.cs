@@ -1,5 +1,5 @@
-﻿using DotCart.Abstractions.Schema;
-using DotCart.Core;
+﻿using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Schema;
 
 namespace DotCart.Drivers.NATS.Tests;
 

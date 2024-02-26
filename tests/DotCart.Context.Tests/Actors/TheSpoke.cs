@@ -1,5 +1,6 @@
+using DotCart.Abstractions;
 using DotCart.Abstractions.Actors;
-using DotCart.Core;
+using DotCart.Actors;
 
 namespace DotCart.Context.Tests.Actors;
 

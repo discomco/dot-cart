@@ -1,7 +1,7 @@
-﻿using DockTrace.TestKit;
-using DotCart.Abstractions.Behavior;
+﻿using DotCart.Abstractions.Behavior;
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
+using DotCart.Schema;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
@@ -101,7 +101,7 @@ public abstract class NATSEmitterTestsT<TPayload, TMeta>
         var host = TestEnv.ResolveRequired<IHostExecutor>();
         var publisher = TestEnv.ResolveRequired<INATSEmitter<TPayload, TMeta>>();
         Assert.NotNull(publisher);
-        await host.StartAsync(cts.Token).ConfigureAwait(false);
+        await host.StartAsync(cts.Token);
         var factCtor = TestEnv.ResolveRequired<FactCtorT<TPayload, TMeta>>();
         Assert.NotNull(factCtor);
         var payloadCtor = TestEnv.ResolveRequired<PayloadCtorT<TPayload>>();
@@ -111,7 +111,7 @@ public abstract class NATSEmitterTestsT<TPayload, TMeta>
         var fact = factCtor("", payloadCtor(), metaCtor(""));
         Thread.Sleep(2_000);
         // WHEN
-        await publisher.EmitAsync(fact).ConfigureAwait(false);
+        await publisher.EmitAsync(fact);
 
         Thread.Sleep(2_000);
         // THEN

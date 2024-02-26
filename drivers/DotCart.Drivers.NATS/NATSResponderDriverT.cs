@@ -1,3 +1,5 @@
+using DotCart.Abstractions.Contract;
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Core;
@@ -6,10 +8,9 @@ using Serilog;
 
 namespace DotCart.Drivers.NATS;
 
-public interface INATSResponderDriverT<TPayload> : IResponderDriverT<TPayload>
-    where TPayload : IPayload
-{
-}
+public interface INATSResponderDriverT<TPayload>
+    : IResponderDriverT<TPayload>
+    where TPayload : IPayload;
 
 public class NATSResponderDriverT<TPayload> : DriverB, INATSResponderDriverT<TPayload>
     where TPayload : IPayload
@@ -90,7 +91,8 @@ public class NATSResponderDriverT<TPayload> : DriverB, INATSResponderDriverT<TPa
 
     private object OnDeserialize(byte[] data)
     {
-        return data.FromBytes<HopeT<TPayload>>();
+        return data
+            .FromBytes<HopeT<TPayload>>();
     }
 
     private Task ConnectAsync(CancellationToken cancellationToken)

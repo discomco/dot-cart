@@ -1,4 +1,5 @@
 using DotCart.Abstractions.Schema;
+using DotCart.Schema;
 using DotCart.TestFirst.Schema;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
@@ -11,7 +12,8 @@ namespace DotCart.TestFirst.Tests.Schema;
 public class TheDocIDTests
     : IDTestsT<TheSchema.DocID>
 {
-    public TheDocIDTests(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    public TheDocIDTests(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 

@@ -5,9 +5,10 @@
         <Authors>macula.io</Authors>
         <Company>DisComCo Sp.z.o.o</Company>
         <Copyright>Copyright (c)2019-2023 by DisComCo</Copyright>
-        <TargetFramework>net7.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
+
         <SignAssembly>true</SignAssembly>
-        <AssemblyOriginatorKeyFile>../../../dot-cart.snk</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile>../../../../dot-cart.snk</AssemblyOriginatorKeyFile>
         <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
         <PackageIconUrl>https://discomco.pl/img/discomco-favicon.png</PackageIconUrl>
         <PackageProjectUrl>https://github.com/rgfaber/dot-scream</PackageProjectUrl>

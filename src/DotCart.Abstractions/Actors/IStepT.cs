@@ -1,5 +1,5 @@
+using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 
 namespace DotCart.Abstractions.Actors;
 
@@ -12,5 +12,7 @@ public interface IStepT<TPipeInfo, TPayload>
     int Order { get; }
     Importance Level { get; }
     void SetPipe(IPipeT<TPipeInfo, TPayload> pipe);
-    Task<Feedback> DoStepAsync(IDto msg, Feedback fbk, CancellationToken cancellationToken);
+    Task<IFeedback> DoStepAsync(IDto msg,
+        IFeedback fbk,
+        CancellationToken cancellationToken);
 }
