@@ -12,13 +12,13 @@ public interface IAggregateBuilder
 
 public static partial class Inject
 {
-    public static IServiceCollection AddSingletonAggregateBuilder<TAggregateInfo, TAggregateState>(
+    public static IServiceCollection AddSingletonAggregateBuilder<TAggregateInfo, TState>(
         this IServiceCollection services)
         where TAggregateInfo : IAggregateInfoB
-        where TAggregateState : IState
+        where TState : IState
     {
         return services
-            .AddSingleton<IAggregateBuilder, AggregateBuilder<TAggregateInfo, TAggregateState>>();
+            .AddSingleton<IAggregateBuilder, AggregateBuilder<TAggregateInfo, TState>>();
     }
 }
 

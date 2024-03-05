@@ -2,17 +2,16 @@ using DotCart.Drivers.CouchDB;
 using DotCart.Drivers.CouchDB.TestFirst;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
-using Engine.Context;
-using Engine.Contract;
+using Engine.TestUtils;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
-using Inject = Engine.TestUtils.Inject;
+using Schema = Engine.Contract.Schema;
 
 
 namespace Engine.Drivers.Tests;
 
 public class CouchStoreTests
-    : CouchStoreTestsT<ICouchDocDbInfo, Schema.Engine, Schema.EngineID>
+    : CouchStoreTestsT<TheContext.ICouchDocDbInfo, Schema.Engine, Schema.EngineID>
 {
     public CouchStoreTests(ITestOutputHelper output, IoCTestContainer testEnv)
         : base(output, testEnv)
@@ -29,8 +28,8 @@ public class CouchStoreTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-
-        Inject.AddTestDocCtors(services
-            .AddDotCouch<TheContext.ICouchDocDbInfo, Schema.Engine, Schema.EngineID>());
+        services
+            .AddDotCouch<TheContext.ICouchDocDbInfo, Schema.Engine, Schema.EngineID>()
+            .AddTestDocCtors();
     }
 }

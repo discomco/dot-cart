@@ -5,8 +5,8 @@ using DotCart.Abstractions.Schema;
 using DotCart.Behavior;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
-using Engine.Contract;
 using Engine.TestUtils;
+using Engine.TestUtils.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 using Schema = Engine.Contract.Schema;
@@ -83,7 +83,7 @@ public class EngineBehaviorTests
         _ID = _newID();
         var startCmd = Command.New<Contract.Start.Payload>(
             _ID,
-            TestUtils.Initialize.PayloadCtor().ToBytes(),
+            Funcs.PayloadCtor().ToBytes(),
             MetaB.New(NameAtt.Get<IEngineAggregateInfo>(), _ID.Id()).ToBytes()
         );
         //        _agg.SetID(_ID);

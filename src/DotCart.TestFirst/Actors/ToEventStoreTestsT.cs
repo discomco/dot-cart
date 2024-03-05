@@ -13,9 +13,9 @@ public abstract class ToEventStoreTestsT<TPayload, TMeta, TReadModelStore>
     where TPayload : IPayload
     where TMeta : IMetaB
 {
-    protected IAggregateBuilder _aggregateBuilder;
-    protected ICmdHandler _cmdHandler;
-    protected IExchange _exchange;
+    protected IAggregateBuilder AggregateBuilder;
+    protected ICmdHandler CmdHandler;
+    protected IExchange Exchange;
     protected IAggregateStore AggregateStore;
 
 
@@ -88,16 +88,16 @@ public abstract class ToEventStoreTestsT<TPayload, TMeta, TReadModelStore>
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _exchange = TestEnv.ResolveRequired<IExchange>();
+        Exchange = TestEnv.ResolveRequired<IExchange>();
         // THEN
-        Assert.NotNull(_exchange);
+        Assert.NotNull(Exchange);
     }
 
     protected override void Initialize()
     {
         AggregateStore = TestEnv.ResolveRequired<IAggregateStore>();
-        _cmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
-        _aggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
-        _exchange = TestEnv.ResolveRequired<IExchange>();
+        CmdHandler = TestEnv.ResolveRequired<ICmdHandler>();
+        AggregateBuilder = TestEnv.ResolveRequired<IAggregateBuilder>();
+        Exchange = TestEnv.ResolveRequired<IExchange>();
     }
 }

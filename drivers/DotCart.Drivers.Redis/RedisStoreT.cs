@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
-using DotCart.Core;
 using StackExchange.Redis;
 
 namespace DotCart.Drivers.Redis;

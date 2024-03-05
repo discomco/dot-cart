@@ -24,6 +24,6 @@ public class PayloadTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient(_ => TestUtils.Initialize.PayloadCtor);
+            .AddTransient(_ => TestUtils.Initialize.Funcs.PayloadCtor);
     }
 }

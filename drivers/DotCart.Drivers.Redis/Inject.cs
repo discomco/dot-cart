@@ -42,11 +42,11 @@ public static class Inject
         configOptions ??= redisOptionsFromConfig;
         services.AddRedisConnectionFactory<TDbInfo, TDoc>(configOptions);
         services.TryAddSingleton<
-            IRedisStoreBuilder<TDbInfo, TDoc, TID>,
-            RedisStoreBuilder<TDbInfo, TDoc, TID>>();
+            IRedisStoreFactory<TDbInfo, TDoc, TID>,
+            RedisStoreFactory<TDbInfo, TDoc, TID>>();
         services.TryAddSingleton<
-            IStoreBuilderT<TDbInfo, TDoc, TID>,
-            RedisStoreBuilder<TDbInfo, TDoc, TID>>();
+            IStoreFactoryT<TDbInfo, TDoc, TID>,
+            RedisStoreFactory<TDbInfo, TDoc, TID>>();
         return services;
     }
 }

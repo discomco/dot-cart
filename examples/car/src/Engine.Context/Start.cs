@@ -7,7 +7,9 @@ using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
 using DotCart.Defaults;
+using DotCart.Defaults.EventStore;
 using DotCart.Defaults.RabbitMq;
+using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.RabbitMQ;
 using DotCart.Drivers.Redis;
@@ -49,73 +51,55 @@ public static class Start
                 Dummy,
                 MetaB,
                 Contract.Start.Payload,
-                IRetroPipe>();
+                IRetroPipe>()
+            .AddESDBStore();
     }
 
-    public interface IToRedisDoc : IActorT<Spoke>
-    {
-    }
+    public interface IToRedisDoc : IActorT<Spoke>;
 
     [Name(ToRedisDoc_v1)]
     [DbName(DbConstants.RedisDocDbName)]
-    public class ToRedisDoc : ProjectionT<
-        IRedisDocDbInfo,
-        Schema.Engine,
-        Contract.Start.Payload, MetaB, Schema.EngineID>, IToRedisDoc
-    {
-        public ToRedisDoc(IExchange exchange,
-            IStoreBuilderT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
-            Evt2Doc<Schema.Engine, Contract.Start.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.Engine> newDoc) : base(exchange,
-            storeBuilder,
+    public class ToRedisDoc(
+        IExchange exchange,
+        IStoreFactoryT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID> storeFactory,
+        Evt2Doc<Schema.Engine, Contract.Start.Payload, MetaB> evt2Doc,
+        StateCtorT<Schema.Engine> newDoc)
+        : ProjectionT<
+            IRedisDocDbInfo,
+            Schema.Engine,
+            Contract.Start.Payload, MetaB, Schema.EngineID>(exchange,
+            storeFactory,
             evt2Doc,
-            newDoc)
-        {
-        }
-    }
+            newDoc), IToRedisDoc;
 
     [Name(Spoke_v1)]
-    public class Spoke : SpokeT<Spoke>
-    {
-        public Spoke(
-            IExchange exchange,
-            IProjector projector) : base(exchange, projector)
-        {
-        }
-    }
+    public class Spoke(
+        IExchange exchange,
+        IProjector projector) : SpokeT<Spoke>(exchange, projector);
 
     [DbName(DbConstants.RedisListDbName)]
     [DocId(IDConstants.EngineListId)]
     [Name(ToRedisList_v1)]
-    public class ToRedisList
+    public class ToRedisList(
+        IExchange exchange,
+        IStoreFactoryT<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID> storeFactory,
+        Evt2Doc<Schema.EngineList, Contract.Start.Payload, MetaB> evt2Doc,
+        StateCtorT<Schema.EngineList> newDoc)
         : ProjectionT<
             IRedisListDbInfo,
             Schema.EngineList,
             Contract.Start.Payload,
-            MetaB, Schema.EngineListID>, IActorT<Spoke>
-    {
-        public ToRedisList(IExchange exchange,
-            IStoreBuilderT<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID> storeBuilder,
-            Evt2Doc<Schema.EngineList, Contract.Start.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.EngineList> newDoc) : base(exchange,
-            storeBuilder,
+            MetaB, Schema.EngineListID>(exchange,
+            storeFactory,
             evt2Doc,
-            newDoc)
-        {
-        }
-    }
+            newDoc), IActorT<Spoke>;
 
     [Name(ToRabbitMq_v1)]
-    public class ToRabbitMq
-        : EmitterT<Spoke, Contract.Start.Payload, MetaB>
-    {
-        public ToRabbitMq(
-            IRmqEmitterDriverT<Contract.Start.Payload, MetaB> driver,
-            IExchange exchange,
-            Evt2Fact<Contract.Start.Payload, MetaB> evt2Fact) : base(driver, exchange, evt2Fact)
-        {
-        }
-    }
+    public class ToRabbitMq(
+        IRmqEmitterDriverT<Contract.Start.Payload, MetaB> driver,
+        IExchange exchange,
+        Evt2Fact<Contract.Start.Payload, MetaB> evt2Fact)
+        : EmitterT<Spoke, Contract.Start.Payload, MetaB>(driver, exchange, evt2Fact);
 
     [Name(FromNATS_v1)]
     public class FromNATS
@@ -133,29 +117,21 @@ public static class Start
         }
     }
 
-    public interface IHopePipe : IPipeInfoB
-    {
-    }
+    public interface IHopePipe
+        : IPipeInfoB;
 
-    public interface IRetroPipe : IPipeInfoB
-    {
-    }
+    public interface IRetroPipe
+        : IPipeInfoB;
 
     [Name(FromRabbitMqRetro_v1)]
-    public class FromRabbitMqRetro
+    public class FromRabbitMqRetro(
+        IRmqListenerDriverT<Contract.Start.Payload> driver,
+        IExchange exchange,
+        IPipeBuilderT<IRetroPipe, Contract.Start.Payload> pipeBuilder)
         : ListenerT<
             Spoke,
             Dummy,
             MetaB,
             Contract.Start.Payload,
-            IRetroPipe>
-    {
-        public FromRabbitMqRetro(
-            IRmqListenerDriverT<Contract.Start.Payload> driver,
-            IExchange exchange,
-            IPipeBuilderT<IRetroPipe, Contract.Start.Payload> pipeBuilder)
-            : base(driver, exchange, pipeBuilder)
-        {
-        }
-    }
+            IRetroPipe>(driver, exchange, pipeBuilder);
 }

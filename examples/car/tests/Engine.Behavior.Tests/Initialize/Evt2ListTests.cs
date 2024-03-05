@@ -4,6 +4,7 @@ using DotCart.TestKit;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Funcs = Engine.TestUtils.Initialize.Funcs;
 
 namespace Engine.Behavior.Tests.Initialize;
 
@@ -29,8 +30,8 @@ public class Evt2ListTests
             .AddInitializeProjectionFuncs()
             .AddListIDCtor()
             .AddTransient(_ => TestUtils.Schema.EmptyListCtor)
-            .AddTransient(_ => TestUtils.Initialize.PayloadCtor)
+            .AddTransient(_ => Funcs.PayloadCtor)
             .AddTransient(_ => TestUtils.Schema.MetaCtor)
-            .AddTransient(_ => TestUtils.Initialize.EvtCtor);
+            .AddTransient(_ => Funcs.EvtCtor);
     }
 }

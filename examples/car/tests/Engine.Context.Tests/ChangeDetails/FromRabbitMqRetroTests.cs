@@ -8,7 +8,8 @@ using Xunit.Abstractions;
 namespace Engine.Context.Tests.ChangeDetails;
 
 public class FromRabbitMqRetroTests
-    : RetroListenerTestsT<Context.ChangeDetails.Spoke, Context.ChangeDetails.FromRabbitMqRetro, Contract.ChangeDetails.Payload,
+    : RetroListenerTestsT<Context.ChangeDetails.Spoke, Context.ChangeDetails.FromRabbitMqRetro,
+        Contract.ChangeDetails.Payload,
         MetaB, Context.ChangeDetails.IRetroPipe, Schema.EngineID>
 {
     public FromRabbitMqRetroTests(ITestOutputHelper output, IoCTestContainer testEnv)

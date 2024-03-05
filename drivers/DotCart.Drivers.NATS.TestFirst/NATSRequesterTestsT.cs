@@ -1,9 +1,7 @@
 ﻿using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Schema;
-using DotCart.Logging;
 using DotCart.TestKit;
 using Microsoft.Extensions.DependencyInjection;
-using Serilog;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -13,6 +11,10 @@ public abstract class NATSRequesterTestsT<TPayload>
     : NATSTestsB
     where TPayload : IPayload
 {
+    protected NATSRequesterTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
+    {
+    }
 
 
     [Fact]
@@ -36,12 +38,6 @@ public abstract class NATSRequesterTestsT<TPayload>
         var requester = TestEnv.ResolveRequired<INATSRequesterT<TPayload>>();
         // THEN
         Assert.NotNull(requester);
-    }
-
-
-    protected NATSRequesterTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
     }
 
 

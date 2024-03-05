@@ -1,6 +1,5 @@
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Drivers;
-using DotCart.Abstractions.Schema;
 using DotCart.Defaults.CouchDb;
 
 namespace DotCart.Drivers.CouchDB;

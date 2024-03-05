@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
@@ -69,10 +68,11 @@ public static class Start
             {
                 if (lst.Items.All(it => it.Key != evt.AggregateId))
                     return lst;
-                var newLst = lst with
-                {
-                    Items = ImmutableDictionary.CreateRange(lst.Items)
-                };
+                // var newLst = lst with
+                // {
+                //     Items = ImmutableDictionary.CreateRange(lst.Items)
+                // };
+                var newLst = lst;
                 newLst.Items[evt.AggregateId].Status
                     = newLst.Items[evt.AggregateId].Status.UnsetFlag(Schema.Engine.Flags.Stopped);
                 newLst.Items[evt.AggregateId].Status
@@ -160,7 +160,4 @@ public static class Start
             .AddTransient(_ => _evt2List)
             .AddTransient(_ => _evt2ListVal);
     }
-
-
-
 }

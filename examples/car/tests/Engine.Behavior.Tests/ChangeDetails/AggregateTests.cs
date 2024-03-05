@@ -1,4 +1,3 @@
-using System.Diagnostics.Contracts;
 using DotCart.Abstractions.Behavior;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;

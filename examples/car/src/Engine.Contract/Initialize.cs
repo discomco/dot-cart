@@ -56,6 +56,4 @@ public static class Initialize
             return new Exception(message);
         }
     }
-
-
 }

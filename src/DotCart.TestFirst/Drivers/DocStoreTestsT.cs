@@ -22,12 +22,12 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
 
 
     [Fact]
-    public void ShouldResolveStoreBuilder()
+    public void ShouldResolveStoreFactory()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         // THEN
         Assert.NotNull(builder);
     }
@@ -62,9 +62,9 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var newDoc = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         Assert.NotNull(builder);
-        var store = builder.Build();
+        var store = builder.Create();
         // THEN
         var ID = newID();
         var doc = newDoc();
@@ -89,9 +89,9 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var newDoc = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         // THEN
-        var store = builder.Build();
+        var store = builder.Create();
         var ID = newID();
         var doc = newDoc();
         var id = ID.Id();
@@ -116,9 +116,9 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var newDoc = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         Assert.NotNull(builder);
-        var store = builder.Build();
+        var store = builder.Create();
         // THEN
         var ID = newID();
         var doc = newDoc();
@@ -146,9 +146,9 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var newDoc = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         Assert.NotNull(builder);
-        var store = builder.Build();
+        var store = builder.Create();
         // THEN
         var ID = newID();
         var doc = newDoc();
@@ -177,9 +177,9 @@ public abstract class DocStoreTestsT<TDbInfo, TDoc, TID>
         // WHEN
         var newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         var newDoc = TestEnv.ResolveRequired<StateCtorT<TDoc>>();
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         Assert.NotNull(builder);
-        var store = builder.Build();
+        var store = builder.Create();
         // THEN
         var ID = newID();
         var doc = newDoc();

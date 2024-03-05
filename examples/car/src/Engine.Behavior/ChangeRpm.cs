@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
@@ -13,17 +12,6 @@ namespace Engine.Behavior;
 
 public static class ChangeRpm
 {
-
-    public static Schema.Rpm? calcRpm(int original, int delta)
-    {
-        var newPower = original + delta;
-        if (newPower <= 0)
-            newPower = 0;
-        return Schema.Rpm.New(newPower);
-    }
-
-
-
     private static readonly RaiseFuncT<Schema.Engine, Contract.ChangeRpm.Payload, MetaB>
         _raiseFunc =
             (cmd, _) =>
@@ -80,10 +68,11 @@ public static class ChangeRpm
                     return doc;
                 var newItem = doc.Items[evt.AggregateId] with { };
                 newItem.Power = calcRpm(newItem.Power, evt.GetPayload<Contract.ChangeRpm.Payload>().Delta).Value;
-                var newDoc = doc with
-                {
-                    Items = ImmutableDictionary.CreateRange(doc.Items)
-                };
+                // var newDoc = doc with
+                // {
+                //     Items = ImmutableDictionary.CreateRange(doc.Items)
+                // };
+                var newDoc = doc;
                 newDoc.Items = newDoc.Items.Remove(evt.AggregateId);
                 newDoc.Items = newDoc.Items.Add(evt.AggregateId, newItem);
                 return newDoc;
@@ -126,6 +115,14 @@ public static class ChangeRpm
                     meta
                 );
 
+    public static Schema.Rpm? calcRpm(int original, int delta)
+    {
+        var newPower = original + delta;
+        if (newPower <= 0)
+            newPower = 0;
+        return Schema.Rpm.New(newPower);
+    }
+
     public static IServiceCollection AddChangeRpmACLFuncs(this IServiceCollection services)
     {
         return services
@@ -153,7 +150,4 @@ public static class ChangeRpm
             .AddTransient(_ => _guardFunc)
             .AddTransient(_ => _raiseFunc);
     }
-
-
-
 }

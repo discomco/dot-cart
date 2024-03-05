@@ -20,26 +20,26 @@ public abstract class CouchStoreTestsT<TDbInfo, TDoc, TID>
     }
 
 
-    [Fact]
-    public void ShouldResolveCouchBuilder()
-    {
-        // GIVEN
-        Assert.NotNull(TestEnv);
-        // WHEN
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
-        // THEN
-        Assert.NotNull(builder);
-    }
+    // [Fact]
+    // public void ShouldResolveCouchBuilder()
+    // {
+    //     // GIVEN
+    //     Assert.NotNull(TestEnv);
+    //     // WHEN
+    //     var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
+    //     // THEN
+    //     Assert.NotNull(builder);
+    // }
 
     [Fact]
-    public void ShouldBuildDocStore()
+    public void ShouldCreateDocStore()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TDoc, TID>>();
+        var builder = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TDoc, TID>>();
         Assert.NotNull(builder);
-        var docStore = builder.Build();
+        var docStore = builder.Create();
         // THEN
         Assert.NotNull(docStore);
         Assert.IsType<CouchDocStoreT<TDbInfo, TDoc, TID>>(docStore);

@@ -2,7 +2,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Behavior;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -19,6 +18,18 @@ public static partial class Inject
             .AddConfiguredESDBClients()
             .AddSingleton<IAggregateStore, ESDBStore>()
             .AddSingleton<IEventStore, ESDBStore>();
+    }
+
+
+    private static IServiceCollection AddEventStore(this IServiceCollection services,
+        Action<EventStoreClientSettings>? clientSettings)
+    {
+        return services
+            .AddEventStoreClient(clientSettings)
+            .AddEventStoreOperationsClient(clientSettings)
+            .AddEventStorePersistentSubscriptionsClient(clientSettings)
+            .AddEventStoreProjectionManagementClient(clientSettings)
+            .AddEventStoreUserManagementClient(clientSettings);
     }
 }
 

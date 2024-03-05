@@ -8,7 +8,6 @@ namespace Engine.Contract;
 
 public static class Schema
 {
-
     private static readonly object _setFlagMutex = new();
 
     public static Engine.Flags SetFlag(this Engine.Flags status, Engine.Flags flag)
@@ -35,12 +34,10 @@ public static class Schema
     }
 
 
-
     [DbName(DbConstants.RedisDocDbName)]
     public record Engine(string Id, Engine.Flags Status, Details Details, Rpm Rpm)
         : IState
     {
-
         [Flags]
         public enum Flags
         {
@@ -50,7 +47,6 @@ public static class Schema
             Stopped = 4,
             Overheated = 8
         }
-
 
 
         // private Engine()
@@ -119,8 +115,6 @@ public static class Schema
                 Power = power
             };
         }
-
-
     }
 
     [IDPrefix(IDConstants.EngineListIDPrefix)]
@@ -146,6 +140,20 @@ public static class Schema
         {
             return new EngineList(id, ImmutableDictionary<string, EngineListItem>.Empty);
         }
+
+        public static EngineList New()
+        {
+            var ID = EngineListID.New();
+            return New(ID.Id());
+        }
+
+
+
+        // public override bool Equals(object? obj)
+        // {
+        //     return obj is EngineList list &&
+        //            Id == list.Id;
+        // }
     }
 
     [IDPrefix(IDConstants.EngineIDPrefix)]
@@ -164,7 +172,6 @@ public static class Schema
             return new EngineID(value.ToLower());
         }
     }
-
 
 
     public record Details
@@ -193,5 +200,4 @@ public static class Schema
             return new Rpm(value);
         }
     }
-
 }

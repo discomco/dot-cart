@@ -14,7 +14,7 @@ namespace Engine.TestUtils;
 public static class ChangeDetails
 {
     public static readonly PayloadCtorT<
-            Engine.Contract.ChangeDetails.Payload>
+            Contract.ChangeDetails.Payload>
         PayloadCtor =
             () => Contract.ChangeDetails.Payload.New(Contract.Schema.Details.New("Engine #2", "A V8 Merlin engine."));
 

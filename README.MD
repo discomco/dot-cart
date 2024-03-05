@@ -2,30 +2,40 @@
 
 > **DotCart** stands for **Cartwheel Architecture for DotNET**.
 
-The **DotCart SDK** is a toolbox for developing **modular, behavior-centric DotNet applications** that use **Event Sourcing with CQRS**: a paradigm that is based on writing state changes (_Events_) to an immutable, append-only log, whilst using  interpretations thereof (_Projections_) for materializing views that are read-optimized for specific use cases.
+The **DotCart SDK** is an open toolbox for developing **modular, behavior-centric DotNet applications** that use **Event Sourcing with CQRS**: a paradigm that is based on writing state changes (_Events_) to an immutable, append-only log, whilst using  interpretations thereof (_Projections_) for materializing views that are read-optimized for specific use cases.
+
+## ERcN Application Stack
+
+The DotCart SDK is open and extendible, using driver-based integration.  
+
+However, for applications we prefer the _ERcN_ Stack.
+
+E - EventStoreDB (for storing Event Streams)  
+R - Redis (for caching/storing Read Models)  
+cN - core NATS (for inter-process async Req/Rsp and Pub/Sub)
 
 ## Purpose
 
- > _Event Sourcing with CQRS_ is still considered difficult and is often accused of adding complexity to systems and thus, teams tend to gravitate to CRUD based solutions using RDBMS systems. Further down the road, they usually discover that a bag of trickery needs to be applied, to keep the gears spinning.
+ > _Event Sourcing with CQRS_ is often considered emerging, difficult and regarded as adding 'unnecessary' complexity to systems.  
+ Though this is a very opinionated view, it usually results in teams opting for a more traditional CRUD-based approach, even if this brings its own challenges and complexities down the road.
 
-This toolbox aims at eliminating the need for hand-crafted boiler plate code, so that engineers can focus on implementing business value, rather than infrastructure code.  
-A second aim is to bring uniformity to the codebase both in structure as in nomenclature, so that developers can easily cross-over from one domain to another, reducing ramp-up time to almost nil.
+This toolbox addresses these concerns by eliminating the need for hand-crafted boiler plate code and offering a 'yellow brick road to ES/CQRS', so that engineers can focus on implementing business value.  
+Additionally, it aims to bring uniformity to the codebase both in structure as in nomenclature, so that developers can easily cross-over from one domain to another, reducing ramp-up time to almost zero.  
+The outcome of implementation, is a highly modular solution, that is bounded by behavior (a process), open for integration and liberal in deployment.
 
 ## Outline
 
 - [The DotCart SDK](#the-dotcart-sdk)
+  - [ERcN Application Stack](#ercn-application-stack)
   - [Purpose](#purpose)
   - [Outline](#outline)
   - [Cartwheel Architecture (CA)](#cartwheel-architecture-ca)
-    - [WRITE Spokes](#write-spokes)
+    - [WRITE Spokes (W-Spoke)](#write-spokes-w-spoke)
       - [Write2Stream variant](#write2stream-variant)
       - [Write2Project variant](#write2project-variant)
   - [Getting Started](#getting-started)
     - [Schema First](#schema-first)
     - [Behavior](#behavior)
-  - [Outline](#outline-1)
-  - [Introduction](#introduction)
-  - [Motivation](#motivation)
     - [as a **Software Engineering Manager**](#as-a-software-engineering-manager)
     - [as a **Software Architect**](#as-a-software-architect)
     - [as a **Software Engineer**](#as-a-software-engineer)
@@ -43,11 +53,11 @@ Cartwheel Architecture aims at providing an unambiguous definition for _Module_.
 
  ![cartwheel architecture](image/README/cartwheel-arch.png)
 
-### WRITE Spokes
+### WRITE Spokes (W-Spoke)
 
-> A WRITE spoke is responsible for processing a single Command.
+> A WRITE Spoke is responsible for processing a single Command.
 
-Though we try to respect the current state of literature as much as possible, it is worth mentionioning that two variants of WRITE Spoke can be identified: the **Write2Stream** and the **Write2Project** variants.
+While reflecting on a W-Spoke's anatomy, it became clear that two  distinct variants can be identified: the **Write2Stream** and the **Write2Project** variants.
 
 #### Write2Stream variant
 
@@ -57,7 +67,7 @@ The Write2Stream variant's responsibility end at the moment when the Event is ap
 - One **Responder** (required)
 - One **Command Pipeline** (required) containing:
   - A number of **Specifications** (middleware)
-  - An **Event Sourcing Aggregate** (required)
+  - A reference to the **Event Sourcing Aggregate** (required, Injected)
   - One **Try** function (required)
   - One or more **Apply** functions (one for each event that is emitted by the pipeline)
 - A number of **Domain Policies** (optional)
@@ -68,19 +78,8 @@ The Write2Stream variant's responsibility end at the moment when the Event is ap
 
 #### Write2Project variant
 
-
-
-
-> PROJECTIONS
-
-
-
-
-uses the Exchange Pattern: an in-process, topic-based  Pub/Sub mechanism that has the performs the same function as its external siblings and to which 
-
-
-
-
+> PROJECTIONS  
+a _pure projection_ is a function that has an _Event_ and a certain _Read Model State_ as inputs and a _Mutated Read Model State_ as output.
 
 
 ## Getting Started
@@ -103,37 +102,6 @@ Next, developers will implement the Spoke's Behavior. This consists of a **singl
 
 One _Spoke_ (module) starting with  which are identied via the towards a collection of active, always-on, actor-like components, that operate against the infrastructure and marshal commands and events in and out of the business logic, which is maintained at the center of the application in a so-called _event-sourced aggregate_.
 
-
-## Outline
-
-- [The DotCart SDK](#the-dotcart-sdk)
-  - [Purpose](#purpose)
-  - [Outline](#outline)
-  - [Cartwheel Architecture (CA)](#cartwheel-architecture-ca)
-    - [WRITE Spokes](#write-spokes)
-      - [Write2Stream variant](#write2stream-variant)
-      - [Write2Project variant](#write2project-variant)
-  - [Getting Started](#getting-started)
-    - [Schema First](#schema-first)
-    - [Behavior](#behavior)
-  - [Outline](#outline-1)
-  - [Introduction](#introduction)
-  - [Motivation](#motivation)
-    - [as a **Software Engineering Manager**](#as-a-software-engineering-manager)
-    - [as a **Software Architect**](#as-a-software-architect)
-    - [as a **Software Engineer**](#as-a-software-engineer)
-  - [Documentation](#documentation)
-    - [Core SDK Packages](#core-sdk-packages)
-      - [DotCart.TestKit](#dotcarttestkit)
-      - [DotCart.TestFirst](#dotcarttestfirst)
-      - [DotCart.Abstractions](#dotcartabstractions)
-      - [DotCart](#dotcart)
-  - [Development](#development)
-
-## Introduction
-
-
-## Motivation
 
 ### as a **Software Engineering Manager**
 

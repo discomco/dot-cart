@@ -12,7 +12,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>        
+        <ProjectReference Include="..\..\src\DotCart.Abstractions\DotCart.Abstractions.csproj"/>
         <ProjectReference Include="..\..\src\DotCart.Defaults\DotCart.Defaults.csproj"/>
     </ItemGroup>
 

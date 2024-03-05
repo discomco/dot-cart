@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.Runtime.Serialization;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
@@ -52,10 +51,11 @@ public static class Stop
             {
                 if (lst.Items.All(it => it.Key != evt.AggregateId))
                     return lst;
-                var newList = lst with
-                {
-                    Items = ImmutableDictionary.CreateRange(lst.Items)
-                };
+                // var newList = lst with
+                // {
+                //     Items = ImmutableDictionary.CreateRange(lst.Items)
+                // };
+                var newList = lst;
                 var newListItem = newList.Items[evt.AggregateId] with { };
                 newListItem.Status = newListItem.Status
                     .UnsetFlag(Schema.Engine.Flags.Started)

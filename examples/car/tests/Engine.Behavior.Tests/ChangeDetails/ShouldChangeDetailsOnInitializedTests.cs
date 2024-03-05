@@ -5,6 +5,7 @@ using DotCart.Behavior;
 using DotCart.TestFirst.Behavior;
 using DotCart.TestKit;
 using Engine.TestUtils;
+using Engine.TestUtils.Initialize;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
 
@@ -33,7 +34,7 @@ public class ShouldChangeDetailsOnInitializedTests
         // AND
         var agg = aggBuilder.Build();
         var aggID = Schema.DocIDCtor();
-        var initPld = TestUtils.Initialize.PayloadCtor();
+        var initPld = Funcs.PayloadCtor();
         var initCmd = Command.New<Contract.Initialize.Payload>(
             aggID,
             initPld.ToBytes(),

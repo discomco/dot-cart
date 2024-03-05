@@ -6,7 +6,9 @@ using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
 using DotCart.Defaults;
+using DotCart.Defaults.EventStore;
 using DotCart.Drivers.CouchDB;
+using DotCart.Drivers.EventStoreDB;
 using DotCart.Drivers.NATS;
 using DotCart.Drivers.Redis;
 using DotCart.Spokes;
@@ -18,10 +20,14 @@ namespace Engine.Context;
 
 public static class ChangeRpm
 {
-    public const string ToCouchDoc_v1 = Contract.ChangeRpm.Topics.Evt_v1 + ":to_couch_doc:v1";
-    public const string ToRedisDoc_v1 = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc:v1";
-    public const string ToRedisList_v1 = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_list:v1";
-    public const string FromNATS_v1 = Contract.ChangeRpm.Topics.Hope_v1 + ":from_nats:v1";
+    public const string ToCouchDoc_v1
+        = Contract.ChangeRpm.Topics.Evt_v1 + ":to_couch_doc:v1";
+    public const string ToRedisDoc_v1
+        = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc:v1";
+    public const string ToRedisList_v1
+        = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_list:v1";
+    public const string FromNATS_v1
+        = Contract.ChangeRpm.Topics.Hope_v1 + ":from_nats:v1";
 
     public const string Spoke_v1 = "engine:change_rpm:spoke:v1";
 
@@ -39,97 +45,77 @@ public static class ChangeRpm
             .AddTransient<IActorT<Spoke>, ToRedisList>()
             .AddProjectorInfra<IEngineProjectorInfo, Schema.Engine, Schema.EngineList>()
             .AddHopeInPipe<IHopePipe, Contract.ChangeRpm.Payload, MetaB>()
-            .AddNATSResponderT<Spoke, FromNATS, Contract.ChangeRpm.Payload, MetaB>();
+            .AddNATSResponderT<Spoke, FromNATS, Contract.ChangeRpm.Payload, MetaB>()
+            .AddESDBStore();
     }
 
     [Name(ToRedisDoc_v1)]
     [DbName(DbConstants.RedisDocDbName)]
-    public class ToRedisDoc : ProjectionT<
-        IRedisDocDbInfo,
-        Schema.Engine,
-        Contract.ChangeRpm.Payload,
-        MetaB,
-        Schema.EngineID>, IActorT<Spoke>
-    {
-        public ToRedisDoc(IExchange exchange,
-            IStoreBuilderT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
-            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.Engine> newDoc) : base(exchange,
-            storeBuilder,
+    public class ToRedisDoc(
+        IExchange exchange,
+        IStoreFactoryT<IRedisDocDbInfo, Schema.Engine, Schema.EngineID> storeFactory,
+        Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
+        StateCtorT<Schema.Engine> newDoc)
+        : ProjectionT<
+            IRedisDocDbInfo,
+            Schema.Engine,
+            Contract.ChangeRpm.Payload,
+            MetaB,
+            Schema.EngineID>(exchange,
+            storeFactory,
             evt2Doc,
-            newDoc)
-        {
-        }
-    }
+            newDoc), IActorT<Spoke>;
 
 
     [Name(Spoke_v1)]
-    public class Spoke : SpokeT<Spoke>
-    {
-        public Spoke(
-            IExchange exchange,
-            IProjector projector) : base(exchange, projector)
-        {
-        }
-    }
+    public class Spoke(
+        IExchange exchange,
+        IProjector projector)
+        : SpokeT<Spoke>(exchange, projector);
 
     [DocId(IDConstants.EngineListId)]
     [DbName(DbConstants.RedisListDbName)]
     [Name(ToRedisList_v1)]
-    public class ToRedisList : ProjectionT<
-        IRedisListDbInfo,
-        Schema.EngineList,
-        Contract.ChangeRpm.Payload, MetaB, Schema.EngineListID>, IActorT<Spoke>
-    {
-        public ToRedisList(IExchange exchange,
-            IStoreBuilderT<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID> storeBuilder,
-            Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.EngineList> newDoc) : base(exchange,
-            storeBuilder,
+    public class ToRedisList(
+        IExchange exchange,
+        IStoreFactoryT<IRedisListDbInfo, Schema.EngineList, Schema.EngineListID> storeFactory,
+        Evt2Doc<Schema.EngineList, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
+        StateCtorT<Schema.EngineList> newDoc)
+        : ProjectionT<
+            IRedisListDbInfo,
+            Schema.EngineList,
+            Contract.ChangeRpm.Payload, MetaB, Schema.EngineListID>(exchange,
+            storeFactory,
             evt2Doc,
-            newDoc)
-        {
-        }
-    }
+            newDoc), IActorT<Spoke>;
 
     [Name(FromNATS_v1)]
-    public class FromNATS
+    public class FromNATS(
+        INATSResponderDriverT<Contract.ChangeRpm.Payload> driver,
+        IExchange exchange,
+        IPipeBuilderT<IHopePipe, Contract.ChangeRpm.Payload> builder)
         : ResponderT<
             Spoke,
             Contract.ChangeRpm.Payload,
-            IHopePipe>
-    {
-        public FromNATS(
-            INATSResponderDriverT<Contract.ChangeRpm.Payload> driver,
-            IExchange exchange,
-            IPipeBuilderT<IHopePipe, Contract.ChangeRpm.Payload> builder)
-            : base(driver, exchange, builder)
-        {
-        }
-    }
+            IHopePipe>(driver, exchange, builder);
 
-    public interface IHopePipe : IPipeInfoB
-    {
-    }
+    public interface IHopePipe
+        : IPipeInfoB;
 
 
     [Name(ToCouchDoc_v1)]
     [DbName(DbConstants.CouchDocDbName)]
-    public class ToCouchDoc
+    public class ToCouchDoc(
+        IExchange exchange,
+        IStoreFactoryT<ICouchDocDbInfo, Schema.Engine, Schema.EngineID> storeFactory,
+        Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
+        StateCtorT<Schema.Engine> newDoc)
         : ProjectionT<ICouchDocDbInfo,
             Schema.Engine,
             Contract.ChangeRpm.Payload,
             MetaB,
-            Schema.EngineID>, IActorT<Spoke>
-    {
-        public ToCouchDoc(IExchange exchange,
-            IStoreBuilderT<ICouchDocDbInfo, Schema.Engine, Schema.EngineID> storeBuilder,
-            Evt2Doc<Schema.Engine, Contract.ChangeRpm.Payload, MetaB> evt2Doc,
-            StateCtorT<Schema.Engine> newDoc) : base(exchange,
-            storeBuilder,
+            Schema.EngineID>(exchange,
+            storeFactory,
             evt2Doc,
-            newDoc)
-        {
-        }
-    }
+            newDoc), IActorT<Spoke>;
 }

@@ -1,4 +1,6 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Schema;
+using DotCart.TestFirst.Drivers;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -29,11 +31,13 @@ public static partial class Inject
     }
 
 
-    public static IServiceCollection AddEventFeeder(this IServiceCollection services)
+    public static IServiceCollection AddEventFeeder<TID, TDoc>(this IServiceCollection services)
+        where TDoc : IState
+        where TID : IID
     {
         return services
             .AddRootDocCtors()
             .AddInitializeWithChangeRpmEvents()
-            .AddTransient<IActorB, EventFeeder>();
+            .AddTransient<IActorB, EventFeeder<TID, TDoc>>();
     }
 }

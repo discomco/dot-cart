@@ -24,7 +24,7 @@ public class HopeTests
     {
         services
             .AddTestDocIDCtor()
-            .AddTransient(_ => TestUtils.Initialize.PayloadCtor)
-            .AddTransient(_ => TestUtils.Initialize.HopeCtor);
+            .AddTransient(_ => TestUtils.Initialize.Funcs.PayloadCtor)
+            .AddTransient(_ => TestUtils.Initialize.Funcs.HopeCtor);
     }
 }

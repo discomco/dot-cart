@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj" />
-      <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
+        <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.NATS\DotCart.Drivers.NATS.csproj"/>
+        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>
     </ItemGroup>
 
 

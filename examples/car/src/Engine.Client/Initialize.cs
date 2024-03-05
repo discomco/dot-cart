@@ -1,4 +1,3 @@
-
 using DotCart.Drivers.NATS;
 using Microsoft.Extensions.DependencyInjection;
 using NATS.Client;
@@ -16,7 +15,7 @@ public static class Initialize
     public interface IRequester;
 
     internal class Requester
-        : NATSRequesterT<Engine.Contract.Initialize.Payload>, IRequester
+        : NATSRequesterT<Contract.Initialize.Payload>, IRequester
     {
         protected Requester(INatsClientConnectionFactory connectionFactory, Action<Options> configureOptions)
             : base(connectionFactory, configureOptions)

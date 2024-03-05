@@ -4,15 +4,15 @@ using DotCart.Defaults.CouchDb;
 
 namespace DotCart.Drivers.CouchDB;
 
-public class CouchStoreBuilderT<TDbInfo, TDoc, TID>
-    : ICouchStoreBuilderT<TDbInfo, TDoc, TID>, ICouchAdminBuilderT<TDbInfo>
+public class CouchStoreFactoryT<TDbInfo, TDoc, TID>
+    : ICouchStoreFactoryT<TDbInfo, TDoc, TID>, ICouchAdminFactoryT<TDbInfo>
     where TDoc : IState
     where TID : IID
     where TDbInfo : ICouchDbInfoB
 {
     private readonly IMyCouchFactory _factory;
 
-    public CouchStoreBuilderT(IMyCouchFactory factory)
+    public CouchStoreFactoryT(IMyCouchFactory factory)
     {
         _factory = factory;
     }
@@ -22,7 +22,7 @@ public class CouchStoreBuilderT<TDbInfo, TDoc, TID>
         return new CouchAdminStoreT<TDbInfo>(_factory);
     }
 
-    public IDocStoreT<TDoc> Build()
+    public IDocStoreT<TDoc> Create()
     {
         return new CouchDocStoreT<TDbInfo, TDoc, TID>(_factory);
     }

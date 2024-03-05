@@ -6,8 +6,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\src\DotCart\DotCart.csproj" />
-      <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj" />
+        <ProjectReference Include="..\..\..\..\src\DotCart\DotCart.csproj"/>
+        <ProjectReference Include="..\Engine.Contract\Engine.Contract.csproj"/>
     </ItemGroup>
 
 

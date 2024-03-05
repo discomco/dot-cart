@@ -7,7 +7,6 @@ namespace Engine.Contract;
 
 public static class ChangeRpm
 {
-
     public static class Topics
     {
         public const string Hope_v1 = "engine.change_rpm.v1";

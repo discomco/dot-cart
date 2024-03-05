@@ -4,6 +4,7 @@ using DotCart.TestKit;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Funcs = Engine.TestUtils.Initialize.Funcs;
 
 namespace Engine.Context.Tests.Initialize;
 
@@ -30,7 +31,7 @@ public class FromRabbitMqRetroTests
 
     protected override void InjectDependencies(IServiceCollection services)
     {
-        TestUtils.Initialize
+        Funcs
             .AddTestFuncs(services)
             .AddInitializeSpoke();
     }

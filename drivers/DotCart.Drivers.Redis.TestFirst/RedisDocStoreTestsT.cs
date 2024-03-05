@@ -16,9 +16,9 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
     where TID : IID
     where TDbInfo : IRedisDbInfoB
 {
-    private IRedisStoreBuilder<TDbInfo, TDoc, TID> _builder;
     protected IConnectionMultiplexer _connection;
     protected IRedisConnectionFactory<TDbInfo, TDoc> _connFact;
+    private IRedisStoreFactory<TDbInfo, TDoc, TID> _factory;
     protected IDocStoreT<TDoc> RedisStoreT;
 
 
@@ -37,9 +37,9 @@ public abstract class RedisDocStoreTestsT<TDbInfo, TDoc, TID>
         Assert.NotNull(TestEnv);
         _connFact = TestEnv.ResolveRequired<IRedisConnectionFactory<TDbInfo, TDoc>>();
         Assert.NotNull(_connFact);
-        _builder = TestEnv.ResolveRequired<IRedisStoreBuilder<TDbInfo, TDoc, TID>>();
-        Assert.NotNull(_builder);
-        RedisStoreT = _builder.Build();
+        _factory = TestEnv.ResolveRequired<IRedisStoreFactory<TDbInfo, TDoc, TID>>();
+        Assert.NotNull(_factory);
+        RedisStoreT = _factory.Create();
         Assert.NotNull(RedisStoreT);
         _newID = TestEnv.ResolveRequired<IDCtorT<TID>>();
         Assert.NotNull(_newID);

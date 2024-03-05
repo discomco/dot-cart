@@ -24,7 +24,8 @@ public static class Config
 
     private static class Defaults
     {
-        public const string Uri = "esdb+discover://127.0.0.1:2113?tls=false";
+        public const string Uri =
+            "esdb+discover://es.local:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
 
         // public const string Uri = "tcp://es.local:2113";
         // public const string Uri = "esdb://es.local:2113?tls=false";

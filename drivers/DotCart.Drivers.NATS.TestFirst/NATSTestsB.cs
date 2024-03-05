@@ -11,8 +11,10 @@ namespace DotCart.Drivers.NATS.TestFirst;
 public abstract class NATSTestsB
     : IoCTests
 {
-
-
+    protected NATSTestsB(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
+    {
+    }
 
 
     [Fact]
@@ -61,11 +63,6 @@ public abstract class NATSTestsB
         var factory = TestEnv.ResolveRequired<INatsClientConnectionFactory>();
         // THEN
         Assert.NotNull(factory);
-    }
-
-    protected NATSTestsB(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
     }
 
 

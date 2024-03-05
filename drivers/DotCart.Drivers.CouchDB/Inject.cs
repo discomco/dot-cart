@@ -42,9 +42,9 @@ public static class Inject
     {
         services.TryAddSingleton(ServerInfo.LocalFromConfig);
         services.TryAddSingleton<IMyCouchFactory, MyCouchClientFactory>();
-        services.TryAddSingleton<ICouchAdminBuilderT<TDbInfo>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
-        //        services.TryAddSingleton<ICouchStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
-        services.TryAddSingleton<IStoreBuilderT<TDbInfo, TDoc, TID>, CouchStoreBuilderT<TDbInfo, TDoc, TID>>();
+        services.TryAddSingleton<ICouchAdminFactoryT<TDbInfo>, CouchStoreFactoryT<TDbInfo, TDoc, TID>>();
+        services.TryAddSingleton<ICouchStoreFactoryT<TDbInfo, TDoc, TID>, CouchStoreFactoryT<TDbInfo, TDoc, TID>>();
+        services.TryAddSingleton<IStoreFactoryT<TDbInfo, TDoc, TID>, CouchStoreFactoryT<TDbInfo, TDoc, TID>>();
         return services;
     }
 }

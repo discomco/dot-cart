@@ -3,28 +3,23 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
+using DotCart.TestFirst.Drivers;
 using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Engine.TestUtils;
 
-public delegate IEnumerable<ICmdB> ScenarioGenerator<in TID>(TID ID)
-    where TID : IID;
-
-public delegate IEnumerable<IEvtB> EventStreamGenerator<in TID>(TID ID)
-    where TID : IID;
-
 public static partial class Inject
 {
     public static IServiceCollection AddInitializeWithChangeRpmEvents(this IServiceCollection services)
     {
-        return services.AddTransient<EventStreamGenerator<Contract.Schema.EngineID>>(_ =>
+        return services.AddTransient<EventStreamGenFunc<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeWithChangeRpmEvents);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
     {
-        return services.AddTransient<ScenarioGenerator<Contract.Schema.EngineID>>(_ =>
+        return services.AddTransient<ScenarioGenFunc<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeScenario);
     }
 }

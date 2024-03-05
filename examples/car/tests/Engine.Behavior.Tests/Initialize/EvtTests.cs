@@ -5,6 +5,7 @@ using DotCart.TestKit;
 using Engine.Contract;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit.Abstractions;
+using Funcs = Engine.TestUtils.Initialize.Funcs;
 
 namespace Engine.Behavior.Tests.Initialize;
 
@@ -28,8 +29,8 @@ public class EvtTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddTransient(_ => TestUtils.Initialize.EvtCtor)
-            .AddTransient(_ => TestUtils.Initialize.PayloadCtor)
+            .AddTransient(_ => Funcs.EvtCtor)
+            .AddTransient(_ => Funcs.PayloadCtor)
             .AddTransient(_ => TestUtils.Schema.DocIDCtor);
     }
 }

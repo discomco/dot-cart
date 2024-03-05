@@ -13,6 +13,8 @@ public static partial class Inject
         where TPipeInfo : IPipeInfoB
     {
         return services
+            .AddCmdHandler()
+
             .AddTransient<IStepT<TPipeInfo, THopePayload>, HopeLoggerStepT<TPipeInfo, THopePayload>>()
             .AddTransient<IStepT<TPipeInfo, THopePayload>, CmdHandlerStepT<TPipeInfo, THopePayload, TMeta>>()
             .AddPipeBuilder<TPipeInfo, THopePayload>();

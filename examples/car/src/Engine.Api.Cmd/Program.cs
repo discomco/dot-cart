@@ -1,8 +1,9 @@
 using DotCart.Core;
+using DotCart.Drivers.EventStoreDB;
 using DotCart.Logging;
 using Engine.Context;
 using Serilog;
-using Inject = Engine.Context.Inject;
+using Inject = DotCart.Logging.Inject;
 
 DotEnv.FromEmbedded();
 
@@ -13,7 +14,7 @@ builder.Logging
     .ClearProviders()
     .AddSerilog();
 builder.Host
-    .UseSerilog((_, _) => InjectSerilog.AddLoggerFromCode());
+    .UseSerilog(Inject.CreateSerilogConsoleLogger());
 
 
 // Add services to the container.
@@ -25,6 +26,7 @@ builder.Services.AddSwaggerGen(config
     => config.CustomSchemaIds(x => x.FullName?.Replace("+", "_")));
 
 builder.Services.AddConsoleLogger();
+builder.Services.AddESDBStore();
 
 builder.Services.AddCartwheel();
 
@@ -41,9 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
+// app.UseHttpsRedirection();
 
-app.UseAuthorization();
+// app.UseAuthorization();
 
 app.MapControllers();
 

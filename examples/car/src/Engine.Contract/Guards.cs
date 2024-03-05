@@ -3,13 +3,12 @@ using DotCart.Abstractions.Core;
 
 namespace Engine.Contract;
 
-
 public static class Guards
 {
-    public static IGuardClause EngineInitialized(this IGuardClause guard, Contract.Schema.Engine state)
+    public static IGuardClause EngineInitialized(this IGuardClause guard, Schema.Engine state)
     {
         if (((int)state.Status).HasFlag((int)Schema.Engine.Flags.Initialized))
-            throw Contract.Initialize.Exception.New($"Engine {state.Id} is already initialized.");
+            throw Initialize.Exception.New($"Engine {state.Id} is already initialized.");
         return guard;
     }
 

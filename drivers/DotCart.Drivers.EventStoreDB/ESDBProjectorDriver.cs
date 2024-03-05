@@ -2,16 +2,60 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
+using DotCart.Actors;
 using DotCart.Core;
 using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Schema;
 using EventStore.Client;
 using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Retry;
 using Serilog;
 
 namespace DotCart.Drivers.EventStoreDB;
+
+public static partial class Inject
+{
+
+    public static IServiceCollection AddSingletonESDBProjector<TInfo>(this IServiceCollection services)
+        where TInfo : IProjectorInfoB
+    {
+        return services
+            .AddConfiguredESDBClients()
+            .AddSingletonESDBProjectorDriver<TInfo>()
+            .AddSingleton<IProjector, Projector<TInfo>>();
+    }
+
+    public static IServiceCollection AddTransientESDBProjector<TInfo>(this IServiceCollection services)
+        where TInfo : IProjectorInfoB
+    {
+        return services
+            .AddTransientESDBProjectorDriver<TInfo>()
+            .AddTransient<IProjector, Projector<TInfo>>();
+    }
+
+    public static IServiceCollection AddSingletonESDBProjectorDriver<TInfo>(this IServiceCollection services)
+        where TInfo : IProjectorInfoB
+    {
+        return services
+            .AddSingleton(_ =>
+                new SubscriptionFilterOptions(
+                    StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+            .AddSingleton<IProjectorDriverT<TInfo>, ESDBProjectorDriver<TInfo>>();
+    }
+
+    public static IServiceCollection AddTransientESDBProjectorDriver<TInfo>(this IServiceCollection services)
+        where TInfo : IProjectorInfoB
+    {
+        return services
+            .AddConfiguredESDBClients()
+            .AddSingleton(_ =>
+                new SubscriptionFilterOptions(
+                    StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
+            .AddTransient<IProjectorDriverT<TInfo>, ESDBProjectorDriver<TInfo>>();
+    }
+}
 
 public class ESDBProjectorDriver<TInfo>
     : DriverB, IProjectorDriverT<TInfo> where TInfo : IProjectorInfoB

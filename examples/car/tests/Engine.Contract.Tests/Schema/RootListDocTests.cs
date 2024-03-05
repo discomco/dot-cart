@@ -5,17 +5,12 @@ using Xunit.Abstractions;
 
 namespace Engine.Contract.Tests.Schema;
 
-public class RootListDocTests
+public class RootListDocTests(ITestOutputHelper output, IoCTestContainer testEnv)
     : ListDocTestsT<
         Contract.Schema.EngineListID,
         Contract.Schema.EngineList,
-        Contract.Schema.EngineListItem>
+        Contract.Schema.EngineListItem>(output, testEnv)
 {
-    public RootListDocTests(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
-    }
-
     protected override void SetEnVars()
     {
     }

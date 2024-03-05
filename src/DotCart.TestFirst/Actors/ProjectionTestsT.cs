@@ -31,12 +31,12 @@ public abstract class ProjectionTestsT<
     private IExchange _exchange;
     private IActorT<TSpoke>? _projection;
 
-    protected ProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv) : base(output, testEnv)
+    protected ProjectionTestsT(ITestOutputHelper output, IoCTestContainer testEnv)
+        : base(output, testEnv)
     {
     }
 
 
-    // TODO : REACTIVATE THIS AFTER THE INTERVIEW
     [Fact]
     public void ShouldResolveProjection()
     {
@@ -121,7 +121,7 @@ public abstract class ProjectionTestsT<
         Assert.NotNull(TestEnv);
 
         // WHEN
-        var sb = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TState, TID>>();
+        var sb = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TState, TID>>();
         // THEN
         Assert.NotNull(sb);
     }
@@ -132,9 +132,9 @@ public abstract class ProjectionTestsT<
     {
         // GIVEN
         Assert.NotNull(TestEnv);
-        var sb = TestEnv.ResolveRequired<IStoreBuilderT<TDbInfo, TState, TID>>();
+        var sb = TestEnv.ResolveRequired<IStoreFactoryT<TDbInfo, TState, TID>>();
         // WHEN
-        var rms = sb.Build();
+        var rms = sb.Create();
         // THEN
         Assert.NotNull(rms);
     }

@@ -4,8 +4,8 @@ namespace Engine.Contract;
 
 public static class Funcs
 {
-    public static ValueObjectCtorT<Schema.EngineListItem>
-        EngineListItemCtor =>
+    public static readonly ValueObjectCtorT<Schema.EngineListItem>
+        EngineListItemCtor =
             () => new Schema.EngineListItem();
 
     public static readonly ValueObjectCtorT<Schema.Details>
@@ -16,15 +16,15 @@ public static class Funcs
         RootIDCtor =
             _ => new Schema.EngineID();
 
-    public static IDCtorT<Schema.EngineListID>
-        ListIDCtor =>
+    public static readonly IDCtorT<Schema.EngineListID>
+        ListIDCtor =
             _ => new Schema.EngineListID();
 
     public static readonly StateCtorT<Schema.Engine>
-        RootCtor = Schema.Engine.New;
+        RootCtor =
+            Schema.Engine.New;
 
-    public static StateCtorT<Schema.EngineList>
-        ListCtor =>
-            () => Schema.EngineList.New(ListIDCtor().Id());
-
+    public static readonly StateCtorT<Schema.EngineList>
+        ListCtor =
+            Schema.EngineList.New;
 }

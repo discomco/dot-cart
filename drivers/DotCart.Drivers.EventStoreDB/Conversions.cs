@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Behavior;
-using DotCart.Behavior;
 using EventStore.Client;
 
 namespace DotCart.Drivers.EventStoreDB;

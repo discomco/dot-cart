@@ -1,5 +1,6 @@
 using Engine.Context;
 using Serilog;
+using Inject = DotCart.Logging.Inject;
 
 //DotEnv.FromEmbedded();
 
@@ -9,7 +10,7 @@ var host = Host.CreateDefaultBuilder(args)
         logging
             .ClearProviders()
             .AddSerilog())
-    .UseSerilog(DotCart.Logging.Inject.CreateSerilogConsoleLogger())
+    .UseSerilog(Inject.CreateSerilogConsoleLogger())
     .ConfigureServices(services =>
     {
         services

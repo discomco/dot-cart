@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using NATS.Client;
 
 namespace DotCart.Drivers.NATS;
+
 public static class Inject
 {
     public static IServiceCollection AddCoreNATS(this IServiceCollection services,

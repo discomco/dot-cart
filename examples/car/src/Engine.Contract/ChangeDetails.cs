@@ -54,6 +54,4 @@ public static class ChangeDetails
             return new Exception(msg);
         }
     }
-
-
 }

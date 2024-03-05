@@ -9,7 +9,7 @@
     </PropertyGroup>
 
 
-    <ItemGroup>        
+    <ItemGroup>
         <ProjectReference Include="..\Engine.Context\Engine.Context.csproj"/>
     </ItemGroup>
 

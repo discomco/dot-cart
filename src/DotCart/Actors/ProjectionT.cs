@@ -32,11 +32,11 @@ public abstract class ProjectionT<TDbInfo, TDoc, TPayload, TMeta, TID>
 
     protected ProjectionT(
         IExchange exchange,
-        IStoreBuilderT<TDbInfo, TDoc, TID> storeBuilder,
+        IStoreFactoryT<TDbInfo, TDoc, TID> storeFactory,
         Evt2Doc<TDoc, TPayload, TMeta> evt2Doc,
         StateCtorT<TDoc> newDoc) : base(exchange)
     {
-        _docStore = storeBuilder.Build();
+        _docStore = storeFactory.Create();
         _evt2Doc = evt2Doc;
         _newDoc = newDoc;
     }

@@ -27,8 +27,8 @@ public class FactTests
     {
         services
             .AddTransient(_ => TestUtils.Schema.MetaCtor)
-            .AddTransient(_ => TestUtils.Initialize.FactCtor)
+            .AddTransient(_ => TestUtils.Initialize.Funcs.FactCtor)
             .AddTransient(_ => TestUtils.Schema.DocIDCtor)
-            .AddTransient(_ => TestUtils.Initialize.PayloadCtor);
+            .AddTransient(_ => TestUtils.Initialize.Funcs.PayloadCtor);
     }
 }

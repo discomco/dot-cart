@@ -1,11 +1,32 @@
 using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Polly;
 using EventStore.Client;
+using Grpc.Core;
+using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Retry;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-internal class ESDBEventSourcingClient
+public static partial class Inject
+{
+    public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
+    {
+        return services
+            .AddPolly()
+            .AddEventStore(s =>
+            {
+                s.ConnectivitySettings.Insecure = Config.Insecure;
+                s.ConnectivitySettings.Address = new Uri(Config.Uri);
+                //  s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
+                if (Config.UseTls) s.ChannelCredentials = new SslCredentials();
+            })
+            .AddSingleton<IESDBPersistentSubscriptionsClient, ESDBPersistentSubscriptionsClient>()
+            .AddSingleton<IESDBEventSourcingClient, ESDBEventSourcingClient>();
+    }
+}
+
+public class ESDBEventSourcingClient
     : IESDBEventSourcingClient
 {
     private readonly EventStoreClient _client;

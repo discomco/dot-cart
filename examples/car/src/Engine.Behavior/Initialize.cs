@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Ardalis.GuardClauses;
 using DotCart.Abstractions;
 using DotCart.Abstractions.Behavior;
@@ -19,9 +18,9 @@ public static class Initialize
 
     private static readonly Evt2Fact<Contract.Initialize.Payload, MetaB> _evt2Fact =
         evt => FactT<Contract.Initialize.Payload, MetaB>.New(
-            aggId: evt.AggregateId,
-            payload: evt.Data.FromBytes<Contract.Initialize.Payload>()!,
-            meta: evt.MetaData.FromBytes<MetaB>()!
+            evt.AggregateId,
+            evt.Data.FromBytes<Contract.Initialize.Payload>()!,
+            evt.MetaData.FromBytes<MetaB>()!
         );
 
     private static readonly Fact2Msg<byte[], Contract.Initialize.Payload, MetaB>
@@ -74,10 +73,11 @@ public static class Initialize
                     return list;
                 }
 
-                var newList = list with
-                {
-                    Items = ImmutableDictionary<string, Schema.EngineListItem>.Empty.AddRange(list.Items)
-                };
+                // var newList = list with
+                // {
+                //     Items = ImmutableDictionary<string, Schema.EngineListItem>.Empty.AddRange(list.Items)
+                // };
+                var newList = list;
                 newList.Items = list.Items.Add(evt.AggregateId, Schema.EngineListItem.New(
                     evt.AggregateId,
                     evt.GetPayload<Contract.Initialize.Payload>().Details.Name,
@@ -91,10 +91,10 @@ public static class Initialize
             (input, output, evt) =>
             {
                 var result =
-                    !input.Items.Any()
-                    || input.Items.All(item => item.Key != evt.AggregateId);
+                    input.Items.Any(item => item.Key == evt.AggregateId);
+                // || input.Items.All();
                 result = result
-                         && output.Items.Any(item => item.Key == evt.AggregateId)
+                         // && output.Items.Any(item => item.Key == evt.AggregateId);
                          && output.Items[evt.AggregateId].Status.HasFlagFast(Schema.Engine.Flags.Initialized);
                 return result;
             };
@@ -158,5 +158,4 @@ public static class Initialize
             .AddTransient(_ => _raiseFunc)
             .AddTransient(_ => _newEvt);
     }
-
 }

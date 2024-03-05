@@ -22,7 +22,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.ResolveRequired<ICouchAdminBuilderT<TDbInfo>>();
+        var builder = TestEnv.ResolveRequired<ICouchAdminFactoryT<TDbInfo>>();
         // THEN
         var admin = builder
             .BuildAdmin();
@@ -36,7 +36,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var builder = TestEnv.ResolveRequired<ICouchAdminBuilderT<TDbInfo>>();
+        var builder = TestEnv.ResolveRequired<ICouchAdminFactoryT<TDbInfo>>();
         Assert.NotNull(builder);
         var adminStore = builder.BuildAdmin();
         // THEN
@@ -48,7 +48,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
     public async Task ShouldCreateDb()
     {
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<ICouchAdminBuilderT<TDbInfo>>();
+        var builder = TestEnv.ResolveRequired<ICouchAdminFactoryT<TDbInfo>>();
         var admin = builder.BuildAdmin();
         // WHEN
         var fbk = await admin.CreateDbAsync();
@@ -62,7 +62,7 @@ public abstract class CouchAdminTestsT<TDbInfo> :
         // GIVEN
         var cts = new CancellationTokenSource(1_000);
         Assert.NotNull(TestEnv);
-        var builder = TestEnv.ResolveRequired<ICouchAdminBuilderT<TDbInfo>>();
+        var builder = TestEnv.ResolveRequired<ICouchAdminFactoryT<TDbInfo>>();
         var admin = builder.BuildAdmin();
         // WHEN
         var fbk = await admin.DbExistsAsync(cts.Token);

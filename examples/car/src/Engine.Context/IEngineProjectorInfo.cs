@@ -7,6 +7,4 @@ namespace Engine.Context;
 
 [GroupName("engine-sub")]
 [IDPrefix(IDConstants.EngineIDPrefix)]
-public interface IEngineProjectorInfo : IProjectorInfoB
-{
-}
+public interface IEngineProjectorInfo : IProjectorInfoB;

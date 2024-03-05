@@ -9,7 +9,7 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0"/>
-        <PackageReference Include="xunit" Version="2.7.0" />
+        <PackageReference Include="xunit" Version="2.7.0"/>
         <PackageReference Include="xunit.runner.visualstudio" Version="2.5.7">
             <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
             <PrivateAssets>all</PrivateAssets>
@@ -30,11 +30,11 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.NATS.TestFirst\DotCart.Drivers.NATS.TestFirst.csproj" />
-      <ProjectReference Include="..\..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj" />
-      <ProjectReference Include="..\..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj" />
-      <ProjectReference Include="..\..\src\Engine.Context\Engine.Context.csproj" />
-      <ProjectReference Include="..\..\src\Engine.TestUtils\Engine.TestUtils.csproj" />
+        <ProjectReference Include="..\..\..\..\drivers\DotCart.Drivers.NATS.TestFirst\DotCart.Drivers.NATS.TestFirst.csproj"/>
+        <ProjectReference Include="..\..\..\..\src\DotCart.TestFirst\DotCart.TestFirst.csproj"/>
+        <ProjectReference Include="..\..\..\..\src\DotCart.TestKit\DotCart.TestKit.csproj"/>
+        <ProjectReference Include="..\..\src\Engine.Context\Engine.Context.csproj"/>
+        <ProjectReference Include="..\..\src\Engine.TestUtils\Engine.TestUtils.csproj"/>
     </ItemGroup>
 
 </Project>

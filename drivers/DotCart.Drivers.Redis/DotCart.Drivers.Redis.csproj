@@ -9,11 +9,11 @@
 
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0"/>
-        <PackageReference Include="StackExchange.Redis" Version="2.7.23" />
+        <PackageReference Include="StackExchange.Redis" Version="2.7.27"/>
     </ItemGroup>
 
-    <ItemGroup>        
-        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
+    <ItemGroup>
+        <ProjectReference Include="..\..\src\DotCart\DotCart.csproj"/>
     </ItemGroup>
 
 </Project>

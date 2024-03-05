@@ -17,12 +17,8 @@ public static partial class Inject
 {
 }
 
-
-
 public static class ChangeDetails
 {
-
-
     public const string OnInitialized_v1 = "engine:on_initialized:change_details:v1";
 
 
@@ -63,7 +59,7 @@ public static class ChangeDetails
             {
                 if (doc.Items.All(x => x.Key != evt.AggregateId))
                     return doc;
-                var newDoc = doc with { };
+                var newDoc = doc; //with { };
                 newDoc.Items[evt.AggregateId].Name = evt.GetPayload<Contract.ChangeDetails.Payload>().Details.Name;
                 return newDoc;
             };

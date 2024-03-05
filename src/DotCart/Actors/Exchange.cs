@@ -24,13 +24,22 @@ internal class Exchange
     : ActiveComponent, IExchange
 {
     private static IExchange _instance;
-    private readonly object _createMutex = new();
+    private static readonly object _createMutex = new();
     private readonly object _subMutex = new();
 
     private ImmutableDictionary<string, ImmutableList<IActorB>> _topics =
         ImmutableDictionary<string, ImmutableList<IActorB>>.Empty;
 
-    public static IExchange Instance => _instance ??= new Exchange();
+    public static IExchange Instance
+    {
+        get
+        {
+            lock (_createMutex)
+            {
+                return _instance ??= new Exchange();
+            }
+        }
+    }
 
 
     public void Subscribe(string topic, IActorB consumer)
