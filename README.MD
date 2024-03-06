@@ -4,17 +4,6 @@
 
 The **DotCart SDK** is an open toolbox for developing **modular, behavior-centric DotNet applications** that use **Event Sourcing with CQRS**: a paradigm that is based on writing state changes (_Events_) to an immutable, append-only log, whilst using  interpretations thereof (_Projections_) for materializing views that are read-optimized for specific use cases.
 
-## ERcNC Application Stack
-
-The DotCart SDK is open and extendible, using driver-based integration.  
-
-However, for applications we prefer the _ERcNC_ Stack.
-
-E - EventStoreDB (for storing Event Streams and consuming Projections)  
-R - Redis (for caching/storing Read Models)  
-cN - core NATS (for inter-process, location-transparent async Req/Rsp and Pub/Sub)  
-C - CouchDB (as a persistent document database)
-
 ## Purpose
 
  > _Event Sourcing with CQRS_ is often considered emerging, difficult and regarded as adding 'unnecessary' complexity to systems.  
@@ -24,11 +13,22 @@ This toolbox addresses these concerns by eliminating the need for hand-crafted b
 Additionally, it aims to bring uniformity to the codebase both in structure as in nomenclature, so that developers can easily cross-over from one domain to another, reducing ramp-up time to almost zero.  
 The outcome of implementation, is a highly modular solution, that is bounded by behavior (a process), open for integration and liberal in deployment.
 
+## ERcNC Application Stack
+
+The DotCart SDK is open and extendible, using driver-based integration.  
+
+However, for applications we prefer the _ERcNC_ Stack.
+
+E - [EventStoreDB](https://eventstore.com) (for storing Event Streams and consuming Projections)  
+R - Redis (for caching/storing Read Models)  
+cN - core NATS (for inter-process, location-transparent async Req/Rsp and Pub/Sub)  
+C - CouchDB (as a persistent document database)
+
 ## Outline
 
 - [The DotCart Toolbox](#the-dotcart-toolbox)
-  - [ERcNC Application Stack](#ercnc-application-stack)
   - [Purpose](#purpose)
+  - [ERcNC Application Stack](#ercnc-application-stack)
   - [Outline](#outline)
   - [Cartwheel Architecture (CA)](#cartwheel-architecture-ca)
     - [WRITE Spokes (W-Spoke)](#write-spokes-w-spoke)
@@ -37,6 +37,7 @@ The outcome of implementation, is a highly modular solution, that is bounded by 
   - [Getting Started](#getting-started)
     - [Schema First](#schema-first)
     - [Behavior](#behavior)
+  - [Motivation](#motivation)
     - [as a **Software Engineering Manager**](#as-a-software-engineering-manager)
     - [as a **Software Architect**](#as-a-software-architect)
     - [as a **Software Engineer**](#as-a-software-engineer)
@@ -103,6 +104,7 @@ Next, developers will implement the Spoke's Behavior. This consists of a **singl
 
 One _Spoke_ (module) starting with  which are identied via the towards a collection of active, always-on, actor-like components, that operate against the infrastructure and marshal commands and events in and out of the business logic, which is maintained at the center of the application in a so-called _event-sourced aggregate_.
 
+## Motivation
 
 ### as a **Software Engineering Manager**
 
@@ -126,12 +128,11 @@ One _Spoke_ (module) starting with  which are identied via the towards a collect
 
 ## Documentation
 
-This SDK is built with modularity in mind
+This SDK is built with application modularity in mind.
 
 More details about the design phylosophy and inner structures of DotCart Applications can be found here:
 
 - [Bounded by Behavior](https://docs.google.com/document/d/1io3HsGItmu02Nx4hHru9wVLnF6lTiQDVecko-ga6Pg0/edit?usp=sharing)
-
 
 ### Core SDK Packages
 
