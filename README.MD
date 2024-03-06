@@ -4,13 +4,13 @@
 
 The **DotCart SDK** is an open toolbox for developing **modular, behavior-centric DotNet applications** that use **Event Sourcing with CQRS**: a paradigm that is based on writing state changes (_Events_) to an immutable, append-only log, whilst using  interpretations thereof (_Projections_) for materializing views that are read-optimized for specific use cases.
 
-## ERcN Application Stack
+## ERcNC Application Stack
 
 The DotCart SDK is open and extendible, using driver-based integration.  
 
 However, for applications we prefer the _ERcNC_ Stack.
 
-E - EventStoreDB (for storing Event Streams)  
+E - EventStoreDB (for storing Event Streams and consuming Projections)  
 R - Redis (for caching/storing Read Models)  
 cN - core NATS (for inter-process, location-transparent async Req/Rsp and Pub/Sub)  
 C - CouchDB (as a persistent document database)
@@ -27,7 +27,7 @@ The outcome of implementation, is a highly modular solution, that is bounded by 
 ## Outline
 
 - [The DotCart Toolbox](#the-dotcart-toolbox)
-  - [ERcN Application Stack](#ercn-application-stack)
+  - [ERcNC Application Stack](#ercnc-application-stack)
   - [Purpose](#purpose)
   - [Outline](#outline)
   - [Cartwheel Architecture (CA)](#cartwheel-architecture-ca)
