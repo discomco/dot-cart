@@ -65,7 +65,7 @@ public class ESDBEventSourcingClient
         //            );
     }
 
-    public Task<IWriteResult> AppendToStreamAsync(
+    public async Task<IWriteResult> AppendToStreamAsync(
         string streamName,
         StreamState expectedState,
         IEnumerable<EventData> eventData,
@@ -74,14 +74,25 @@ public class ESDBEventSourcingClient
         UserCredentials? userCredentials = null,
         CancellationToken cancellationToken = default)
     {
-        //        return _retryPolicy.ExecuteAsync(() => 
-        return _client.AppendToStreamAsync(streamName,
-            expectedState,
-            eventData,
-            configureOperationOptions,
-            deadline,
-            userCredentials, cancellationToken);
-        //            );
+        try
+        {
+            //        return _retryPolicy.ExecuteAsync(() => 
+            var res = await _client.AppendToStreamAsync(streamName,
+                expectedState,
+                eventData,
+                configureOperationOptions,
+                deadline,
+                userCredentials, cancellationToken);
+            //            );
+            return res;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+            throw;
+        }
+
+
     }
 
     public Task<StreamMetadataResult> GetStreamMetadataAsync(string streamName,

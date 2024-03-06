@@ -20,7 +20,8 @@ public interface ICloseAsync
     Task CloseAsync(bool allowCommandsToComplete);
 }
 
-public interface IEventStore : IAggregateStore
+public interface IEventStore
+    : IAggregateStore
 {
     Task<AppendResult> AppendEventsAsync(IID ID, IEnumerable<IEvtB> events,
         CancellationToken cancellationToken = default);

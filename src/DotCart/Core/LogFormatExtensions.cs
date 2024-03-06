@@ -6,59 +6,70 @@ public static class LogFormatExtensions
 {
     public static string AsVerb(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Blue(Output.Black($"::{value}::"));
     }
 
     public static string AsDo(this string value)
     {
+        return $"\t::{value}::";
         return Output.Background.Rgb(64, 64, 128, Output.Black($"\t::{value}::"));
     }
 
     public static string AsRunning(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(16, 16, 128, Output.Black($"::{value}::"));
     }
 
     public static string AsWarning(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(16, 16, 0, Output.Black($"::{value}::"));
     }
 
 
     public static string AsEnforcing(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(8, 16, 136, Output.Black($"::{value}::"));
     }
 
     public static string AsEnforced(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(136, 16, 8, Output.Black($"::{value}::"));
     }
 
 
     public static string AsRan(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(128, 16, 16, Output.Black($"::{value}::"));
     }
 
     public static string AsDone(this string value)
     {
+        return $"\t::{value}::";
         return Output.Background.Rgb(128, 32, 32, Output.Black($"\t::{value}::"));
     }
 
 
     public static string AsSubject(this string value)
     {
+        return $"::{value}::";
         return Output.Background.White(Output.Black($"::{value}::"));
     }
 
     public static string AsFact(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Rgb(22, 120, 120, Output.Yellow($"::{value}::"));
     }
 
     public static string AsError(this string value)
     {
+        return $"::{value}::";
         return Output.Background.Red(Output.Yellow($"::{value}::"));
     }
 }

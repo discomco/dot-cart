@@ -1,5 +1,4 @@
 namespace DotCart.Abstractions.Actors;
 
-public interface IProjector : IActorB
-{
-}
+public interface IProjector
+    : IActorB;

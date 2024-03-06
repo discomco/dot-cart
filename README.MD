@@ -1,4 +1,4 @@
-# The DotCart SDK
+# The DotCart Toolbox
 
 > **DotCart** stands for **Cartwheel Architecture for DotNET**.
 
@@ -8,11 +8,12 @@ The **DotCart SDK** is an open toolbox for developing **modular, behavior-centri
 
 The DotCart SDK is open and extendible, using driver-based integration.  
 
-However, for applications we prefer the _ERcN_ Stack.
+However, for applications we prefer the _ERcNC_ Stack.
 
 E - EventStoreDB (for storing Event Streams)  
 R - Redis (for caching/storing Read Models)  
-cN - core NATS (for inter-process async Req/Rsp and Pub/Sub)
+cN - core NATS (for inter-process, location-transparent async Req/Rsp and Pub/Sub)  
+C - CouchDB (as a persistent document database)
 
 ## Purpose
 
@@ -25,7 +26,7 @@ The outcome of implementation, is a highly modular solution, that is bounded by 
 
 ## Outline
 
-- [The DotCart SDK](#the-dotcart-sdk)
+- [The DotCart Toolbox](#the-dotcart-toolbox)
   - [ERcN Application Stack](#ercn-application-stack)
   - [Purpose](#purpose)
   - [Outline](#outline)

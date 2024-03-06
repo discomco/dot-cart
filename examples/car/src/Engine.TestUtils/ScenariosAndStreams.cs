@@ -3,7 +3,9 @@ using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Contract;
 using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Schema;
+using DotCart.TestFirst.Actors;
 using DotCart.TestFirst.Drivers;
+using DotCart.TestKit.Mocks;
 using Engine.Behavior;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,13 +15,13 @@ public static partial class Inject
 {
     public static IServiceCollection AddInitializeWithChangeRpmEvents(this IServiceCollection services)
     {
-        return services.AddTransient<EventStreamGenFunc<Contract.Schema.EngineID>>(_ =>
+        return services.AddTransient<EventStreamGenFuncT<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeWithChangeRpmEvents);
     }
 
     public static IServiceCollection AddInitializeEngineScenario(this IServiceCollection services)
     {
-        return services.AddTransient<ScenarioGenFunc<Contract.Schema.EngineID>>(_ =>
+        return services.AddTransient<ScenarioGenFuncT<Contract.Schema.EngineID>>(_ =>
             ScenariosAndStreams.InitializeScenario);
     }
 }

@@ -47,7 +47,8 @@ public static class TheContract
     [FactTopic(TheConstants.FactTopic)]
     [CmdTopic(TheConstants.CmdTopic)]
     [EvtTopic(TheConstants.EvtTopic)]
-    public record Payload : IPayload
+    public record Payload
+        : IPayload
     {
         [JsonConstructor]
         public Payload(string material, decimal weight, DateTime arrival, string id)
@@ -80,9 +81,8 @@ public static class TheContract
 
 
     [Topic(TheConstants.FactTopic)]
-    public interface IFact : IFactB
-    {
-    }
+    public interface IFact
+        : IFactB;
 
     public record Meta(string AggregateType, string AggregateId)
         : MetaB(AggregateType, AggregateId)

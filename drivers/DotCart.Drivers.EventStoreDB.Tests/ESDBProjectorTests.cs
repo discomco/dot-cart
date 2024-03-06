@@ -1,9 +1,14 @@
 using DotCart.Abstractions.Actors;
+using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Drivers;
+using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Logging;
+using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
+using Engine.TestUtils;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -121,6 +126,86 @@ public class ESDBProjectorTests
         Assert.NotNull(_client);
     }
 
+    [Fact]
+    public void ShouldResolveEventFeeder()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var feeder = TestEnv.ResolveRequired<IEventFeeder>();
+        // THEN
+        Assert.NotNull(feeder);
+    }
+
+    [Fact]
+    public void ShouldResolveStreamGenFunc()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var streamGen = TestEnv.ResolveRequired<EventStreamGenFuncT<TheSchema.DocID>>();
+        // THEN
+        Assert.NotNull(streamGen);
+    }
+
+
+    [Fact]
+    public void ShouldResolveProjector()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var projector = TestEnv.ResolveRequired<IProjector>();
+        // THEN
+        Assert.NotNull(projector);
+    }
+
+
+    [Fact]
+    public void ShouldResolveProjectorDriver()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        _driver = TestEnv.ResolveRequired<IProjectorDriverT<TheActors.IProjectorInfo>>();
+        // THEN
+        Assert.NotNull(_driver);
+    }
+
+    [Fact]
+    public void ShouldResolveIDCtor()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        // WHEN
+        var ctor = TestEnv.ResolveRequired<IDCtorT<TheSchema.DocID>>();
+        // THEN
+        Assert.NotNull(ctor);
+    }
+
+
+    [Fact]
+    public async Task ShouldFeedEventsToEventStore()
+    {
+        // GIVEN
+        Assert.NotNull(TestEnv);
+        var feeder = TestEnv.ResolveRequired<IEventFeeder>();
+        Assert.NotNull(feeder);
+        var cts = new CancellationTokenSource(10_000);
+        // WHEN
+        // await feeder.Activate(cts.Token);
+        // if (feeder.Status == ComponentStatus.Active)
+        while (!cts.Token.IsCancellationRequested)
+        {
+            feeder.HandleCast(StartFeeding.It(), cts.Token);
+            await Task.Delay(100, cts.Token);
+        }
+        // if (feeder.Status == ComponentStatus.Active)
+        feeder.HandleCast(StopFeeding.It(), cts.Token);
+        // THEN
+        // await feeder.Deactivate(cts.Token);
+    }
+
 
     protected override void Initialize()
     {
@@ -134,9 +219,14 @@ public class ESDBProjectorTests
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddConsoleLogger()
+            .AddEventFeeder<TheSchema.DocID, TheSchema.Doc>()
+            .AddTheDocCtors()
+            .AddEventStreamGenFunc()
             .AddSingletonExchange()
             .AddConfiguredESDBClients()
             .AddSingletonESDBProjectorDriver<TheActors.IProjectorInfo>()
+            .AddSingletonESDBProjector<TheActors.IProjectorInfo>()
             .AddESDBStore();
     }
 }

@@ -32,7 +32,8 @@ namespace DotCart.Actors;
 
 [Name("HopeLogger")]
 [Order(0)]
-public class HopeLoggerStepT<TPipeInfo, TPayload> : StepT<TPipeInfo, TPayload>
+public class HopeLoggerStepT<TPipeInfo, TPayload>
+    : StepT<TPipeInfo, TPayload>
     where TPayload : IPayload
     where TPipeInfo : IPipeInfoB
 {

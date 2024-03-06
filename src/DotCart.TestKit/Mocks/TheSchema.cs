@@ -8,6 +8,9 @@ namespace DotCart.TestKit.Mocks;
 
 public static class TheSchema
 {
+
+
+
     public static IServiceCollection AddTheDocCtors(this IServiceCollection services)
     {
         return services
@@ -65,7 +68,7 @@ public static class TheSchema
 
     public static class Materials
     {
-        public static string[] Kinds = { "Wood", "Metal", "Rock", "Fabric" };
+        public static readonly string[] Kinds = ["Wood", "Metal", "Rock", "Fabric"];
 
         public static string Random()
         {
@@ -76,12 +79,14 @@ public static class TheSchema
 
 
     [IDPrefix(TheConstants.DocIDPrefix)]
-    public record DocID : IDB
+    public record DocID
+        : IDB
     {
         public static readonly IDCtorT<DocID> Ctor =
             _ => New;
 
-        public DocID(string value = "") : base(IDPrefixAtt.Get<DocID>(), value)
+        public DocID(string value = "")
+            : base(IDPrefixAtt.Get<DocID>(), value)
         {
         }
 
