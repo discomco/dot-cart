@@ -37,6 +37,7 @@ C - CouchDB (as a persistent document database)
   - [Getting Started](#getting-started)
     - [Schema First](#schema-first)
     - [Behavior](#behavior)
+      - [Aggregate Composition](#aggregate-composition)
   - [Motivation](#motivation)
     - [as a **Software Engineering Manager**](#as-a-software-engineering-manager)
     - [as a **Software Architect**](#as-a-software-architect)
@@ -94,6 +95,12 @@ Everything starts with the _domain schema_: an anemic, static and rooted data st
 This schema defines the structures that will contain the _Volatile State_, that will be calculated by the Event Sourced Aggregate.
 
 ### Behavior
+
+#### Aggregate Composition
+
+Though a Cartwheel application is modular, using Command Pipelines as a partial bounded context, we cannot escape the reality that an Eventsourced Aggregate and its Volatile State are shared amongst all spokes. To cope with this reality, we introduce the idea of Aggregate Composition. In fact, when examining the nature of a Command Pipeline, we see that each command is picked up by a _Try_ function, which evaluates the validity of the command and one or more _Apply_ and  _Raise_ functions. An _Apply_ function applies an event to the current state, while a _Raise_ function emits the Event for further processing.  
+By treating these functions as first-class citizens, it becomes possible to inject them into the Aggregate and thus making the Aggregate itself composable.
+
 
 > SPOKES  
 > Cartwheel 
