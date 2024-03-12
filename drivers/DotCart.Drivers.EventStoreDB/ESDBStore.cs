@@ -22,14 +22,15 @@ public static partial class Inject
 
 
     private static IServiceCollection AddESDBClients(this IServiceCollection services,
+        string connectionString,
         Action<EventStoreClientSettings>? overrideSettings)
     {
         return services
-            .AddEventStoreClient(overrideSettings)
-            .AddEventStoreOperationsClient(overrideSettings)
-            .AddEventStorePersistentSubscriptionsClient(overrideSettings)
-            .AddEventStoreProjectionManagementClient(overrideSettings)
-            .AddEventStoreUserManagementClient(overrideSettings);
+            .AddEventStoreClient(connectionString, overrideSettings)
+            .AddEventStoreOperationsClient(connectionString, overrideSettings)
+            .AddEventStorePersistentSubscriptionsClient(connectionString, overrideSettings)
+            .AddEventStoreProjectionManagementClient(connectionString, overrideSettings)
+            .AddEventStoreUserManagementClient(connectionString, overrideSettings);
     }
 }
 

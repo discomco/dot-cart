@@ -16,24 +16,30 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddSingletonESDBProjector<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddSingletonESDBProjector<TInfo>(
+        this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings = null)
         where TInfo : IProjectorInfoB
     {
         return services
-            .AddResilientESDBClients()
+            .AddResilientESDBClients(overrideSettings)
             .AddSingletonESDBProjectorDriver<TInfo>()
             .AddSingleton<IProjector, Projector<TInfo>>();
     }
 
-    public static IServiceCollection AddTransientESDBProjector<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddTransientESDBProjector<TInfo>(
+        this IServiceCollection services,
+        string connectionString, Action<EventStoreClientSettings>? overrideSettings = null)
         where TInfo : IProjectorInfoB
     {
         return services
-            .AddTransientESDBProjectorDriver<TInfo>()
+            .AddResilientESDBClients(overrideSettings)
+            .AddTransientESDBProjectorDriver<TInfo>(overrideSettings)
             .AddTransient<IProjector, Projector<TInfo>>();
     }
 
-    public static IServiceCollection AddSingletonESDBProjectorDriver<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddSingletonESDBProjectorDriver<TInfo>(this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings = null)
         where TInfo : IProjectorInfoB
     {
         return services
@@ -43,11 +49,12 @@ public static partial class Inject
             .AddSingleton<IProjectorDriverT<TInfo>, ESDBProjectorDriver<TInfo>>();
     }
 
-    public static IServiceCollection AddTransientESDBProjectorDriver<TInfo>(this IServiceCollection services)
+    public static IServiceCollection AddTransientESDBProjectorDriver<TInfo>(this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings = null)
         where TInfo : IProjectorInfoB
     {
         return services
-            .AddResilientESDBClients()
+            .AddResilientESDBClients(overrideSettings)
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
                     StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))

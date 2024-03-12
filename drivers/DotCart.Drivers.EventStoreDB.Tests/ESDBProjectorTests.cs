@@ -214,7 +214,7 @@ public class ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testE
     {
         services
             .AddSettingsFromAppDirectory()
-            .UseSettings<ESDBSettings>(ESDBSettings.SectionId)
+            .AddSettingsFromSection<ESDBSettings>(ESDBSettings.SectionId)
             .AddConsoleLogger()
             .AddEventFeeder<TheSchema.DocID, TheSchema.Doc>()
             .AddTheDocCtors()
@@ -222,7 +222,6 @@ public class ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testE
             .AddSingletonExchange()
             .AddResilientESDBClients()
             .AddSingletonESDBProjectorDriver<TheActors.IProjectorInfo>()
-            .AddSingletonESDBProjector<TheActors.IProjectorInfo>()
-            .AddESDBStore();
+            .AddSingletonESDBProjector<TheActors.IProjectorInfo>();
     }
 }

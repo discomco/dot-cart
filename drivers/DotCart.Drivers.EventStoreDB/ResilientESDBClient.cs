@@ -1,6 +1,7 @@
 using DotCart.Polly;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Polly;
 using Polly.Retry;
 
@@ -12,15 +13,18 @@ public static partial class Inject
         this IServiceCollection services,
         Action<EventStoreClientSettings>? overrideSettings = null)
     {
+        var esdbSettings = services.BuildServiceProvider()
+            .GetRequiredService<IOptions<ESDBSettings>>()
+            .Value;
         return services
             .AddPolly()
-            .AddESDBClients(overrideSettings)
+            .AddESDBClients(esdbSettings.Uri, overrideSettings)
             .AddSingleton<IResilientPersistentSubscriptionsESDBClient, ResilientPersistentSubscriptionsESDBClient>()
             .AddSingleton<IResilientESDBClient, ResilientESDBClient>();
     }
 }
 
-public class ResilientESDBClient
+internal class ResilientESDBClient
     : IResilientESDBClient
 {
     private readonly EventStoreClient _client;

@@ -33,7 +33,10 @@ builder.Services.AddSwaggerGen(config
     => config.CustomSchemaIds(x => x.FullName?.Replace("+", "_")));
 
 builder.Services.AddConsoleLogger();
-builder.Services.AddESDBStore();
+
+builder.Services
+    .AddESDBSettingsFromAppDirectory()
+    .AddESDBStore();
 
 builder.Services.AddCartwheel();
 

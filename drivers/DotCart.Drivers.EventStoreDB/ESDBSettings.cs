@@ -4,7 +4,6 @@ using EventStore.Client;
 namespace DotCart.Drivers.EventStoreDB;
 
 public class ESDBSettings
-    : EventStoreClientSettings
 {
     public const string SectionId = "eventStoreDB";
     [JsonPropertyName("tlsCaFile")] public string TlsCaFile { get; set; } = "/usr/local/share/ca-certificates/ca.crt";
@@ -12,7 +11,6 @@ public class ESDBSettings
     [JsonPropertyName("tlsVerifyCert")] public bool TlsVerifyCert { get; set; } = false;
     [JsonPropertyName("tls")] public bool Tls { get; set; } = false;
     [JsonPropertyName("keepAliveTimeout")] public int KeepAliveTimeout { get; set; } = 10000;
-
     [JsonPropertyName("keepAliveInterval")]
     public int KeepAliveInterval { get; set; } = 10000;
 
@@ -24,5 +22,5 @@ public class ESDBSettings
 
     [JsonPropertyName("uri")]
     public string Uri { get; set; } =
-        "discover+esdb://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
+        "esdb+discover://admin:changeit@localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
 }

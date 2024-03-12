@@ -21,17 +21,17 @@ public static class ConfigUtils
                     .Build());
     }
 
-    public static IServiceCollection UseSettings<TOptions>(this IServiceCollection services,
+    public static IServiceCollection AddSettingsFromSection<TSettings>(this IServiceCollection services,
         string sectionId,
-        Action<TOptions>? overrideOptions = null)
-        where TOptions : class
+        Action<TSettings>? overrideSettings = null)
+        where TSettings : class
     {
         var prov = services.BuildServiceProvider();
         var cfg = prov.GetRequiredService<IConfiguration>();
         var section = cfg.GetSection(sectionId);
-        services.AddOptions<TOptions>();
-        services.Configure<TOptions>(section);
-        if (overrideOptions != null) services.Configure(overrideOptions);
+        services.AddOptions<TSettings>();
+        services.Configure<TSettings>(section);
+        if (overrideSettings != null) services.Configure(overrideSettings);
 
         return services;
     }

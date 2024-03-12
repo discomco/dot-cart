@@ -36,7 +36,7 @@ public class ResilientESDBClientTests(
 
 
     [Fact]
-    public async Task ShouldAppendToStreamAsyncUsingOotBEventStoreClient()
+    public async Task ShouldAppendToStreamAsyncUsingRawEventStoreClient()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
@@ -86,23 +86,8 @@ public class ResilientESDBClientTests(
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddESDSettingsFromAppDirectory()
-            .AddResilientESDBClients()
-            // Add the Raw EventStore Client to check the gRPC connection issue
-            .AddEventStoreClient(settings =>
-            {
-                var esdbSettings = services
-                    .BuildServiceProvider()
-                    .GetRequiredService<IOptions<ESDBSettings>>()
-                    .Value;
-                settings.ConnectivitySettings.Address = new Uri(esdbSettings.Uri);
-                // settings.ConnectivitySettings.Insecure = esdbSettings.IsInsecure;
-                // settings.DefaultCredentials = new UserCredentials(
-                //     esdbSettings.Username,
-                //     esdbSettings.Password);
-                // settings.ConnectivitySettings.TlsCaFile = X509Certificate2
-                //     .CreateFromPemFile(esdbSettings.TlsCaFile);
-                // settings.ConnectivitySettings.TlsVerifyCert = false;
-            });
+            .AddESDBSettingsFromAppDirectory()
+            .AddResilientESDBClients() // Add the Raw EventStore Client to check the gRPC connection issue
+;
     }
 }
