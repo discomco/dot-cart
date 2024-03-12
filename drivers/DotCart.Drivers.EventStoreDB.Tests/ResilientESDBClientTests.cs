@@ -38,7 +38,7 @@ public class ResilientESDBClientTests(
 
 
     [Fact]
-    public async Task ShouldAppendToStreamAsync()
+    public async Task ShouldAppendToStreamAsyncUsingOotBEventStoreClient()
     {
         // GIVEN
         Assert.NotNull(TestEnv);
