@@ -1,5 +1,4 @@
 using DotCart.Core;
-using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace DotCart.Drivers.EventStoreDB;

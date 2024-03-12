@@ -1,4 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Serialization;
 using EventStore.Client;
 
@@ -13,9 +12,17 @@ public class ESDBSettings
     [JsonPropertyName("tlsVerifyCert")] public bool TlsVerifyCert { get; set; } = false;
     [JsonPropertyName("tls")] public bool Tls { get; set; } = false;
     [JsonPropertyName("keepAliveTimeout")] public int KeepAliveTimeout { get; set; } = 10000;
-    [JsonPropertyName("keepAliveInterval")] public int KeepAliveInterval { get; set; } = 10000;
-    [JsonPropertyName("maxDiscoverAttempts")] public int MaxDiscoverAttempts { get; set; } = 10;
+
+    [JsonPropertyName("keepAliveInterval")]
+    public int KeepAliveInterval { get; set; } = 10000;
+
+    [JsonPropertyName("maxDiscoverAttempts")]
+    public int MaxDiscoverAttempts { get; set; } = 10;
+
     [JsonPropertyName("username")] public string Username { get; set; } = "admin";
     [JsonPropertyName("password")] public string Password { get; set; } = "changeit";
-    [JsonPropertyName("uri")] public string Uri { get; set; } = "discover+esdb://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
+
+    [JsonPropertyName("uri")]
+    public string Uri { get; set; } =
+        "discover+esdb://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
 }

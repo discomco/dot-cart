@@ -5,9 +5,22 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.TestKit.Mocks;
+using Microsoft.Extensions.DependencyInjection;
 using Serilog;
 
 namespace DotCart.TestFirst.Actors;
+
+public static class Inject
+{
+    public static IServiceCollection AddEventFeeder<TID, TDoc>(this IServiceCollection services)
+        where TDoc : IState
+        where TID : IID
+    {
+        return services
+            .AddTransient<IEventFeeder, EventFeederT<TID, TDoc>>();
+    }
+}
+
 
 public record StartFeeding : IMsg
 {

@@ -1,4 +1,3 @@
-
 namespace DotCart.Drivers.EventStoreDB;
 
 public interface IESDBClientBase

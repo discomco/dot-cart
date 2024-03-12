@@ -139,6 +139,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCart.Drivers.Grpc", "dri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCart.Drivers.Grpc.Tests", "drivers\DotCart.Drivers.Grpc.Tests\DotCart.Drivers.Grpc.Tests.csproj", "{83F7EBC5-7F03-4FD5-B11E-7750EE5C63D9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DotCart.Drivers.EventStoreDB.TestFirst", "drivers\DotCart.Drivers.EventStoreDB.TestFirst\DotCart.Drivers.EventStoreDB.TestFirst.csproj", "{7E84FDEF-C1CD-4164-B886-8D0562E8B446}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -340,6 +342,10 @@ Global
 		{83F7EBC5-7F03-4FD5-B11E-7750EE5C63D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{83F7EBC5-7F03-4FD5-B11E-7750EE5C63D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{83F7EBC5-7F03-4FD5-B11E-7750EE5C63D9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7E84FDEF-C1CD-4164-B886-8D0562E8B446}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7E84FDEF-C1CD-4164-B886-8D0562E8B446}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7E84FDEF-C1CD-4164-B886-8D0562E8B446}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7E84FDEF-C1CD-4164-B886-8D0562E8B446}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{DA80A1A2-5281-40D8-8B88-FCC0F65E3F18} = {0FF5546C-D563-4DF5-BF41-0D5C85C5AF6E}
@@ -393,5 +399,6 @@ Global
 		{E8C4991E-2E52-4799-9CFB-1B27879687A4} = {C2C3F717-4CD4-4D20-AABF-96BB94C13420}
 		{02B66814-8EEA-4F0D-B1BF-649F97E18D00} = {EDEBE9BD-18DC-437E-A7A6-D469A44403AF}
 		{83F7EBC5-7F03-4FD5-B11E-7750EE5C63D9} = {EDEBE9BD-18DC-437E-A7A6-D469A44403AF}
+		{7E84FDEF-C1CD-4164-B886-8D0562E8B446} = {EDEBE9BD-18DC-437E-A7A6-D469A44403AF}
 	EndGlobalSection
 EndGlobal

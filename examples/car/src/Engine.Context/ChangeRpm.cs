@@ -5,7 +5,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
-using DotCart.Defaults;
 using DotCart.Defaults.EventStore;
 using DotCart.Drivers.CouchDB;
 using DotCart.Drivers.EventStoreDB;
@@ -22,10 +21,13 @@ public static class ChangeRpm
 {
     public const string ToCouchDoc_v1
         = Contract.ChangeRpm.Topics.Evt_v1 + ":to_couch_doc:v1";
+
     public const string ToRedisDoc_v1
         = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_doc:v1";
+
     public const string ToRedisList_v1
         = Contract.ChangeRpm.Topics.Evt_v1 + ":to_redis_list:v1";
+
     public const string FromNATS_v1
         = Contract.ChangeRpm.Topics.Hope_v1 + ":from_nats:v1";
 

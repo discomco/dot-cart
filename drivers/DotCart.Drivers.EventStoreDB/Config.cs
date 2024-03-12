@@ -24,8 +24,6 @@ public static class Config
 
     private static class Defaults
     {
-        public static readonly string Uri =
-            $"esdb+discover://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls={UseTls}&tlsVerifyCert=false";
         // "esdb+discover://localhost:2112?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";        
         // public const string Uri =
         //     "esdb://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls=false";
@@ -37,5 +35,8 @@ public static class Config
         public const string Password = "changeit";
         public const string False = "false";
         public const string True = "true";
+
+        public static readonly string Uri =
+            $"esdb+discover://localhost:2113?keepAliveTimeout=10000&keepAliveInterval=10000&tls={UseTls}&tlsVerifyCert=false";
     }
 }

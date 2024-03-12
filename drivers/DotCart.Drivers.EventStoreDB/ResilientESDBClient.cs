@@ -1,6 +1,5 @@
 using DotCart.Polly;
 using EventStore.Client;
-using Grpc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
 using Polly.Retry;
@@ -86,8 +85,6 @@ public class ResilientESDBClient
             Console.WriteLine(e);
             throw;
         }
-
-
     }
 
     public Task<StreamMetadataResult> GetStreamMetadataAsync(string streamName,

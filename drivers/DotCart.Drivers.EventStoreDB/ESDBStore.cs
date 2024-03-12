@@ -11,7 +11,8 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddESDBStore(this IServiceCollection services, Action<EventStoreClientSettings>? overrideSettings = null)
+    public static IServiceCollection AddESDBStore(this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings = null)
     {
         return services
             .AddResilientESDBClients(overrideSettings)

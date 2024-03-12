@@ -16,7 +16,6 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-
     public static IServiceCollection AddSingletonESDBProjector<TInfo>(this IServiceCollection services)
         where TInfo : IProjectorInfoB
     {

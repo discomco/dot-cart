@@ -6,7 +6,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
-using DotCart.Defaults;
 using DotCart.Defaults.EventStore;
 using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.CouchDB;
@@ -25,14 +24,19 @@ public static class ChangeDetails
 {
     public const string Spoke_v1
         = "engine:change_details:spoke:v1";
+
     public const string ToCouchDoc_v1
         = Contract.ChangeDetails.Topics.Evt_v1 + ":to_couch_doc:v1";
+
     public const string ToRedisDoc_v1
         = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_doc:v1";
+
     public const string ToRedisList_v1
         = Contract.ChangeDetails.Topics.Evt_v1 + ":to_redis_list:v1";
+
     public const string ToRabbitMq_v1
         = Contract.ChangeDetails.Topics.Fact_v1 + ":to_rabbit_mq:v1";
+
     public const string FromRabbitMqRetro_v1
         = Contract.ChangeDetails.Topics.Fact_v1 + ":from_rabbit_mq_retro:v1";
 

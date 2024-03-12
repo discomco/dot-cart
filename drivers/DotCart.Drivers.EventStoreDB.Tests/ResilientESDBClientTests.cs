@@ -1,5 +1,3 @@
-using System.Security.Cryptography.X509Certificates;
-using System.Text;
 using DotCart.TestKit;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
@@ -89,6 +87,8 @@ public class ResilientESDBClientTests(
     {
         services
             .AddESDSettingsFromAppDirectory()
+            .AddResilientESDBClients()
+            // Add the Raw EventStore Client to check the gRPC connection issue
             .AddEventStoreClient(settings =>
             {
                 var esdbSettings = services
@@ -96,13 +96,13 @@ public class ResilientESDBClientTests(
                     .GetRequiredService<IOptions<ESDBSettings>>()
                     .Value;
                 settings.ConnectivitySettings.Address = new Uri(esdbSettings.Uri);
-                settings.ConnectivitySettings.Insecure = esdbSettings.IsInsecure;
-                settings.DefaultCredentials = new UserCredentials(
-                    esdbSettings.Username,
-                    esdbSettings.Password);
+                // settings.ConnectivitySettings.Insecure = esdbSettings.IsInsecure;
+                // settings.DefaultCredentials = new UserCredentials(
+                //     esdbSettings.Username,
+                //     esdbSettings.Password);
                 // settings.ConnectivitySettings.TlsCaFile = X509Certificate2
                 //     .CreateFromPemFile(esdbSettings.TlsCaFile);
-                settings.ConnectivitySettings.TlsVerifyCert = false;
+                // settings.ConnectivitySettings.TlsVerifyCert = false;
             });
     }
 }

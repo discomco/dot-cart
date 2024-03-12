@@ -4,7 +4,6 @@ using DotCart.Logging;
 using Engine.Context;
 using Serilog;
 
-
 DotEnv.FromEmbedded();
 
 var builder = WebApplication

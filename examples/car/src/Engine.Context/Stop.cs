@@ -6,7 +6,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
-using DotCart.Defaults;
 using DotCart.Defaults.EventStore;
 using DotCart.Defaults.RabbitMq;
 using DotCart.Drivers.EventStoreDB;

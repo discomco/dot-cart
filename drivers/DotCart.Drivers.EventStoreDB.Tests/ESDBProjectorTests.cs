@@ -1,5 +1,4 @@
 using DotCart.Abstractions.Actors;
-using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
@@ -8,7 +7,6 @@ using DotCart.Logging;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
-using Engine.TestUtils;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -200,6 +198,7 @@ public class ESDBProjectorTests
             feeder.HandleCast(StartFeeding.It(), cts.Token);
             await Task.Delay(100, cts.Token);
         }
+
         // if (feeder.Status == ComponentStatus.Active)
         feeder.HandleCast(StopFeeding.It(), cts.Token);
         // THEN
