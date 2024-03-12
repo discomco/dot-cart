@@ -3,7 +3,7 @@ using DotCart.Abstractions.Core;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
-using DotCart.Drivers.EventStoreDB.Interfaces;
+using DotCart.Core;
 using DotCart.Logging;
 using DotCart.TestFirst.Actors;
 using DotCart.TestKit;
@@ -19,7 +19,7 @@ namespace DotCart.Drivers.EventStoreDB.Tests;
 public class ESDBProjectorTests
     : IoCTests
 {
-    private IESDBPersistentSubscriptionsClient? _client;
+    private IResilientPersistentSubscriptionsESDBClient? _client;
     private IProjectorDriver? _driver;
     private IEventStore? _eventStore;
     private IExchange? _exchange;
@@ -121,7 +121,7 @@ public class ESDBProjectorTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        _client = TestEnv.ResolveRequired<IESDBPersistentSubscriptionsClient>();
+        _client = TestEnv.ResolveRequired<IResilientPersistentSubscriptionsESDBClient>();
         // THEN
         Assert.NotNull(_client);
     }
@@ -214,6 +214,7 @@ public class ESDBProjectorTests
 
     protected override void SetEnVars()
     {
+        DotEnv.FromEmbedded();
     }
 
     protected override void InjectDependencies(IServiceCollection services)
@@ -224,7 +225,7 @@ public class ESDBProjectorTests
             .AddTheDocCtors()
             .AddEventStreamGenFunc()
             .AddSingletonExchange()
-            .AddConfiguredESDBClients()
+            .AddResilientESDBClients()
             .AddSingletonESDBProjectorDriver<TheActors.IProjectorInfo>()
             .AddSingletonESDBProjector<TheActors.IProjectorInfo>()
             .AddESDBStore();

@@ -4,7 +4,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Behavior;
-using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.TestKit;
 using DotCart.TestKit.Mocks;
 using Microsoft.Extensions.DependencyInjection;
@@ -36,7 +35,7 @@ public class ESDBEventStoreTests
         // GIVEN
         Assert.NotNull(TestEnv);
         // WHEN
-        var esClient = TestEnv.ResolveRequired<IESDBEventSourcingClient>();
+        var esClient = TestEnv.ResolveRequired<IResilientESDBClient>();
         // THEN
         Assert.NotNull(esClient);
     }
@@ -155,6 +154,6 @@ public class ESDBEventStoreTests
             .AddSingleton<IAggregateStore, ESDBStore>()
             .AddSingleton<IEventStore, ESDBStore>()
             .AddSingletonExchange()
-            .AddConfiguredESDBClients();
+            .AddResilientESDBClients();
     }
 }

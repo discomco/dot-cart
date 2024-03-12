@@ -1,18 +1,17 @@
-using DotCart.Drivers.EventStoreDB.Interfaces;
 using EventStore.Client;
 using Polly;
 using Polly.Retry;
 
 namespace DotCart.Drivers.EventStoreDB;
 
-public class ESDBPersistentSubscriptionsClient
-    : IESDBPersistentSubscriptionsClient
+public class ResilientPersistentSubscriptionsESDBClient
+    : IResilientPersistentSubscriptionsESDBClient
 {
     private readonly EventStorePersistentSubscriptionsClient _clt;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
 
-    public ESDBPersistentSubscriptionsClient(
+    public ResilientPersistentSubscriptionsESDBClient(
         EventStorePersistentSubscriptionsClient clt,
         AsyncRetryPolicy? retryPolicy)
     {

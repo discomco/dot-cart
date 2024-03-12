@@ -2,7 +2,6 @@ using DotCart.Abstractions.Actors;
 using DotCart.Abstractions.Behavior;
 using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
-using DotCart.Drivers.EventStoreDB.Interfaces;
 using EventStore.Client;
 using Microsoft.Extensions.DependencyInjection;
 using Polly;
@@ -12,37 +11,37 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddESDBStore(this IServiceCollection services)
+    public static IServiceCollection AddESDBStore(this IServiceCollection services, Action<EventStoreClientSettings>? overrideSettings = null)
     {
         return services
-            .AddConfiguredESDBClients()
+            .AddResilientESDBClients(overrideSettings)
             .AddSingleton<IAggregateStore, ESDBStore>()
             .AddSingleton<IEventStore, ESDBStore>();
     }
 
 
-    private static IServiceCollection AddEventStore(this IServiceCollection services,
-        Action<EventStoreClientSettings>? clientSettings)
+    private static IServiceCollection AddESDBClients(this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings)
     {
         return services
-            .AddEventStoreClient(clientSettings)
-            .AddEventStoreOperationsClient(clientSettings)
-            .AddEventStorePersistentSubscriptionsClient(clientSettings)
-            .AddEventStoreProjectionManagementClient(clientSettings)
-            .AddEventStoreUserManagementClient(clientSettings);
+            .AddEventStoreClient(overrideSettings)
+            .AddEventStoreOperationsClient(overrideSettings)
+            .AddEventStorePersistentSubscriptionsClient(overrideSettings)
+            .AddEventStoreProjectionManagementClient(overrideSettings)
+            .AddEventStoreUserManagementClient(overrideSettings);
     }
 }
 
 public class ESDBStore
     : IEventStore
 {
-    private readonly IESDBEventSourcingClient _client;
+    private readonly IResilientESDBClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
     private readonly AsyncRetryPolicy _retryPolicy;
     private IActorB _actor;
 
     public ESDBStore(
-        IESDBEventSourcingClient client,
+        IResilientESDBClient client,
         AsyncRetryPolicy? retryPolicy = null
     )
     {

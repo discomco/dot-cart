@@ -41,6 +41,7 @@ public static class Inject
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
+            .Enrich.WithCaller()
             // .WriteTo.Console(LogEventLevel.Verbose,
             //     "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{Level}] {Message} {NewLine}[{Properties}]{NewLine}{Exception}")
             .WriteTo.Console(
@@ -74,6 +75,7 @@ public static class Inject
             .MinimumLevel.ControlledBy(new EnvLogLevelSwitch(EnVars.LOG_LEVEL_MIN))
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
+            .Enrich.WithCaller()
             .WriteTo.FastConsole(
                 new FastConsoleSinkOptions { UseJson = true },
                 "{Timestamp:yyyy-MM-dd HH:mm:ss.fff} [{ThreadId:d3}][{Level:u3}] {Message:lj}{NewLine}{Exception}",

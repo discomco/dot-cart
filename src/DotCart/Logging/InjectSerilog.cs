@@ -26,7 +26,7 @@ public static class InjectSerilog
     }
 
 
-    public static IServiceCollection AddSeriloggersFromSettings(this IServiceCollection services,
+    public static IServiceCollection AddSerilogFromSettings(this IServiceCollection services,
         bool enableSelfLog = false,
         string appLogPrefix = "default",
         string appLogDir = "")
@@ -39,18 +39,21 @@ public static class InjectSerilog
         return services;
     }
 
-    public static IServiceCollection AddSeriloggersFromSettingsOnly(this IServiceCollection services,
+    public static IServiceCollection AddSerilogFromSettingsOnly(
+        this IServiceCollection services,
+        string settingsFile = "appsettings.json",
         bool enableSelfLog = false)
     {
         services
             .TryAddSingleton(_ => AddLoggerFromSettingsOnly(
+                settingsFile,
                 enableSelfLog)
             );
         return services;
     }
 
 
-    public static IServiceCollection AddSeriloggersFromCode(this IServiceCollection services,
+    public static IServiceCollection AddSerilogFromCode(this IServiceCollection services,
         bool enableSelfLog = false,
         string appLogPrefix = "default",
         string appLogDir = "")
@@ -85,6 +88,7 @@ public static class InjectSerilog
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithProcessName()
+            .Enrich.WithCaller()
             .Enrich.With<EVersionEnricher>()
             .Enrich.With<XVersionEnricher>()
             .Enrich.With<CVersionEnricher>()
@@ -136,6 +140,7 @@ public static class InjectSerilog
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithProcessName()
+            .Enrich.WithCaller()
             .Enrich.With<UtcTimestampEnricher>()
             .Enrich.With<EVersionEnricher>()
             .Enrich.With<XVersionEnricher>()
@@ -161,6 +166,7 @@ public static class InjectSerilog
     }
 
     public static ILogger AddLoggerFromSettingsOnly(
+        string settingsFile = "appsettings.json",
         bool enableSelfLog = false)
     {
         if (enableSelfLog)
@@ -168,9 +174,8 @@ public static class InjectSerilog
             SelfLog.Enable(msg => Debug.WriteLine(msg));
             SelfLog.Enable(Console.Error);
         }
-
         var appSettings = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
+            .AddJsonFile(settingsFile)
             .Build();
         var logConfig = new LoggerConfiguration();
         var dontShowCleanup = "Contains(@m, 'cleanup cycle')";
@@ -181,6 +186,7 @@ public static class InjectSerilog
             .Enrich.FromLogContext()
             .Enrich.WithThreadId()
             .Enrich.WithProcessName()
+            .Enrich.WithCaller()
             .Enrich.With<EVersionEnricher>()
             .Enrich.With<XVersionEnricher>()
             .Enrich.With<CVersionEnricher>()

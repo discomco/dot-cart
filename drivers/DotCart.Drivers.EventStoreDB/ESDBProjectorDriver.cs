@@ -4,7 +4,6 @@ using DotCart.Abstractions.Drivers;
 using DotCart.Abstractions.Schema;
 using DotCart.Actors;
 using DotCart.Core;
-using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Schema;
 using EventStore.Client;
 using Grpc.Core;
@@ -22,7 +21,7 @@ public static partial class Inject
         where TInfo : IProjectorInfoB
     {
         return services
-            .AddConfiguredESDBClients()
+            .AddResilientESDBClients()
             .AddSingletonESDBProjectorDriver<TInfo>()
             .AddSingleton<IProjector, Projector<TInfo>>();
     }
@@ -49,7 +48,7 @@ public static partial class Inject
         where TInfo : IProjectorInfoB
     {
         return services
-            .AddConfiguredESDBClients()
+            .AddResilientESDBClients()
             .AddSingleton(_ =>
                 new SubscriptionFilterOptions(
                     StreamFilter.Prefix($"{IDPrefixAtt.Get<TInfo>()}{IDFuncs.PrefixSeparator}")))
@@ -60,7 +59,7 @@ public static partial class Inject
 public class ESDBProjectorDriver<TInfo>
     : DriverB, IProjectorDriverT<TInfo> where TInfo : IProjectorInfoB
 {
-    private readonly IESDBPersistentSubscriptionsClient _client;
+    private readonly IResilientPersistentSubscriptionsESDBClient _client;
     private readonly SubscriptionFilterOptions _filterOptions;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
 
@@ -74,7 +73,7 @@ public class ESDBProjectorDriver<TInfo>
 
 
     public ESDBProjectorDriver(
-        IESDBPersistentSubscriptionsClient client,
+        IResilientPersistentSubscriptionsESDBClient client,
         SubscriptionFilterOptions filterOptions,
         AsyncRetryPolicy? retryPolicy = null)
     {

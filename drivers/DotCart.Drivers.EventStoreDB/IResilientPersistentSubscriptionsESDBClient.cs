@@ -1,6 +1,6 @@
 using EventStore.Client;
 
-namespace DotCart.Drivers.EventStoreDB.Interfaces;
+namespace DotCart.Drivers.EventStoreDB;
 
 /// <summary>
 ///     The client used to manage persistent subscriptions in the EventStoreDB.
@@ -11,7 +11,8 @@ namespace DotCart.Drivers.EventStoreDB.Interfaces;
 ///         on google.com
 ///     </a>
 /// </footer>
-public interface IESDBPersistentSubscriptionsClient : IESDBClientBase
+public interface IResilientPersistentSubscriptionsESDBClient
+    : IESDBClientBase
 {
     Task CreateAsync(
         string streamName,

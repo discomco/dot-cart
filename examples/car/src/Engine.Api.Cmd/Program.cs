@@ -3,18 +3,23 @@ using DotCart.Drivers.EventStoreDB;
 using DotCart.Logging;
 using Engine.Context;
 using Serilog;
-using Inject = DotCart.Logging.Inject;
+
 
 DotEnv.FromEmbedded();
 
 var builder = WebApplication
     .CreateBuilder(args);
 
-builder.Logging
-    .ClearProviders()
-    .AddSerilog();
-builder.Host
-    .UseSerilog(Inject.CreateSerilogConsoleLogger());
+// builder.Logging
+
+// .ClearProviders()
+// .AddSerilog()
+//
+
+builder.Logging.AddSerilog()    .UseSerilog(
+        InjectSerilog.AddLoggerFromSettingsOnly()
+    );
+// .UseSerilog(Inject.CreateSerilogConsoleLogger());
 
 
 // Add services to the container.

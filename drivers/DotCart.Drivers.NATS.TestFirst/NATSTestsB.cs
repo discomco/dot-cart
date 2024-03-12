@@ -77,7 +77,7 @@ public abstract class NATSTestsB
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
-            .AddSeriloggersFromSettingsOnly()
+            .AddSerilogFromSettingsOnly()
             .AddCoreNATS(options =>
             {
                 options.User = "a";

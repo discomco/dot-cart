@@ -26,7 +26,7 @@ public class MyNATSResponderDriverTests
     {
         services
             .AddCoreNATS()
-            .AddSeriloggersFromCode()
+            .AddSerilogFromCode()
             .AddNATSResponderDriverT<MyReq>();
     }
 }

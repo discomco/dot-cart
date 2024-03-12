@@ -23,9 +23,10 @@
 
 using EventStore.Client;
 
-namespace DotCart.Drivers.EventStoreDB.Interfaces;
+namespace DotCart.Drivers.EventStoreDB;
 
-public interface IESDBEventSourcingClient : IESDBClientBase
+public interface IResilientESDBClient
+    : IESDBClientBase
 {
     Task<IWriteResult> AppendToStreamAsync(
         string streamName,
@@ -86,7 +87,7 @@ public interface IESDBEventSourcingClient : IESDBClientBase
     IAsyncEnumerable<ResolvedEvent> ReadAllAsync(
         Direction direction,
         Position position,
-        long maxCount = 9223372036854775807,
+        long maxCount = long.MaxValue,
         bool resolveLinkTos = false,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,
@@ -96,7 +97,7 @@ public interface IESDBEventSourcingClient : IESDBClientBase
         Direction direction,
         string streamName,
         StreamPosition revision,
-        long maxCount = 9223372036854775807,
+        long maxCount = long.MaxValue,
         bool resolveLinkTos = false,
         TimeSpan? deadline = null,
         UserCredentials? userCredentials = null,

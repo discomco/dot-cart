@@ -1,4 +1,3 @@
-using DotCart.Drivers.EventStoreDB.Interfaces;
 using DotCart.Polly;
 using EventStore.Client;
 using Grpc.Core;
@@ -10,31 +9,27 @@ namespace DotCart.Drivers.EventStoreDB;
 
 public static partial class Inject
 {
-    public static IServiceCollection AddConfiguredESDBClients(this IServiceCollection services)
+    public static IServiceCollection AddResilientESDBClients(
+        this IServiceCollection services,
+        Action<EventStoreClientSettings>? overrideSettings = null)
     {
         return services
             .AddPolly()
-            .AddEventStore(s =>
-            {
-                s.ConnectivitySettings.Insecure = Config.Insecure;
-                s.ConnectivitySettings.Address = new Uri(Config.Uri);
-                //  s.DefaultCredentials = new UserCredentials(Config.UserName, Config.Password);
-                if (Config.UseTls) s.ChannelCredentials = new SslCredentials();
-            })
-            .AddSingleton<IESDBPersistentSubscriptionsClient, ESDBPersistentSubscriptionsClient>()
-            .AddSingleton<IESDBEventSourcingClient, ESDBEventSourcingClient>();
+            .AddESDBClients(overrideSettings)
+            .AddSingleton<IResilientPersistentSubscriptionsESDBClient, ResilientPersistentSubscriptionsESDBClient>()
+            .AddSingleton<IResilientESDBClient, ResilientESDBClient>();
     }
 }
 
-public class ESDBEventSourcingClient
-    : IESDBEventSourcingClient
+public class ResilientESDBClient
+    : IResilientESDBClient
 {
     private readonly EventStoreClient _client;
     private readonly int _maxRetries = Polly.Config.MaxRetries;
-    private readonly AsyncRetryPolicy _retryPolicy;
+    private readonly AsyncRetryPolicy? _retryPolicy;
 
 
-    public ESDBEventSourcingClient(EventStoreClient client, AsyncRetryPolicy? retryPolicy = null)
+    public ResilientESDBClient(EventStoreClient client, AsyncRetryPolicy? retryPolicy = null)
     {
         _client = client;
 
