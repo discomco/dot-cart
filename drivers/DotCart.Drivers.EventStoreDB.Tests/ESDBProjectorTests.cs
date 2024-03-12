@@ -14,8 +14,8 @@ using Xunit.Abstractions;
 
 namespace DotCart.Drivers.EventStoreDB.Tests;
 
-public class ESDBProjectorTests
-    : IoCTests
+public class ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv)
+    : IoCTests(output, testEnv)
 {
     private IResilientPersistentSubscriptionsESDBClient? _client;
     private IProjectorDriver? _driver;
@@ -25,11 +25,6 @@ public class ESDBProjectorTests
     private ILogger? _logger;
     private IDocStoreT<TheSchema.Doc>? _memStore;
     private SubscriptionFilterOptions? _subOptions;
-
-    public ESDBProjectorTests(ITestOutputHelper output, IoCTestContainer testEnv)
-        : base(output, testEnv)
-    {
-    }
 
 
     [Fact]
@@ -213,12 +208,13 @@ public class ESDBProjectorTests
 
     protected override void SetEnVars()
     {
-        DotEnv.FromEmbedded();
     }
 
     protected override void InjectDependencies(IServiceCollection services)
     {
         services
+            .AddSettingsFromAppDirectory()
+            .UseSettings<ESDBSettings>(ESDBSettings.SectionId)
             .AddConsoleLogger()
             .AddEventFeeder<TheSchema.DocID, TheSchema.Doc>()
             .AddTheDocCtors()

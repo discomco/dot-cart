@@ -19,8 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\DotCart.Drivers.Grpc\DotCart.Drivers.Grpc.csproj"/>
+      <ProjectReference Include="..\..\src\DotCart\DotCart.csproj" />
     </ItemGroup>
-
 
 </Project>
